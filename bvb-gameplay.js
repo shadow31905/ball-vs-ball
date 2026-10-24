@@ -109,7 +109,7 @@
   function onGuestState(hostState) {
     if(!hostState || netRole!=='guest') return;
     useChoice(G);
-    panelKey='';
+    // The draw wrapper updates only when phase or tactic really changes.
   }
 
   function rank(id) {
