@@ -27,7 +27,7 @@ const rows=[
 ['Kosmiczne odbicia',1,43,'bounce','hits'],
 ['Rdzeń wulkanu',2,44,'blast','fast'],
 ['Opary otchłani',0,39,'toxic','special'],
-['Demony szybkości',5,35,'speed','rush'],
+['Demony szybkości',5,37,'speed','rush'],
 ['Wirujące bariery',4,47,'shield','guard'],
 ['Zakrzywiony wymiar',1,21,'portal','portal'],
 ['Ostatnia iskra',2,48,'shock','close'],
@@ -121,7 +121,7 @@ function chooseBall(i,value){
  chosen[i]=id;saveState().deck=chosen;save();render();
 }
 function bossBall(l){
- const template=B[l.enemyId]||B[0],boss=BOSSD[Math.floor(l.id/10)-1];
+ const template=B[l.enemyId]||B[0],boss=BOSSD[[2,1,3,4,5][Math.floor(l.id/10)-1]];
  return {...template,n:boss.n,e:boss.e,c:boss.c,isBoss:true};
 }
 function inspect(n){if(n>saveState().unlocked)return;selected=n;render();}
@@ -138,6 +138,7 @@ function render(){
    ownIds().map(id=>'<option value="'+id+'"'+(ball.id===id?' selected':'')+'>'+esc(B[id].n)+'</option>').join('')+
    '</select></label>').join('');
  p.innerHTML='<h2>🗺️ Kampania — 50 poziomów</h2><p>✅ '+c.cleared.length+'/50 · ⭐ '+c.stars.length+'/50 · 🔓 '+c.unlocked+'/50</p>'+
+  (c.finalWon?'<div class="cd"><b>👑 Puchar kampanii — ukończono 50 poziomów!</b><p>Odblokowano tytuł „Pogromca Chaosu” i złotą aurę.</p><button class="b ac" onclick="window.BVBCampaign.equip()">👑 Załóż nagrodę</button></div>':'')+
   '<div class="cd"><b>🎴 Wybierz 3 posiadane kulki</b><div class="bvb-deck">'+picks+'</div>'+
   '<small>To Ty ustalasz drużynę, a przed walką wybierasz taktykę.</small></div>'+
   '<div class="bvb-campaign-head"><h3>'+selected+'/50 · '+(l.boss?'👑 ':'')+esc(l.title)+'</h3>'+
@@ -271,7 +272,7 @@ function finish(g,won){
   coins=first?45+n*6:10+n;
   if(g.campaignGoalMet&&!c.stars.includes(n)){c.stars.push(n);stars=25+n*2;}
   S.coins+=coins+stars;
-  if(n===50)c.finalWon=true;
+  if(n===50&&!c.finalWon){c.finalWon=true;S.coins+=500;S.candies=(S.candies||0)+100;}
  }
  save();
  const next=won&&n<50;
@@ -284,11 +285,15 @@ function finish(g,won){
   '<button class="b" onclick="window.BVBCampaign.open()">🗺️ Mapa poziomów</button>'+
   '<button class="b" onclick="menu()">Menu główne</button>';
 }
+function equip(){
+ if(!saveState().finalWon)return;
+ S.playerTitle='Pogromca Chaosu';S.playerAura='#facc15';save();render();
+}
 const oldOver=over;
 over=function(){
  const campaign=G?.m===13&&!G.finished,g=campaign?G:null;
  oldOver();if(g)finish(g,g.h[0]>0);
 };
-window.BVBCampaign={LEVELS,TWISTS,GOALS,EVENTS,open,render,inspect,start,chooseBall,deck,
+window.BVBCampaign={LEVELS,TWISTS,GOALS,EVENTS,open,render,inspect,start,chooseBall,deck,equip,
 prepareMatch,setupRound,applyActors,intermission,continueEvent,onImpact,onAbility,onPortal,onRoundEnd,saveState};
 })();
