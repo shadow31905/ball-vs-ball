@@ -1436,6 +1436,7 @@ function setupNetConnection(conn) {
       }
       hearts();
       window.BVBGameplay?.onGuestState?.(hostState);
+      if (!G.finished) $('#ov').hidden = true; // A new online rematch clears the old end screen.
       if (G.finished) {
         const guestWon = G.h[0] > 0;
         $('#ov').hidden = false;
@@ -2662,7 +2663,8 @@ function launchMatch(remoteAngle = null) {
     ? computeBotAim(180, 60, 180, 300, Math.cos(G.pa), Math.sin(G.pa), diff)
     : remoteAngle;
   const enemyBall = G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : G.bb;
-  const enemyAngle = remoteAngle == null ? botAim : remoteAngle + Math.PI;
+  // The guest sees the same X axis and a mirrored Y axis: flip only the Y component.
+  const enemyAngle = remoteAngle == null ? botAim : -remoteAngle;
   const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, G.m === 12 ? 1 : G.m === 11 ? 3 : 2, G.m === 12 ? 0 : diff, G.m === 12 ? 0 : diff);
   window.BVBGameplay?.prepareActors?.(G, p, e);
   G.bl = [p, e];
