@@ -592,6 +592,7 @@
       </div>
 
       <button class="b graj" onclick="startMatch(0)">GRAJ</button>
+      <button class="b ac" onclick="window.BVBCampaign?.open?.()">🗺️ KAMPANIA · 50 WYJĄTKOWYCH POZIOMÓW</button>
       <button class="b boss-button" onclick="bossMenu()">👹 BOSS FIGHT · 6 STRAŻNIKÓW</button>
 
       <div class="grid-2">
@@ -2446,6 +2447,7 @@ function collideWithArena(o,dt) {
   if(portal && o.portalCooldown<=0 && Math.hypot(o.x-portal.x,o.y-portal.y)<o.r+portal.r-5) {
     const destination=randomEmptyPoint([...(G.obstacles||[]),portal,...G.bl.filter(t=>t!==o)] , 40);
     o.x=destination.x;o.y=destination.y;
+    window.BVBCampaign?.onPortal?.(G,o);
     o.portalCooldown=2+Math.random()*3;
     portalVisual(portal,o.x,o.y);
     if(netRole!=='guest') {S.ach.portals++;checkAchievements();}
@@ -2577,6 +2579,7 @@ function startMatch(mode = 0) {
   const previousArena = G?.finished ? G.th : null;
   G = freshGame(mode, myThree, botThree);
   window.BVBGameplay?.newMatch?.(G);
+  window.BVBCampaign?.prepareMatch?.(G);
   arenaTransition(G.th, previousArena);
   if (mode === 11) G.bossIndex = pendingBossIndex;
   show('game');
@@ -2585,11 +2588,13 @@ function startMatch(mode = 0) {
 
 function nextRound() {
   if (!G) return;
+  if (window.BVBCampaign?.intermission?.(G)) return;
   G.ph = 'draft';
   G.rn = (G.rn || 0) + 1;
   G.bl = []; G.pr = []; G.z = []; G.fx = []; G.rings = []; G.pop = [];
   createRoundArena(G);
   window.BVBGameplay?.newRound?.(G);
+  window.BVBCampaign?.setupRound?.(G);
   remoteAimAngle = null; hostAimAngle = null; remoteBallId = null;
   renderDraft();
   hearts();
@@ -2598,7 +2603,7 @@ function nextRound() {
 
 function renderDraft() {
   if (!G) return;
-  $('#msg').textContent = 'Wybierz jedną z 3 wylosowanych kulek, wyceluj procą i wystrzel:';
+  $('#msg').textContent = G.m===13 ? 'Kampania '+G.campaignLevel+'/50: wybierz kulkę ze swojej drużyny, wyceluj i wystrzel!' : 'Wybierz jedną z 3 wylosowanych kulek, wyceluj procą i wystrzel:';
   $('#cards').innerHTML = G.my.map((b, i) => {
     const st = G.m === 12 ? getBallStats(b.id, 1, 0, 0) : getBallStats(b.id);
     return `<button class="card" style="--rc:${RC[b.r]}" onclick="pick(${i})">
@@ -2611,7 +2616,7 @@ function renderDraft() {
       </div>
     </button>`;
   }).join('');
-  $('#bset').innerHTML = `<b>${G.m === 12 ? '🌐 Kule rywala:' : '🤖 Kule Bota:'}</b>` + G.bt.map(b => `<span class="bs">${orb(b)}<small>${esc(b.n)}</small></span>`).join('');
+  $('#bset').innerHTML = `<b>${G.m === 13 ? '🗺️ Poziom '+G.campaignLevel+'/50 · Rywal:' : G.m === 12 ? '🌐 Kule rywala:' : '🤖 Kule Bota:'}</b>` + G.bt.map(b => `<span class="bs">${orb(b)}<small>${esc(b.n)}</small></span>`).join('');
 }
 
 function pick(i) {
@@ -2623,7 +2628,7 @@ function pick(i) {
     G.ph = 'aim';
     netSend({ type: 'pick', id: G.pb.id, matchId: G.matchId, rn: G.rn });
   } else {
-    G.bb = G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : ((G.m == 9 || G.m == 10) ? B[99] : (remoteBallId || rnd(G.bt)));
+    G.bb = G.m===13 ? G.bt[0] : G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : ((G.m == 9 || G.m == 10) ? B[99] : (remoteBallId || rnd(G.bt)));
     G.ph = 'aim';
     broadcastState();
   }
@@ -2667,6 +2672,7 @@ function launchMatch(remoteAngle = null) {
   const enemyAngle = remoteAngle == null ? botAim : -remoteAngle;
   const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, G.m === 12 ? 1 : G.m === 11 ? 3 : 2, G.m === 12 ? 0 : diff, G.m === 12 ? 0 : diff);
   window.BVBGameplay?.prepareActors?.(G, p, e);
+  window.BVBCampaign?.applyActors?.(G,p,e);
   G.bl = [p, e];
   G.ph = 'battle';
   G.rt = 0;
@@ -2829,6 +2835,7 @@ function step(dt) {
     if (o.abilityCd <= 0) {
       const foe = G.bl.find(t => t !== o && alive(t));
       specialAbility(o, foe);
+      window.BVBCampaign?.onAbility?.(G,o);
       o.abilityCd = Math.max(1.0, ((o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6) * (o.abilityRate||1));
     }
     if (o.status.slow > 0) o.status.slow = Math.max(0, o.status.slow - dt);
@@ -2882,6 +2889,7 @@ function step(dt) {
           a.impactSlow = b.impactSlow = hitSlow;
           applyDamage(a,damageToA);
           applyDamage(b,damageToB);
+          window.BVBCampaign?.onImpact?.(G);
           burst(a,effectType(b.b),8,false);
           burst(b,effectType(a.b),8,false);
           SFX.hit();
@@ -2902,7 +2910,9 @@ function step(dt) {
   updateEffects(dt);
   const team0 = G.bl.some(o => o.team === 0 && alive(o)), team1 = G.bl.some(o => o.team === 1 && alive(o));
   if (!team0 || !team1) {
-    roundEnd(team0 && !team1 ? 0 : team1 && !team0 ? 1 : -1);
+    const winner=team0 && !team1 ? 0 : team1 && !team0 ? 1 : -1;
+    window.BVBCampaign?.onRoundEnd?.(G,winner);
+    roundEnd(winner);
   }
 }
 
@@ -3096,5 +3106,6 @@ requestAnimationFrame(loop);
 </script>
 <script src="./bvb-anime-update.js"></script>
 <script src="./bvb-gameplay.js"></script>
+<script src="./bvb-campaign.js"></script>
 </body>
 </html>
