@@ -1364,6 +1364,7 @@ function setupNetConnection(conn) {
     netSend({ type: 'hello', role: netRole, name: 'Ball VS Ball' });
     if (netRole === 'guest') {
       netSend({ type: 'deck', ids: makeOwnOnlineDeck() });
+      window.BVBGameplay?.resendTactic?.();
       // Re-send the current round's unacknowledged input after a connection drop.
       if (G?.m === 12 && guestMatchId === G.matchId && guestRound === G.rn) {
         if (guestBallId != null) netSend({type:'pick', id:guestBallId, matchId:G.matchId, rn:G.rn});
@@ -1434,12 +1435,14 @@ function setupNetConnection(conn) {
         $('#msg').textContent = 'Kulę wybrano. Czekam na wybór hosta…';
       }
       hearts();
+      window.BVBGameplay?.onGuestState?.(hostState);
       if (G.finished) {
         const guestWon = G.h[0] > 0;
         $('#ov').hidden = false;
         $('#ovb').innerHTML = `<h2>${guestWon ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2><p style="margin:10px 0;color:var(--mu)">Wynik meczu online</p><button class="b graj" onclick="$('#ov').hidden=true;menu()">Menu główne</button>`;
       }
     }
+    if (data.type === 'tactic' && netRole === 'host') window.BVBGameplay?.applyRemoteTactic?.(data);
     if (data.type === 'pick' && netRole === 'host') {
       if (!G || G.m !== 12 || !['draft','aim'].includes(G.ph) || data.matchId !== G.matchId || data.rn !== G.rn) return;
       // Gość może wybierać tylko spośród trzech kulek ze swojej talii.
@@ -2584,6 +2587,7 @@ function nextRound() {
   G.rn = (G.rn || 0) + 1;
   G.bl = []; G.pr = []; G.z = []; G.fx = []; G.rings = []; G.pop = [];
   createRoundArena(G);
+  window.BVBGameplay?.newRound?.(G);
   remoteAimAngle = null; hostAimAngle = null; remoteBallId = null;
   renderDraft();
   hearts();
@@ -2594,13 +2598,14 @@ function renderDraft() {
   if (!G) return;
   $('#msg').textContent = 'Wybierz jedną z 3 wylosowanych kulek, wyceluj procą i wystrzel:';
   $('#cards').innerHTML = G.my.map((b, i) => {
-    const st = getBallStats(b.id);
+    const st = G.m === 12 ? getBallStats(b.id, 1, 0, 0) : getBallStats(b.id);
     return `<button class="card" style="--rc:${RC[b.r]}" onclick="pick(${i})">
       ${orb(b)}
       <div>
         <b>${esc(b.n)} · <span style="color:#fde047">V${st.tier}</span></b>
         <small style="color:#cbd5e1;display:block">❤️ ${st.hp} HP · ⚔️ ${st.dmg} DMG</small>
         <span class="d">${st.activeDesc}</span>
+        ${window.BVBGameplay?.badge?.(b.id) || ''}
       </div>
     </button>`;
   }).join('');
@@ -2631,6 +2636,7 @@ function fire() {
   if (netRole === 'guest' && activeConn) {
     guestAimSent = true;
     guestAimAngle = G.pa;
+    window.BVBGameplay?.resendTactic?.();
     netSend({ type: 'fire', angle: G.pa, matchId: G.matchId, rn: G.rn });
     $('#fire').disabled = true;
     $('#msg').textContent = 'Wysłano strzał. Oczekiwanie na ruch drugiego gracza…';
@@ -2650,13 +2656,14 @@ function fire() {
 }
 function launchMatch(remoteAngle = null) {
   if (!G || G.ph !== 'aim') return;
-  const p = actor(G.pb, 180, 300, G.pa, 0, 0);
+  const p = G.m === 12 ? actor(G.pb, 180, 300, G.pa, 0, 0, 1, 0, 0) : actor(G.pb, 180, 300, G.pa, 0, 0);
   const botAim = remoteAngle == null
     ? computeBotAim(180, 60, 180, 300, Math.cos(G.pa), Math.sin(G.pa), diff)
     : remoteAngle;
   const enemyBall = G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : G.bb;
   const enemyAngle = remoteAngle == null ? botAim : remoteAngle + Math.PI;
-  const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, G.m === 11 ? 3 : 2, diff, diff);
+  const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, G.m === 12 ? 1 : G.m === 11 ? 3 : 2, G.m === 12 ? 0 : diff, G.m === 12 ? 0 : diff);
+  window.BVBGameplay?.prepareActors?.(G, p, e);
   G.bl = [p, e];
   G.ph = 'battle';
   G.rt = 0;
@@ -2788,7 +2795,8 @@ function step(dt) {
   moveArena(dt);
   for (const o of G.bl) {
     if (!alive(o)) continue;
-    const speedBoost = (G.m === 11 ? 1.08 : 1.15) * (o.status.stun > 0 ? 0 : o.status.slow > 0 ? 0.55 : 1);
+    o.contact = Math.max(0,(o.contact||0)-dt);
+    const speedBoost = (G.m === 11 ? 1.08 : 1.15) * (o.speedFactor||1) * (o.status.stun > 0 ? 0 : o.status.slow > 0 ? 0.55 : 1);
     o.x += o.vx * 110 * speedBoost * dt;
     o.y += o.vy * 110 * speedBoost * dt;
     o.trailClock = (o.trailClock || 0) + dt;
@@ -2801,7 +2809,7 @@ function step(dt) {
     if (o.abilityCd <= 0) {
       const foe = G.bl.find(t => t !== o && alive(t));
       specialAbility(o, foe);
-      o.abilityCd = Math.max(1.5, (o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6);
+      o.abilityCd = Math.max(1.0, ((o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6) * (o.abilityRate||1));
     }
     if (o.status.slow > 0) o.status.slow = Math.max(0, o.status.slow - dt);
     if (o.status.stun > 0) o.status.stun = Math.max(0, o.status.stun - dt);
@@ -2815,14 +2823,32 @@ function step(dt) {
   }
   if (G.bl.length === 2) {
     const [a, b] = G.bl;
-    if (alive(a) && alive(b) && Math.hypot(a.x - b.x, a.y - b.y) < a.r + b.r) {
-      applyDamage(a, 15);
-      applyDamage(b, 15);
-      burst(a, effectType(b.b), 6, false);
-      burst(b, effectType(a.b), 6, false);
-      SFX.hit();
-      a.vx *= -1; a.vy *= -1;
-      b.vx *= -1; b.vy *= -1;
+    if (alive(a) && alive(b)) {
+      const dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);
+      const minDist=a.r+b.r;
+      if (dist < minDist) {
+        // Separate overlapping balls before dealing damage; never hit every frame.
+        const nx=dist>0.001?dx/dist:1,ny=dist>0.001?dy/dist:0;
+        const penetration=minDist-dist+.75;
+        a.x=clamp(a.x+nx*penetration*.5,a.r,W-a.r);
+        a.y=clamp(a.y+ny*penetration*.5,a.r,W-a.r);
+        b.x=clamp(b.x-nx*penetration*.5,b.r,W-b.r);
+        b.y=clamp(b.y-ny*penetration*.5,b.r,W-b.r);
+        if (a.contact<=0 && b.contact<=0) {
+          a.contact=b.contact=.30;
+          const damageToA=Math.max(3,b.baseDmg*(b.power||1));
+          const damageToB=Math.max(3,a.baseDmg*(a.power||1));
+          applyDamage(a,damageToA);
+          applyDamage(b,damageToB);
+          burst(a,effectType(b.b),8,false);
+          burst(b,effectType(a.b),8,false);
+          SFX.hit();
+        }
+        // Reflect incoming velocities relative to the contact normal.
+        const da=a.vx*nx+a.vy*ny,db=b.vx*nx+b.vy*ny;
+        if(da<0){a.vx-=2*da*nx;a.vy-=2*da*ny;}
+        if(db>0){b.vx-=2*db*nx;b.vy-=2*db*ny;}
+      }
     }
   }
   updateEffects(dt);
@@ -3021,5 +3047,6 @@ if (invitedRoom && invitedRoom.length < 150) {
 requestAnimationFrame(loop);
 </script>
 <script src="./bvb-anime-update.js"></script>
+<script src="./bvb-gameplay.js"></script>
 </body>
 </html>
