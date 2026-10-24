@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signed() { return request.auth != null; }
+    function owner(uid) { return signed() && request.auth.uid == uid; }
+
+    // Only the logged-in account can read/write its entire game save.
+    match /saves/{uid} {
+      allow get: if owner(uid);
+      allow list, delete: if false;
+      allow create, update: if owner(uid)
+        && request.resource.data.keys().hasOnly(['state', 'updatedAt'])
+        && request.resource.data.keys().hasAll(['state', 'updatedAt'])
+        && request.resource.data.state is string
+        && request.resource.data.state.size() < 350000
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    // The public profile contains ONLY nickname and provisional scores; no email or private save.
+    // WARNING: client-supplied scores can be tampered with. Verified rankings require server-side game validation.
+    match /profiles/{uid} {
+      allow get: if signed();
+      allow list: if signed() && request.query.limit <= 20;
+      allow create, update: if owner(uid)
+        && request.resource.data.keys().hasOnly(['uid', 'nick', 'nickKey', 'wins', 'level', 'updatedAt'])
+        && request.resource.data.keys().hasAll(['uid', 'nick', 'nickKey', 'wins', 'level', 'updatedAt'])
+        && request.resource.data.uid == uid
+        && request.resource.data.nick is string && request.resource.data.nick.size() >= 3 && request.resource.data.nick.size() <= 16
+        && request.resource.data.nickKey is string && request.resource.data.nickKey.size() >= 3 && request.resource.data.nickKey.size() <= 32
+        && request.resource.data.wins is int && request.resource.data.wins >= 0
+        && request.resource.data.level is int && request.resource.data.level >= 1
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+      match /friends/{friendUid} {
+        allow get, list: if owner(uid);
+        allow create, update: if owner(uid)
+          && request.resource.data.keys().hasOnly(['uid','nick','addedAt'])
+          && request.resource.data.uid == friendUid
+          && request.resource.data.nick is string && request.resource.data.nick.size() <= 16
+          && request.resource.data.addedAt == request.time;
+        allow delete: if owner(uid);
+      }
+    }
+
+    match /inbox/{recipient}/invites/{inviteId} {
+      allow get, list, delete: if owner(recipient);
+      allow create: if signed()
+        && request.resource.data.keys().hasOnly(['from','to','fromNick','room','createdAt'])
+        && request.resource.data.keys().hasAll(['from','to','fromNick','room','createdAt'])
+        && request.resource.data.from == request.auth.uid
+        && request.resource.data.to == recipient
+        && exists(/databases/$(database)/documents/profiles/$(request.auth.uid)/friends/$(recipient))
+        && request.resource.data.fromNick is string && request.resource.data.fromNick.size() <= 16
+        && request.resource.data.room is string && request.resource.data.room.size() <= 150
+        && request.resource.data.createdAt == request.time;
+      allow update: if false;
+    }
+
+    match /{path=**} { allow read, write: if false; }
+  }
+}
