@@ -1,44 +1,38 @@
-# 🎮 Ball VS Ball — online
+# 🎮 Ball VS Ball (BVB)
 
-**Gra:** https://shadow31905.github.io/ball-vs-ball/
+**Graj:** https://shadow31905.github.io/ball-vs-ball/
 
-## 1vs1 z kolegą
+## ✅ Baza Supabase jest podłączona
 
-Oboje otwórzcie grę. W **Multiplayer online** jeden gracz klika **Utwórz pokój** i wysyła link drugiemu. Kolega otwiera link i klika **Dołącz do pokoju**, a host **Rozpocznij 1vs1**. Gra używa PeerJS / WebRTC. Różne sieci Wi-Fi mogą działać, ale nie w każdej sieci jest możliwe połączenie bez TURN.
+Projekt **Ball VS Ball** w Supabase działa i został podłączony do gry w pliku `supabase-config.js`. Baza ma włączone reguły RLS chroniące zapisy graczy. Rejestracja, logowanie, prywatny postęp, znajomi i zaproszenia używają Supabase.
 
-## 👤 Konta — bez Firebase, z Supabase
+**Uwaga o e-mailach:** Supabase domyślnie wymaga potwierdzenia adresu e-mail. Żeby link w mailu prawidłowo wracał do BVB, właściciel projektu powinien jeszcze ustawić adresy przekierowań w panelu Supabase:
 
-Ekran startowy ma trzy opcje: **Zaloguj się**, **Stwórz konto**, **Graj bez konta**. Konta online potrzebują bazy danych oraz usługi logowania. Ta wersja korzysta z **Supabase**, nie z Firebase. Usunięto kod Firebase.
+1. Otwórz [Auth → URL Configuration](https://supabase.com/dashboard/project/mcmvowcsvcinnmanejeh/auth/url-configuration).
+2. W **Site URL** wpisz `https://shadow31905.github.io/ball-vs-ball/`.
+3. Dodaj ten sam adres do **Redirect URLs** i zapisz.
 
-**Ważne: samo umieszczenie kodu na GitHub Pages nie uruchomi jeszcze rejestracji.** Jednorazowo trzeba podłączyć własny projekt Supabase.
+Bez tego potwierdzenie e-maila może prowadzić na domyślny adres `localhost:3000`. Po kliknięciu linku w e-mailu można wtedy ręcznie wrócić do strony gry i spróbować się zalogować.
 
-1. Wejdź na https://supabase.com/dashboard i utwórz projekt.
-2. W **SQL Editor** uruchom całą zawartość [`supabase-schema.sql`](supabase-schema.sql). To tworzy profile, prywatne zapisy, listy znajomych i zaproszenia oraz zabezpiecza je przez RLS.
-3. W **Authentication → Providers → Email** włącz e-mail i hasło (najbezpieczniej z potwierdzeniem e-mail).
-4. W **Authentication → URL Configuration** ustaw `Site URL` na `https://shadow31905.github.io/ball-vs-ball/` i dopisz ten adres do `Redirect URLs`.
-5. W **Project Settings → API Keys** skopiuj **Project URL** oraz klucz **publishable** (ewentualnie dawny **anon**). Wklej je w publiczny plik [`supabase-config.js`](supabase-config.js) jako `url` i `publishableKey`.
-6. **Nigdy nie publikuj** klucza `service_role`, `secret`, żadnego hasła ani tokenu administratora na GitHubie.
-7. Odśwież grę i załóż testowe konto. Gdy potwierdzasz e-mail, po potwierdzeniu zaloguj się ponownie. W zakładce Konto wybierz **Zachowaj obecny postęp w chmurze**, potem sprawdź konto na drugim urządzeniu i wybierz **Wczytaj zapis z chmury**.
+**Nie udostępniaj nikomu swojego hasła ani kluczy tajnych Supabase.** Klucz `sb_publishable_...` w `supabase-config.js` jest publiczny i może być używany w przeglądarce; nigdy nie umieszczaj tam `service_role` ani klucza `secret`.
 
-### 🔐 Nicki niepowtarzalne
+## 👤 Konta
 
-- Nick musi mieć 3–16 znaków: litery A–Z, cyfry i `_`.
-- `Kuba` oraz `kuba` to ten sam nick.
-- Baza Postgres ma unikalny indeks `lower(nick)` i tworzy profil **w tej samej transakcji co nowe konto**. To blokuje duplikaty, również jeśli dwie osoby rejestrują się jednocześnie.
-- Zmiana nicku zwalnia stary nick, którego można użyć ponownie.
+- Na początku gry: **Zaloguj się / Stwórz konto / Graj bez konta**.
+- Nick: 3–16 znaków; litery A–Z, cyfry i `_`.
+- Nazwy nie mogą się powtarzać niezależnie od wielkości liter, np. `Kuba` i `kuba` to ten sam nick. Wymusza to unikalny indeks w bazie.
+- Gracz sam decyduje o przesłaniu lokalnego postępu do chmury lub pobraniu istniejącego zapisu. Przed pobraniem gry z chmury tworzona jest lokalna kopia zapasowa.
+- Publiczny ranking jest informacyjny: nie ma jeszcze ochrony przed fałszowaniem wyników.
 
-### ☁️ Postęp i bezpieczeństwo
+## 🌐 1vs1 przez internet
 
-- Początkowe lokalne zapisy gry pozostają na urządzeniu. Przed wczytaniem chmury powstaje lokalna kopia zapasowa.
-- Hasłami zajmuje się **Supabase Auth**. Kod gry nie przechowuje haseł.
-- Każdy gracz ma dostęp tylko do **swojego** zapisu w tabeli `saves` (RLS). Publiczne profile zawierają nick i statystyki, bez e-maila.
-- Listy znajomych są jednostronne; zaproszenia do pokoju można zobaczyć w zakładce Konto → Zaproszenia.
-- Ranking jest informacyjny. Do prawdziwego rankingu rywalizacyjnego potrzebna jest weryfikacja zwycięstw na zaufanym serwerze, ponieważ dane rozgrywki można zmienić w przeglądarce.
-- Zachowaj możliwość eksportu zapisu. Nie wpisuj jako nicku prawdziwego imienia i nazwiska.
+Obaj gracze otwierają stronę. Jeden wybiera **Multiplayer online → Utwórz pokój** i przesyła link zaproszenia, drugi klika **Dołącz do pokoju**. Host rozpoczyna mecz. Połączenie PeerJS/WebRTC może działać między różnymi sieciami Wi-Fi; nie każda sieć je przepuszcza, ponieważ nie ma serwera TURN.
 
-## Pliki
+## 📁 Pliki
 
 - `index.html` — gra BVB
-- `bvb-accounts.js` — obsługa kont, zapisów i znajomych Supabase
-- `supabase-config.js` — publiczne ustawienia nowego projektu (na razie puste)
-- `supabase-schema.sql` — schemat i reguły dostępu do bazy
+- `bvb-accounts.js` — obsługa kont Supabase
+- `supabase-config.js` — bezpieczna publiczna konfiguracja Supabase
+- `supabase-schema.sql` — schemat i reguły bezpieczeństwa użyte do tworzenia bazy
+
+**Firebase nie jest używany.**
