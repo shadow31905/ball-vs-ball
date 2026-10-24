@@ -13,19 +13,28 @@ BVB używa PeerJS/WebRTC. Gracze mogą być na różnych sieciach Wi-Fi, ale zal
 
 ## 👤 Konta BVB — uruchomienie (jednorazowe kroki właściciela)
 
-Kod ma przygotowane: rejestrację i logowanie e-mail + hasło, odzyskanie hasła, prywatne zapisy gry w chmurze, synchronizację między urządzeniami, pseudonimy, kontakty znajomych, zaproszenia do pokoju 1vs1 i **informacyjny** ranking.
+Po otwarciu gry pojawia się ekran **Zaloguj się / Stwórz konto** (oraz opcja **Graj bez konta**, żeby nie blokować dotychczasowej rozgrywki). Kod ma przygotowane: rejestrację i logowanie e-mail + hasło, odzyskanie hasła, prywatne zapisy gry w chmurze, synchronizację między urządzeniami, pseudonimy, kontakty znajomych, zaproszenia do pokoju 1vs1 i **informacyjny** ranking.
 
-**Konta pozostają wyłączone, dopóki nie podłączysz własnego Firebase.** Gra bez kont nadal działa z lokalnym zapisem, więc konfiguracja nie usuwa postępu.
+**Konta pozostają wyłączone, dopóki nie podłączysz własnego Firebase.** Przyciski rejestracji/logowania są widoczne na ekranie startowym, ale bez konfiguracji wyświetlają stosowny komunikat. Gra bez kont nadal działa z lokalnym zapisem, więc konfiguracja nie usuwa postępu.
 
 1. Otwórz https://console.firebase.google.com/ i utwórz projekt Firebase.
 2. W projekcie dodaj **aplikację webową** (`</>`), skopiuj jej *Firebase web app config* (`apiKey`, `authDomain`, `projectId`, `appId`). To identyfikatory publiczne aplikacji, **nie** klucz administracyjny, hasło ani service account.
 3. W **Authentication → Sign-in method** włącz **Email/Password**.
 4. W **Authentication → Settings → Authorized domains** dodaj `shadow31905.github.io` (jeśli brak). Nie dodawaj nieznanych domen.
-5. Utwórz bazę **Cloud Firestore** w trybie produkcyjnym. W zakładce **Rules** wklej całe reguły z pliku [`firestore.rules`](firestore.rules) i kliknij **Publish**. **Nie ustawiaj `allow read, write: if true`.**
+5. Utwórz bazę **Cloud Firestore** w trybie produkcyjnym. W zakładce **Rules** wklej **najnowsze** reguły z pliku [`firestore.rules`](firestore.rules) i kliknij **Publish** (to konieczne do wyłącznej rezerwacji nicków). **Nie ustawiaj `allow read, write: if true`.**
 6. Edytuj plik [`firebase-config.js`](firebase-config.js) w repozytorium: zamiast `null` wpisz skopiowany publiczny obiekt `firebaseConfig`. Zostaw `window.BVB_FIREBASE_CONFIG =` i średnik; **nie publikuj prywatnych kluczy ani haseł**.
-7. GitHub Pages opublikuje zmianę automatycznie. Otwórz stronę, zakładkę **Konto**, zarejestruj testowe konto, wybierz **Zachowaj ten postęp w chmurze**, zaloguj się na drugim urządzeniu i wybierz **Wczytaj mój zapis z chmury**.
+7. GitHub Pages opublikuje zmianę automatycznie. Otwórz stronę, zakładkę **Konto**, na ekranie startowym stwórz testowe konto z unikalnym nickiem, wybierz **Zachowaj ten postęp w chmurze**, zaloguj się na drugim urządzeniu i wybierz **Wczytaj mój zapis z chmury**.
 
 **Zapis na urządzeniu nie zostaje nadpisany bez pytania.** Wczytanie chmury tworzy kopię poprzedniego lokalnego stanu pod kluczem `bvb_cloud_backup_<timestamp>` w Local Storage przeglądarki. Zalecany jest też **Eksport Zapisu** w Ustawieniach gry.
+
+### 🆔 Unikalne nicki
+
+- Nick ma **3–16 znaków**, tylko litery A–Z, cyfry i `_` (np. `SuperGracz_7`).
+- **Wielkość liter nie odróżnia nicków:** `Kuba` i `kuba` to ta sama nazwa.
+- Rejestracja i zmiana nicku używają **transakcji Firestore** zapisującej profil wraz z rezerwacją w `nicknames/<nick zapisany małymi literami>`.
+- Reguły Firestore sprawdzają spójność tych dokumentów. Gdy dwie osoby próbują jednocześnie zająć ten sam nick, tylko jedna transakcja może się udać.
+- Zmiana nicku zwalnia poprzednią nazwę. **Przy wdrażaniu tej wersji należy ponownie opublikować reguły Firestore.**
+- Gdy dodajesz konta do już istniejącej bazy Firebase, sprawdź ewentualne stare duplikaty nicków. Stary gracz z konfliktem zostanie poproszony o wybór innego nicku.
 
 ### Bezpieczeństwo i ograniczenia
 
