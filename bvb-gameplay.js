@@ -17,6 +17,13 @@
     frenzy: {icon:'⚡',name:'SZYBKIE MOCE',desc:'Umiejętności odnawiają się o 25% szybciej'},
     clash: {icon:'💥',name:'POTĘŻNE UDERZENIA',desc:'Obie kulki zadają o 13% więcej obrażeń, ale są wolniejsze'}
   };
+  const MISSIONS = {
+    strike: {name:'Siła ataku',desc:'Wygraj rundę z taktyką Atak',reward:25},
+    guard: {name:'Mocna obrona',desc:'Wygraj rundę z taktyką Obrona',reward:25},
+    rush: {name:'Mistrz szybkości',desc:'Wygraj rundę z taktyką Szybkość',reward:25},
+    balls: {name:'Dwie różne kulki',desc:'Wygraj rundy dwiema różnymi kulkami',reward:35},
+    styles: {name:'Adaptacja',desc:'Wygraj rundy dwoma różnymi taktykami',reward:35}
+  };
   let personalChoice = 'balanced', matchKey = '', panelKey = '';
   const oldDraw = draw, oldRoundEnd = roundEnd;
   const palette = document.createElement('style');
@@ -59,6 +66,11 @@
     if (typeof SFX?.tick === 'function') SFX.tick();
   }
 
+  function newMatch(g) {
+    if (!g || g.m === 12 || netRole === 'guest') return;
+    const keys=Object.keys(MISSIONS);
+    g.mission={key:keys[Math.floor(Math.random()*keys.length)],complete:false,progress:[]};
+  }
   function nextRule(g) {
     if (!g || netRole === 'guest') return;
     const keys = Object.keys(RULES).filter(k=>k!==g.lastModifier);
@@ -131,11 +143,16 @@
     const current=useChoice(G),r=rule(G);
     const locked=G.ph!=='draft'&&G.ph!=='aim' || (netRole==='guest'&&G.m===12&&guestAimSent) || (netRole==='host'&&G.m===12&&hostAimAngle!=null);
     const effective = netRole==='guest' && G.m===12 ? current : G.tactics?.[0]||current;
-    const key = roundKey(G)+':'+G.ph+':'+r.name+':'+effective+':'+locked;
+    const mission = G.mission && MISSIONS[G.mission.key];
+    const key = roundKey(G)+':'+G.ph+':'+r.name+':'+effective+':'+locked+':'+(G.mission?.complete||false)+':'+(G.mission?.progress?.length||0);
     if(key===panelKey)return;
     panelKey=key;
     const tip=TACTICS[effective] || TACTICS.balanced;
     el.innerHTML =
+      (mission ? '<p class="bvb-rule" style="border-left:3px solid #facc15">'+
+        '<b>🏅 Misja meczu: '+mission.name+'</b> · +'+mission.reward+' 🪙<span style="display:block;color:#cad7fa">'+
+        (G.mission.complete?'✅ Wykonano!':mission.desc+(G.mission.progress?.length?' ('+G.mission.progress.length+'/2)':''))+
+        '</span></p>':'')+
       '<p class="bvb-rule"><b>'+r.icon+' Zasada rundy: '+r.name+'</b><span style="display:block;color:#cad7fa">'+r.desc+'</span></p>'+
       '<b style="font-size:12px">🎯 Twoja taktyka na tę rundę'+(locked?' (wybrana)':' (wybierz przed strzałem)')+':</b>'+
       '<div class="bvb-buttons">'+Object.entries(TACTICS).map(([id,t])=>
@@ -147,9 +164,29 @@
   }
 
   draw = function() { oldDraw(); displayPanel(); };
+  function updateMission(winner, participant) {
+    if(winner!==0 || !participant || !G?.mission || G.mission.complete || G.m===12 || G.m===4)return;
+    const mission=G.mission, task=MISSIONS[mission.key];
+    if(!task)return;
+    const tactic=G.tactics?.[0]||'balanced';
+    let fulfilled=false;
+    if(['strike','guard','rush'].includes(mission.key))fulfilled=tactic===mission.key;
+    else {
+      const id=mission.key==='balls'?participant.b.id:tactic;
+      if(!mission.progress.includes(id))mission.progress.push(id);
+      fulfilled=mission.progress.length>=2;
+    }
+    if(fulfilled){
+      mission.complete=true;
+      S.coins=(S.coins||0)+task.reward;
+      G.pop ||= [];
+      G.pop.push({x:participant.x,y:Math.max(25,participant.y-55),text:'🏅 MISJA +'+task.reward+' 🪙',c:'#facc15',age:0,life:1.35});
+    }
+  }
   roundEnd = function(winner) {
     if(!G || G.ph!=='battle')return;
     const participant=G.bl?.find(o=>o.team===0);
+    updateMission(winner,participant);
     if(participant && G.m!==12 && !participant.b?.isBoss){
       S.mastery ||= {};
       const id=participant.b.id;
@@ -164,7 +201,7 @@
     oldRoundEnd(winner);
   };
 
-  window.BVBGameplay = {TACTICS,RULES,newRound:nextRule,prepareActors,selectTactic,applyRemoteTactic,resendTactic,onGuestState,badge,rank,
+  window.BVBGameplay = {TACTICS,RULES,MISSIONS,newMatch,newRound:nextRule,prepareActors,selectTactic,applyRemoteTactic,resendTactic,onGuestState,badge,rank,
     getTactic:()=>personalChoice,
     getRule:()=>G?.modifier||'standard'
   };
