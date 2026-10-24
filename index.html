@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Ball VS Ball — Ultimate Edition (130 Kulek + Brawl Stars Inventory + V2/V3 + Multiplayer)</title>
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="./firebase-config.js"></script>
+  <script type="module" src="./bvb-cloud.js"></script>
   <style>
     :root {
       --bg: #070a18;
@@ -577,6 +579,7 @@
       <button class="b" onclick="mpMenu()">
         <span class="icon-globe">🌐</span> Multiplayer 1 vs 1 / Co-Op 2v2 (online)
       </button>
+      <button class="b ac" onclick="panel('account')">👤 Konto · Znajomi · Ranking</button>
 
       <button class="b" id="svBtn" onclick="startMatch(1)">
         Survival (rekord: fala 0)
@@ -1038,6 +1041,7 @@ function save() {
   const cc = $('#coinCount'), cd = $('#candyCount');
   if (cc && S) cc.textContent = S.coins;
   if (cd && S) cd.textContent = S.candies;
+  window.BVBCloud?.scheduleSave?.();
 }
 
 function snd(f, d, t, v, s, m) {
@@ -1250,6 +1254,7 @@ function mpMenu() {
     <label style="display:block;margin:12px 0 5px">Kod pokoju</label>
     <input id="peerCode" class="inp" autocomplete="off" placeholder="Wklej kod hosta" />
     <button class="b" onclick="joinNet()">Dołącz do pokoju</button>
+    <div id="netFriendsHint" style="margin:8px 0;color:var(--mu);font-size:.85rem"></div>
     <p id="netStatus" role="status" style="margin:10px 0;color:#93c5fd">Niepołączono.</p>
     <button class="b" onclick="disconnectNet();mpMenu()">Rozłącz</button>`;
 }
@@ -1296,6 +1301,7 @@ function hostNet() {
       netRole = 'host'; netStatus('Pokój gotowy. Wyślij ten kod znajomemu: ' + id);
       const el = $('#netStatus'); if (el) el.dataset.peerId = id;
       const invite = $('#netInvite'); if (invite) invite.hidden = !['http:', 'https:'].includes(location.protocol);
+      window.BVBCloud?.showLobbyFriends?.();
     });
     peer.on('connection', conn => {
       if (activeConn) { try { conn.close(); } catch(e) {} return; }
@@ -1498,6 +1504,7 @@ function panel(k) {
   $('#pn').dataset.panel = k;
   show('pn');
   const p = $('#pb');
+  if (k === 'account') { if (window.BVBCloud?.renderAccount) window.BVBCloud.renderAccount(); else p.innerHTML='<div class="cd"><h2>👤 Konto BVB</h2><p>System kont wymaga połączenia z Firebase. Gra lokalna działa bez zmian.</p></div>'; return; }
   if (k === 'arena') {arenaMenuPanel(p);return;}
   if (k === 'ach') {achievementsPanel(p);return;}
 
@@ -2916,6 +2923,21 @@ function loop(t) {
   requestAnimationFrame(loop);
 }
 
+// Safe interface between the classic game script and the optional Firebase module.
+window.BVBGameBridge = {
+  getNickname: () => String(S.nm || 'Gracz'),
+  setNickname: name => { S.nm = String(name||'Gracz').trim().slice(0,16);save(); },
+  stats: () => ({wins:Math.max(0,S.wins|0),level:Math.max(1,S.lv|0)}),
+  exportState: () => JSON.stringify(S),
+  backup: () => {try {localStorage.setItem('bvb_cloud_backup_'+Date.now(),JSON.stringify(S));} catch(e) { /* local storage may be full */ }},
+  importState: data => {try {const x=JSON.parse(data);if(!x || !Array.isArray(x.own))return false;localStorage.setItem(K,JSON.stringify(x));load();return true;} catch(e){return false;}},
+  goMenu: () => menu(),
+  getRoom: () => (netRole==='host' && activeConn?.open || netRole==='host' && peer?.id) ? peer?.id : null,
+  joinRoom: room => {if(typeof room!=='string' || !room || room.length>150)return;mpMenu();$('#peerCode').value=room;joinNet();}
+};
+window.addEventListener('bvb-cloud-ready',()=>{
+  if ($('#pn')?.dataset.panel === 'account' && !$('#pn').hidden) window.BVBCloud?.renderAccount?.();
+});
 load();
 menu();
 const invitedRoom = new URLSearchParams(location.search).get('room');
