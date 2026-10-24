@@ -104,7 +104,8 @@
     if (!foe || !alive(foe)) return;
     o.comboCooldown = 5.5;
     o.comboHits = 0;
-    const choice = Math.floor(Math.random()*3);
+    // Tactical choice controls the finisher; Balanced keeps the surprise.
+    const choice = o.tactic === 'strike' ? 0 : o.tactic === 'rush' ? 1 : o.tactic === 'guard' ? 2 : Math.floor(Math.random()*3);
     const col = o.b.c || '#e879f9';
     o.attackGlow = .75;
     addPop(o.x,o.y-36,'COMBO!','#fde047',1.3);
