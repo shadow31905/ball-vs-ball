@@ -1328,6 +1328,7 @@ function hostNet() {
       const invite = $('#netInvite'); if (invite) invite.hidden = !['http:', 'https:'].includes(location.protocol);
       window.BVBCloud?.showLobbyFriends?.();
     });
+    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
     peer.on('connection', conn => {
       if (activeConn) { try { conn.close(); } catch(e) {} return; }
       activeConn = conn; setupNetConnection(conn);
@@ -1344,6 +1345,7 @@ function joinNet() {
   reconnectRoom = code;
   try {
     peer = new Peer();
+    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
     peer.on('open', () => {
       netRole = 'guest';
       activeConn = peer.connect(code, { reliable: true });
@@ -1360,8 +1362,14 @@ function setupNetConnection(conn) {
     netStatus('Połączono! Rola: ' + (netRole === 'host' ? 'host' : 'gość') + '. Kanał danych działa.');
     const btn = $('#netStart'); if (btn) btn.hidden = true;
     netSend({ type: 'hello', role: netRole, name: 'Ball VS Ball' });
-    if (netRole === 'guest') netSend({ type: 'deck', ids: makeOwnOnlineDeck() });
-    else if (G?.m === 12) broadcastState();
+    if (netRole === 'guest') {
+      netSend({ type: 'deck', ids: makeOwnOnlineDeck() });
+      // Re-send the current round's unacknowledged input after a connection drop.
+      if (G?.m === 12 && guestMatchId === G.matchId && guestRound === G.rn) {
+        if (guestBallId != null) netSend({type:'pick', id:guestBallId, matchId:G.matchId, rn:G.rn});
+        if (guestAimSent) netSend({type:'fire', angle:guestAimAngle, matchId:G.matchId, rn:G.rn});
+      }
+    } else if (G?.m === 12) broadcastState();
   });
   conn.on('data', data => {
     if (!data || typeof data !== 'object') return;
