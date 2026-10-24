@@ -37,7 +37,9 @@ create index if not exists bvb_invites_recipient on public.invites (recipient_id
 
 -- Runs inside the Auth sign-up transaction, so nickname uniqueness is atomic.
 -- Untrusted user_metadata never grants privileges or stores a password here.
-create or replace function public.bvb_create_profile()
+create schema if not exists bvb_private;
+
+create or replace function bvb_private.bvb_create_profile()
 returns trigger
 language plpgsql
 security definer
@@ -57,7 +59,7 @@ $$;
 drop trigger if exists bvb_auth_user_created on auth.users;
 create trigger bvb_auth_user_created
   after insert on auth.users
-  for each row execute function public.bvb_create_profile();
+  for each row execute function bvb_private.bvb_create_profile();
 
 alter table public.profiles enable row level security;
 alter table public.saves enable row level security;
@@ -111,3 +113,6 @@ grant select,insert,delete on public.friends to authenticated;
 grant select,insert,delete on public.invites to authenticated;
 
 -- Ranking is informational only. Preventing falsified wins needs a trusted server.
+-- Privileged Auth trigger stays in a non-exposed schema.
+revoke all on schema bvb_private from public, anon, authenticated;
+revoke all on function bvb_private.bvb_create_profile() from public, anon, authenticated;
