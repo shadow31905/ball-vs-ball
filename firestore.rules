@@ -3,8 +3,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function signed() { return request.auth != null; }
     function owner(uid) { return signed() && request.auth.uid == uid; }
+    function namePath(key) { return /databases/$(database)/documents/nicknames/$(key); }
+    function profilePath(uid) { return /databases/$(database)/documents/profiles/$(uid); }
+    function validName(name) {
+      return name is string && name.matches('^[A-Za-z0-9_]{3,16}$');
+    }
 
-    // Only the logged-in account can read/write its entire game save.
+    // Private player save, available only to its owner.
     match /saves/{uid} {
       allow get: if owner(uid);
       allow list, delete: if false;
@@ -16,20 +21,60 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
     }
 
-    // The public profile contains ONLY nickname and provisional scores; no email or private save.
-    // WARNING: client-supplied scores can be tampered with. Verified rankings require server-side game validation.
+    // Globally exclusive names. A nickname document is keyed by LOWERCASE nick.
+    // Creation is paired atomically with profile creation/update via getAfter().
+    // No user may steal, mutate, or delete another person's claim.
+    match /nicknames/{key} {
+      allow get: if signed(); // existence check / lookup; never contains email
+      allow list: if false;
+      allow create: if signed()
+        && request.resource.data.keys().hasOnly(['uid','nick','nickKey'])
+        && request.resource.data.keys().hasAll(['uid','nick','nickKey'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.nickKey == key
+        && validName(request.resource.data.nick)
+        && request.resource.data.nick.lower() == key
+        && getAfter(profilePath(request.auth.uid)).data.nickKey == key
+        && getAfter(profilePath(request.auth.uid)).data.nick == request.resource.data.nick;
+      allow update: if signed()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['uid','nick','nickKey'])
+        && request.resource.data.keys().hasAll(['uid','nick','nickKey'])
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.nickKey == key
+        && validName(request.resource.data.nick)
+        && request.resource.data.nick.lower() == key
+        && getAfter(profilePath(request.auth.uid)).data.nickKey == key
+        && getAfter(profilePath(request.auth.uid)).data.nick == request.resource.data.nick;
+      allow delete: if signed()
+        && resource.data.uid == request.auth.uid
+        && resource.data.nickKey == key
+        && exists(profilePath(request.auth.uid))
+        && getAfter(profilePath(request.auth.uid)).data.nickKey != key;
+    }
+
+    // Public profile (no email and no passwords). Nick must always have a
+    // matching owned claim; old claim must be released when nick changes.
+    // Scores are client-provided and NOT cheat-resistant.
     match /profiles/{uid} {
       allow get: if signed();
       allow list: if signed() && request.query.limit <= 20;
       allow create, update: if owner(uid)
-        && request.resource.data.keys().hasOnly(['uid', 'nick', 'nickKey', 'wins', 'level', 'updatedAt'])
-        && request.resource.data.keys().hasAll(['uid', 'nick', 'nickKey', 'wins', 'level', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['uid','nick','nickKey','wins','level','updatedAt'])
+        && request.resource.data.keys().hasAll(['uid','nick','nickKey','wins','level','updatedAt'])
         && request.resource.data.uid == uid
-        && request.resource.data.nick is string && request.resource.data.nick.size() >= 3 && request.resource.data.nick.size() <= 16
-        && request.resource.data.nickKey is string && request.resource.data.nickKey.size() >= 3 && request.resource.data.nickKey.size() <= 32
+        && validName(request.resource.data.nick)
+        && request.resource.data.nickKey == request.resource.data.nick.lower()
+        && getAfter(namePath(request.resource.data.nickKey)).data.uid == uid
+        && getAfter(namePath(request.resource.data.nickKey)).data.nick == request.resource.data.nick
         && request.resource.data.wins is int && request.resource.data.wins >= 0
         && request.resource.data.level is int && request.resource.data.level >= 1
-        && request.resource.data.updatedAt == request.time;
+        && request.resource.data.updatedAt == request.time
+        && (!exists(profilePath(uid))
+             || resource.data.nickKey == request.resource.data.nickKey
+             || !existsAfter(namePath(resource.data.nickKey))
+             || (exists(namePath(resource.data.nickKey))
+                 && get(namePath(resource.data.nickKey)).data.uid != uid));
       allow delete: if false;
       match /friends/{friendUid} {
         allow get, list: if owner(uid);
