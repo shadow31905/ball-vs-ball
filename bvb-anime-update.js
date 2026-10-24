@@ -143,7 +143,7 @@
         target.flashColor = attacker?.b?.c || '#fff';
         sparks(target.x,target.y,target.flashColor,crit?19:9,target.b?.id||0);
         ring(target.x,target.y,crit?'#ef4444':target.flashColor,target.r+2,crit?.65:.28);
-        if (S.o.nd) addPop(target.x,target.y-23,(crit?'CRITICAL! ':'')+Math.ceil(dealt),
+        if (S.o.nd || crit) addPop(target.x,target.y-23,(crit?'CRITICAL! ':'')+(S.o.nd?Math.ceil(dealt):''),
           crit?'#ff4747':'#fff4a3',crit?1.25:.75);
         if (attacker && alive(attacker)) {
           attacker.comboHits = (attacker.comboHits||0)+1;
@@ -209,13 +209,14 @@
     if (!G || G.ph !== 'battle') return;
     G.ph = 'end';
     if(winner>=0) G.h[1-winner]--;
+    G.lastRoundWinner = winner;
     const loser = G.bl?.find(o=>o.team!==winner);
     const victor = G.bl?.find(o=>o.team===winner);
     const kind = effectType(victor?.b);
     if(loser) {burst(loser,kind,35,false);ring(loser.x,loser.y,EFFECTS[kind]?.color||'#fff',25,1.3);}
     hearts();
     broadcastState();
-    banner(winner<0?'DRAW!':'K.O.!',winner<0?'#facc15':EFFECTS[kind]?.color||'#fb7185',1500);
+    banner(winner<0?'DRAW!':winner===0?'VICTORY!':'DEFEAT!',winner<0?'#facc15':winner===0?'#fbbf24':'#8b5cf6',1500);
     const match = G.matchId, round = G.rn;
     setTimeout(()=>{
       if(!G || G.matchId!==match || G.rn!==round || G.ph!=='end') return;
@@ -334,7 +335,7 @@
         if(netRole==='guest'){
           if(G.finished)banner(G.h[0]>0?'VICTORY!':'DEFEAT!',G.h[0]>0?'#fbbf24':'#8b5cf6');
           else if(G.ph==='battle')banner('ROUND START!','#38bdf8');
-          else if(G.ph==='end')banner('K.O.!','#fb7185');
+          else if(G.ph==='end')banner(G.lastRoundWinner<0?'DRAW!':G.lastRoundWinner===0?'VICTORY!':'DEFEAT!',G.lastRoundWinner===0?'#fbbf24':'#8b5cf6');
         } else if(G.finished)banner(G.h[0]>0?'VICTORY!':'DEFEAT!',G.h[0]>0?'#fbbf24':'#8b5cf6');
         else if(G.ph==='battle')banner('ROUND START!','#38bdf8');
       }
