@@ -1255,7 +1255,15 @@ function mpMenu() {
 }
 function startOnlineMatch() {
   if (netRole !== 'host' || !activeConn?.open) { netStatus('Najpierw połącz się ze znajomym.'); return; }
+  if (!guestOnlineDeck || guestOnlineDeck.length !== 3) {
+    netStatus('Czekam na kolekcję kulek znajomego.'); return;
+  }
   startMatch(12);
+}
+// Każdy gracz korzysta z własnych odblokowanych kulek, a nie z losowych kulek bota.
+function makeOwnOnlineDeck() {
+  const owned = B.filter(b => S.own.includes(b.id));
+  return sh(owned.length >= 3 ? owned : [B[0], B[1], B[2]]).slice(0, 3).map(b => b.id);
 }
 function netStatus(message) {
   const el = $('#netStatus');
@@ -1279,7 +1287,7 @@ async function copyNetInvite() {
   }
 }
 function hostNet() {
-  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null;
+  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
   if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
   disconnectNet(false);
   try {
@@ -1297,7 +1305,7 @@ function hostNet() {
   } catch (e) { netStatus('Nie udało się utworzyć pokoju: ' + e.message); }
 }
 function joinNet() {
-  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null;
+  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
   const code = ($('#peerCode')?.value || '').trim();
   if (!code) { netStatus('Najpierw wpisz kod pokoju.'); return; }
   if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
@@ -1315,12 +1323,26 @@ function joinNet() {
 function setupNetConnection(conn) {
   conn.on('open', () => {
     netStatus('Połączono! Rola: ' + (netRole === 'host' ? 'host' : 'gość') + '. Kanał danych działa.');
-    const btn = $('#netStart'); if (btn) btn.hidden = (netRole !== 'host');
+    const btn = $('#netStart'); if (btn) btn.hidden = true;
     netSend({ type: 'hello', role: netRole, name: 'Ball VS Ball' });
+    if (netRole === 'guest') netSend({ type: 'deck', ids: makeOwnOnlineDeck() });
   });
   conn.on('data', data => {
     if (!data || typeof data !== 'object') return;
-    if (data.type === 'hello') { netStatus('Połączono ze znajomym. Host może rozpocząć mecz.'); if (netRole === 'host') { const btn = $('#netStart'); if (btn) btn.hidden = false; broadcastState(); } }
+    if (data.type === 'hello') {
+      netStatus(netRole === 'host' ? 'Połączono. Czekam na kulki znajomego…' : 'Połączono ze znajomym. Czekam na rozpoczęcie meczu.');
+    }
+    if (data.type === 'deck' && netRole === 'host' && (!G || G.finished || G.m !== 12)) {
+      const ids = data.ids;
+      if (Array.isArray(ids) && ids.length === 3 &&
+          new Set(ids).size === 3 && ids.every(id => Number.isInteger(id) && B[id])) {
+        guestOnlineDeck = ids.map(id => B[id]);
+        netStatus('Połączono! Obaj gracze użyją swoich odblokowanych kulek.');
+        const btn = $('#netStart'); if (btn) btn.hidden = false;
+      } else {
+        netStatus('Nieprawidłowa kolekcja znajomego. Połączcie się ponownie.');
+      }
+    }
     if (data.type === 'state' && netRole === 'guest' && data.state) {
       // The host owns the simulation; reverse perspectives for the guest.
       const hostState = data.state;
@@ -1374,7 +1396,9 @@ function setupNetConnection(conn) {
       }
     }
     if (data.type === 'pick' && netRole === 'host') {
-      remoteBallId = B.find(b => b.id === data.id) || B[0];
+      // Gość może wybierać tylko spośród trzech kulek ze swojej talii.
+      remoteBallId = G?.bt?.find(b => b.id === data.id) || null;
+      if (!remoteBallId) return;
       if (G && G.ph === 'aim') G.bb = remoteBallId;
       broadcastState();
     }
@@ -1384,7 +1408,7 @@ function setupNetConnection(conn) {
     }
     if (data.type === 'ping') netSend({type:'pong', at:data.at});
   });
-  conn.on('close', () => { activeConn = null; const btn = $('#netStart'); if (btn) btn.hidden = true; netStatus('Połączenie zostało zamknięte.'); });
+  conn.on('close', () => { activeConn = null; guestOnlineDeck = null; const btn = $('#netStart'); if (btn) btn.hidden = true; netStatus('Połączenie zostało zamknięte.'); });
   conn.on('error', err => netStatus('Błąd kanału: ' + (err.message || 'nieznany')));
 }
 function netSend(data) {
@@ -1397,10 +1421,10 @@ function broadcastState() {
 function disconnectNet(updateStatus = true) {
   try { if (activeConn) activeConn.close(); } catch (e) {}
   try { if (peer && !peer.destroyed) peer.destroy(); } catch (e) {}
-  activeConn = null; peer = null; netRole = null; guestRound = -1; guestMatchId = null; guestBallId = null; guestAimSent = false;
+  activeConn = null; peer = null; netRole = null; guestRound = -1; guestMatchId = null; guestBallId = null; guestAimSent = false; guestOnlineDeck = null;
   if (updateStatus) netStatus('Rozłączono.');
 }
-let pendingBossIndex = 0, netRole = null, remoteBallId = null, remoteAimAngle = null, hostAimAngle = null, netSyncAt = 0, guestBallId = null, guestRound = -1, guestMatchId = null, guestAimSent = false, guestAimAngle = -Math.PI / 2;
+let pendingBossIndex = 0, netRole = null, remoteBallId = null, remoteAimAngle = null, hostAimAngle = null, netSyncAt = 0, guestBallId = null, guestRound = -1, guestMatchId = null, guestAimSent = false, guestAimAngle = -Math.PI / 2, guestOnlineDeck = null;
 
 const ARENA_ACHIEVEMENTS = [
   { id:'arenas', name:'🏆 Wędrowiec Aren', description:'Wygraj mecz na każdej z 6 aren.', coin:180, title:'Wędrowiec Aren', aura:'#fbbf24' },
@@ -1610,7 +1634,7 @@ function renderBrawlInventory(p) {
     <div class="bs-top">
       <div>
         <div class="bs-counter">🔮 ODBLOKOWANE KULKI: ${S.own.length} / ${B.length}</div>
-        <small style="color:var(--mu);font-size:0.76rem">Kliknij dowolną kulkę, aby zobaczyć statystyki, ulepszenia HP/DMG i ewolucję V2/V3!</small>
+        <small style="color:var(--mu);font-size:0.76rem">Tylko kulki w sekcji „Odblokowane” należą do Ciebie. Pozostałe są podglądem do zdobycia.</small>
       </div>
       <input class="inp" style="margin:4px 0 0" placeholder="🔍 Szukaj kulki..." value="${colSearch.replace(/"/g, '')}" oninput="colSearch=this.value;renderBrawlInventory($('#pb'))" />
       <div style="display:flex;gap:4px;flex-wrap:wrap;width:100%;margin-top:4px">
@@ -2461,7 +2485,11 @@ function startMatch(mode = 0) {
   refreshPeriods();
   const own = B.filter(b => S.own.includes(b.id));
   const myThree = mode === 4 ? B : (own.length >= 3 ? sh(own).slice(0, 3) : [B[0], B[1], B[2]]);
-  const botThree = (mode == 9 || mode == 10) ? [B[99], ...sh(B.filter(b => b.id >= 100)).slice(0, 2)] : sh(B.filter(b => b.id < 99)).slice(0, 3);
+  if (mode === 12 && (!activeConn?.open || netRole !== 'host' || !guestOnlineDeck)) {
+    netStatus('Poczekaj na połączenie i kolekcję znajomego.'); return;
+  }
+  const botThree = mode === 12 ? guestOnlineDeck.slice() :
+    (mode == 9 || mode == 10) ? [B[99], ...sh(B.filter(b => b.id >= 100)).slice(0, 2)] : sh(B.filter(b => b.id < 99)).slice(0, 3);
   if (mode === 11) botThree[0] = { ...B[99], ...BOSSD[pendingBossIndex], isBoss: true };
   const previousArena = G?.finished ? G.th : null;
   G = freshGame(mode, myThree, botThree);
@@ -2497,7 +2525,7 @@ function renderDraft() {
       </div>
     </button>`;
   }).join('');
-  $('#bset').innerHTML = `<b>🤖 Kule Bota:</b>` + G.bt.map(b => `<span class="bs">${orb(b)}<small>${esc(b.n)}</small></span>`).join('');
+  $('#bset').innerHTML = `<b>${G.m === 12 ? '🌐 Kule rywala:' : '🤖 Kule Bota:'}</b>` + G.bt.map(b => `<span class="bs">${orb(b)}<small>${esc(b.n)}</small></span>`).join('');
 }
 
 function pick(i) {
