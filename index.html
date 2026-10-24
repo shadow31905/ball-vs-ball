@@ -539,10 +539,32 @@
     #transitionName {font-size:2rem;font-weight:900;color:white;text-shadow:0 0 25px #a855f7;padding:0 15px;}
     @keyframes arenaWipe {from{clip-path:circle(0 at 50% 50%);opacity:.5}to{clip-path:circle(150% at 50% 50%);opacity:1}}
     @keyframes arenaTitle {from{transform:scale(.96);filter:brightness(.85)}to{transform:scale(1.05);filter:brightness(1.18)}}
+    /* Account selection is the first screen, before the game menu. */
+    .account-gate { position:fixed; inset:0; z-index:250; background:radial-gradient(circle at 45% 20%,#23336b 0%,#080d25 65%); display:flex; justify-content:center; align-items:flex-start; overflow-y:auto; padding:clamp(18px,5vh,55px) 12px 30px; }
+    .account-gate-box { width:100%; max-width:420px; padding:24px 18px; border:2px solid #526dd9; border-radius:22px; background:linear-gradient(150deg,#172451,#0b1230); box-shadow:0 18px 45px #0008; }
+    .account-gate-box h1 { text-align:center; letter-spacing:1px; font-size:1.7rem; margin:0 0 8px; }
+    .account-gate-box h1 span { color:#83a7ff; }
+    .account-gate-box .b { display:block; width:100%; margin:12px 0; min-height:44px; }
+    .account-gate-box label { display:block; margin:10px 0 5px; font-size:.9rem; color:#d5dcff; }
+    .account-gate-box .inp { width:100%; }
+    #gateMessage { color:#fef08a; font-size:.86rem; min-height:16px; margin-top:12px; overflow-wrap:anywhere; }
     [hidden] { display: none !important; }
   </style>
 </head>
 <body>
+  <div id="accountGate" class="account-gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+    <div class="account-gate-box">
+      <h1 id="gateTitle">BALL <span>VS</span> BALL</h1>
+      <p style="text-align:center;color:#bdcaff;margin-bottom:16px">🎮 Witaj w grze!</p>
+      <div id="gateBody">
+        <p style="color:#b9c5ef;margin-bottom:18px">Wybierz, jak chcesz rozpocząć.</p>
+        <button class="b graj" onclick="window.BVBCloud?.gateMode('login')">🔐 Zaloguj się</button>
+        <button class="b ac" onclick="window.BVBCloud?.gateMode('register')">✨ Stwórz konto</button>
+        <button class="b" onclick="window.BVBCloud?.playGuest?.() ?? (document.getElementById('accountGate').hidden=true)">🎮 Graj bez konta</button>
+      </div>
+      <p id="gateMessage" role="status"></p>
+    </div>
+  </div>
   <div id="app">
     <div id="saveWarn" hidden>⚠️ Uwaga: Przeglądarka zablokowała zapis lokalny (localStorage). Użyj Eksportu w Ustawieniach, aby nie stracić postępu.</div>
     <header>
@@ -1033,6 +1055,8 @@ function load() {
 function save() {
   const warn = $('#saveWarn');
   try {
+    // The logged-in nickname is controlled by its exclusive Firestore claim.
+    if (window.BVBCloud?.isOnline && window.BVBCloud.nickname) S.nm = window.BVBCloud.nickname;
     localStorage.setItem(K, JSON.stringify(S));
     if (warn) warn.hidden = true;
   } catch (e) {
@@ -1928,13 +1952,15 @@ function claimhw(i) { S.hwq.cl.push(i); S.candies += HWQ[i].r; save(); SFX.win()
 
 function prof(p) {
   const g = S.g | 0, w = S.wins | 0;
+  const online = Boolean(window.BVBCloud?.isOnline);
   p.innerHTML = `
     <div class="cd">
       <h2>👤 Profil Gracza</h2>
       <div style="display:flex;gap:10px;align-items:center;margin:10px 0">
         <span style="font-size:38px">${S.av || AV[0]}</span>
-        <input class="inp" maxlength="14" value="${(S.nm || 'Gracz').replace(/["<>&]/g, '')}" oninput="S.nm=this.value.slice(0,14);save()" placeholder="Twój nick..." />
+        <input class="inp" maxlength="16" value="${(S.nm || 'Gracz').replace(/["<>&]/g, '')}" ${online ? 'readonly title="Zmień nick w zakładce Konto"' : 'oninput="S.nm=this.value.slice(0,16);save()"'} placeholder="Twój nick..." />
       </div>
+      ${online ? '<button class="b ac" onclick="panel(\'account\')">🔐 Zmień nick w Koncie</button>' : ''}
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
         ${AV.map(a => `<button class="b" style="width:auto;padding:8px 12px;margin:0" onclick="S.av='${a}';save();panel('pr')">${a}</button>`).join('')}
       </div>
