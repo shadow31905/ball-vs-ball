@@ -1341,6 +1341,7 @@ function joinNet() {
   if (!code) { netStatus('Najpierw wpisz kod pokoju.'); return; }
   if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
   disconnectNet(false);
+  reconnectRoom = code;
   try {
     peer = new Peer();
     peer.on('open', () => {
@@ -1352,11 +1353,15 @@ function joinNet() {
   } catch (e) { netStatus('Nie udało się dołączyć: ' + e.message); }
 }
 function setupNetConnection(conn) {
+  const connectWatchdog = setTimeout(() => { if (!conn.open && activeConn === conn) { try { conn.close(); } catch (_) {} } }, 10000);
   conn.on('open', () => {
+    clearTimeout(connectWatchdog);
+    reconnectSeq++; reconnectTries = 0;
     netStatus('Połączono! Rola: ' + (netRole === 'host' ? 'host' : 'gość') + '. Kanał danych działa.');
     const btn = $('#netStart'); if (btn) btn.hidden = true;
     netSend({ type: 'hello', role: netRole, name: 'Ball VS Ball' });
     if (netRole === 'guest') netSend({ type: 'deck', ids: makeOwnOnlineDeck() });
+    else if (G?.m === 12) broadcastState();
   });
   conn.on('data', data => {
     if (!data || typeof data !== 'object') return;
@@ -1427,6 +1432,7 @@ function setupNetConnection(conn) {
       }
     }
     if (data.type === 'pick' && netRole === 'host') {
+      if (!G || G.m !== 12 || !['draft','aim'].includes(G.ph) || data.matchId !== G.matchId || data.rn !== G.rn) return;
       // Gość może wybierać tylko spośród trzech kulek ze swojej talii.
       remoteBallId = G?.bt?.find(b => b.id === data.id) || null;
       if (!remoteBallId) return;
@@ -1434,13 +1440,24 @@ function setupNetConnection(conn) {
       broadcastState();
     }
     if (data.type === 'fire' && netRole === 'host') {
+      if (!G || G.m !== 12 || G.ph !== 'aim' || data.matchId !== G.matchId || data.rn !== G.rn || !remoteBallId) return;
       remoteAimAngle = Number.isFinite(data.angle) ? data.angle : -Math.PI / 2;
       if (G && G.ph === 'aim' && hostAimAngle != null && remoteBallId != null) launchMatch(remoteAimAngle);
     }
     if (data.type === 'ping') netSend({type:'pong', at:data.at});
   });
-  conn.on('close', () => { activeConn = null; guestOnlineDeck = null; const btn = $('#netStart'); if (btn) btn.hidden = true; netStatus('Połączenie zostało zamknięte.'); });
-  conn.on('error', err => netStatus('Błąd kanału: ' + (err.message || 'nieznany')));
+  conn.on('close', () => {
+    clearTimeout(connectWatchdog);
+    if (activeConn !== conn) return;
+    activeConn = null;
+    const btn = $('#netStart'); if (btn) btn.hidden = true;
+    if (netRole === 'guest' && reconnectRoom && peer && !peer.destroyed) scheduleNetReconnect();
+    else netStatus('Połączenie zamknięte. Host może przyjąć ponowne połączenie.');
+  });
+  conn.on('error', err => {
+    netStatus('Błąd kanału: ' + (err.message || 'nieznany'));
+    if (activeConn === conn) { try { conn.close(); } catch (_) {} }
+  });
 }
 function netSend(data) {
   try { if (activeConn && activeConn.open) activeConn.send(data); } catch (e) {}
@@ -1449,13 +1466,32 @@ function broadcastState() {
   if (netRole !== 'host' || !activeConn || !activeConn.open || !G) return;
   try { netSend({ type: 'state', state: JSON.parse(JSON.stringify(G)) }); } catch (e) {}
 }
+function scheduleNetReconnect() {
+  if (reconnectTries >= 6) { netStatus('Nie udało się odzyskać połączenia. Utwórz pokój ponownie.'); return; }
+  const attempt = ++reconnectTries, seq = ++reconnectSeq;
+  netStatus('Próba ponownego połączenia ' + attempt + '/6…');
+  setTimeout(() => {
+    if (seq !== reconnectSeq || netRole !== 'guest' || activeConn?.open || !reconnectRoom || !peer || peer.destroyed) return;
+    if (peer.disconnected) {
+      try { peer.reconnect(); } catch (_) {}
+      scheduleNetReconnect();
+      return;
+    }
+    try {
+      activeConn = peer.connect(reconnectRoom, { reliable:true });
+      setupNetConnection(activeConn);
+    } catch (_) { scheduleNetReconnect(); }
+  }, Math.min(12000, 900 * Math.pow(2, attempt - 1)));
+}
 function disconnectNet(updateStatus = true) {
+  reconnectSeq++; reconnectTries = 0; reconnectRoom = '';
   try { if (activeConn) activeConn.close(); } catch (e) {}
   try { if (peer && !peer.destroyed) peer.destroy(); } catch (e) {}
   activeConn = null; peer = null; netRole = null; guestRound = -1; guestMatchId = null; guestBallId = null; guestAimSent = false; guestOnlineDeck = null;
   if (updateStatus) netStatus('Rozłączono.');
 }
 let pendingBossIndex = 0, netRole = null, remoteBallId = null, remoteAimAngle = null, hostAimAngle = null, netSyncAt = 0, guestBallId = null, guestRound = -1, guestMatchId = null, guestAimSent = false, guestAimAngle = -Math.PI / 2, guestOnlineDeck = null;
+let reconnectSeq = 0, reconnectTries = 0, reconnectRoom = '';
 
 const ARENA_ACHIEVEMENTS = [
   { id:'arenas', name:'🏆 Wędrowiec Aren', description:'Wygraj mecz na każdej z 6 aren.', coin:180, title:'Wędrowiec Aren', aura:'#fbbf24' },
@@ -2539,7 +2575,7 @@ function nextRound() {
   G.rn = (G.rn || 0) + 1;
   G.bl = []; G.pr = []; G.z = []; G.fx = []; G.rings = []; G.pop = [];
   createRoundArena(G);
-  remoteAimAngle = null; hostAimAngle = null;
+  remoteAimAngle = null; hostAimAngle = null; remoteBallId = null;
   renderDraft();
   hearts();
   broadcastState();
@@ -2569,7 +2605,7 @@ function pick(i) {
     guestBallId = G.pb.id;
     G.bb = G.bt?.[0] || B[0];
     G.ph = 'aim';
-    netSend({ type: 'pick', id: G.pb.id });
+    netSend({ type: 'pick', id: G.pb.id, matchId: G.matchId, rn: G.rn });
   } else {
     G.bb = G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : ((G.m == 9 || G.m == 10) ? B[99] : (remoteBallId || rnd(G.bt)));
     G.ph = 'aim';
@@ -2586,7 +2622,7 @@ function fire() {
   if (netRole === 'guest' && activeConn) {
     guestAimSent = true;
     guestAimAngle = G.pa;
-    netSend({ type: 'fire', angle: G.pa });
+    netSend({ type: 'fire', angle: G.pa, matchId: G.matchId, rn: G.rn });
     $('#fire').disabled = true;
     $('#msg').textContent = 'Wysłano strzał. Oczekiwanie na ruch drugiego gracza…';
     return;
@@ -2934,7 +2970,7 @@ function loop(t) {
   const elapsed = Math.min(0.1, Math.max(0, (t - (frameLast || t)) / 1000));
   frameLast = t;
   if (G) {
-    if (G.ph === 'battle' && !(netRole === 'guest' && activeConn)) {
+    if (G.ph === 'battle' && netRole !== 'guest') {
       fixedAccumulator += elapsed;
       let steps = 0;
       while (fixedAccumulator >= 1 / 60 && steps++ < 6 && G?.ph === 'battle') {
@@ -2975,5 +3011,6 @@ if (invitedRoom && invitedRoom.length < 150) {
 }
 requestAnimationFrame(loop);
 </script>
+<script src="./bvb-anime-update.js"></script>
 </body>
 </html>
