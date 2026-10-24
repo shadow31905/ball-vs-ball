@@ -1,7 +1,5 @@
-/* BVB — public client identifiers ONLY.
-   Fill in with Project URL and publishable/anon key from Supabase Project Settings.
-   Never put a service_role or secret key in a public repository. */
+/* Ball VS Ball — public Supabase identifiers. Never commit secret/service_role keys. */
 window.BVB_SUPABASE_CONFIG = {
-  url: '',
-  publishableKey: ''
+  url: "https://mcmvowcsvcinnmanejeh.supabase.co",
+  publishableKey: "sb_publishable_K_fxa9VrBp62t-RBzdKYkQ_pnuWvuvu"
 };
