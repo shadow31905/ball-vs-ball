@@ -1,52 +1,44 @@
-# 🎮 Ball VS Ball (BVB)
+# 🎮 Ball VS Ball — online
 
-**Graj:** https://shadow31905.github.io/ball-vs-ball/
+**Gra:** https://shadow31905.github.io/ball-vs-ball/
 
-## 🌐 1vs1 przez internet
+## 1vs1 z kolegą
 
-1. Oboje otwórzcie grę.
-2. Host wybiera **Multiplayer online → Utwórz pokój**.
-3. Host wysyła koledze link przyciskiem **Kopiuj link dla znajomego** albo (po konfiguracji kont) zaprasza go z listy znajomych.
-4. Kolega otwiera link i klika **Dołącz do pokoju**, a host **Rozpocznij 1vs1**.
+Oboje otwórzcie grę. W **Multiplayer online** jeden gracz klika **Utwórz pokój** i wysyła link drugiemu. Kolega otwiera link i klika **Dołącz do pokoju**, a host **Rozpocznij 1vs1**. Gra używa PeerJS / WebRTC. Różne sieci Wi-Fi mogą działać, ale nie w każdej sieci jest możliwe połączenie bez TURN.
 
-BVB używa PeerJS/WebRTC. Gracze mogą być na różnych sieciach Wi-Fi, ale zależy to od NAT i zapór; nie ma obecnie serwera TURN. GitHub Pages udostępnia pliki strony, a nie serwer symulacji gry.
+## 👤 Konta — bez Firebase, z Supabase
 
-## 👤 Konta BVB — uruchomienie (jednorazowe kroki właściciela)
+Ekran startowy ma trzy opcje: **Zaloguj się**, **Stwórz konto**, **Graj bez konta**. Konta online potrzebują bazy danych oraz usługi logowania. Ta wersja korzysta z **Supabase**, nie z Firebase. Usunięto kod Firebase.
 
-Po otwarciu gry pojawia się ekran **Zaloguj się / Stwórz konto** (oraz opcja **Graj bez konta**, żeby nie blokować dotychczasowej rozgrywki). Kod ma przygotowane: rejestrację i logowanie e-mail + hasło, odzyskanie hasła, prywatne zapisy gry w chmurze, synchronizację między urządzeniami, pseudonimy, kontakty znajomych, zaproszenia do pokoju 1vs1 i **informacyjny** ranking.
+**Ważne: samo umieszczenie kodu na GitHub Pages nie uruchomi jeszcze rejestracji.** Jednorazowo trzeba podłączyć własny projekt Supabase.
 
-**Konta pozostają wyłączone, dopóki nie podłączysz własnego Firebase.** Przyciski rejestracji/logowania są widoczne na ekranie startowym, ale bez konfiguracji wyświetlają stosowny komunikat. Gra bez kont nadal działa z lokalnym zapisem, więc konfiguracja nie usuwa postępu.
+1. Wejdź na https://supabase.com/dashboard i utwórz projekt.
+2. W **SQL Editor** uruchom całą zawartość [`supabase-schema.sql`](supabase-schema.sql). To tworzy profile, prywatne zapisy, listy znajomych i zaproszenia oraz zabezpiecza je przez RLS.
+3. W **Authentication → Providers → Email** włącz e-mail i hasło (najbezpieczniej z potwierdzeniem e-mail).
+4. W **Authentication → URL Configuration** ustaw `Site URL` na `https://shadow31905.github.io/ball-vs-ball/` i dopisz ten adres do `Redirect URLs`.
+5. W **Project Settings → API Keys** skopiuj **Project URL** oraz klucz **publishable** (ewentualnie dawny **anon**). Wklej je w publiczny plik [`supabase-config.js`](supabase-config.js) jako `url` i `publishableKey`.
+6. **Nigdy nie publikuj** klucza `service_role`, `secret`, żadnego hasła ani tokenu administratora na GitHubie.
+7. Odśwież grę i załóż testowe konto. Gdy potwierdzasz e-mail, po potwierdzeniu zaloguj się ponownie. W zakładce Konto wybierz **Zachowaj obecny postęp w chmurze**, potem sprawdź konto na drugim urządzeniu i wybierz **Wczytaj zapis z chmury**.
 
-1. Otwórz https://console.firebase.google.com/ i utwórz projekt Firebase.
-2. W projekcie dodaj **aplikację webową** (`</>`), skopiuj jej *Firebase web app config* (`apiKey`, `authDomain`, `projectId`, `appId`). To identyfikatory publiczne aplikacji, **nie** klucz administracyjny, hasło ani service account.
-3. W **Authentication → Sign-in method** włącz **Email/Password**.
-4. W **Authentication → Settings → Authorized domains** dodaj `shadow31905.github.io` (jeśli brak). Nie dodawaj nieznanych domen.
-5. Utwórz bazę **Cloud Firestore** w trybie produkcyjnym. W zakładce **Rules** wklej **najnowsze** reguły z pliku [`firestore.rules`](firestore.rules) i kliknij **Publish** (to konieczne do wyłącznej rezerwacji nicków). **Nie ustawiaj `allow read, write: if true`.**
-6. Edytuj plik [`firebase-config.js`](firebase-config.js) w repozytorium: zamiast `null` wpisz skopiowany publiczny obiekt `firebaseConfig`. Zostaw `window.BVB_FIREBASE_CONFIG =` i średnik; **nie publikuj prywatnych kluczy ani haseł**.
-7. GitHub Pages opublikuje zmianę automatycznie. Otwórz stronę, zakładkę **Konto**, na ekranie startowym stwórz testowe konto z unikalnym nickiem, wybierz **Zachowaj ten postęp w chmurze**, zaloguj się na drugim urządzeniu i wybierz **Wczytaj mój zapis z chmury**.
+### 🔐 Nicki niepowtarzalne
 
-**Zapis na urządzeniu nie zostaje nadpisany bez pytania.** Wczytanie chmury tworzy kopię poprzedniego lokalnego stanu pod kluczem `bvb_cloud_backup_<timestamp>` w Local Storage przeglądarki. Zalecany jest też **Eksport Zapisu** w Ustawieniach gry.
+- Nick musi mieć 3–16 znaków: litery A–Z, cyfry i `_`.
+- `Kuba` oraz `kuba` to ten sam nick.
+- Baza Postgres ma unikalny indeks `lower(nick)` i tworzy profil **w tej samej transakcji co nowe konto**. To blokuje duplikaty, również jeśli dwie osoby rejestrują się jednocześnie.
+- Zmiana nicku zwalnia stary nick, którego można użyć ponownie.
 
-### 🆔 Unikalne nicki
+### ☁️ Postęp i bezpieczeństwo
 
-- Nick ma **3–16 znaków**, tylko litery A–Z, cyfry i `_` (np. `SuperGracz_7`).
-- **Wielkość liter nie odróżnia nicków:** `Kuba` i `kuba` to ta sama nazwa.
-- Rejestracja i zmiana nicku używają **transakcji Firestore** zapisującej profil wraz z rezerwacją w `nicknames/<nick zapisany małymi literami>`.
-- Reguły Firestore sprawdzają spójność tych dokumentów. Gdy dwie osoby próbują jednocześnie zająć ten sam nick, tylko jedna transakcja może się udać.
-- Zmiana nicku zwalnia poprzednią nazwę. **Przy wdrażaniu tej wersji należy ponownie opublikować reguły Firestore.**
-- Gdy dodajesz konta do już istniejącej bazy Firebase, sprawdź ewentualne stare duplikaty nicków. Stary gracz z konfliktem zostanie poproszony o wybór innego nicku.
-
-### Bezpieczeństwo i ograniczenia
-
-- Firestore `saves/<uid>` może odczytywać i modyfikować wyłącznie zalogowany właściciel. Publiczny profil zawiera pseudonim i statystyki, bez e-maila.
-- Ranking jest **nieweryfikowany**: zapisywane z przeglądarki zwycięstwa można sfałszować. Ranking rywalizacyjny wymaga zaufanego backendu walidującego mecze.
-- Kontakty znajomych są **jednostronną listą** (dodanie kontaktu nie oznacza akceptacji po drugiej stronie). Zaproszenie do pokoju jest widoczne po kliknięciu **Odśwież zaproszenia** w zakładce Konta. Nie ma automatycznych powiadomień push.
-- Dodatkowe zabezpieczenia antyspamowe, antycheat, kontrola kosztów Firestore, App Check i obsługa danych osobowych powinny być skonfigurowane przed publicznym zwiększaniem liczby graczy.
-- Nie udostępniaj nikomu swojego hasła, kodów logowania, prywatnego klucza Firebase ani danych administratora. Używaj pseudonimu zamiast pełnego imienia i nazwiska.
+- Początkowe lokalne zapisy gry pozostają na urządzeniu. Przed wczytaniem chmury powstaje lokalna kopia zapasowa.
+- Hasłami zajmuje się **Supabase Auth**. Kod gry nie przechowuje haseł.
+- Każdy gracz ma dostęp tylko do **swojego** zapisu w tabeli `saves` (RLS). Publiczne profile zawierają nick i statystyki, bez e-maila.
+- Listy znajomych są jednostronne; zaproszenia do pokoju można zobaczyć w zakładce Konto → Zaproszenia.
+- Ranking jest informacyjny. Do prawdziwego rankingu rywalizacyjnego potrzebna jest weryfikacja zwycięstw na zaufanym serwerze, ponieważ dane rozgrywki można zmienić w przeglądarce.
+- Zachowaj możliwość eksportu zapisu. Nie wpisuj jako nicku prawdziwego imienia i nazwiska.
 
 ## Pliki
 
-- [`index.html`](index.html) — gra i przyciski Konto.
-- [`bvb-cloud.js`](bvb-cloud.js) — interfejs kont, autoryzacja Firebase, zapisy, znajomi, ranking.
-- [`firebase-config.js`](firebase-config.js) — konfiguracja publicznego projektu Firebase (domyślnie wyłączona).
-- [`firestore.rules`](firestore.rules) — wymagane reguły bezpieczeństwa bazy danych.
+- `index.html` — gra BVB
+- `bvb-accounts.js` — obsługa kont, zapisów i znajomych Supabase
+- `supabase-config.js` — publiczne ustawienia nowego projektu (na razie puste)
+- `supabase-schema.sql` — schemat i reguły dostępu do bazy
