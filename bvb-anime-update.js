@@ -136,6 +136,7 @@
     const dealt = Math.max(0,before-target.hp);
     const blocked = Math.max(0,oldShield-(target.status.shield||0));
     if (direct) {
+      if (G) G.recentHitAt = G.rt || 0;
       shieldEffect(target,blocked);
       if (dealt>0) {
         const attacker = G?.bl?.find(p=>p!==target);
@@ -150,7 +151,8 @@
           if (attacker.comboHits >= 5 && !(attacker.comboCooldown>0))
             executeCombo(attacker,target);
         }
-        if (crit) SFX.boom();
+        if (crit) { SFX.boom(); if (G) G.shake = Math.max(G.shake || 0, 3.5); }
+        else if (damage >= 20 && G) G.shake = Math.max(G.shake || 0, 2);
       }
     }
     if (dealt>0 && alive(target)) emergency(target);
@@ -186,8 +188,8 @@
       o.dotVisual = (o.dotVisual||0)+dt;
       if(o.dotVisual>=.8) {
         o.dotVisual = 0;
-        if(o.status.poison>0) sparks(o.x,o.y,'#a3e635',3,o.uid);
-        if(o.status.burn>0) sparks(o.x,o.y,'#fb923c',4,o.uid);
+        if(o.status.poison>0) {sparks(o.x,o.y,'#a3e635',3,o.uid); if(S.o.nd)addPop(o.x,o.y-22,'-2','#a3e635',.6);}
+        if(o.status.burn>0) {sparks(o.x,o.y,'#fb923c',4,o.uid); if(S.o.nd)addPop(o.x,o.y-22,'-3','#fb923c',.6);}
         if(o.status.stun>0) sparks(o.x,o.y,'#facc15',5,o.uid);
         if(o.status.slow>0) sparks(o.x,o.y,'#bae6fd',4,o.uid);
       }
@@ -196,7 +198,7 @@
     if (G?.ph === 'battle' && G.bl.length === 2) {
       const [a,b] = G.bl, dx=a.x-b.x,dy=a.y-b.y, gap=Math.hypot(dx,dy);
       const separating=dx*(a.vx-b.vx)+dy*(a.vy-b.vy)>0;
-      if(gap<a.r+b.r+14 && gap>a.r+b.r+2 && separating) {
+      if(gap<a.r+b.r+14 && gap>a.r+b.r+2 && separating && G.rt-(G.recentHitAt||-10)>.65) {
         if((G.rt||0)-(G.lastDodgeAt||-10)>1.8) {
           G.lastDodgeAt=G.rt;
           addPop((a.x+b.x)/2,(a.y+b.y)/2-23,'DODGE!','#67e8f9');
@@ -340,6 +342,14 @@
         else if(G.ph==='battle')banner('ROUND START!','#38bdf8');
       }
     }
+    const canvas = $('#cv');
+    if (canvas) {
+      if (G && (G.shake||0)>0 && S.o.sk && quality()) {
+        const s = G.shake;
+        canvas.style.transform = 'translate(' + ((Math.random()-.5)*s*2).toFixed(1) + 'px,' + ((Math.random()-.5)*s*2).toFixed(1) + 'px)';
+      } else canvas.style.transform = '';
+    }
+    if(G) G.shake = Math.max(0,(G.shake||0)-elapsed*7);
     oldLoop(t);
   };
 })();
