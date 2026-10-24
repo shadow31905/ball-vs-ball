@@ -1393,6 +1393,7 @@ function setupNetConnection(conn) {
       G.my = guestDeck;
       G.bt = hostDeck;
       G.h = [hostState.h[1], hostState.h[0]];
+      G.lastRoundWinner = Number.isInteger(hostState.lastRoundWinner) && hostState.lastRoundWinner >= 0 ? 1 - hostState.lastRoundWinner : -1;
       G.pb = guestBall;
       G.bb = hostBall;
       G.pa = guestAimAngle;
