@@ -21,6 +21,14 @@
   document.head.appendChild(styles);
 
   const oldBurst = burst, oldAbility = specialAbility, oldApply = applyDamage;
+  const oldHitSound = SFX.hit;
+  SFX.hit = function() {
+    oldHitSound();
+    if(!G?.bl?.length || typeof snd !== 'function') return;
+    const id = G.bl[0]?.b?.id || 0;
+    const id2 = G.bl[1]?.b?.id || 0;
+    snd(230+(id*19+id2*13)%510,.075,id%2?'triangle':'sawtooth',.025,105);
+  };
   const oldStep = step, oldDraw = draw, oldLoop = loop, oldSetp = setp, oldRoundEnd = roundEnd;
   let frameMark = 0, lowFrames = 0, highFrames = 0, adaptive = 1, visualRound = '', visualPhase = '';
   const smooth = new Map();
@@ -171,7 +179,13 @@
     if (kind === 'shield' && (o.status.shield||0)>oldShield)
       addPop(o.x,o.y-32,'SHIELD!','#a5f3fc');
     if (kind === 'ice') addPop(foe.x,foe.y-34,'FROZEN!','#bae6fd');
-    if (kind === 'electric') {addPop(foe.x,foe.y-33,'SHOCK!','#fef08a');SFX.zap();}
+    if (kind === 'electric') {
+      addPop(foe.x,foe.y-33,'SHOCK!','#fef08a');
+      G.lightning ||= [];
+      G.lightning.push({from:o.uid,to:foe.uid,life:.38,max:.38,seed:o.b.id});
+      if(G.lightning.length>8)G.lightning.shift();
+      SFX.zap();
+    }
     if (foe.hp<foeHp) {
       foe.flash = .18;
       foe.flashColor = EFFECTS[kind]?.color || o.b.c;
@@ -284,6 +298,23 @@
     }
     cx.restore();
   }
+  function drawLightning() {
+    if (!quality()) return;
+    for(const l of G.lightning||[]) {
+      const from=G.bl?.find(o=>o.uid===l.from),to=G.bl?.find(o=>o.uid===l.to);
+      if(!from||!to)continue;
+      cx.save();cx.strokeStyle='#fde047';cx.lineWidth=1.3+quality()*2.2;
+      cx.shadowColor='#facc15';cx.shadowBlur=10;
+      cx.globalAlpha=Math.max(0,l.life/l.max);
+      cx.beginPath();cx.moveTo(from.x,from.y);
+      for(let i=1;i<9;i++) {
+        const t=i/9, off=Math.sin((l.seed+i*17)*2.31)*11*(1-Math.abs(2*t-1)*.5);
+        const dx=to.x-from.x,dy=to.y-from.y,len=Math.hypot(dx,dy)||1;
+        cx.lineTo(from.x+dx*t-dy/len*off,from.y+dy*t+dx/len*off);
+      }
+      cx.lineTo(to.x,to.y);cx.stroke();cx.restore();
+    }
+  }
   draw = function() {
     if (!G) return;
     const oldPos = [];
@@ -307,6 +338,7 @@
     }
     try {
       oldDraw();
+      if(q)drawLightning();
       if(q && G.ph==='battle')
         for(const o of G.bl||[])if(alive(o))drawStatus(o);
     } finally {
@@ -349,7 +381,11 @@
         canvas.style.transform = 'translate(' + ((Math.random()-.5)*s*2).toFixed(1) + 'px,' + ((Math.random()-.5)*s*2).toFixed(1) + 'px)';
       } else canvas.style.transform = '';
     }
-    if(G) G.shake = Math.max(0,(G.shake||0)-elapsed*7);
+    if(G) {
+      G.shake = Math.max(0,(G.shake||0)-elapsed*7);
+      for(const l of G.lightning||[])l.life-=elapsed;
+      G.lightning=(G.lightning||[]).filter(l=>l.life>0);
+    }
     oldLoop(t);
   };
 })();
