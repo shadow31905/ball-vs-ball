@@ -2670,6 +2670,7 @@ function launchMatch(remoteAngle = null) {
   G.bl = [p, e];
   G.ph = 'battle';
   G.rt = 0;
+  G.silence = 0; G.silenceBoost = 0; G.silenceBoostFading = false; G.hitStop = 0;
   $('#fire').hidden = true;
   $('#msg').textContent = '⚔️ Walka trwa!';
   SFX.shot();
@@ -2794,12 +2795,28 @@ function foeAliveForStatus(actorObj, actors) { return actors.some(t => t !== act
 
 function step(dt) {
   if (!G || G.ph !== 'battle') return;
+  if (G.hitStop > 0) { G.hitStop = Math.max(0, G.hitStop - dt); updateEffects(dt); return; }
   G.rt += dt;
+  // +20% at round start; +5% every five seconds, up to +50%.
+  // After five seconds without contact an extra +10% smoothly fades on the next hit.
+  const previousGap = G.silence || 0;
+  G.silence = (G.silence || 0) + dt;
+  if (G.silence >= 5 && previousGap < 5) G.silenceBoost = .10;
+  if (G.silenceBoostFading) {
+    G.silenceBoost = Math.max(0, (G.silenceBoost || 0) - .1 * dt / 2);
+    if (!G.silenceBoost) G.silenceBoostFading = false;
+  }
+  G.speedRamp = Math.min(.5, Math.floor(G.rt / 5) * .05);
   moveArena(dt);
   for (const o of G.bl) {
     if (!alive(o)) continue;
     o.contact = Math.max(0,(o.contact||0)-dt);
-    const speedBoost = (G.m === 11 ? 1.08 : 1.15) * (o.speedFactor||1) * (o.status.stun > 0 ? 0 : o.status.slow > 0 ? 0.55 : 1);
+    o.impactSlow = Math.max(0,(o.impactSlow||0)-dt);
+    const basePace = 1.2 + (G.speedRamp||0) + (G.silenceBoost||0) + (o.hp/o.mh < .15 ? .15 : 0);
+    const speedBoost = (G.m === 11 ? 1.08 : 1.15) * (o.speedFactor||1) *
+      basePace * (o.status.stun > 0 ? 0 : o.status.slow > 0 ? .55 : 1) *
+      (o.impactSlow > 0 ? .83 : 1);
+    o.actualPace = speedBoost;
     o.x += o.vx * 110 * speedBoost * dt;
     o.y += o.vy * 110 * speedBoost * dt;
     o.trailClock = (o.trailClock || 0) + dt;
@@ -2820,8 +2837,16 @@ function step(dt) {
     if (o.status.poison > 0) { o.status.poison = Math.max(0, o.status.poison - dt); applyDamage(o, 2.6 * dt); }
     if (o.status.burn > 0) { o.status.burn = Math.max(0, o.status.burn - dt); applyDamage(o, 3.5 * dt); }
 
-    if (o.x < o.r || o.x > W - o.r) { o.vx *= -1; o.x = clamp(o.x, o.r, W - o.r); }
-    if (o.y < o.r || o.y > W - o.r) { o.vy *= -1; o.y = clamp(o.y, o.r, W - o.r); }
+    if (o.x < o.r || o.x > W - o.r) {
+      o.vx *= -1; o.x = clamp(o.x, o.r, W - o.r);
+      const delta=(Math.random()<.5?-1:1)*(1+Math.random()*2)*Math.PI/180;
+      const vx=o.vx,vy=o.vy;o.vx=vx*Math.cos(delta)-vy*Math.sin(delta);o.vy=vx*Math.sin(delta)+vy*Math.cos(delta);
+    }
+    if (o.y < o.r || o.y > W - o.r) {
+      o.vy *= -1; o.y = clamp(o.y, o.r, W - o.r);
+      const delta=(Math.random()<.5?-1:1)*(1+Math.random()*2)*Math.PI/180;
+      const vx=o.vx,vy=o.vy;o.vx=vx*Math.cos(delta)-vy*Math.sin(delta);o.vy=vx*Math.sin(delta)+vy*Math.cos(delta);
+    }
     collideWithArena(o, dt);
   }
   if (G.bl.length === 2) {
@@ -2839,8 +2864,22 @@ function step(dt) {
         b.y=clamp(b.y-ny*penetration*.5,b.r,W-b.r);
         if (a.contact<=0 && b.contact<=0) {
           a.contact=b.contact=.30;
-          const damageToA=Math.max(3,b.baseDmg*(b.power||1));
-          const damageToB=Math.max(3,a.baseDmg*(a.power||1));
+          G.silence = 0; G.silenceBoostFading = true;
+          const overtime=G.rt>=30?1.10:1;
+          const momentumA=1 + Math.min(.10,Math.max(0,(b.actualPace||1.2)-1.2)*.12);
+          const momentumB=1 + Math.min(.10,Math.max(0,(a.actualPace||1.2)-1.2)*.12);
+          const damageToA=Math.max(3,b.baseDmg*(b.power||1)*overtime*momentumA);
+          const damageToB=Math.max(3,a.baseDmg*(a.power||1)*overtime*momentumB);
+          const heavyImpact=Math.random()<.075; // Rare cinematic collisions: ~7.5%.
+          if(heavyImpact) {
+            G.hitStop=.075;
+            G.rings ||= [];
+            G.rings.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2,age:0,life:.7,radius:28,c:'#fff'});
+            G.pop ||= [];
+            G.pop.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2-30,age:0,life:.85,text:'POWER CLASH!',c:'#facc15'});
+          }
+          const hitSlow = Math.min(.23,.065+Math.max(damageToA,damageToB)*.004);
+          a.impactSlow = b.impactSlow = hitSlow;
           applyDamage(a,damageToA);
           applyDamage(b,damageToB);
           burst(a,effectType(b.b),8,false);
@@ -2851,6 +2890,12 @@ function step(dt) {
         const da=a.vx*nx+a.vy*ny,db=b.vx*nx+b.vy*ny;
         if(da<0){a.vx-=2*da*nx;a.vy-=2*da*ny;}
         if(db>0){b.vx-=2*db*nx;b.vy-=2*db*ny;}
+        // Barely noticeable deviation avoids endless identical collision loops.
+        for(const o of [a,b]){
+          const t=(Math.random()<.5?-1:1)*(1+Math.random()*2)*Math.PI/180;
+          const vx=o.vx,vy=o.vy;
+          o.vx=vx*Math.cos(t)-vy*Math.sin(t);o.vy=vx*Math.sin(t)+vy*Math.cos(t);
+        }
       }
     }
   }
