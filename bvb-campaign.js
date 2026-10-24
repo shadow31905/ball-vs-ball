@@ -265,6 +265,7 @@ function finish(g,won){
  g.campaignRewarded=true;
  const c=saveState(),n=g.campaignLevel,l=stage(n);
  const first=won&&!c.cleared.includes(n);
+ const finalTrophy=won&&n===50&&!c.finalWon;
  let coins=0,stars=0;
  if(won){
   if(first)c.cleared.push(n);
@@ -279,7 +280,8 @@ function finish(g,won){
  $('#ovb').innerHTML='<h2>'+(won?'🏆 Poziom '+n+' ukończony!':'💔 Spróbuj ponownie')+'</h2>'+
   '<h3>'+esc(l.title)+'</h3>'+
   (won?'<p>+'+coins+' 🪙'+(stars?' · ⭐ Gwiazdka +'+stars+' 🪙':'')+
-   '</p><p>'+(next?'🔓 Odblokowano poziom '+(n+1):n===50?'👑 Ukończono 50 poziomów!':'Możesz walczyć o gwiazdkę.')+'</p>':
+   '</p><p>'+(next?'🔓 Odblokowano poziom '+(n+1):n===50?'👑 Ukończono 50 poziomów!':'Możesz walczyć o gwiazdkę.')+'</p>'+
+   (finalTrophy?'<p>🏆 Finałowy puchar: +500 🪙, +100 🍬 i tytuł „Pogromca Chaosu”!</p>':''):
    '<p>Możesz zmienić skład lub taktykę.</p>')+
   '<button class="b graj" onclick="window.BVBCampaign.start('+(next?n+1:n)+')">'+(next?'➡️ Następny poziom':'🔄 Zagraj ponownie')+'</button>'+
   '<button class="b" onclick="window.BVBCampaign.open()">🗺️ Mapa poziomów</button>'+
