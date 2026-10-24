@@ -2575,6 +2575,7 @@ function startMatch(mode = 0) {
   if (mode === 11) botThree[0] = { ...B[99], ...BOSSD[pendingBossIndex], isBoss: true };
   const previousArena = G?.finished ? G.th : null;
   G = freshGame(mode, myThree, botThree);
+  window.BVBGameplay?.newMatch?.(G);
   arenaTransition(G.th, previousArena);
   if (mode === 11) G.bossIndex = pendingBossIndex;
   show('game');
