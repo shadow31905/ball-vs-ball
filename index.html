@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Ball VS Ball — Ultimate Edition (130 Kulek + Brawl Stars Inventory + V2/V3 + Multiplayer)</title>
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-  <script src="./firebase-config.js"></script>
-  <script type="module" src="./bvb-cloud.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="./supabase-config.js" defer></script>
+  <script src="./bvb-accounts.js" defer></script>
   <style>
     :root {
       --bg: #070a18;
@@ -1528,7 +1529,7 @@ function panel(k) {
   $('#pn').dataset.panel = k;
   show('pn');
   const p = $('#pb');
-  if (k === 'account') { if (window.BVBCloud?.renderAccount) window.BVBCloud.renderAccount(); else p.innerHTML='<div class="cd"><h2>👤 Konto BVB</h2><p>System kont wymaga połączenia z Firebase. Gra lokalna działa bez zmian.</p></div>'; return; }
+  if (k === 'account') { if (window.BVBCloud?.renderAccount) window.BVBCloud.renderAccount(); else p.innerHTML='<div class="cd"><h2>👤 Konto BVB</h2><p>Aby korzystać z kont online, trzeba podłączyć Supabase. Gra bez konta działa bez zmian.</p></div>'; return; }
   if (k === 'arena') {arenaMenuPanel(p);return;}
   if (k === 'ach') {achievementsPanel(p);return;}
 
@@ -2949,7 +2950,7 @@ function loop(t) {
   requestAnimationFrame(loop);
 }
 
-// Safe interface between the classic game script and the optional Firebase module.
+// Safe interface between the classic game script and the optional account module.
 window.BVBGameBridge = {
   getNickname: () => String(S.nm || 'Gracz'),
   setNickname: name => { S.nm = String(name||'Gracz').trim().slice(0,16);save(); },
