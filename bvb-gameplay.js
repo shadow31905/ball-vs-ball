@@ -67,7 +67,7 @@
   }
 
   function newMatch(g) {
-    if (!g || g.m === 12 || netRole === 'guest') return;
+    if (!g || g.m === 12 || g.m === 4 || netRole === 'guest') return;
     const keys=Object.keys(MISSIONS);
     g.mission={key:keys[Math.floor(Math.random()*keys.length)],complete:false,progress:[]};
   }
