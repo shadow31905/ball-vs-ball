@@ -4,19 +4,21 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js';
 import {
   getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
-  signInWithEmailAndPassword, signOut, sendPasswordResetEmail
+  signInWithEmailAndPassword, signOut, sendPasswordResetEmail, deleteUser
 } from 'https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js';
 import {
   getFirestore, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc,
-  collection, query, where, orderBy, limit, serverTimestamp
+  collection, query, where, orderBy, limit, serverTimestamp, runTransaction, updateDoc
 } from 'https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js';
 
 const CONFIG = window.BVB_FIREBASE_CONFIG;
 const READY = Boolean(CONFIG?.apiKey && CONFIG?.authDomain && CONFIG?.projectId && CONFIG?.appId);
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const cleanNick = s => String(s||'').trim().replace(/\s+/g,' ').slice(0,16);
-const friendKey = s => String(s||'').trim().toLocaleLowerCase('pl-PL');
+const cleanNick = s => String(s||'').trim();
+const validNick = s => /^[A-Za-z0-9_]{3,16}$/.test(s);
+const nickKey = s => cleanNick(s).toLowerCase();
+const friendKey = s => nickKey(s);
 const statusText = err => {
   const code = err?.code || '';
   if (/auth\/email-already-in-use/.test(code)) return 'Ten adres jest już zarejestrowany.';
@@ -25,13 +27,16 @@ const statusText = err => {
   if (/auth\/invalid-credential|auth\/wrong-password|auth\/user-not-found/.test(code)) return 'Nieprawidłowy e-mail lub hasło.';
   if (/auth\/too-many-requests/.test(code)) return 'Za dużo prób. Spróbuj później.';
   if (/auth\/unauthorized-domain/.test(code)) return 'Dodaj tę domenę w Firebase Authentication → Authorized domains.';
-  if (/permission-denied/.test(code)) return 'Brak dostępu do bazy. Sprawdź reguły Firestore.';
+  if (/permission-denied/.test(code)) return 'Brak dostępu do bazy. Sprawdź reguły Firestore, w tym rezerwację nicków.';
+  if (/nick-taken/.test(code)) return 'Ten nick jest już zajęty. Wybierz inny.';
+  if (/unavailable/.test(code)) return 'Baza jest chwilowo niedostępna. Spróbuj ponownie.';
   return (err?.message || 'Nie udało się wykonać operacji.').slice(0,180);
 };
 let app, auth, db, user = null, cloudSave = null, cloudActive = false, syncTimer = null, syncBusy = false, syncAfter = false;
-let notice = '', signingUpNick = '', lastUserId = null;
+let notice = '', profileReady = false, profileNick = '', registrationBusy = false, guestChoice = false, gateView = 'welcome';
 const ownSaveRef = () => doc(db,'saves',user.uid);
 const ownProfileRef = () => doc(db,'profiles',user.uid);
+const nameRef = name => doc(db,'nicknames',nickKey(name));
 const activePanel = () => $('#pn')?.dataset.panel === 'account' && !$('#pn').hidden;
 function info(msg) { notice=msg; const p=$('#accountMessage'); if(p) p.textContent=msg; }
 function refresh() { if(activePanel()) renderAccount(); }
@@ -42,18 +47,46 @@ const game = () => window.BVBGameBridge;
 const currentNick = () => cleanNick(game()?.getNickname() || 'Gracz');
 const currentStats = () => game()?.stats?.() || {wins:0,level:1};
 
-async function writeProfile() {
-  if(!user || !cloudActive) return;
-  const n=currentNick(), stats=currentStats();
-  await setDoc(ownProfileRef(), {
-    uid:user.uid, nick:n, nickKey:friendKey(n),
-    wins:Math.max(0,Math.floor(Number(stats.wins)||0)),
-    level:Math.max(1,Math.floor(Number(stats.level)||1)), updatedAt:serverTimestamp()
-  },{merge:true});
+// Atomically reserve the case-insensitive name and update the public profile.
+// Firestore rules enforce both sides of this operation, including releasing an old name.
+async function reserveNick(n, uid) {
+  if (!validNick(n)) throw new Error('Nick: 3–16 znaków, tylko litery A–Z, cyfry i _.');
+  const newKey=nickKey(n), profileRef=doc(db,'profiles',uid), claimRef=nameRef(n);
+  await runTransaction(db,async transaction=>{
+    const profileSnap=await transaction.get(profileRef);
+    const existing=profileSnap.exists() ? profileSnap.data() : null;
+    const oldKey=existing?.nickKey || null;
+    const previousRef=oldKey && oldKey!==newKey ? doc(db,'nicknames',oldKey) : null;
+    const claimSnap=await transaction.get(claimRef);
+    if(claimSnap.exists() && claimSnap.data().uid!==uid) {
+      const error=new Error('Ten nick jest już zajęty. Wybierz inny.');
+      error.code='nick-taken';throw error;
+    }
+    if(previousRef) {
+      const oldClaim=await transaction.get(previousRef);
+      if(!oldClaim.exists() || oldClaim.data().uid!==uid) throw new Error('Nie udało się zwolnić poprzedniego nicku.');
+    }
+    // All reads precede all writes. A competing registration retries and sees the claim.
+    transaction.set(claimRef,{uid,nick:n,nickKey:newKey});
+    transaction.set(profileRef,{
+      uid,nick:n,nickKey:newKey,
+      wins:Math.max(0,Math.floor(Number(existing?.wins)||0)),
+      level:Math.max(1,Math.floor(Number(existing?.level)||1)),
+      updatedAt:serverTimestamp()
+    });
+    if(previousRef) transaction.delete(previousRef);
+  });
 }
-
+async function writeProfile() {
+  if(!user || !cloudActive || !profileReady) return;
+  const stats=currentStats();
+  await updateDoc(ownProfileRef(),{
+    wins:Math.max(0,Math.floor(Number(stats.wins)||0)),
+    level:Math.max(1,Math.floor(Number(stats.level)||1)),updatedAt:serverTimestamp()
+  });
+}
 async function flush() {
-  if(!cloudActive || !user || !READY) return;
+  if(!cloudActive || !user || !profileReady || !READY) return;
   if(syncBusy) {syncAfter=true;return;}
   syncBusy=true;
   try {
@@ -66,32 +99,40 @@ async function flush() {
   finally {syncBusy=false;if(syncAfter){syncAfter=false;scheduleSave();}}
 }
 function scheduleSave() {
-  if(!cloudActive || !user) return;
+  if(!cloudActive || !user || !profileReady) return;
   clearTimeout(syncTimer);
   syncTimer=setTimeout(()=>{syncTimer=null;void flush();},1800);
 }
 async function checkSave() {
-  cloudActive=false; cloudSave=null;
+  cloudActive=false; cloudSave=null; profileReady=false;profileNick='';
+  if(!user)return;
   try {
-    const snap=await getDoc(ownSaveRef());
-    if(snap.exists() && typeof snap.data().state==='string') cloudSave=snap.data().state;
-    info(cloudSave ? '☁️ Znaleziono zapis w chmurze. Wybierz, który zachować.' : '☁️ To konto nie ma jeszcze zapisu w chmurze. Możesz przesłać obecny postęp.');
     const profile=await getDoc(ownProfileRef());
     if(!profile.exists()) {
-      const n=signingUpNick || currentNick();
-      await setDoc(ownProfileRef(), {uid:user.uid,nick:n,nickKey:friendKey(n),wins:0,level:1,updatedAt:serverTimestamp()});
+      info('Wybierz swój unikalny nick, aby zakończyć zakładanie konta.');
+      gateMode('complete');refresh();return;
     }
-  } catch(e) { info('⚠️ Nie można odczytać danych: '+statusText(e)); }
-  finally { signingUpNick='';refresh(); }
+    const name=String(profile.data().nick||'');
+    if(!validNick(name)) {info('Wybierz nowy nick (3–16 znaków: litery, cyfry, _).');gateMode('complete');return;}
+    await reserveNick(name,user.uid); // also migrates pre-existing profiles, if possible
+    profileReady=true;
+    game()?.setNickname?.(name);
+    const snap=await getDoc(ownSaveRef());
+    if(snap.exists() && typeof snap.data().state==='string')cloudSave=snap.data().state;
+    info(cloudSave?'☁️ Znaleziono zapis w chmurze. Wybierz, który zachować.':'☁️ Możesz przesłać lokalny postęp do chmury.');
+    hideGate();
+  } catch(e) {
+    info('⚠️ '+statusText(e));
+    gateMode('complete');
+  } finally {refresh();}
 }
-
 async function useLocal() {
-  if(!user) return;
+  if(!user || !profileReady) return;
   if(cloudSave && !confirm('Zastąpić zapis w chmurze postępem z tego urządzenia? Dotychczasowy zapis w chmurze zostanie nadpisany.')) return;
   cloudActive=true; cloudSave=null; await flush(); refresh();
 }
 async function useCloud() {
-  if(!user || !cloudSave) return;
+  if(!user || !profileReady || !cloudSave) return;
   if(!confirm('Wczytać zapis z chmury? Obecny zapis lokalny zostanie zachowany w kopii zapasowej na tym urządzeniu.')) return;
   try {
     const state=JSON.parse(cloudSave);
@@ -99,52 +140,111 @@ async function useCloud() {
     game()?.backup?.();
     if(!game()?.importState?.(cloudSave)) throw new Error('Nie udało się wczytać zapisu.');
     cloudSave=null; cloudActive=true;
+    const profile=await getDoc(ownProfileRef());
+    if(profile.exists())game()?.setNickname?.(profile.data().nick);
     info('✅ Wczytano zapis z chmury.');
     game()?.goMenu?.();
     refresh();
   } catch(e) {info('❌ '+statusText(e));}
 }
 
-async function accountAction(action) {
-  if(!READY) {info('Firebase nie jest skonfigurowany.');return;}
-  const email=$('#accountEmail')?.value?.trim(), pass=$('#accountPass')?.value, n=cleanNick($('#accountNick')?.value);
+async function accountAction(action,values=null) {
+  if(!READY) {info('Konta będą działały po konfiguracji Firebase przez właściciela gry.');gateMessage(notice);return;}
+  const email=(values?.email??$('#accountEmail')?.value??'').trim();
+  const pass=values?.pass??$('#accountPass')?.value;
+  const n=cleanNick(values?.nick??$('#accountNick')?.value);
   try {
     if(action==='register') {
-      if(n.length<3) {info('Nick powinien mieć 3–16 znaków.');return;}
-      signingUpNick=n;
-      await createUserWithEmailAndPassword(auth,email,pass);
+      if(!validNick(n)) {info('Nick musi mieć 3–16 znaków: litery, cyfry, _.');gateMessage(notice);return;}
+      if(!email || !pass) {info('Wpisz e-mail i hasło.');gateMessage(notice);return;}
+      registrationBusy=true;
+      // Friendly preflight; the Firestore transaction is the authoritative uniqueness check.
+      const nameTaken=await getDoc(nameRef(n));
+      if(nameTaken.exists()) {
+        registrationBusy=false;info('Ten nick jest już zajęty. Wybierz inny.');gateMessage(notice);return;
+      }
+      const cred=await createUserWithEmailAndPassword(auth,email,pass);
+      user=cred.user;
+      try { await reserveNick(n,user.uid); }
+      catch(error) {
+        // Registration cannot complete without an exclusive nickname claim.
+        try {await deleteUser(cred.user);} catch(_) {await signOut(auth);}
+        user=null;throw error;
+      }
       game()?.setNickname?.(n);
-      info('✅ Konto utworzone. Wybierz sposób zapisania postępu.');
+      info('✅ Konto utworzone! Nick jest tylko Twój.');
+      registrationBusy=false;
+      await checkSave();
     } else if(action==='login') {
+      if(!email || !pass) {info('Wpisz e-mail i hasło.');gateMessage(notice);return;}
       await signInWithEmailAndPassword(auth,email,pass);
-      info('✅ Zalogowano. Wybierz zapis gry.');
+      info('✅ Zalogowano.');
     } else if(action==='reset') {
-      if(!email) {info('Wpisz e-mail w formularzu.');return;}
+      if(!email) {info('Wpisz e-mail w formularzu.');gateMessage(notice);return;}
       await sendPasswordResetEmail(auth,email);
       info('Jeśli konto istnieje, otrzymasz e-mail z instrukcją resetowania hasła.');
     }
-  } catch(e) {signingUpNick=''; info(statusText(e));}
+  } catch(e) { info(statusText(e));gateMessage(notice); }
+  finally {registrationBusy=false;refresh();}
 }
 async function logout() {
   clearTimeout(syncTimer);syncTimer=null;
-  if(cloudActive) await flush();
-  cloudActive=false; cloudSave=null;
-  try {await signOut(auth); info('Wylogowano. Postęp lokalny pozostał na tym urządzeniu.');}
+  if(cloudActive)await flush();
+  cloudActive=false;cloudSave=null;profileReady=false;profileNick='';guestChoice=false;
+  try {await signOut(auth);info('Wylogowano. Postęp lokalny pozostał na urządzeniu.');gateMode('welcome');game()?.goMenu?.();}
   catch(e){info(statusText(e));}
   refresh();
 }
 async function updateNick() {
-  if(!user) return;
+  if(!user)return;
   const n=cleanNick($('#newAccountNick')?.value);
-  if(n.length<3) {info('Nick powinien mieć 3–16 znaków.');return;}
+  if(!validNick(n)) {info('Nick: 3–16 znaków, tylko litery, cyfry i _.');return;}
   try {
-    const stats=currentStats();
-    await setDoc(ownProfileRef(), {uid:user.uid,nick:n,nickKey:friendKey(n),wins:Math.max(0,Number(stats.wins)||0),level:Math.max(1,Number(stats.level)||1),updatedAt:serverTimestamp()},{merge:true});
+    await reserveNick(n,user.uid);
     game()?.setNickname?.(n);
-    info('✅ Nick zapisany.');refresh();
-  } catch(e) {info(statusText(e));}
+    info('✅ Zmieniono nick. Poprzedni jest znów dostępny.');refresh();
+  } catch(e) {info(statusText(e));refresh();}
 }
 
+// First screen: sign in or create account. Offline/local play stays accessible
+// so GitHub Pages remains playable until Firebase is configured.
+function gateMessage(message) {const el=$('#gateMessage');if(el)el.textContent=message||'';}
+function hideGate() {const el=$('#accountGate');if(el)el.hidden=true;}
+function gateMode(mode='welcome') {
+  gateView=mode;
+  const root=$('#accountGate'),body=$('#gateBody');if(!root || !body)return;
+  root.hidden=false;
+  const intro=READY?'Zaloguj się, aby grać i zachować postęp na różnych urządzeniach.':
+    'Konta nie są jeszcze aktywne. Najpierw właściciel musi podłączyć Firebase.';
+  if(mode==='welcome') {
+    body.innerHTML=`<p style="color:#b9c5ef;margin:0 0 18px">${esc(intro)}</p>
+      <button class="b graj" onclick="BVBCloud.gateMode('login')">🔐 Zaloguj się</button>
+      <button class="b ac" onclick="BVBCloud.gateMode('register')">✨ Stwórz konto</button>
+      <button class="b" onclick="BVBCloud.playGuest()">🎮 Graj bez konta</button>`;
+  } else {
+    const registering=mode==='register',complete=mode==='complete';
+    body.innerHTML=`<h3 style="margin-bottom:10px">${complete?'👤 Wybierz unikalny nick':registering?'✨ Stwórz konto':'🔐 Zaloguj się'}</h3>
+      ${(registering||complete)?`<label for="gateNick">Nick (3–16 znaków, litery, cyfry, _)</label><input class="inp" id="gateNick" maxlength="16" autocomplete="nickname" placeholder="Twój unikalny nick" required>`:''}
+      ${complete?'':`<label for="gateEmail">E-mail</label><input class="inp" id="gateEmail" type="email" autocomplete="email" placeholder="E-mail" required>
+      <label for="gatePass">Hasło</label><input class="inp" id="gatePass" type="password" autocomplete="${registering?'new-password':'current-password'}" placeholder="Hasło (min. 6 znaków)" required>`}
+      <button class="b graj" onclick="BVBCloud.gateSubmit('${complete?'complete':registering?'register':'login'}')">${complete?'Zatwierdź nick':registering?'Utwórz konto':'Zaloguj się'}</button>
+      ${!complete?`<button class="b" onclick="BVBCloud.gateMode('welcome')">⬅ Wstecz</button>`:''}
+      ${!complete?`<button class="b" onclick="BVBCloud.playGuest()">Graj bez konta</button>`:''}`;
+  }
+  gateMessage(notice);
+}
+function playGuest(){guestChoice=true;hideGate();}
+async function gateSubmit(mode) {
+  const n=cleanNick($('#gateNick')?.value);
+  if(mode==='complete') {
+    if(!user) {gateMode('welcome');return;}
+    if(!validNick(n)) {gateMessage('Nick: 3–16 znaków, litery, cyfry, _.');return;}
+    try {await reserveNick(n,user.uid);game()?.setNickname?.(n);await checkSave();}
+    catch(e){gateMessage(statusText(e));}
+    return;
+  }
+  await accountAction(mode,{email:$('#gateEmail')?.value,pass:$('#gatePass')?.value,nick:n});
+}
 async function friendSearch() {
   if(!user) return;
   const value=friendKey($('#friendSearch')?.value);
@@ -251,8 +351,8 @@ function renderAccount() {
     return;
   }
   if(!user){
-    box.innerHTML=`<div class="cd"><h2>🔐 Konto BVB</h2><p style="font-size:.84rem;color:var(--mu)">Używaj pseudonimu, nie podawaj tu imienia i nazwiska. Hasło obsługuje Firebase Authentication.</p>
-    <label>Nick publiczny (przy rejestracji)</label><input class="inp" id="accountNick" maxlength="16" autocomplete="nickname" placeholder="Twój nick" value="${esc(currentNick())}">
+    box.innerHTML=`<div class="cd"><h2>🔐 Konto BVB</h2><p style="font-size:.84rem;color:var(--mu)">Nicki są unikalne (bez względu na wielkość liter). Litery A–Z, cyfry i _. Hasła obsługuje Firebase.</p>
+    <label>Nick publiczny (przy rejestracji)</label><input class="inp" id="accountNick" maxlength="16" autocomplete="nickname" placeholder="Unikalny nick" value="${esc(currentNick())}">
     <label>E-mail</label><input class="inp" id="accountEmail" type="email" autocomplete="email" placeholder="E-mail">
     <label>Hasło</label><input class="inp" id="accountPass" type="password" autocomplete="current-password" placeholder="Hasło (min. 6 znaków)">
     <button class="b graj" onclick="BVBCloud.accountAction('login')">Zaloguj się</button>
@@ -270,7 +370,7 @@ function renderAccount() {
       '<button class="b" onclick="BVBCloud.flush()">☁️ Zapisz teraz</button>'}
     <button class="b" onclick="BVBCloud.logout()">Wyloguj</button>
     </div>
-    <div class="cd"><h3>✏️ Nick gracza</h3><input class="inp" id="newAccountNick" maxlength="16" placeholder="Nowy nick" value="${esc(currentNick())}"><button class="b" onclick="BVBCloud.updateNick()">Zmień nick</button></div>
+    <div class="cd"><h3>✏️ Nick gracza</h3><input class="inp" id="newAccountNick" maxlength="16" placeholder="Unikalny nowy nick" value="${esc(currentNick())}"><button class="b" onclick="BVBCloud.updateNick()">Zmień nick</button></div>
     <div class="cd"><h3>👥 Znajomi</h3><p style="font-size:.8rem;color:var(--mu)">Dodawanie po nicku tworzy kontakt na Twojej liście.</p>
       <input class="inp" id="friendSearch" maxlength="16" placeholder="Dokładny nick znajomego"><button class="b" onclick="BVBCloud.friendSearch()">🔎 Szukaj</button>
       <div id="friendResults"></div><h3 style="margin-top:14px">Twoja lista</h3><div id="friendList"></div>
@@ -279,17 +379,24 @@ function renderAccount() {
   void loadFriends();void loadInvites();
 }
 
-const api={configured:READY,accountAction,renderAccount,useLocal,useCloud,logout,updateNick,friendSearch,addFriend,removeFriend,loadFriends,loadInvites,ranking,flush,scheduleSave,showLobbyFriends,sendInvite,get isOnline(){return Boolean(user)},get saving(){return cloudActive}};
+const api={configured:READY,accountAction,renderAccount,useLocal,useCloud,logout,updateNick,friendSearch,addFriend,removeFriend,loadFriends,loadInvites,ranking,flush,scheduleSave,showLobbyFriends,sendInvite,gateMode,gateSubmit,playGuest,get isOnline(){return Boolean(user&&profileReady)},get nickname(){return profileReady?profileNick:''},get saving(){return cloudActive}};
 window.BVBCloud=api;
+gateMode('welcome');
 if(READY){
   try{
     app=initializeApp(CONFIG);auth=getAuth(app);db=getFirestore(app);
     onAuthStateChanged(auth,u=>{
       clearTimeout(syncTimer);syncTimer=null;cloudActive=false;
-      user=u;
-      if(u)void checkSave();
-      else {cloudSave=null;info('Zaloguj się lub utwórz konto.');refresh();}
-    },e=>{info(statusText(e));refresh();});
+      user=u;profileReady=false;profileNick='';
+      if(u) {
+        if(!registrationBusy)void checkSave();
+      } else {
+        cloudSave=null;
+        info('Zaloguj się lub utwórz konto.');
+        if(!guestChoice)gateMode('welcome');
+        refresh();
+      }
+    },e=>{info(statusText(e));gateMode('welcome');refresh();});
   }catch(e){info('Błąd konfiguracji Firebase: '+statusText(e));}
 }
 window.dispatchEvent(new Event('bvb-cloud-ready'));
