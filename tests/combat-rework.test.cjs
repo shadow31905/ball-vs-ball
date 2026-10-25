@@ -150,7 +150,7 @@ test('bounded combat diagnostics expose seed, hash and recent events',()=>{
  const {g,api}=fixture();
  api.setSeed(g,0x33445566);
  const pair=g.bl;api.contactDamage(pair[0],pair[1],12);
- g.rt=12;api.beforeStep(g,1/60);
+ g.rt=20;api.beforeStep(g,1/60);
  let data=api.diagnostics(g);
  assert.equal(data.schemaVersion,1);
  assert.equal(data.seed,0x33445566);
