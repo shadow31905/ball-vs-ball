@@ -47,17 +47,32 @@ for(const [name,lines] of sections){
 const close=document.createElement('button');close.className='b graj';close.type='button';
 close.textContent='▶ Przejdź do gry';close.addEventListener('click',hide);body.append(close);
 modal.append(body);document.body.append(modal);
-let lastFocused=null,entryTimer=null;
-function open(){
+// Increase RELEASE_VERSION with each future release to show its notes once again.
+const RELEASE_VERSION='2.0';
+const SEEN_KEY='bvb-release-notes-seen-'+RELEASE_VERSION;
+let lastFocused=null,entryTimer=null,seenThisSession=false;
+function alreadySeen(){
+ if(seenThisSession)return true;
+ try{return localStorage.getItem(SEEN_KEY)==='1';}
+ catch(e){return false;}
+}
+function markSeen(){
+ seenThisSession=true;
+ try{localStorage.setItem(SEEN_KEY,'1');}
+ catch(e){/* Storage blocked: still show only once in the current session. */}
+}
+function open(automatic=false){
  if(!document.getElementById('accountGate')?.hidden)return;
+ if(automatic&&alreadySeen())return;
  lastFocused=document.activeElement;modal.hidden=false;close.focus();
+ if(automatic)markSeen();
 }
 function hide(){modal.hidden=true;lastFocused?.focus?.();}
 modal.addEventListener('click',e=>{if(e.target===modal)hide();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)hide();});
 function entered(){
  clearTimeout(entryTimer);entryTimer=setTimeout(()=>{
-  if(document.getElementById('accountGate')?.hidden)open();
+  if(document.getElementById('accountGate')?.hidden)open(true);
  },350);
 }
 window.addEventListener('bvb-entered-game',entered);
@@ -67,7 +82,7 @@ if(list){
  const btn=document.createElement('button');btn.type='button';btn.className='b bvb3-custom bvb3-wide';
  const label=document.createElement('span');label.className='bvb-menu-title';label.textContent='📋 Historia zmian 2.0';
  const hint=document.createElement('span');hint.className='bvb-menu-hint';hint.textContent='Sprawdź wszystkie nowości w aktualizacji.';
- btn.append(label,hint);btn.addEventListener('click',open);list.append(btn);
+ btn.append(label,hint);btn.addEventListener('click',()=>open());list.append(btn);
 }
 window.BVB2ReleaseNotes={open,hide,entered};
 })();
