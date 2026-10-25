@@ -2940,13 +2940,17 @@ function step(dt) {
           burst(b,effectType(a.b),8,false);
           SFX.hit();
         }
-        // Reflect incoming velocities relative to the contact normal.
-        const da=a.vx*nx+a.vy*ny,db=b.vx*nx+b.vy*ny;
-        if(da<0){a.vx-=2*da*nx;a.vy-=2*da*ny;}
-        if(db>0){b.vx-=2*db*nx;b.vy-=2*db*ny;}
-        // Barely noticeable deviation avoids endless identical collision loops.
+        // Impulse-based collision: heavier balls lose less velocity on impact.
+        const invA=1/Math.max(.2,a.mass||1),invB=1/Math.max(.2,b.mass||1);
+        const approach=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;
+        if(approach<0){
+          const impulse=-(1+.91)*approach/(invA+invB);
+          a.vx+=impulse*nx*invA;a.vy+=impulse*ny*invA;
+          b.vx-=impulse*nx*invB;b.vy-=impulse*ny*invB;
+        }
+        // Gentle spin deflection avoids identical repeated trajectories.
         for(const o of [a,b]){
-          const t=(Math.random()<.5?-1:1)*(1+Math.random()*2)*Math.PI/180;
+          const t=(o.spin||0)*.035+(Math.random()-.5)*.018;
           const vx=o.vx,vy=o.vy;
           o.vx=vx*Math.cos(t)-vy*Math.sin(t);o.vy=vx*Math.sin(t)+vy*Math.cos(t);
         }
