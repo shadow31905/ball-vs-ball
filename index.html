@@ -1446,9 +1446,9 @@ function setupNetConnection(conn) {
         G.pb = B.find(b => b.id === guestBallId) || G.my[0];
         G.bb = hostBall;
         $('#cards').innerHTML = '';
-        $('#fire').hidden = false;
-        $('#fire').disabled = guestAimSent;
-        $('#msg').textContent = guestAimSent ? 'Czekam na drugi strzał…' : 'Wyceluj i naciśnij WYSTRZEL!';
+        $('#fire').hidden = true;
+        $('#fire').disabled = true;
+        $('#msg').textContent = 'Czekam na automatyczny start walki…';
       } else {
         $('#cards').innerHTML = '';
         $('#fire').hidden = true;
@@ -1476,9 +1476,10 @@ function setupNetConnection(conn) {
       broadcastState();
     }
     if (data.type === 'fire' && netRole === 'host') {
-      if (!G || G.m !== 12 || G.ph !== 'aim' || data.matchId !== G.matchId || data.rn !== G.rn || !remoteBallId) return;
+      if (!G || G.m !== 12 || !['draft','aim'].includes(G.ph) || data.matchId !== G.matchId || data.rn !== G.rn) return;
+      // The guest may be ready before the host chooses a ball; retain the input.
       remoteAimAngle = Number.isFinite(data.angle) ? data.angle : -Math.PI / 2;
-      if (G && G.ph === 'aim' && hostAimAngle != null && remoteBallId != null) launchMatch(remoteAimAngle);
+      if (G.ph === 'aim' && hostAimAngle != null && remoteBallId != null) launchMatch(remoteAimAngle);
     }
     if (data.type === 'ping') netSend({type:'pong', at:data.at});
   });
@@ -2659,8 +2660,10 @@ function pick(i) {
   $('#fire').hidden = netRole === 'guest' && activeConn && !G.bb;
   $('#fire').disabled = false;
   $('#msg').textContent = `${G.m === 11 ? '👹 Boss: ' : 'Przeciwnik wybrał: '}${G.bb.n}. Walka rozpocznie się automatycznie!`;
-  // Solo fights are fully automatic; online handshake remains unchanged until sync is reworked.
-  if(G.m!==12 && !activeConn?.open)launchMatch(null);
+  // All fights launch automatically; online still waits for both confirmed choices.
+  G.pa=-Math.PI/2;
+  if(G.m===12)fire();
+  else launchMatch(null);
 }
 
 function fire() {
@@ -2698,16 +2701,11 @@ function launchMatch(remoteAngle = null) {
   // Standard bot difficulty is one profile, not hidden V2 + upgrades + random boosts.
   const normalBot = G.m === 0;
   const difficulty = clamp(diff, 0, 4);
-  const botTier = normalBot ? [1,1,2,3,3][difficulty] : G.m === 12 ? 1 : G.m === 11 ? 3 : 2;
-  const botLevel = normalBot ? [0,0,1,2,4][difficulty] : G.m === 12 ? 0 : diff;
+  // Difficulty changes decision quality, not hidden HP/damage/evolution bonuses.
+  const botTier = normalBot ? 1 : G.m === 12 ? 1 : G.m === 11 ? 3 : 2;
+  const botLevel = normalBot ? 0 : G.m === 12 ? 0 : diff;
   const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, botTier, botLevel, botLevel);
   window.BVBGameplay?.prepareActors?.(G, p, e);
-  if(normalBot){
-    const hpScale=[.88,1,1.08,1.15,1.25][difficulty];
-    const dmgScale=[.86,1,1.08,1.15,1.25][difficulty];
-    e.hp=Math.round(e.hp*hpScale);e.mh=e.hp;
-    e.baseDmg=Math.round(e.baseDmg*dmgScale*100)/100;
-  }
   window.BVBCampaign?.applyActors?.(G,p,e);
   window.BVB2?.prepareActors?.(G,p,e);
   window.BVBRework?.prepareActors?.(G,p,e);
