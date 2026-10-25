@@ -2713,6 +2713,7 @@ function launchMatch(remoteAngle = null) {
   window.BVBRework?.prepareActors?.(G,p,e);
   G.bl = [p, e];
   G.ph = 'battle';
+  window.BVBReworkUI?.startRound?.(G);
   G.rt = 0;
   G.silence = 0; G.silenceBoost = 0; G.silenceBoostFading = false; G.hitStop = 0;
   $('#fire').hidden = true;
@@ -2772,6 +2773,7 @@ function burst(o, kind, n = 12, label = true) {
   if (!G || !o) return;
   const e = EFFECTS[kind] || EFFECTS.normal;
   G.fx ||= []; G.rings ||= []; G.pop ||= [];
+  if(window.BVBReworkUI?.fx?.()==='low')n=Math.min(n,4);
   for (let i = 0; i < n; i++) {
     const a = Math.PI * 2 * i / n + Math.random() * 0.45, sp = 18 + Math.random() * 63;
     G.fx.push({ x: o.x, y: o.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
@@ -2970,6 +2972,7 @@ function step(dt) {
 function roundEnd(winner) {
   if (!G || G.ph !== 'battle') return;
   G.ph = 'end';
+  window.BVBReworkUI?.endRound?.(G,winner);
   if (winner >= 0) G.h[1 - winner]--;
   hearts();
   broadcastState();
@@ -3001,6 +3004,7 @@ function over() {
   $('#ovb').innerHTML = `
     <h2>${win ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2>${G.m === 11 ? `<p style="margin:8px 0">Boss: ${esc(BOSSD[G.bossIndex || 0].n)}</p>` : ''}
     <p style="color:var(--mu);margin:10px 0">${G.m === 12 ? 'Mecz towarzyski online' : `+${coinEarned} 🪙 · +${candyEarned} 🍬`}</p>
+    ${window.BVBReworkUI?.victoryStats?.(G) || ''}
     <button class="b graj" onclick="$('#ov').hidden=true;${G.m === 11 ? `startBossFight(${G.bossIndex || 0})` : `startMatch(${G.m})`}">Zagraj ponownie</button>
     <button class="b" onclick="menu()">Menu główne</button>
   `;
@@ -3015,6 +3019,9 @@ function hearts() {
 
 function pz() {
   if (!G) return;
+  if (G.ph==='battle' && G.m!==12 && window.BVBReworkUI?.togglePause) {
+    window.BVBReworkUI.togglePause();return;
+  }
   $('#ov').hidden = false;
   $('#ovb').innerHTML = '<h2>Pauza ⏸️</h2><button class="b graj" onclick="$(\'#ov\').hidden=true">Wznów grę</button><button class="b" onclick="menu()">Wyjdź do menu</button>';
 }
@@ -3027,6 +3034,12 @@ function emo(i) {
 function draw() {
   if (!G) return;
   cx.setTransform(D, 0, 0, D, 0, 0);
+  if(window.BVBReworkUI?.camera?.()==='dynamic' && G.ph==='battle'){
+    const pair=G.bl||[];
+    const gap=pair.length===2?Math.hypot(pair[0].x-pair[1].x,pair[0].y-pair[1].y):300;
+    const zoom=1+Math.max(0,Math.min(.105,(230-gap)/200*.105));
+    cx.translate(180,180);cx.scale(zoom,zoom);cx.translate(-180,-180);
+  }
   drawArenaBackground();
   drawArenaItems();
 
@@ -3114,14 +3127,15 @@ function loop(t) {
   const elapsed = Math.min(0.1, Math.max(0, (t - (frameLast || t)) / 1000));
   frameLast = t;
   if (G) {
-    if (G.ph === 'battle' && netRole !== 'guest') {
-      fixedAccumulator += elapsed;
+    if (G.ph === 'battle' && netRole !== 'guest' && !window.BVBReworkUI?.paused?.()) {
+      fixedAccumulator += elapsed * (window.BVBReworkUI?.rate?.() ?? 1);
       let steps = 0;
       while (fixedAccumulator >= 1 / 60 && steps++ < 6 && G?.ph === 'battle') {
         step(1 / 60);
         fixedAccumulator -= 1 / 60;
       }
     }
+    window.BVBReworkUI?.frame?.(G,elapsed);
     draw();
     if (netRole === 'host' && activeConn && G.ph === 'battle' && t - netSyncAt > 120) {
       netSyncAt = t; broadcastState();
@@ -3160,6 +3174,7 @@ requestAnimationFrame(loop);
 <script src="./bvb-campaign.js"></script>
 <script src="./bvb-abilities-v2.js"></script>
 <script src="./bvb-combat-rework.js"></script>
+<script src="./bvb-combat-ui.js"></script>
 <script src="./bvb-preview-v2.js"></script>
 <script src="./bvb-ui-v2.js"></script>
 <script src="./bvb-main-menu-v3.js"></script>
