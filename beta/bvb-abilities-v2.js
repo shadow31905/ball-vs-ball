@@ -324,7 +324,7 @@ function cast(o,foe){
   visual(o,o,'chess',42,d.color,.65);
   if(delta<96)strike(o,foe,o.baseDmg*.55,{knock:.24});break;
  case 'dice':case 'potion': {
-  const roll=Math.floor(Math.random()*3);
+  const roll=Math.floor((window.BVBRework?.random?.() ?? Math.random())*3);
   if(roll===0)shoot(o,foe,{damage:o.baseDmg*.45,slow:.65,color:d.color});
   else if(roll===1)zone(o,foe.x,foe.y,'poison',30,2.8,.38);
   else {o.status.shield=(o.status.shield||0)+9;visual(o,o,'shield',33,d.color,.55);}
@@ -378,7 +378,7 @@ function cast(o,foe){
   shoot(o,foe,{count:5,damage:o.baseDmg*.25,spread:.28,speed:165,bounces:1,color:d.color});
   visual(o,o,'shard',32,d.color,.5);break;
  case 'blink':{
-  const a=Math.atan2(o.y-foe.y,o.x-foe.x)+(Math.random()-.5)*1.1;
+  const a=Math.atan2(o.y-foe.y,o.x-foe.x)+((window.BVBRework?.random?.() ?? Math.random())-.5)*1.1;
   o.x=clamp(foe.x+Math.cos(a)*80,o.r,W-o.r);
   o.y=clamp(foe.y+Math.sin(a)*80,o.r,W-o.r);
   visual(o,o,'blink',33,d.color,.65);break;
