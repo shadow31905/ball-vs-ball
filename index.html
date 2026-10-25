@@ -2592,6 +2592,7 @@ function nextRound() {
   G.ph = 'draft';
   G.rn = (G.rn || 0) + 1;
   G.bl = []; G.pr = []; G.z = []; G.fx = []; G.rings = []; G.pop = [];
+  G.v2 = null; // Round-based hazards and Spider webs expire only at round boundary.
   createRoundArena(G);
   window.BVBGameplay?.newRound?.(G);
   window.BVBCampaign?.setupRound?.(G);
@@ -2673,6 +2674,7 @@ function launchMatch(remoteAngle = null) {
   const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, G.m === 12 ? 1 : G.m === 11 ? 3 : 2, G.m === 12 ? 0 : diff, G.m === 12 ? 0 : diff);
   window.BVBGameplay?.prepareActors?.(G, p, e);
   window.BVBCampaign?.applyActors?.(G,p,e);
+  window.BVB2?.prepareActors?.(G,p,e);
   G.bl = [p, e];
   G.ph = 'battle';
   G.rt = 0;
@@ -2836,7 +2838,7 @@ function step(dt) {
       const foe = G.bl.find(t => t !== o && alive(t));
       specialAbility(o, foe);
       window.BVBCampaign?.onAbility?.(G,o);
-      o.abilityCd = Math.max(1.0, ((o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6) * (o.abilityRate||1));
+      o.abilityCd = window.BVB2?.cooldown?.(o) ?? Math.max(1.0, ((o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6) * (o.abilityRate||1));
     }
     if (o.status.slow > 0) o.status.slow = Math.max(0, o.status.slow - dt);
     if (o.status.stun > 0) o.status.stun = Math.max(0, o.status.stun - dt);
@@ -2887,8 +2889,11 @@ function step(dt) {
           }
           const hitSlow = Math.min(.23,.065+Math.max(damageToA,damageToB)*.004);
           a.impactSlow = b.impactSlow = hitSlow;
-          applyDamage(a,damageToA);
-          applyDamage(b,damageToB);
+          applyDamage(a,damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15)));
+          applyDamage(b,damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15)));
+          a.skillCharge=b.skillCharge=0;
+          if(a.skillReflect>0)applyDamage(b,Math.min(3,damageToA*.2));
+          if(b.skillReflect>0)applyDamage(a,Math.min(3,damageToB*.2));
           window.BVBCampaign?.onImpact?.(G);
           burst(a,effectType(b.b),8,false);
           burst(b,effectType(a.b),8,false);
@@ -3107,5 +3112,7 @@ requestAnimationFrame(loop);
 <script src="./bvb-anime-update.js"></script>
 <script src="./bvb-gameplay.js"></script>
 <script src="./bvb-campaign.js"></script>
+<script src="./bvb-abilities-v2.js"></script>
+<script src="./bvb-ui-v2.js"></script>
 </body>
 </html>
