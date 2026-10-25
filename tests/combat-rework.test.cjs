@@ -146,6 +146,20 @@ test('five AI profiles have distinct reaction times and target decisions',()=>{
  assert.equal(new Set(clocks.map(n=>n.toFixed(2))).size,5);
  for(let i=1;i<5;i++)assert.ok(clocks[i]<clocks[i-1]);
 });
+test('bounded combat diagnostics expose seed, hash and recent events',()=>{
+ const {g,api}=fixture();
+ api.setSeed(g,0x33445566);
+ const pair=g.bl;api.contactDamage(pair[0],pair[1],12);
+ g.rt=12;api.beforeStep(g,1/60);
+ let data=api.diagnostics(g);
+ assert.equal(data.schemaVersion,1);
+ assert.equal(data.seed,0x33445566);
+ assert.ok(data.stateHash.length===8);
+ assert.ok(data.events.some(e=>e.type==='ARENA_SHIFT'));
+ for(let i=0;i<300;i++)api.trace(g,'TEST',{i});
+ data=api.diagnostics(g);
+ assert.ok(data.events.length<=250);
+});
 test('main HTML includes all combat hooks and valid inline JS',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   for(const needle of [
