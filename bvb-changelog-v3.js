@@ -3,7 +3,7 @@
 'use strict';
 if(document.getElementById('bvb2ReleaseModal'))return;
 const css=document.createElement('style');
-css.textContent="\n#bvb2ReleaseModal[hidden]{display:none!important}\n#bvb2ReleaseModal{position:fixed;inset:0;z-index:350;display:grid;place-items:center;\nbackground:#06091dd9;padding:12px;overflow-y:auto}\n.bvb2-release-card{width:min(520px,100%);max-height:min(90vh,880px);overflow-y:auto;\npadding:22px 19px;background:linear-gradient(145deg,#1e2856,#0c1532);\nborder:2px solid #6c7cdb;border-radius:19px;box-shadow:0 0 45px #162f96aa,0 20px 55px #000b}\n.bvb2-release-head{display:block;margin:0 0 13px}\n.bvb2-release-head h2{font-size:1.42rem;letter-spacing:.4px;color:#fef08a;margin-bottom:4px}\n.bvb2-release-head p{font-size:.83rem;color:#cbd5e1}\n.bvb2-release-card h3{font-size:1rem;color:#bcb7ff;margin:13px 0 6px}\n.bvb2-release-card ul{padding-left:19px;font-size:.82rem;line-height:1.55;color:#e6e9ff}\n.bvb2-release-card li{margin:0 0 5px}\n.bvb2-release-card>.b{width:100%;margin:19px 0 0}\n@media(max-width:390px){.bvb2-release-card{padding:16px 13px}.bvb2-release-card h2{font-size:1.15rem}}\n";
+css.textContent="\n#bvb2ReleaseModal[hidden]{display:none!important}\n#bvb2ReleaseModal{position:fixed;inset:0;z-index:350;display:grid;place-items:center;\nbackground:#06091dd9;padding:12px;overflow-y:auto}\n.bvb2-release-card{width:min(520px,100%);max-height:min(90vh,880px);overflow-y:auto;\npadding:22px 19px;background:linear-gradient(145deg,#1e2856,#0c1532);\nborder:2px solid #6c7cdb;border-radius:19px;box-shadow:0 0 45px #162f96aa,0 20px 55px #000b}\n.bvb2-release-head{display:block;margin:0 0 13px}\n.bvb2-release-head h2{font-size:1.42rem;letter-spacing:.4px;color:#fef08a;margin-bottom:4px}\n.bvb2-release-head p{font-size:.83rem;color:#cbd5e1}\n.bvb2-release-card h3{font-size:1rem;color:#bcb7ff;margin:13px 0 6px}\n.bvb2-release-card ul{padding-left:19px;font-size:.82rem;line-height:1.55;color:#e6e9ff}\n.bvb2-release-card li{margin:0 0 5px}\n.bvb2-release-card>.b{width:100%;margin:12px 0 0}\n.bvb2-release-card>.bvb2-release-optout{background:#243152;border:1px solid #8993b5;color:#e2e8f0}\n.bvb2-release-card>.bvb2-release-optout:hover{background:#33466c}\n@media(max-width:390px){.bvb2-release-card{padding:16px 13px}.bvb2-release-card h2{font-size:1.15rem}}\n";
 document.head.append(css);
 const sections=[
  ['🛠️ Naprawiono w 2.0.1',[
@@ -53,11 +53,31 @@ for(const [name,lines] of sections){
 }
 const close=document.createElement('button');close.className='b graj';close.type='button';
 close.textContent='▶ Przejdź do gry';close.addEventListener('click',hide);body.append(close);
+const optOut=document.createElement('button');optOut.type='button';
+optOut.className='b bvb2-release-optout';
+optOut.addEventListener('click',()=>{
+ const disabled=autoDisabled();
+ try{if(disabled)localStorage.removeItem(OPTOUT_KEY);else localStorage.setItem(OPTOUT_KEY,'1');}
+ catch(e){/* Local storage may be unavailable. */}
+ optOutThisSession=!disabled;
+ refreshOptOut();hide();
+});
+body.append(optOut);
 modal.append(body);document.body.append(modal);
 // Increase RELEASE_VERSION with each future release to show its notes once again.
 const RELEASE_VERSION='2.0.1';
 const SEEN_KEY='bvb-release-notes-seen-'+RELEASE_VERSION;
-let lastFocused=null,entryTimer=null,seenThisSession=false;
+const OPTOUT_KEY='bvb-release-notes-optout';
+let lastFocused=null,entryTimer=null,seenThisSession=false,optOutThisSession=false;
+function autoDisabled(){
+ if(optOutThisSession)return true;
+ try{return localStorage.getItem(OPTOUT_KEY)==='1';}
+ catch(e){return false;}
+}
+function refreshOptOut(){
+ optOut.textContent=autoDisabled()?'🔔 Włącz ponowne pokazywanie Changeloga':'🚫 Nie pokazuj więcej';
+ optOut.setAttribute('aria-label',autoDisabled()?'Włącz automatyczne powiadomienia o nowych aktualizacjach':'Nie pokazuj automatycznie Changeloga przy kolejnych aktualizacjach');
+}
 function alreadySeen(){
  if(seenThisSession)return true;
  try{return localStorage.getItem(SEEN_KEY)==='1';}
@@ -70,7 +90,8 @@ function markSeen(){
 }
 function open(automatic=false){
  if(!document.getElementById('accountGate')?.hidden)return;
- if(automatic&&alreadySeen())return;
+ if(automatic&&(alreadySeen()||autoDisabled()))return;
+ refreshOptOut();
  lastFocused=document.activeElement;modal.hidden=false;close.focus();
  if(automatic)markSeen();
 }
