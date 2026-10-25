@@ -225,6 +225,7 @@
   roundEnd = function(winner) {
     if (!G || G.ph !== 'battle') return;
     G.ph = 'end';
+    window.BVBReworkUI?.endRound?.(G,winner);
     if(winner>=0) G.h[1-winner]--;
     G.lastRoundWinner = winner;
     const loser = G.bl?.find(o=>o.team!==winner);
