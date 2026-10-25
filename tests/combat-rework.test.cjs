@@ -99,6 +99,26 @@ test('burn + freeze status reaction damages at most once per second',()=>{
   api.beforeStep(g,1/60);
   assert.equal(o.hp,after);
 });
+test('six bosses telegraph an arena attack before damage',()=>{
+ for(let index=0;index<6;index++){
+   const {g,api}=fixture();
+   g.m=11;g.bossIndex=index;
+   g.rt=7.1;api.afterStep(g,1/60);
+   assert.ok(g.bossTelegraph,'missing boss telegraph '+index);
+   assert.equal(g.bossTelegraph.index,index);
+   g.rt=8.4;api.afterStep(g,1/60);
+   assert.equal(g.bossTelegraph,null);
+ }
+});
+test('spectator module and automatic online handshake are wired',()=>{
+ const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ const ui=fs.readFileSync(path.join(root,'bvb-combat-ui.js'),'utf8');
+ new vm.Script(ui,{filename:'bvb-combat-ui.js'});
+ for(const needle of ['bvb-combat-ui.js','window.BVBReworkUI?.frame?.(G,elapsed)',
+  'window.BVBReworkUI?.endRound?.(G,winner)','if(G.m===12)fire();',
+  'remoteAimAngle != null) launchMatch(remoteAimAngle)'])
+  assert.ok(html.includes(needle),needle);
+});
 test('main HTML includes all combat hooks and valid inline JS',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   for(const needle of [
