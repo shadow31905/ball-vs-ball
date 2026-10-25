@@ -273,7 +273,13 @@ function onWall(o,side){
   if(st.wallBeams.length>12)st.wallBeams.splice(0,st.wallBeams.length-12);
   visual(o,o,'beam',23,d.color,.48);
  }
- if(d.kind==='turret'||d.kind==='pet'||d.kind==='train')zone(o,o.x,o.y,d.kind,23,4,.65);
+ if(d.kind==='turret'||d.kind==='pet')zone(o,o.x,o.y,d.kind,23,4,.65);
+ if(d.kind==='train'){
+  zone(o,o.x,o.y,'train',20,2.5,.65);
+  const train=st.hazards[st.hazards.length-1];
+  train.vx=side==='left'?160:side==='right'?-160:0;
+  train.vy=side==='top'?160:side==='bottom'?-160:0;
+ }
  if(d.kind==='grid'&&o.b.id===27)zone(o,o.x,o.y,'shock',30,2,.55);
  if(d.kind==='frost'&&o.b.id===29)zone(o,o.x,o.y,'frost',19,3,.38);
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
@@ -406,6 +412,17 @@ function cast(o,foe){
 }
 const oldSpecial=specialAbility;
 specialAbility=cast;
+// Cell's one-time mitosis is part of its single growth ability.
+const previousApply=applyDamage;
+applyDamage=function(target,damage){
+ previousApply(target,damage);
+ if(target?.b?.id===17&&target.hp<=0&&!target.v2MitosisUsed){
+  target.v2MitosisUsed=true;target.hp=Math.max(1,Math.round(target.mh*.24));
+  target.r=Math.max(10,target.r*.68);
+  target.status.shield=(target.status.shield||0)+5;
+  visual(target,target,'growth',32,'#5eead4',.95);
+ }
+};
 function closestToSegment(px,py,ax,ay,bx,by){
  const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy||1)));
  return Math.hypot(px-(ax+t*dx),py-(ay+t*dy));
@@ -445,6 +462,8 @@ function tick(dt){
  st.shots=st.shots.filter(p=>p.life>0);
  for(const h of st.hazards){
   h.age+=dt;h.life-=dt;h.cooldown-=dt;
+  if(h.kind==='train'){h.x+=(h.vx||0)*dt;h.y+=(h.vy||0)*dt;}
+  if(h.kind==='train'&&(h.x<-25||h.x>W+25||h.y<-25||h.y>W+25))h.life=0;
   if(h.life<=0)continue;
   const foe=G.bl.find(o=>o.team!==h.team&&alive(o)&&Math.hypot(o.x-h.x,o.y-h.y)<o.r+h.radius);
   if(!foe||h.cooldown>0)continue;
@@ -530,8 +549,16 @@ function drawOverlay(){
  for(const h of st.hazards||[]){
   cx.globalAlpha=Math.min(.5,.16+.34*Math.min(1,h.life/.6));cx.fillStyle=h.color;cx.strokeStyle=h.color;
   cx.shadowColor=h.color;cx.shadowBlur=10;
-  cx.beginPath();cx.arc(h.x,h.y,h.radius,0,Math.PI*2);cx.fill();
-  cx.globalAlpha=.9;cx.lineWidth=2;cx.stroke();
+  if(h.kind==='train'){
+   cx.save();cx.translate(h.x,h.y);cx.rotate(Math.atan2(h.vy||0,h.vx||1));
+   cx.fillStyle='#4338ca';cx.strokeStyle=h.color;cx.globalAlpha=.85;
+   cx.fillRect(-27,-11,54,22);cx.strokeRect(-27,-11,54,22);
+   cx.fillStyle='#c4b5fd';for(let j=0;j<3;j++)cx.fillRect(-20+j*14,-6,9,8);
+   cx.restore();
+  }else {
+   cx.beginPath();cx.arc(h.x,h.y,h.radius,0,Math.PI*2);cx.fill();
+   cx.globalAlpha=.9;cx.lineWidth=2;cx.stroke();
+  }
  }
  for(const p of st.shots||[]){
   cx.globalAlpha=detailed?.4:.16;cx.lineWidth=Math.max(2,p.r*.85);cx.lineCap='round';
