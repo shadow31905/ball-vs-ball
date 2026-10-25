@@ -1473,7 +1473,8 @@ function setupNetConnection(conn) {
       remoteBallId = G?.bt?.find(b => b.id === data.id) || null;
       if (!remoteBallId) return;
       if (G && G.ph === 'aim') G.bb = remoteBallId;
-      broadcastState();
+      if (G.ph === 'aim' && hostAimAngle != null && remoteAimAngle != null) launchMatch(remoteAimAngle);
+      else broadcastState();
     }
     if (data.type === 'fire' && netRole === 'host') {
       if (!G || G.m !== 12 || !['draft','aim'].includes(G.ph) || data.matchId !== G.matchId || data.rn !== G.rn) return;
