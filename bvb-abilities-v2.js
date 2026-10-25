@@ -198,7 +198,7 @@ function visual(owner,point,kind='burst',size=24,color=null,duration=.48){
 }
 function strike(source,target,amount,options={}){
  if(!alive(target))return;
- applyDamage(target,Math.max(.5,amount));
+ applyDamage(target,Math.max(.5,amount*(source?.status?.weaken>0?.8:1)));
  if(options.poison)target.status.poison=Math.max(target.status.poison||0,options.poison);
  if(options.burn)target.status.burn=Math.max(target.status.burn||0,options.burn);
  if(options.slow)target.status.slow=Math.max(target.status.slow||0,options.slow);
