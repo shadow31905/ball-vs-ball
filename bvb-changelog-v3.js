@@ -6,6 +6,13 @@ const css=document.createElement('style');
 css.textContent="\n#bvb2ReleaseModal[hidden]{display:none!important}\n#bvb2ReleaseModal{position:fixed;inset:0;z-index:350;display:grid;place-items:center;\nbackground:#06091dd9;padding:12px;overflow-y:auto}\n.bvb2-release-card{width:min(520px,100%);max-height:min(90vh,880px);overflow-y:auto;\npadding:22px 19px;background:linear-gradient(145deg,#1e2856,#0c1532);\nborder:2px solid #6c7cdb;border-radius:19px;box-shadow:0 0 45px #162f96aa,0 20px 55px #000b}\n.bvb2-release-head{display:block;margin:0 0 13px}\n.bvb2-release-head h2{font-size:1.42rem;letter-spacing:.4px;color:#fef08a;margin-bottom:4px}\n.bvb2-release-head p{font-size:.83rem;color:#cbd5e1}\n.bvb2-release-card h3{font-size:1rem;color:#bcb7ff;margin:13px 0 6px}\n.bvb2-release-card ul{padding-left:19px;font-size:.82rem;line-height:1.55;color:#e6e9ff}\n.bvb2-release-card li{margin:0 0 5px}\n.bvb2-release-card>.b{width:100%;margin:19px 0 0}\n@media(max-width:390px){.bvb2-release-card{padding:16px 13px}.bvb2-release-card h2{font-size:1.15rem}}\n";
 document.head.append(css);
 const sections=[
+ ['🛠️ Naprawiono w 2.0.1',[
+  'Topór i pozostałe kulki z orbitującymi ostrzami mają teraz widoczne ostrza w walce, które naprawdę trafiają przeciwnika.',
+  'Łatwy bot ma słabsze statystyki, bez ukrytej ewolucji V2 i losowych premii do szarży lub pancerza.',
+  'Średni bot nie otrzymuje losowej taktyki Szarża, a jego siła lepiej odpowiada wybranemu poziomowi.',
+  'Sześciu bossów korzysta z różnych umiejętności; poprawiono ich zdrowie i obrażenia.',
+  'Poprawiono spójność czasów odnowienia umiejętności, osłabienie, ogłuszenie oraz rykoszety w narożnikach.'
+ ]],
  ['✨ Dodano',[
   'Nowe menu główne: cztery animowane kafelki z ikonami, opisami i podglądem zawartości.',
   'Osobne ekrany trybów walki, kulek i sklepu, nagród oraz konta i ustawień.',
@@ -32,10 +39,10 @@ const sections=[
  ]]
 ];
 const modal=document.createElement('div');modal.id='bvb2ReleaseModal';modal.hidden=true;
-modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Historia zmian Ball VS Ball 2.0');
+modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Historia zmian Ball VS Ball 2.0.1');
 const body=document.createElement('div');body.className='bvb2-release-card';
 const header=document.createElement('header');header.className='bvb2-release-head';
-const title=document.createElement('h2');title.textContent='🎮 BALL VS BALL 2.0';
+const title=document.createElement('h2');title.textContent='🎮 BALL VS BALL 2.0.1';
 const subtitle=document.createElement('p');subtitle.textContent='Co nowego w aktualizacji?';
 header.append(title,subtitle);body.append(header);
 for(const [name,lines] of sections){
@@ -48,7 +55,7 @@ const close=document.createElement('button');close.className='b graj';close.type
 close.textContent='▶ Przejdź do gry';close.addEventListener('click',hide);body.append(close);
 modal.append(body);document.body.append(modal);
 // Increase RELEASE_VERSION with each future release to show its notes once again.
-const RELEASE_VERSION='2.0';
+const RELEASE_VERSION='2.0.1';
 const SEEN_KEY='bvb-release-notes-seen-'+RELEASE_VERSION;
 let lastFocused=null,entryTimer=null,seenThisSession=false;
 function alreadySeen(){
@@ -80,7 +87,7 @@ window.addEventListener('bvb-entered-game',entered);
 const list=document.querySelector('#bvb3_account .bvb3-actions');
 if(list){
  const btn=document.createElement('button');btn.type='button';btn.className='b bvb3-custom bvb3-wide';
- const label=document.createElement('span');label.className='bvb-menu-title';label.textContent='📋 Historia zmian 2.0';
+ const label=document.createElement('span');label.className='bvb-menu-title';label.textContent='📋 Historia zmian 2.0.1';
  const hint=document.createElement('span');hint.className='bvb-menu-hint';hint.textContent='Sprawdź wszystkie nowości w aktualizacji.';
  btn.append(label,hint);btn.addEventListener('click',()=>open());list.append(btn);
 }
