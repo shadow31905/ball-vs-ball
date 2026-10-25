@@ -1,0 +1,3184 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <base href="../">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Ball VS Ball — BETA reworku walki</title>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <style>
+    :root {
+      --bg: #070a18;
+      --bg2: #0b112c;
+      --cd: #19234d;
+      --cd-dark: #090e24;
+      --btn: #19234d;
+      --btn-sh: #090e24;
+      --ac: #4b83ff;
+      --ad: #2b55b8;
+      --hw: linear-gradient(135deg, #ea580c, #7e22ce);
+      --hw-sh: #4c1d95;
+      --tx: #f8fafc;
+      --mu: #9aa5d6;
+      --ar: #25326b;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    * {
+      box-sizing: inherit;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    }
+    input, textarea, select {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 50% 15%, #162256 0%, var(--bg2) 45%, var(--bg) 100%) fixed;
+      color: var(--tx);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* Zezwól na przewijanie strony w dół i w górę. */
+      overscroll-behavior-y: auto;
+      touch-action: pan-y pinch-zoom;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    #app {
+      width: 100%;
+      max-width: 460px;
+      min-width: 0;
+      padding: 12px 10px 26px;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    header h1 {
+      font-size: clamp(0.95rem, 4.4vw, 1.2rem);
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      white-space: nowrap;
+    }
+    header h1 span { color: var(--ac); }
+    .wallet-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-left: auto;
+    }
+    .coin-badge {
+      background: var(--btn);
+      border: 1px solid #2e3d7a;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 0 var(--btn-sh), 0 4px 10px rgba(0,0,0,0.4);
+      color: #fff;
+      cursor: pointer;
+    }
+    .coin-badge.candy {
+      background: linear-gradient(135deg, #431407, #3b0764);
+      border-color: #fb923c;
+      color: #fed7aa;
+    }
+    .bs-top {
+      background: linear-gradient(135deg, #1e2652, #111836);
+      border: 2px solid var(--ac);
+      border-radius: 18px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      box-shadow: 0 5px 0 #090e24;
+    }
+    .bs-counter {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #fde047;
+      letter-spacing: 0.5px;
+    }
+    .bs-sec-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 20, 45, 0.75);
+      border-left: 5px solid var(--ac);
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin: 14px 0 8px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #bae6fd;
+    }
+    .bs-card {
+      position: relative;
+      background: linear-gradient(180deg, #1f2a5e 0%, #111838 100%);
+      border-radius: 16px;
+      padding: 10px 8px;
+      text-align: center;
+      border: 2px solid var(--rc);
+      box-shadow: 0 5px 0 #090e24;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: transform 0.12s, filter 0.12s;
+      min-width: 0;
+    }
+    .bs-card:hover { transform: translateY(-2px); filter: brightness(1.08); }
+    .bs-card.lk { opacity: 0.45; filter: grayscale(0.85); }
+    .bs-tier-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: linear-gradient(135deg, #f59e0b, #dc2626);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid #fef08a;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    .bs-lv-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: #0f172a;
+      color: #38bdf8;
+      font-size: 0.65rem;
+      font-weight: 900;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid #38bdf8;
+    }
+    .dup-bar {
+      width: 100%;
+      height: 14px;
+      background: #090e24;
+      border-radius: 999px;
+      border: 1px solid #2e3d7a;
+      overflow: hidden;
+      position: relative;
+      margin-top: 3px;
+    }
+    .dup-bar > i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #4b83ff, #facc15);
+      transition: width 0.3s;
+    }
+    .dup-bar > span {
+      position: absolute;
+      inset: 0;
+      font-size: 0.65rem;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 0 1px 2px #000;
+    }
+    .stat-box-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 10px 0;
+      text-align: center;
+    }
+    .stat-pill {
+      background: rgba(9, 14, 36, 0.75);
+      border: 1px solid #29366e;
+      border-radius: 10px;
+      padding: 7px 4px;
+      font-size: 0.75rem;
+    }
+    .stat-pill b { display: block; font-size: 0.9rem; color: #fde047; margin-top: 2px; }
+    .boss-button {
+      background: linear-gradient(120deg, #3c2454, #785021) !important;
+      border: 1px solid #fbbf24 !important;
+      color: #fef3c7 !important;
+      box-shadow: 0 5px 0 #1f122b !important;
+    }
+    #saveWarn {
+      background: #7f1d1d;
+      color: #fecaca;
+      border: 1px solid #f87171;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    #menu, #pn, #game { animation: fi 0.25s ease-out; width: 100%; }
+    @keyframes fi { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .diff-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .diff-btn {
+      background: var(--btn);
+      color: #dbe4ff;
+      border: 1px solid #2b3970;
+      border-radius: 13px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 13px 2px;
+      box-shadow: 0 4px 0 var(--btn-sh);
+      cursor: pointer;
+      transition: transform 0.08s, filter 0.15s, background 0.15s;
+      text-align: center;
+    }
+    .diff-btn:hover { filter: brightness(1.12); }
+    .diff-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--btn-sh); }
+    .diff-btn.on {
+      background: linear-gradient(180deg, #5a91ff 0%, #3d75f5 100%);
+      color: #ffffff;
+      border-color: #8bb4ff;
+      box-shadow: 0 4px 0 var(--ad), 0 0 16px rgba(75, 131, 255, 0.55);
+    }
+    .b {
+      background: var(--btn);
+      color: #ffffff;
+      border: 1px solid #2b3970;
+      border-radius: 15px;
+      padding: 15px 10px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: 0 5px 0 var(--btn-sh), 0 6px 14px rgba(0,0,0,0.3);
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.08s, filter 0.15s;
+      text-align: center;
+      line-height: 1.25;
+    }
+    .b:hover:not(:disabled) { filter: brightness(1.12); }
+    .b:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 1px 0 var(--btn-sh); }
+    .b:disabled { opacity: 0.45; cursor: not-allowed; }
+    .b.graj {
+      background: linear-gradient(180deg, #578fff 0%, #4477f2 100%);
+      border-color: #82b0ff;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 6px 0 var(--ad), 0 0 24px rgba(75, 131, 255, 0.45);
+      margin-bottom: 11px;
+    }
+    .b.graj:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--ad); }
+    .b.ac {
+      background: linear-gradient(180deg, #578fff 0%, #3d75f5 100%);
+      border-color: #82b0ff;
+      box-shadow: 0 5px 0 var(--ad);
+    }
+    .b.hw {
+      background: var(--hw);
+      border-color: #fdba74;
+      box-shadow: 0 5px 0 var(--hw-sh), 0 0 16px rgba(249, 115, 22, 0.35);
+    }
+    .b.green {
+      background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+      border-color: #34d399;
+      box-shadow: 0 5px 0 #065f46;
+    }
+    .icon-globe {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(56, 189, 248, 0.18);
+      color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+      font-size: 0.85rem;
+    }
+    .icon-inf {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #a855f7, #7e22ce);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+      font-size: 0.85rem;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .grid-2 .b, .grid-3 .b { margin-bottom: 0; }
+    .cd {
+      background: var(--cd);
+      border: 1px solid #2a3975;
+      border-radius: 18px;
+      padding: 14px;
+      margin: 10px 0;
+      box-shadow: 0 4px 0 var(--cd-dark);
+    }
+    .cd.hw-card {
+      background: linear-gradient(145deg, #2a1235, #19102c);
+      border-color: #fb923c;
+      box-shadow: 0 4px 0 #1f0924, 0 0 20px rgba(249, 115, 22, 0.18);
+    }
+    .cd h2, .cd h3 { margin-bottom: 8px; color: #fff; }
+    .bar { height: 12px; background: var(--cd-dark); border-radius: 8px; overflow: hidden; margin: 6px 0; }
+    .bar i { display: block; height: 100%; background: linear-gradient(90deg, #3ddc84, #b8f55a); width: 0; transition: width 0.4s; }
+    .col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .orb {
+      --s: 56px;
+      position: relative;
+      overflow: hidden;
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      font-size: calc(var(--s) * 0.5);
+      color: #111;
+      background: radial-gradient(circle at 35% 28%, #fffb, #fff0 45%),
+                  radial-gradient(circle, var(--oc) 55%, #0009 135%);
+      box-shadow: 0 0 0 3px var(--rc), 0 4px 10px #0006;
+      flex: none;
+    }
+    .orb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(115deg, #ffffffcc 8%, #fff0 42%);
+      pointer-events: none;
+    }
+    #hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 800;
+      margin-bottom: 8px;
+      font-size: 0.88rem;
+      background: var(--cd);
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid #2a3975;
+    }
+    #bset {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0 8px;
+      font-size: 12.5px;
+      background: rgba(25, 35, 77, 0.78);
+      padding: 8px;
+      border-radius: 14px;
+      flex-wrap: wrap;
+      border: 1px solid #28366e;
+    }
+    #bset .orb { --s: 34px; }
+    #bset small { display: block; font-size: 10px; text-align: center; color: var(--mu); margin-top: 2px; }
+    .bs { transition: opacity 0.3s, transform 0.2s; text-align: center; }
+    canvas {
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+      touch-action: none;
+      box-shadow: 0 6px 0 var(--cd-dark), 0 0 24px rgba(75, 131, 255, 0.25);
+      cursor: crosshair;
+    }
+    #msg { text-align: center; font-weight: 800; min-height: 26px; margin: 10px 0; color: #ffd23f; font-size: 0.92rem; }
+    #cards { display: grid; gap: 9px; margin-bottom: 8px; }
+    .card {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      background: var(--cd);
+      color: var(--tx);
+      border: 1px solid #2b3970;
+      border-left: 8px solid var(--rc);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--cd-dark);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.45); }
+    .card b { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+    .card span.d { font-size: 0.78rem; color: var(--mu); line-height: 1.3; display: block; }
+    .card.fl { animation: pop 0.3s; }
+    #ov {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 6, 18, 0.85);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+      padding: 16px;
+    }
+    #ovb {
+      background: var(--cd);
+      border: 1px solid #3b4e94;
+      border-radius: 22px;
+      padding: 20px;
+      text-align: center;
+      width: min(430px, 100%);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+    .cs {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #070b1e;
+      padding: 12px 0;
+      margin: 12px 0;
+      border: 1px solid #2b3970;
+    }
+    #sp { display: flex; width: max-content; }
+    .it {
+      flex: 0 0 94px;
+      margin-right: 4px;
+      text-align: center;
+      padding: 10px 4px 6px;
+      background: linear-gradient(#243069, #12183a);
+      border-bottom: 4px solid var(--rc);
+      border-radius: 8px;
+      color: #fff;
+    }
+    .it small { display: block; font-size: 10.5px; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mk {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #ffb703;
+      z-index: 2;
+      box-shadow: 0 0 10px #ffb703;
+    }
+    .rev .orb {
+      --s: 105px;
+      box-shadow: 0 0 0 4px var(--rc), 0 0 40px var(--rc);
+      animation: pop 0.45s;
+      margin: 10px auto;
+    }
+    @keyframes pop { from { transform: scale(0.2); } to { transform: scale(1); } }
+    input.inp, select.inp, textarea.inp {
+      background: var(--cd-dark);
+      color: #fff;
+      border: 1px solid #334485;
+      padding: 10px;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 0.9rem;
+      margin: 5px 0;
+    }
+    .orb { background: none !important; border: 0 !important; box-shadow: none !important; display: inline-flex !important; align-items: center; justify-content: center; flex-shrink: 0; }
+    .orb svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .boss-list { display: grid; gap: 12px; }
+    .boss-item { display: grid; grid-template-columns: 65px minmax(0, 1fr); gap: 12px; align-items: center; }
+    .boss-item svg { width: 65px; height: 65px; }
+    .boss-item .b, .boss-item > small { grid-column: 1 / -1; }
+    .netnote { font-size: 0.78rem; color: #c4b5fd; line-height: 1.5; margin: 8px 0; }
+    .lobby-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; padding: 10px; background: #140d2b; border: 1px solid #3b2d6e; border-radius: 10px; margin: 6px 0; }
+    .status { font-size: 0.78rem; color: #fde047; font-weight: 700; }
+    @media (max-width: 340px) {
+      #app { padding: 10px 6px 20px; }
+      .grid-3 { gap: 5px; }
+      .b { font-size: 0.76rem; padding: 11px 4px; }
+      .cd { padding: 10px 8px; }
+      header { gap: 4px; }
+      .coin-badge { font-size: 0.72rem; padding: 4px 8px; }
+    }
+    #arenaTransition {position:fixed;inset:0;background:radial-gradient(circle at 45% 40%,#40215c,#080914 70%);z-index:110;display:grid;place-items:center;pointer-events:auto;animation:arenaWipe 0.6s ease-in-out both;}
+    #transitionStage {text-align:center;animation:arenaTitle 1.4s ease-in-out infinite alternate;}
+    .transition-dot {font-size:4rem;color:#a78bfa;text-shadow:0 0 28px #a855f7;}
+    .transition-small {font-size:.8rem;letter-spacing:4px;color:#c4b5fd;font-weight:900;margin:12px 0;}
+    #transitionName {font-size:2rem;font-weight:900;color:white;text-shadow:0 0 25px #a855f7;padding:0 15px;}
+    @keyframes arenaWipe {from{clip-path:circle(0 at 50% 50%);opacity:.5}to{clip-path:circle(150% at 50% 50%);opacity:1}}
+    @keyframes arenaTitle {from{transform:scale(.96);filter:brightness(.85)}to{transform:scale(1.05);filter:brightness(1.18)}}
+    /* Account selection is the first screen, before the game menu. */
+    .account-gate { position:fixed; inset:0; z-index:250; background:radial-gradient(circle at 45% 20%,#23336b 0%,#080d25 65%); display:flex; justify-content:center; align-items:flex-start; overflow-y:auto; padding:clamp(18px,5vh,55px) 12px 30px; }
+    .account-gate-box { width:100%; max-width:420px; padding:24px 18px; border:2px solid #526dd9; border-radius:22px; background:linear-gradient(150deg,#172451,#0b1230); box-shadow:0 18px 45px #0008; }
+    .account-gate-box h1 { text-align:center; letter-spacing:1px; font-size:1.7rem; margin:0 0 8px; }
+    .account-gate-box h1 span { color:#83a7ff; }
+    .account-gate-box .b { display:block; width:100%; margin:12px 0; min-height:44px; }
+    .account-gate-box label { display:block; margin:10px 0 5px; font-size:.9rem; color:#d5dcff; }
+    .account-gate-box .inp { width:100%; }
+    #gateMessage { color:#fef08a; font-size:.86rem; min-height:16px; margin-top:12px; overflow-wrap:anywhere; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="accountGate" hidden class="account-gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+    <div class="account-gate-box">
+      <h1 id="gateTitle">BALL <span>VS</span> BALL</h1>
+      <p style="text-align:center;color:#bdcaff;margin-bottom:16px">🎮 Witaj w grze!</p>
+      <div id="gateBody">
+        <p style="color:#b9c5ef;margin-bottom:18px">Wybierz, jak chcesz rozpocząć.</p>
+        <button class="b graj" onclick="window.BVBCloud?.gateMode('login')">🔐 Zaloguj się</button>
+        <button class="b ac" onclick="window.BVBCloud?.gateMode('register')">✨ Stwórz konto</button>
+        <button class="b" onclick="window.BVBCloud?.playGuest?.() ?? (document.getElementById('accountGate').hidden=true)">🎮 Graj bez konta</button>
+      </div>
+      <p id="gateMessage" role="status"></p>
+    </div>
+  </div>
+  <div id="app">
+    <div style="margin:0 0 10px;padding:9px;border:1px solid #eab308;border-radius:10px;background:#302209;color:#fef08a;font-size:12px;text-align:center"><b>🧪 BETA REWORKU WALKI</b> · Wersja testowa, postęp oddzielony od głównej gry. <a href="./" style="color:#93c5fd">Wróć do wersji stabilnej</a></div>
+    <div id="saveWarn" hidden>⚠️ Uwaga: Przeglądarka zablokowała zapis lokalny (localStorage). Użyj Eksportu w Ustawieniach, aby nie stracić postępu.</div>
+    <header>
+      <div class="title-box">
+        <h1>BALL <span>VS</span> BALL</h1>
+      </div>
+      <div class="wallet-bar">
+        <div class="coin-badge" onclick="panel('shop')" title="Twoje Monety">
+          🪙 <span id="coinCount">100</span>
+        </div>
+        <div class="coin-badge candy" onclick="panel('hw')" title="Cukierki Halloween">
+          🍬 <span id="candyCount">50</span>
+        </div>
+      </div>
+    </header>
+
+    <div id="menu">
+      <div class="bvb-welcome-guide">
+        <strong>👋 Pierwszy raz w Ball VS Ball?</strong>
+        <p>Wybierz <b>GRAJ</b>, żeby stoczyć pierwszy pojedynek, albo <b>Kampanię</b>, żeby przechodzić kolejne poziomy. Wszystkie pozostałe funkcje są opisane poniżej.</p>
+      </div>
+
+      <section class="bvb-menu-section bvb-menu-first" aria-labelledby="bvb-menu-start">
+        <h2 id="bvb-menu-start">🚀 Zacznij tutaj</h2>
+        <p class="bvb-section-caption">Główne sposoby rozpoczęcia gry.</p>
+
+        <button class="b graj" onclick="startMatch(0)">⚔️ GRAJ</button>
+        <button class="b ac" onclick="window.BVBCampaign?.open?.()">🗺️ KAMPANIA · 50 POZIOMÓW</button>
+
+        <div class="bvb-difficulty-guide">🎚️ Poziom trudności <small>Wybierz przed rozpoczęciem walki z botem.</small></div>
+        <div class="diff-row">
+          <button class="diff-btn" onclick="setDiff(0)">Łatwy</button>
+          <button class="diff-btn on" onclick="setDiff(1)">Średni</button>
+          <button class="diff-btn" onclick="setDiff(2)">Trudny</button>
+          <button class="diff-btn" onclick="setDiff(3)">Ekstremalny</button>
+          <button class="diff-btn" onclick="setDiff(4)">Koszmar</button>
+        </div>
+      </section>
+
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-modes">
+        <h2 id="bvb-menu-modes">⚔️ Tryby walki</h2>
+        <p class="bvb-section-caption">Inne wyzwania, bossowie oraz gra ze znajomymi.</p>
+
+        <button class="b boss-button" onclick="bossMenu()">👹 BOSS FIGHT · 6 STRAŻNIKÓW</button>
+        <button class="b" onclick="mpMenu()">
+          <span class="icon-globe">🌐</span> Multiplayer 1 vs 1 / Co-Op 2v2 (online)
+        </button>
+        <button class="b" id="svBtn" onclick="startMatch(1)">Survival (rekord: fala 0)</button>
+        <button class="b" id="infBtn" onclick="startMatch(7)">
+          <span class="icon-inf">♾️</span> Nieskończoność (rekord: fala 0)
+        </button>
+        <div class="grid-2">
+          <button class="b" id="bbBtn" onclick="startMatch(3)">Boss Rush (0)</button>
+          <button class="b" onclick="startMatch(4)">Trening</button>
+        </div>
+        <div class="grid-2">
+          <button class="b" onclick="startMatch(5)">Chaos</button>
+          <button class="b" onclick="startMatch(6)">Turniej</button>
+        </div>
+      </section>
+
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-balls">
+        <h2 id="bvb-menu-balls">🔮 Kulki i sklep</h2>
+        <p class="bvb-section-caption">Zdobywaj, oglądaj i ulepszaj swoje kulki.</p>
+        <div class="grid-3">
+          <button class="b" onclick="panel('shop')">Skrzynki</button>
+          <button class="b" onclick="panel('col')">Kolekcja</button>
+          <button class="b" onclick="panel('st')">Sklep</button>
+        </div>
+      </section>
+
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-rewards">
+        <h2 id="bvb-menu-rewards">🎁 Nagrody i wydarzenia</h2>
+        <p class="bvb-section-caption">Wykonuj zadania i zdobywaj dodatkowe nagrody.</p>
+        <div class="grid-3">
+          <button class="b" onclick="panel('q')">Questy</button>
+          <button class="b" onclick="panel('ach')">🏆 Osiągnięcia aren</button>
+          <button class="b" onclick="panel('bp')">Sezon</button>
+        </div>
+        <div class="bvb-subsection-label">🎃 Halloween</div>
+        <div class="grid-2">
+          <button class="b hw" onclick="startMatch(9)">🎃 Halloween Event<br>(Król Dyń)</button>
+          <button class="b hw" onclick="panel('hw')">🍬 Skrzynia i Sklep<br>Halloween</button>
+        </div>
+      </section>
+
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-settings">
+        <h2 id="bvb-menu-settings">⚙️ Konto i ustawienia</h2>
+        <p class="bvb-section-caption">Profil gracza, wygląd areny i dźwięki.</p>
+
+        <button class="b ac" onclick="panel('account')">👤 Konto · Znajomi · Ranking</button>
+        <div class="grid-3">
+          <button class="b" id="thBtn" onclick="panel('arena')">🎲 Areny: losowe</button>
+          <button class="b" onclick="panel('pr')">Profil</button>
+          <button class="b" onclick="panel('set')">Ustawienia</button>
+        </div>
+        <div class="grid-2">
+          <button class="b" id="msBtn" onclick="toggleSfx()">Efekty: wł.</button>
+          <button class="b" id="mmBtn" onclick="toggleMusic()">Muzyka: wł.</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="pn" hidden>
+      <button class="b" onclick="menu()">⬅ Wróć do menu</button>
+      <div id="pb"></div>
+    </div>
+
+    <div id="game" hidden>
+      <div id="hud">
+        <span id="hb">🤖 Bot ❤️❤️❤️</span>
+        <button class="b" style="width:auto;padding:6px 14px;margin:0;font-size:0.78rem;border-radius:10px" onclick="pz()">Pauza</button>
+        <span id="hp">😎 Ty ❤️❤️❤️</span>
+      </div>
+      <div id="bset"></div>
+      <canvas id="cv"></canvas>
+      <div class="grid-2" style="grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0">
+        <button class="b" style="padding:8px;margin:0" onclick="emo(0)">😎</button>
+        <button class="b" style="padding:8px;margin:0" onclick="emo(1)">😂</button>
+        <button class="b" style="padding:8px;margin:0" onclick="emo(2)">😡</button>
+        <button class="b" style="padding:8px;margin:0" onclick="emo(3)">👏</button>
+      </div>
+      <div id="msg"></div>
+      <div id="cards"></div>
+      <button class="b graj" id="fire" hidden onclick="fire()">WYSTRZEL!</button>
+    </div>
+  </div>
+
+  <div id="arenaTransition" hidden><div id="transitionStage"><div class="transition-dot">✦</div><div class="transition-small">NOWA ARENA</div><div id="transitionName"></div></div></div>
+
+  <div id="ov" hidden>
+    <div id="ovb"></div>
+  </div>
+
+<script>
+const $ = s => document.querySelector(s);
+const rnd = a => a[Math.random() * a.length | 0];
+const sh = a => [...a].sort(() => Math.random() - 0.5);
+
+// ============================================================================
+// 1. PEŁNA LISTA WSZYSTKICH 130 KULEK (Z WYSOKIEJ JAKOŚCI SVG I HALLOWEEN)
+// ============================================================================
+const RAW_BALLS = [
+  ['Szarża','💨',0,'#38bdf8','Im dłużej leci bez zderzenia, tym szybciej pędzi i mocniej uderza.'],
+  ['Topór','🪓',0,'#dc2626','Obracający się topór rani wroga wokół kuli i nakłada krwawienie.'],
+  ['Trujący kolec','🌵',0,'#16a34a','Wystrzeliwuje trujące kolce i zatruwa wroga: 4 obrażenia/s przez 5 s.'],
+  ['Złodziej','🥷',1,'#a855f7','Kradnie prędkość, siłę ataku oraz HP przeciwnika przy trafieniu.'],
+  ['Ostrze','🗡️',1,'#e2e8f0','Wokół kuli krążą ostre miecze; wykonuje szybkie cięcia.'],
+  ['Karabin','🔫',1,'#f59e0b','Strzela szybką serią 6 pocisków w stronę przeciwnika.'],
+  ['Pająk','🕷️',1,'#94a3b8','Zostawia na arenie sieci, które spowalniają wroga o 60%.'],
+  ['Wampir','🧛',1,'#c2185b','Przyczepia się do wroga i wysysa jego punkty zdrowia (45% lifesteal).'],
+  ['Włócznia','🔱',2,'#fbbf24','Co 4 s wykonuje wąską szarżę włócznią z silnym odrzutem.'],
+  ['Rozbłysk','💥',1,'#fb923c','Co kilka sekund wyzwala falę wybuchową (AoE) wokół siebie.'],
+  ['Szachy','♞',3,'#f1f5f9','Co 5 s staje się nieśmiertelna, wraca na środek, pokazuje czerwoną linię i szarżuje wzorem Wieży, Gońca lub Skoczka!'],
+  ['Kostka','🎲',2,'#ef4444','Zostawia kostki (1–6 oczek) zadające losowe obrażenia.'],
+  ['Lodowy Stożek','🧊',2,'#7dd3fc','Wystrzeliwuje stożek lodowych odłamków spowalniających na 3 s.'],
+  ['Laser','🔴',2,'#ef4444','Obracająca się wiązka laserowa rani każdego wroga w zasięgu.'],
+  ['Wąż','🐍',1,'#4ade80','Z czasem rośnie mu długi ogon, który rani i odpycha wroga.'],
+  ['Hak','🪝',2,'#94a3b8','Wystrzeliwuje hak na łańcuchu i przyciąga przeciwnika do siebie.'],
+  ['Przekuwacz','🔨',1,'#f59e0b','Odbicie od ściany przywołuje pomocnika i wzmacnia pancerz.'],
+  ['Komórka','🦠',1,'#2dd4bf','Rośnie z czasem, a po zniszczeniu dzieli się przez mitozę na mniejszą kulę.'],
+  ['Elektryk','⚡',2,'#facc15','Piorun trafia z dystansu i ogłusza wroga na 1,2 s.'],
+  ['Strefa','🟣',2,'#818cf8','Utrzymuje wokół siebie strefę grawitacyjną raniącą wroga.'],
+  ['Promień','🌠',3,'#3b82f6','Ładuje i wystrzeliwuje ultraszybki promień energii (20 obrażeń).'],
+  ['WDC','🔢',2,'#1d4ed8','Po 3 s tworzy na 6 s siatkę 3x3 z losowymi obrażeniami (1–100 DMG) w każdym polu, nadpisując swoje obrażenia kontaktowe!'],
+  ['Jabłko','🍎',2,'#f43f5e','Upuszcza jabłka, które leczą właściciela i ranią wroga.'],
+  ['Armata','💣',1,'#475569','Strzela ciężką kulą armatnią z ogromnym odrzutem (22 DMG).'],
+  ['Wirus','☣️',3,'#a3e635','Zarażony wróg traci kontrolę nad kierunkiem lotu i punkty HP.'],
+  ['Wielki Kolec','📍',1,'#64748b','Olbrzymia masa (145 HP); zadaje dodatkowe obrażenia równe 8% max HP celu.'],
+  ['Łuk','🏹',1,'#d97706','Co 3 s wystrzeliwuje szybką strzałę, która rykoszetuje od ścian.'],
+  ['Król Elektryków','👑',2,'#eab308','Przywołuje potrójne uderzenie pioruna i elektryczną siatkę.'],
+  ['Zasięg','⭕',1,'#06b6d4','Co 3 s rozszerzający się pierścień energii rani pobliskiego wroga.'],
+  ['Mróz','❄️',1,'#38bdf8','Zostawia mroźne plamy, które zamrażają i ranią przeciwnika.'],
+  ['Harpun','⚓',2,'#0f766e','Wbija harpun w cel, wiążąc i przyciągając wroga na 3 sekundy.'],
+  ['Rój','🐝',2,'#facc15','Wypuszcza rój 3 samonaprowadzających pszczół zatruwających cel.'],
+  ['Eliksir','⚗️',3,'#c084fc','Rzuca losowe fiolki alchemiczne: trucizna, lód, ogień lub leczenie.'],
+  ['Konduktor','ϟ',2,'#fde047','Leczy się od ścian, a co 4 odbicia wyzwala falę uderzeniową.'],
+  ['Czarny Pająk','🕷️',2,'#334155','Stawia czarne, jadowite sieci unieruchamiające i trujące cel.'],
+  ['Grób','🪦',2,'#6b7280','Stawia na arenie nagrobki blokujące ruch i wypuszczające duchy.'],
+  ['Skrzydło Światła','🪶',0,'#fef08a','Niezwykle szybka kula wykonująca świetliste zrywy z piórami.'],
+  ['Pudełko Cukierków','🍬',2,'#f472b6','Wystrzeliwuje cukierkowy pocisk (22 DMG) i spowalnia trafiony cel.'],
+  ['Szlam','🟢',1,'#84cc16','Bardzo wytrzymała kula śluzu (155 HP) zostawiająca lepkie plamy.'],
+  ['Kajdany','⛓️',2,'#78716c','Co 5 s przykuwa wroga łańcuchem na 3 sekundy.'],
+  ['Kwas','🧪',1,'#a3e635','Tworzy żrące plamy kwasu osłabiające pancerz wroga o 35%.'],
+  ['Promień Świetlny','✨',1,'#fde047','Wystrzeliwuje promień fotonowy odbijający się 4 razy od ścian.'],
+  ['Trujący Gaz','☁️',1,'#4d7c0f','Wypuszcza wielką chmurę toksycznego gazu dławiącego przeciwnika.'],
+  ['Shuriken','✴️',1,'#cbd5e1','Rzuca 3 rykoszetujące gwiazdki ninja.'],
+  ['Fibonacci','🐚',2,'#f59e0b','Obrażenia zderzeń rosną wg ciągu Fibonacciego (1, 1, 2, 3, 5, 8, 13, 21, 34, 55)!'],
+  ['Kaktus','🪴',2,'#15803d','Odbija 40% otrzymanych obrażeń i wystrzeliwuje igły przy trafieniu.'],
+  ['Bomba','💣',1,'#374151','Wyrzuca tykające bomby eksplodujące po 1,5 sekundy.'],
+  ['Orbita','🪐',2,'#60a5fa','Otoczona przez 3 krążące satelity zadające obrażenia kontaktowe.'],
+  ['Medyk','❤️‍🩹',2,'#f87171','Co 4 s leczy swoje HP i generuje barierę ochronną.'],
+  ['Prawda','◇',3,'#c084fc','Co 5 s tworzy tarczę odbijającą 100% obrażeń w atakującego.'],
+  ['Szkło','🔮',0,'#a5f3fc','Szklana armata: zadaje 250% obrażeń, ale ma tylko 65 HP.'],
+  ['Portal','🌌',1,'#6366f1','Przy odbiciu od ściany teleportuje się przez portal i miażdży lądowaniem.'],
+  ['Tarcza','🛡️',2,'#22d3ee','Co 5 s tworzy tarczę energetyczną pochłaniającą 25 pkt obrażeń.'],
+  ['Magik','🎩',2,'#9333ea','Tworzy iluzję i zamienia się miejscami z przeciwnikiem.'],
+  ['Chronos','⏳',2,'#d97706','Co 6 s zatrzymuje/spowalnia czas dla wroga o 75% na 2,5 sekundy.'],
+  ['Ninja','🥷',2,'#1e293b','Teleportuje się za plecy wroga i zadaje cios krytyczny z cienia.'],
+  ['Pirat','🏴‍☠️',1,'#92400e','Oddaje salwę burtową z 3 kul armatnich jednocześnie.'],
+  ['Górnik','⛏️',1,'#ca8a04','Podkłada ukryte miny zbliżeniowe na podłodze areny.'],
+  ['Szeryf','🤠',1,'#b45309','Strzela z rewolweru pociskiem, który po odbiciu celuje we wroga.'],
+  ['Magma','🌋',2,'#ea580c','Zostawia płonący ślad lawy i wywołuje erupcję wulkaniczną.'],
+  ['Plazma','🔮',2,'#ec4899','Wystrzeliwuje powolną kulę plazmy rażącą cel w locie.'],
+  ['Meteor','☄️',1,'#b91c1c','Sprowadza deszcz meteorytów bezpośrednio na pozycję przeciwnika.'],
+  ['Cyklon','🌪️',1,'#2dd4bf','Tworzy wir powietrzny wciągający i spychający wroga.'],
+  ['Pryzmat','🌈',2,'#f43f5e','Rozszczepia promień światła na 5 kolorowych wiązek laserowych.'],
+  ['Echo','📡',1,'#38bdf8','Wypuszcza falę dźwiękową, która powtarza się echem po 1,5 s.'],
+  ['Grawitacja','🌑',3,'#4f46e5','Przyciąga przeciwnika stałym polem grawitacyjnym i orbitami.'],
+  ['Kotwica','⚓',2,'#1e3a8a','Odporna na odrzut (145 HP); wywołuje wstrząs przy uderzeniu w mur.'],
+  ['Lustro','🪞',2,'#e2e8f0','Aktywuje lustrzaną powłokę odbijającą pociski i obrażenia.'],
+  ['Pustka','🕳️',2,'#4c1d95','Tworzy czarną dziurę wciągającą wroga i pożerającą pociski.'],
+  ['Słońce','☀️',2,'#facc15','Pali przeciwnika gorącą aurą słoneczną w bliskim zasięgu.'],
+  ['Księżyc','🌙',2,'#94a3b8','Zmienia fazy księżyca (Prędkość, Obrażenia, Tarcza, Niewidzialność).'],
+  ['Zaćmienie','🌒',2,'#312e81','Zaciemnia pole widzenia i dezorientuje kierunek ruchu wroga.'],
+  ['Supernowa','🌟',3,'#fde047','Co 6 s wyzwala gigantyczną eksplozję gwiezdną (30 DMG).'],
+  ['Mgławica','🌌',2,'#a855f7','Zostawia obłoki gwiezdnego pyłu wybuchające przy kontakcie.'],
+  ['Pulsar','💫',2,'#06b6d4','Co 2 s emituje pierścień magnetyczny odpychający wroga.'],
+  ['Kwazar','💥',2,'#f97316','Wystrzeliwuje podwójny dżet radiacyjny z obu biegunów.'],
+  ['Kometa','☄️',1,'#38bdf8','Przyspiesza w locie i zostawia zamrażający warkocz kometarny.'],
+  ['Asteroida','🪨',0,'#78716c','160 HP; przy zderzeniu rozrzuca odłamki skalne po arenie.'],
+  ['Kwant','⚛️',2,'#22d3ee','Wchodzi w superpozycję, atakując z dwóch miejsc jednocześnie.'],
+  ['Atom','🟢',2,'#10b981','Krążące elektrony wyzwalają wybuch rozszczepienia przy kolizji.'],
+  ['Proton','➕',2,'#ef4444','Nadaje ładunek dodatni – ściany gwałtownie odpychają wroga.'],
+  ['Neutron','🔘',2,'#64748b','Całkowicie niewrażliwa na spowolnienia, zamrożenia i trucizny.'],
+  ['Elektron','⚡',1,'#facc15','Porusza się błyskawicznymi przeskokami kwantowymi.'],
+  ['Iskra','🎇',1,'#fb923c','Każde odbicie od ściany wypuszcza iskry i zwiększa prędkość.'],
+  ['Piekło','🔥',2,'#dc2626','Podpala ściany i podłogę areny – wróg w ogniu płonie.'],
+  ['Tsunami','🌊',2,'#0284c7','Wysyła szeroką falę pływową przez całą szerokość areny.'],
+  ['Wstrząs','🌍',2,'#854d0e','Uderzenie w ścianę posyła pęknięcie sejsmiczne pod wroga.'],
+  ['Nawałnica','🌩️',2,'#0ea5e9','Przyciąga cel wichurą i razi go piorunem z bliska.'],
+  ['Zamieć','🌨️',2,'#bae6fd','Wywołuje śnieżycę na całej arenie, zamrażając pole walki.'],
+  ['Miraż','👥',1,'#fcd34d','Tworzy 3 złudzenia optyczne i robi gwałtowne uniki.'],
+  ['Widmo','👻',1,'#c084fc','Staje się niematerialna na 2 s i otrzymuje o połowę mniej obrażeń.'],
+  ['Upiór','🧟',1,'#6366f1','Nakłada klątwę zadającą obrażenia i osłabiającą wroga w pobliżu.'],
+  ['Zjawa','👤',2,'#4c1d95','Znika w cieniu i zadaje potrójne obrażenia przy wyjściu z ukrycia.'],
+  ['Kosiarz','镰',3,'#dc2626','Zadaje obrażenia od brakującego HP; poniżej 15% HP wykonuje egzekucję!'],
+  ['Zagłada','💀',2,'#7f1d1d','Nakłada licznik Zagłady, który wybucha potężną falą.'],
+  ['Chaos','🎭',3,'#db2777','Co 4 s wyzwala losową umiejętność innej kulki wzmocnioną o 25%!'],
+  ['Porządek','⚖️',3,'#f8fafc','Strzela precyzyjnie w miejsce, gdzie wróg będzie za chwilę.'],
+  ['Feniks','🪽',3,'#ff9f1c','Po śmierci odradza się z popiołów z 50% HP i ognistą aurą!'],
+  ['Kraken','🦑',3,'#0f766e','Wypuszcza 4 macki chwytające i przyciągające przeciwnika.'],
+  ['Król Dyń','🎃',4,'#ea580c','Wielofazowy Boss Halloween: rzuca wybuchowymi dyniami, wzywa nietoperze i płomienie!'],
+  ['🎃 Wiedźma','🧙‍♀️',5,'#9333ea','[HALLOWEEN] Rzuca kociołkiem tworzącym pole zamiany w żabę i spowolnienia.'],
+  ['🎃 Kocioł','🍲',5,'#15803d','[HALLOWEEN] Rozlewa wrzący kwas osłabiający pancerz wroga o 40%.'],
+  ['🎃 Czarny Kot','🐈‍⬛',5,'#38bdf8','[HALLOWEEN] Aura pecha: odbicia wroga mają 35% szans na samookaleczenie.'],
+  ['🎃 Nietoperz','🦇',5,'#6366f1','[HALLOWEEN] Wysyła falę echolokacji i przywołuje nietoperze kradnące HP.'],
+  ['🎃 Zombie','🧟‍♂️',5,'#4d7c0f','[HALLOWEEN] Po śmierci walczy jeszcze przez 4 sekundy jako nieśmiertelny szkielet!'],
+  ['🎃 Voodoo','🪆',5,'#d97706','[HALLOWEEN] Łączy się nicią klątwy – przekazuje 40% otrzymanych obrażeń wrogowi.'],
+  ['🎃 Strach na Wróble','🌾',5,'#ca8a04','[HALLOWEEN] Wywołuje koszmar, odpychając i dezorientując wroga.'],
+  ['🎃 Ognik','🕯️',5,'#06b6d4','[HALLOWEEN] Zostawia błękitne płomyki dusz ignorujące pancerz i tarcze.'],
+  ['🎃 Wilkołak','🐺',5,'#b45309','[HALLOWEEN] Co 4 s wpada w szał księżyca: przyspiesza, skacze na cel i leczy się z ran.'],
+  ['🎃 Banshee','👻',5,'#a855f7','[HALLOWEEN] Co 4,5 s wydaje krzyk rozchodzący się falą, który ogłusza i osłabia wroga.'],
+  ['🎃 Golem Cmentarny','🗿',5,'#64748b','[HALLOWEEN] Potężna masa (165 HP); stawia monolity nagrobne i wywołuje wstrząs.'],
+  ['🎃 Krwawy Księżyc','🩸',5,'#dc2626','[HALLOWEEN] Tworzy karmazynową aurę wywołującą krwawienie i zwiększającą obrażenia.'],
+  ['🎃 Duch Latarni','🏮',5,'#f97316','[HALLOWEEN] Wystrzeliwuje błędne ogniki krążące po orbicie i podpalające cel.'],
+  ['🎃 Mumia','🤕',5,'#eab308','[HALLOWEEN] Wystrzeliwuje bandaże krępujące ruch przeciwnika i wysysające energię.'],
+  ['🎃 Gargulec','🦇',5,'#475569','[HALLOWEEN] Co 5 s kamienieje (redukcja obrażeń), po czym eksploduje odłamkami skalnymi.'],
+  ['🎃 Nekromanta','💀',5,'#7e22ce','[HALLOWEEN] Co 4,5 s przywołuje 2 duchy szkieletów ścigające przeciwnika.'],
+  ['🎃 Przeklęte Lustro','🪞',5,'#ec4899','[HALLOWEEN] Tworzy mroczny duplikat i odbija część obrażeń w atakującego.'],
+  ['🎃 Pająk Wdowa','🕷️',5,'#ef4444','[HALLOWEEN] Rozstawia toksyczne kokony, które pękają i zatruwają cel.'],
+  ['🎃 Jeździec Bez Głowy','🏇',5,'#ea580c','[HALLOWEEN] Co 4 s wykonuje widmową szarżę przez arenę, zostawiając płonący ślad.'],
+  ['🎃 Żniwiarz Dusz','⚰️',5,'#14b8a6','[HALLOWEEN] Zbiera dusze przy trafieniu; po zebraniu 3 dusz wyzwala wybuch duchowy.'],
+  ['🎃 Dzwon Północy','🔔',5,'#b8a6ff','[HALLOWEEN] Mroczny dzwon wysysa energię i wysyła falę cienia.'],
+  ['🎃 Lodowy Upiór','🥶',5,'#6ee7f9','[HALLOWEEN] Zamraża przeciwnika eterycznym oddechem.'],
+  ['🎃 Królowa Kruków','🐦‍⬛',5,'#8472e5','[HALLOWEEN] Przyzywa przeklęte cienie kruków, które wysysają dusze.'],
+  ['🎃 Zgniła Dynia','🎃',5,'#f59e0b','[HALLOWEEN] Podpala arenę zielonym ogniem i płomieniami.'],
+  ['🎃 Widmowy Rycerz','🛡️',5,'#64748b','[HALLOWEEN] Nakłada tarczę ochronną i wzmacnia pancerz.'],
+  ['🎃 Cukierkowy Koszmar','🍭',5,'#f472b6','[HALLOWEEN] Wywołuje magiczny wybuch przeklętych cukierków.'],
+  ['🎃 Księżycowy Nietoperz','🌘',5,'#a78bfa','[HALLOWEEN] Wampiryczny lot i wysysanie zdrowia przeciwnika.'],
+  ['🎃 Grobowy Alchemik','⚗️',5,'#84cc16','[HALLOWEEN] Trujące opary zatruwają przeciwnika.'],
+  ['🎃 Płacząca Marionetka','🎭',5,'#e879f9','[HALLOWEEN] Mroczna klątwa wysysa energię i spowalnia wroga.'],
+  ['🎃 Kryształ Zaświatów','💎',5,'#22d3ee','[HALLOWEEN] Elektryczne błyskawice z kryształu rażą cel.']
+];
+
+const B = RAW_BALLS.map(([n, e, r, c, d], id) => ({ id, n, e, r, c, d }));
+const RN = ['Zwykła', 'Rzadka', 'Epicka', 'Legendarna', 'Mityczna', 'Halloween'];
+const RC = ['#8d93ab', '#3d8bff', '#a855f7', '#ffb703', '#ef4444', '#f97316'];
+const RW = [45, 30, 16, 7, 2];
+
+const Q = [
+  { k: 'play', t: 'Zagraj 3 mecze', n: 3, r: 50 },
+  { k: 'win', t: 'Wygraj 2 mecze', n: 2, r: 80 },
+  { k: 'gacha', t: 'Otwórz 2 skrzynki', n: 2, r: 60 },
+  { k: 'bn', t: 'Odbij się 40 razy od ścian', n: 40, r: 50 },
+  { k: 'rare', t: 'Wygraj rzadką kulą lub lepszą', n: 1, r: 60 },
+  { k: 'tw', t: 'Wygraj 2 rundy kulą dnia', n: 2, r: 75 }
+];
+const WQ = [
+  { k: 'win', t: 'Wygraj 10 meczów', n: 10, r: 200 },
+  { k: 'play', t: 'Zagraj 20 meczów', n: 20, r: 250 },
+  { k: 'boss', t: 'Pokonaj 3 bossów', n: 3, r: 300 }
+];
+const HWQ = [
+  { k: 'hwwin', t: '🎃 Pokonaj Króla Dyń w Halloween Event', n: 1, r: 150 },
+  { k: 'hwplay', t: '🦇 Rozegraj 3 mecze w Halloween Event', n: 3, r: 120 },
+  { k: 'hwbox', t: '🍬 Otwórz 2 Skrzynie Halloween', n: 2, r: 100 }
+];
+
+// Sześć pełnych aren. Dawne identyfikatory kulek i zapis postępu pozostają bez zmian.
+const ARENAS = [
+  {name:'🎃 Halloween', kind:'halloween', bg:'#180c27', bg2:'#35183e', ac:'#fb923c', scale:0.75},
+  {name:'🌌 Kosmos', kind:'space', bg:'#070d2a', bg2:'#161b51', ac:'#8b5cf6', scale:1.0},
+  {name:'🌋 Wulkan', kind:'volcano', bg:'#280e12', bg2:'#612010', ac:'#fb4b32', scale:0.8},
+  {name:'❄️ Lodowa kraina', kind:'ice', bg:'#0a2b43', bg2:'#144863', ac:'#9deaff', scale:1.3},
+  {name:'🌊 Podwodna', kind:'ocean', bg:'#052b3d', bg2:'#065263', ac:'#2dd4bf', scale:0.9},
+  {name:'🌃 Cyberpunk', kind:'cyber', bg:'#160a29', bg2:'#331646', ac:'#ff4ac8', scale:1.1}
+];
+const TN = ARENAS.map(a=>a.name);
+const RARE_CHANCE = 0.05; // Łącznie 5%: nocna wersja lub wersja z dodatkowymi efektami.
+const DEFAULT_ARENA_SETTINGS = { obstacles:true, count:3, fx:true };
+function settingsForArena(i) {
+  S.arenaCfg ||= {};
+  if (!S.arenaCfg[i]) S.arenaCfg[i] = {...DEFAULT_ARENA_SETTINGS, count:[4,3,3,2,4,5][i]||3};
+  return S.arenaCfg[i];
+}
+function chooseArena() {
+  // Automatyczne losowanie jest domyślne. Ręczny wybór dostępny w ustawieniach aren.
+  if (S.arenaPick === 'manual') return clamp(S.th|0, 0, ARENAS.length-1);
+  let index = Math.floor(Math.random()*ARENAS.length);
+  if (ARENAS.length>1 && index === S.lastArena) index = (index + 1 + Math.floor(Math.random()*(ARENAS.length-1))) % ARENAS.length;
+  S.lastArena = index;
+  save();
+  return index;
+}
+
+const W = 360, PX = 180, PY = 300, BY = 60, SP = 230, D = 2;
+const ERR = [0.85, 0.45, 0.22, 0.10, 0.03];
+const DIFF_MULT = [0.85, 1.05, 1.30, 1.55, 1.85];
+const DIFF_REW = [50, 75, 110, 150, 200];
+const DIFF_CANDY = [100, 200, 400, 600, 800];
+const DIFF_NAMES = ['Łatwy', 'Średni', 'Trudny', 'Ekstremalny', 'Koszmar'];
+const INF_REWARD_PER_WAVE = 25, INF_HP_BASE = 1, INF_HP_LIN = 0.22, INF_HP_QUAD = 0.03, INF_DMG_LIN = 0.10;
+const infHp = w => INF_HP_BASE + INF_HP_LIN * (w - 1) + INF_HP_QUAD * (w - 1) * (w - 1);
+const infDmg = w => 1 + INF_DMG_LIN * (w - 1);
+
+let K = 'bvb_hw_120_v3_beta_combat';
+let S, diff = 1, G = null, P = [], R = [], F = [], E = [], AC, MU = { s: 0, m: 0 }, bi = 0, bt = null;
+
+const DO = { vm: 0.7, vs: 0.8, nd: 1, sk: 1, pq: 1, vb: 1 };
+const AV = ['😎', '🤖', '👾', '🦊', '🐲', '🎃', '👑'];
+const EMO = ['😎', '😂', '😡', '👏'];
+const FIB = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
+
+const BOSSD = [
+  { id: 99, abilityId: 99, bossHpMult: 1.65, bossDmgMult: 1.10, n: 'Król Dyń', e: '🎃', r: 4, c: '#ea580c', bi: 0 },
+  { id: 99, abilityId: 23, bossHpMult: 1.85, bossDmgMult: 1.05, n: 'Iron Titan', e: '🤖', r: 3, c: '#94a3b8', bi: 1 },
+  { id: 99, abilityId: 68, bossHpMult: 1.70, bossDmgMult: 1.12, n: 'Shadow Orb', e: '👁️', r: 3, c: '#6d28d9', bi: 2 },
+  { id: 99, abilityId: 12, bossHpMult: 1.72, bossDmgMult: 1.08, n: 'Frost Monarch', e: '🥶', r: 3, c: '#7dd3fc', bi: 3 },
+  { id: 99, abilityId: 71, bossHpMult: 1.80, bossDmgMult: 1.10, n: 'Void King', e: '🕳️', r: 4, c: '#4c1d95', bi: 4 },
+  { id: 99, abilityId: 95, bossHpMult: 1.68, bossDmgMult: 1.15, n: 'Chaos Sphere', e: '🎭', r: 4, c: '#ec4899', bi: 5 }
+];
+
+const MODS = [
+  { n: 'Szybka gra', sp: 1.45 },
+  { n: 'Wolna gra', sp: 0.72 },
+  { n: 'Wielkie kule', sz: 1.45 },
+  { n: 'Mikro kule', sz: 0.72 },
+  { n: 'Mocne uderzenia', dm: 1.6 },
+  { n: 'Niska grawitacja', sp: 1.25, dm: 1.2 }
+];
+
+const TR = [
+  { n: 'Brak', p: 0 },
+  { n: 'Ogień', p: 200, c: ['#ff6a00', '#ffd23f'] },
+  { n: 'Lód', p: 200, c: ['#7dd3fc', '#ffffff'] },
+  { n: 'Tęcza', p: 400 },
+  { n: 'Neon', p: 300, c: ['#00ffd5', '#ff00aa'] },
+  { n: '🎃 Dyniowy Pył', p: 250, c: ['#f97316', '#a855f7'] }
+];
+const SK = [
+  { n: 'Domyślna', p: 0 },
+  { n: 'Złoty pierścień', p: 300, c: '#ffd700' },
+  { n: 'Neon cyan', p: 250, c: '#00ffd5' },
+  { n: 'Róż', p: 250, c: '#f472b6' },
+  { n: '🎃 Halloween Pomarańcz', p: 250, c: '#f97316' },
+  { n: 'Tęczowa', p: 500, c: 'rb' }
+];
+const VF = [
+  { n: 'Brak', p: 0 },
+  { n: 'Konfetti', p: 250 },
+  { n: 'Fajerwerki', p: 350 },
+  { n: 'Złoty deszcz', p: 400 }
+];
+const CAT = [['tr', 'Ślady', TR], ['sk', 'Skórki kul', SK], ['vf', 'Efekty zwycięstwa', VF]];
+const BPR = Array.from({ length: 20 }, (_, i) => ({ c: 50 + 15 * i, it: i == 4 ? 'tr' : i == 9 ? 'sk' : i == 14 ? 'vf' : null }));
+
+const BASE_HP_TABLE = {
+  25: 145, 38: 155, 50: 65, 52: 140, 66: 145, 77: 160, 81: 135, 98: 135, 99: 190, 101: 125, 104: 130, 110: 165, 114: 140
+};
+const BASE_CD_TABLE = [0,3,3.5,0,2.2,4,4,0,4,5,5,4,4,4,0,5,0,0,5,4,5,9,4,5,5,0,3.5,6,4,4,6,5,5,0,5,6,4,4,5,6,4,5,5,4,0,0,5,0,5,6,0,6,5,6,7,5,5,5,4,4,5,5,5,5,5,5,0,6,7,4,4,6,8,5,3,5,0,0,6,0,5,0,4,0,6,5,0,6,7,6,6,5,6,0,7,4,5,0,6,5,6,6,5,6,6,0,6,5,4,4.5,5,4,4,4.5,5,4.5,5,4,4,4.5];
+
+function getBallStats(id, customTier, customDmgLv, customHpLv) {
+  const b = B[id] || B[0];
+  const isHw = id >= 99;
+  const tier = customTier ?? (S?.tr?.[id] || 1);
+  const dmgLv = customDmgLv ?? (S?.upDmg?.[id] | 0);
+  const hpLv = customHpLv ?? (S?.upHp?.[id] | 0);
+  const baseHp = BASE_HP_TABLE[id] || 105;
+  const baseDmg = id == 50 ? 30 : id == 23 ? 22 : id == 99 ? 20 : 12;
+  const rawCd = BASE_CD_TABLE[id] ?? 4.0;
+  const tierStatMult = tier == 3 ? 1.32 : tier == 2 ? 1.15 : 1.0;
+  const tierAbilityMult = tier == 3 ? 1.55 : tier == 2 ? 1.25 : 1.0;
+  const cdMult = tier == 3 ? 0.72 : tier == 2 ? 0.85 : 1.0;
+  const hp = Math.round(baseHp * (1 + 0.08 * hpLv) * tierStatMult);
+  const dmg = Math.round(baseDmg * (1 + 0.08 * dmgLv) * tierStatMult);
+  const cd = rawCd > 0 ? +(rawCd * cdMult).toFixed(2) : 0;
+  const cleanDesc = b.d.replace(/^\[HALLOWEEN\]\s*/i, '');
+  const descV2 = `${cleanDesc} [Ewolucja V2: +25% siły umiejętności${rawCd > 0 ? `, cooldown ${(rawCd * 0.85).toFixed(1)}s` : ''}].`;
+  const descV3 = `${cleanDesc} [Ewolucja V3 MAX: +55% siły umiejętności${rawCd > 0 ? `, cooldown ${(rawCd * 0.72).toFixed(1)}s` : ''}, impuls specjalny].`;
+  const activeDesc = tier == 3 ? descV3 : tier == 2 ? descV2 : cleanDesc;
+  return { id, b, isHw, tier, dmgLv, hpLv, hp, dmg, cd, activeDesc };
+}
+
+const orb = b => orbHTML(b);
+const roll = (halloweenOnly = false) => {
+  if (halloweenOnly) return rnd(B.filter(b => b.id >= 99));
+  let x = Math.random() * 100, r = 0;
+  for (; r < 4 && x >= RW[r]; r++) x -= RW[r];
+  const pool = B.filter(b => b.r == r && b.id < 99);
+  return pool.length ? rnd(pool) : rnd(B.filter(b => b.id < 99));
+};
+
+// ============================================================================
+// 2. ZAPIS STANU GRY, MIGRACJA V4 (100 🪙 i 50 🍬 NA START + SZARŻA, TOPÓR, KOLEC)
+// ============================================================================
+function load() {
+  let raw = null;
+  try {
+    const str = localStorage.getItem(K);
+    if (str) raw = JSON.parse(str);
+  } catch (e) {
+    raw = null;
+  }
+
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    S = {
+      ver: 4,
+      initReward: 1,
+      coins: 100,
+      candies: 50,
+      xp: 0,
+      lv: 1,
+      own: [0, 1, 2],
+      dup: {},
+      dupV2: {},
+      tr: {},
+      upDmg: {},
+      upHp: {},
+      q: {}
+    };
+  } else {
+    S = raw;
+  }
+
+  if (!Array.isArray(S.own) || !S.own.length) S.own = [0, 1, 2];
+  S.own = [...new Set([0, 1, 2, ...S.own.filter(id => Number.isInteger(id) && B[id])])];
+
+  if (!S.initReward) {
+    S.coins = Number.isFinite(S.coins) ? S.coins : 100;
+    S.candies = Number.isFinite(S.candies) ? S.candies : 50;
+    S.initReward = 1;
+  } else {
+    S.coins = Math.max(0, Math.floor(Number(S.coins) || 0));
+    S.candies = Math.max(0, Math.floor(Number(S.candies) || 0));
+  }
+
+  S.dup = (S.dup && typeof S.dup === 'object') ? S.dup : {};
+  S.dupV2 = (S.dupV2 && typeof S.dupV2 === 'object') ? S.dupV2 : {};
+  S.tr = (S.tr && typeof S.tr === 'object') ? S.tr : {};
+  S.upDmg = (S.upDmg && typeof S.upDmg === 'object') ? S.upDmg : {};
+  S.upHp = (S.upHp && typeof S.upHp === 'object') ? S.upHp : {};
+
+  const t = new Date().toDateString();
+  if (!S.q || S.q.d !== t) S.q = { d: t, play: 0, win: 0, gacha: 0, bn: 0, rare: 0, tw: 0, cl: [] };
+  if (!Array.isArray(S.q.cl)) S.q.cl = [];
+  S.hwq = S.hwq || { hwwin: 0, hwplay: 0, hwbox: 0, cl: [] };
+  if (!Array.isArray(S.hwq.cl)) S.hwq.cl = [];
+  S.bk = S.bk || {};
+  S.fav = S.fav || {};
+  S.ac = Array.isArray(S.ac) ? S.ac : [];
+  S.hist = Array.isArray(S.hist) ? S.hist : [];
+  S.bdt = S.bdt || {};
+  S.bossWins = S.bossWins || {};
+  S.rewardIds = Array.isArray(S.rewardIds) ? S.rewardIds : [];
+  S.arenaCfg = S.arenaCfg && typeof S.arenaCfg === 'object' ? S.arenaCfg : {};
+  S.arenaPick = S.arenaPick === 'manual' ? 'manual' : 'random';
+  S.ach = S.ach && typeof S.ach === 'object' ? S.ach : { winsByArena:{}, portals:0, bounces:0, claimed:[] };
+  S.ach.winsByArena ||= {};
+  S.ach.portals = Math.max(0, Number(S.ach.portals)||0);
+  S.ach.bounces = Math.max(0, Number(S.ach.bounces)||0);
+  S.ach.claimed = Array.isArray(S.ach.claimed) ? S.ach.claimed : [];
+  S.playerTitle ||= '';
+  S.playerAura ||= '';
+  S.o = Object.assign({}, DO, S.o);
+  const wk = Math.floor(Date.now() / 6048e5);
+  if (!S.wq || S.wq.k !== wk) S.wq = { k: wk, win: 0, play: 0, boss: 0, cl: [] };
+  if (!Array.isArray(S.wq.cl)) S.wq.cl = [];
+  if (S.q.tb == null || !S.own.includes(S.q.tb)) S.q.tb = rnd(S.own);
+  const mo = new Date().getFullYear() * 12 + new Date().getMonth();
+  if (!S.bp || S.bp.m !== mo) S.bp = { m: mo, p: 0, cl: [] };
+  if (!Array.isArray(S.bp.cl)) S.bp.cl = [];
+  S.sh = S.sh || { tr: [0], sk: [0], vf: [0] };
+  S.eq = S.eq || { tr: 0, sk: 0, vf: 0 };
+  MU.s = S.ms | 0;
+  MU.m = S.mm | 0;
+  save();
+  preloadArt();
+}
+
+function save() {
+  const warn = $('#saveWarn');
+  try {
+    // The logged-in nickname is controlled by its exclusive Firestore claim.
+    if (window.BVBCloud?.isOnline && window.BVBCloud.nickname) S.nm = window.BVBCloud.nickname;
+    localStorage.setItem(K, JSON.stringify(S));
+    if (warn) warn.hidden = true;
+  } catch (e) {
+    if (warn) warn.hidden = false;
+  }
+  const cc = $('#coinCount'), cd = $('#candyCount');
+  if (cc && S) cc.textContent = S.coins;
+  if (cd && S) cd.textContent = S.candies;
+  window.BVBCloud?.scheduleSave?.();
+}
+
+function snd(f, d, t, v, s, m) {
+  if (m ? MU.m : MU.s) return;
+  v *= (m ? S.o.vm : S.o.vs) * 1.3;
+  if (v < 0.001) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume().catch(() => {});
+    const n = AC.currentTime, o = AC.createOscillator(), g = AC.createGain();
+    o.type = t;
+    o.frequency.setValueAtTime(f, n);
+    if (s) o.frequency.exponentialRampToValueAtTime(s, n + d);
+    g.gain.setValueAtTime(v, n);
+    g.gain.exponentialRampToValueAtTime(0.001, n + d);
+    o.connect(g);
+    g.connect(AC.destination);
+    o.start();
+    o.stop(n + d);
+  } catch (e) {}
+}
+const mel = (a, t) => a.forEach((f, i) => setTimeout(() => snd(f, 0.2, 'triangle', 0.09), i * t));
+const SFX = {
+  hit: () => snd(220, 0.1, 'square', 0.07, 90),
+  boom: () => snd(140, 0.38, 'sawtooth', 0.1, 30),
+  shot: () => snd(880, 0.07, 'square', 0.035, 380),
+  zap: () => snd(1250, 0.22, 'sawtooth', 0.06, 200),
+  tick: () => snd(700, 0.04, 'square', 0.045),
+  win: () => mel([523, 659, 784, 1047], 115),
+  lose: () => mel([392, 330, 262, 196], 135),
+  rare: () => mel([440, 554, 659, 880, 1108], 85)
+};
+
+const BG_MENU = [220, 262, 330, 262, 208, 247, 311, 247, 196, 233, 294, 233, 185, 220, 277, 247];
+const BG_BATTLE = [294, 349, 440, 466, 440, 349, 294, 262, 330, 392, 494, 523, 494, 392, 330, 294];
+// Oryginalne, generowane w przeglądarce ścieżki Halloween — bez plików MP3 i internetu.
+const HW_MENU = [220, 0, 261.63, 0, 246.94, 0, 196, 0, 174.61, 0, 164.81, 0, 196, 0, 146.83, 0];
+const HW_BATTLE = [220, 261.63, 293.66, 261.63, 220, 174.61, 196, 164.81, 220, 261.63, 329.63, 293.66, 261.63, 220, 196, 164.81];
+let bgmMode = 'menu', bgmTheme = '';
+
+// Poza październikiem event nadal ma swój własny mroczny motyw.
+function halloweenSeason() {
+  const d = new Date();
+  return d.getMonth() === 9 || (d.getMonth() === 10 && d.getDate() <= 2);
+}
+function musicTheme() {
+  const eventPanel = !$('#pn').hidden && $('#pn').dataset.panel === 'hw';
+  if (!$('#game').hidden && G && G.th!=null) return 'arena-'+G.th;
+  return halloweenSeason() || eventPanel ? 'halloween' : 'normal';
+}
+
+// Miękka synteza: mroczne dzwonki, drony i pulsujący bas.
+// Dźwięki kończą się automatycznie; nie pozostają aktywne po zmianie muzyki.
+function spookyTone(freq, duration, type = 'sine', volume = 0.025, cutoff = 1300, detune = 0) {
+  if (MU.m || document.hidden || !freq || !S || !S.o) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume().catch(() => {});
+    const now = AC.currentTime;
+    const osc = AC.createOscillator(), gain = AC.createGain(), filter = AC.createBiquadFilter();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+    osc.detune.value = detune;
+    filter.type = 'lowpass';
+    filter.frequency.value = cutoff;
+    // Halloween gra teraz ok. 2,2 raza głośniej; suwak muzyki nadal reguluje poziom.
+    const amount = Math.max(0.0001, Math.min(0.18, volume * S.o.vm * 2.2));
+    const attack = Math.min(0.08, duration * 0.2);
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(amount, now + attack);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.connect(filter); filter.connect(gain); gain.connect(AC.destination);
+    osc.start(now); osc.stop(now + duration + 0.01);
+  } catch (e) {}
+}
+function halloweenBeat(step, isBattle) {
+  const melody = isBattle ? HW_BATTLE : HW_MENU;
+  const n = melody[step % melody.length];
+  if (n) {
+    // Celowo nierówne, rozstrojone dzwony dla nawiedzonego klimatu.
+    spookyTone(n * (isBattle ? 1 : 2), isBattle ? 0.22 : 0.46,
+      'sine', isBattle ? 0.052 : 0.046, 2100, step % 4 === 0 ? -8 : 6);
+    spookyTone(n / 2, isBattle ? 0.3 : 0.6, 'triangle', 0.026, 640);
+  }
+  if (step % 8 === 0) {
+    // Niskie tło: Am → Fm → Dm → E, bez samplowanych nagrań.
+    const roots = [110, 87.31, 73.42, 82.41];
+    const root = roots[Math.floor(step / 8) % roots.length];
+    spookyTone(root, isBattle ? 1.2 : 2.5, 'sawtooth', isBattle ? 0.030 : 0.020, 280);
+    spookyTone(root * 1.498, isBattle ? 0.9 : 2.2, 'triangle', 0.013, 450, -5);
+  }
+  if (isBattle) {
+    if (step % 4 === 0) {
+      spookyTone(72, 0.19, 'sine', 0.1, 220); // uderzenie bębna
+      spookyTone(36, 0.14, 'triangle', 0.045, 140);
+    }
+    if (step % 4 === 2) spookyTone(185, 0.055, 'square', 0.017, 900);
+    if (step % 2 === 1) spookyTone(910, 0.038, 'triangle', 0.009, 2800);
+  } else if (step % 8 === 7) {
+    spookyTone(740, 0.7, 'sine', 0.009, 1800, -14); // echo / szept
+  }
+}
+
+// Osobny instrumentalny motyw dla każdej mapy (WebAudio; działa także offline).
+const ARENA_NOTES = [
+  [220,261.63,246.94,196,174.61,164.81,196,146.83],
+  [220,277.18,329.63,440,329.63,277.18,246.94,196],
+  [164.81,196,220,164.81,146.83,196,174.61,130.81],
+  [293.66,349.23,440,392,349.23,329.63,293.66,261.63],
+  [174.61,220,261.63,293.66,261.63,220,196,174.61],
+  [261.63,329.63,392,523.25,392,329.63,349.23,293.66]
+];
+function arenaBeat(arenaIndex, n, isBattle) {
+  const melody=ARENA_NOTES[arenaIndex], ar=ARENAS[arenaIndex];
+  const f=melody[n % melody.length] * (isBattle?1:0.5);
+  if(arenaIndex===0) { halloweenBeat(n, isBattle); return; }
+  const instrument=arenaIndex===1?'sine':arenaIndex===2?'sawtooth':arenaIndex===3?'triangle':arenaIndex===4?'sine':'square';
+  snd(f, isBattle?0.18:0.31, instrument, arenaIndex===2?0.035:0.030, 0, 1);
+  if(n%4===0) snd(f/2, isBattle?.3:.55, 'triangle', 0.026, 0, 1);
+  if(arenaIndex===2 && n%2===0) snd(62,0.15,'sawtooth',0.022,0,1);
+  if(arenaIndex===3 && n%4===2) snd(f*2,.18,'sine',.025,0,1);
+  if(arenaIndex===4 && n%4===3) snd(f*1.5,.3,'sine',.021,0,1);
+  if(arenaIndex===5 && n%2) snd(f*2,.065,'square',.014,0,1);
+  if(arenaIndex===1 && n%4===1) snd(f*2,.43,'sine',.014,0,1);
+}
+function bgm(mode = bgmMode) {
+  const theme = musicTheme();
+  if (bt && bgmMode === mode && bgmTheme === theme) return;
+  bgmMode = mode;
+  bgmTheme = theme;
+  clearInterval(bt);
+  bt = null;
+  bi = 0;
+  if (MU.m || document.hidden) return;
+  const isBattle = mode === 'battle';
+  const spooky = theme === 'halloween';
+  const arenaIndex=theme.startsWith('arena-')? Number(theme.slice(6)):-1;
+  const track = isBattle ? BG_BATTLE : BG_MENU;
+  const tempo = arenaIndex>=0 ? (isBattle?175:285) : spooky ? (isBattle ? 180 : 345) : (isBattle ? 165 : 245);
+  const step = () => {
+    if (arenaIndex>=0 && ARENAS[arenaIndex]) { arenaBeat(arenaIndex,bi++,isBattle); }
+    else if (spooky) {
+      halloweenBeat(bi++, isBattle);
+    } else {
+      const n = track[bi++ % track.length];
+      snd(n / 2, isBattle ? 0.15 : 0.22, isBattle ? 'sawtooth' : 'triangle', 0.032, 0, 1);
+      if (bi % 4 === 1) snd(n / 4, 0.24, 'square', 0.02, 0, 1);
+    }
+  };
+  step();
+  bt = setInterval(step, tempo);
+}
+
+document.addEventListener('pointerdown', () => {
+  try { if (AC && AC.state === 'suspended') AC.resume(); } catch (e) {}
+  if (!MU.m && !bt) bgm(bgmMode);
+}, { passive: true });
+
+function show(id) {
+  ['menu', 'pn', 'game'].forEach(i => $('#' + i).hidden = (i !== id));
+  bgm(id === 'game' ? 'battle' : 'menu');
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { clearInterval(bt); bt = null; }
+  else if (!MU.m) bgm(bgmMode);
+});
+
+function setDiff(d) {
+  diff = d;
+  SFX.tick();
+  menu();
+}
+
+function toggleSfx() {
+  MU.s ^= 1;
+  S.ms = MU.s;
+  save();
+  menu();
+}
+
+function toggleMusic() {
+  MU.m ^= 1;
+  S.mm = MU.m;
+  save();
+  if (MU.m) { clearInterval(bt); bt = null; } else { bgm(bgmMode); }
+  menu();
+}
+
+function bossMenu() {
+  const p = $('#pb');
+  show('pn');
+  p.innerHTML = `<h2 style="margin:12px 0">👹 Boss Fight — 6 Strażników</h2>
+    <p style="color:var(--mu);margin-bottom:12px">Wybierz bossa. Każdy ma więcej zdrowia i zadaje większe obrażenia.</p>
+    <div class="boss-list">${BOSSD.map((b,i)=>`<div class="cd boss-item" style="padding:12px;border-radius:14px">
+      <span style="font-size:2.3rem;text-align:center">${b.e}</span><div><b>${esc(b.n)}</b><small style="display:block;color:var(--mu)">Strażnik ${i+1} z ${BOSSD.length}</small></div>
+      <button class="b graj" onclick="startBossFight(${i})">WALCZ</button></div>`).join('')}</div>`;
+}
+function startBossFight(index) {
+  pendingBossIndex = clamp(Number(index)|0, 0, BOSSD.length-1);
+  startMatch(11);
+}
+
+function mpMenu() {
+  show('pn');
+  $('#pb').innerHTML = `<h2 style="margin:12px 0">🌐 Multiplayer online</h2>
+    <p style="color:var(--mu);margin-bottom:12px">Jedna osoba tworzy pokój i wysyła kod drugiej osobie. Obie osoby muszą mieć otwartą grę i połączenie z internetem.</p>
+    <button class="b graj" onclick="hostNet()">Utwórz pokój</button>
+    <button class="b ac" id="netInvite" hidden onclick="copyNetInvite()">🔗 Kopiuj link dla znajomego</button>
+    <button class="b graj" id="netStart" hidden onclick="startOnlineMatch()">⚔️ Rozpocznij 1vs1</button>
+    <label style="display:block;margin:12px 0 5px">Kod pokoju</label>
+    <input id="peerCode" class="inp" autocomplete="off" placeholder="Wklej kod hosta" />
+    <button class="b" onclick="joinNet()">Dołącz do pokoju</button>
+    <div id="netFriendsHint" style="margin:8px 0;color:var(--mu);font-size:.85rem"></div>
+    <p id="netStatus" role="status" style="margin:10px 0;color:#93c5fd">Niepołączono.</p>
+    <button class="b" onclick="disconnectNet();mpMenu()">Rozłącz</button>`;
+}
+function startOnlineMatch() {
+  if (netRole !== 'host' || !activeConn?.open) { netStatus('Najpierw połącz się ze znajomym.'); return; }
+  if (!guestOnlineDeck || guestOnlineDeck.length !== 3) {
+    netStatus('Czekam na kolekcję kulek znajomego.'); return;
+  }
+  startMatch(12);
+}
+// Każdy gracz korzysta z własnych odblokowanych kulek, a nie z losowych kulek bota.
+function makeOwnOnlineDeck() {
+  const owned = B.filter(b => S.own.includes(b.id));
+  return sh(owned.length >= 3 ? owned : [B[0], B[1], B[2]]).slice(0, 3).map(b => b.id);
+}
+function netStatus(message) {
+  const el = $('#netStatus');
+  if (el) el.textContent = message;
+}
+async function copyNetInvite() {
+  const id = peer?.id;
+  if (!id) { netStatus('Najpierw utwórz pokój.'); return; }
+  if (!['http:', 'https:'].includes(location.protocol)) {
+    netStatus('Link do pokoju będzie działał po opublikowaniu gry na GitHub Pages.'); return;
+  }
+  const link = new URL(location.href);
+  link.search = '';
+  link.hash = '';
+  link.searchParams.set('room', id);
+  try {
+    await navigator.clipboard.writeText(link.href);
+    netStatus('Link skopiowany! Wyślij go znajomemu.');
+  } catch (_) {
+    window.prompt('Skopiuj ten link i wyślij znajomemu:', link.href);
+  }
+}
+function hostNet() {
+  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
+  if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
+  disconnectNet(false);
+  try {
+    peer = new Peer();
+    peer.on('open', id => {
+      netRole = 'host'; netStatus('Pokój gotowy. Wyślij ten kod znajomemu: ' + id);
+      const el = $('#netStatus'); if (el) el.dataset.peerId = id;
+      const invite = $('#netInvite'); if (invite) invite.hidden = !['http:', 'https:'].includes(location.protocol);
+      window.BVBCloud?.showLobbyFriends?.();
+    });
+    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
+    peer.on('connection', conn => {
+      if (activeConn) { try { conn.close(); } catch(e) {} return; }
+      activeConn = conn; setupNetConnection(conn);
+    });
+    peer.on('error', err => netStatus('Błąd połączenia: ' + (err.type || err.message || 'nieznany')));
+  } catch (e) { netStatus('Nie udało się utworzyć pokoju: ' + e.message); }
+}
+function joinNet() {
+  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
+  const code = ($('#peerCode')?.value || '').trim();
+  if (!code) { netStatus('Najpierw wpisz kod pokoju.'); return; }
+  if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
+  disconnectNet(false);
+  reconnectRoom = code;
+  try {
+    peer = new Peer();
+    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
+    peer.on('open', () => {
+      netRole = 'guest';
+      activeConn = peer.connect(code, { reliable: true });
+      setupNetConnection(activeConn);
+    });
+    peer.on('error', err => netStatus('Błąd połączenia: ' + (err.type || err.message || 'nieznany')));
+  } catch (e) { netStatus('Nie udało się dołączyć: ' + e.message); }
+}
+function setupNetConnection(conn) {
+  const connectWatchdog = setTimeout(() => { if (!conn.open && activeConn === conn) { try { conn.close(); } catch (_) {} } }, 10000);
+  conn.on('open', () => {
+    clearTimeout(connectWatchdog);
+    reconnectSeq++; reconnectTries = 0;
+    netStatus('Połączono! Rola: ' + (netRole === 'host' ? 'host' : 'gość') + '. Kanał danych działa.');
+    const btn = $('#netStart'); if (btn) btn.hidden = true;
+    netSend({ type: 'hello', role: netRole, name: 'Ball VS Ball' });
+    if (netRole === 'guest') {
+      netSend({ type: 'deck', ids: makeOwnOnlineDeck() });
+      window.BVBGameplay?.resendTactic?.();
+      // Re-send the current round's unacknowledged input after a connection drop.
+      if (G?.m === 12 && guestMatchId === G.matchId && guestRound === G.rn) {
+        if (guestBallId != null) netSend({type:'pick', id:guestBallId, matchId:G.matchId, rn:G.rn});
+        if (guestAimSent) netSend({type:'fire', angle:guestAimAngle, matchId:G.matchId, rn:G.rn});
+      }
+    } else if (G?.m === 12) broadcastState();
+  });
+  conn.on('data', data => {
+    if (!data || typeof data !== 'object') return;
+    if (data.type === 'hello') {
+      netStatus(netRole === 'host' ? 'Połączono. Czekam na kulki znajomego…' : 'Połączono ze znajomym. Czekam na rozpoczęcie meczu.');
+    }
+    if (data.type === 'deck' && netRole === 'host' && (!G || G.finished || G.m !== 12)) {
+      const ids = data.ids;
+      if (Array.isArray(ids) && ids.length === 3 &&
+          new Set(ids).size === 3 && ids.every(id => Number.isInteger(id) && B[id])) {
+        guestOnlineDeck = ids.map(id => B[id]);
+        netStatus('Połączono! Obaj gracze użyją swoich odblokowanych kulek.');
+        const btn = $('#netStart'); if (btn) btn.hidden = false;
+      } else {
+        netStatus('Nieprawidłowa kolekcja znajomego. Połączcie się ponownie.');
+      }
+    }
+    if (data.type === 'state' && netRole === 'guest' && data.state) {
+      // The host owns the simulation; reverse perspectives for the guest.
+      const hostState = data.state;
+      if (guestMatchId !== hostState.matchId || guestRound !== hostState.rn) {
+        guestMatchId = hostState.matchId;
+        guestRound = hostState.rn; guestBallId = null; guestAimSent = false;
+        guestAimAngle = -Math.PI / 2;
+      }
+      const hostDeck = hostState.my, guestDeck = hostState.bt;
+      const hostBall = hostState.pb, guestBall = hostState.bb;
+      G = hostState;
+      G.my = guestDeck;
+      G.bt = hostDeck;
+      G.h = [hostState.h[1], hostState.h[0]];
+      G.lastRoundWinner = Number.isInteger(hostState.lastRoundWinner) && hostState.lastRoundWinner >= 0 ? 1 - hostState.lastRoundWinner : -1;
+      G.pb = guestBall;
+      G.bb = hostBall;
+      G.pa = guestAimAngle;
+      G.bl = (hostState.bl || []).map(o => ({ ...o, team: 1 - o.team, y: 360 - o.y, vy: -o.vy,
+        trail: (o.trail || []).map(p => ({ x: p.x, y: 360 - p.y })) }));
+      G.fx = (hostState.fx || []).map(f => ({ ...f, y: 360 - f.y, vy: -f.vy }));
+      G.rings = (hostState.rings || []).map(r => ({ ...r, y: 360 - r.y }));
+      G.pop = (hostState.pop || []).map(p => ({ ...p, y: 360 - p.y }));
+      G.obstacles=(hostState.obstacles||[]).map(p=>({...p,y:360-p.y,dy:-p.dy}));
+      G.portal=hostState.portal?{...hostState.portal,y:360-hostState.portal.y}:null;
+      show('game');
+      if (hostState.ph === 'draft' || (hostState.ph === 'aim' && guestBallId == null)) {
+        G.ph = 'draft';
+        renderDraft();
+        $('#fire').hidden = true;
+      } else if (hostState.ph === 'aim') {
+        G.ph = 'aim';
+        G.pb = B.find(b => b.id === guestBallId) || G.my[0];
+        G.bb = hostBall;
+        $('#cards').innerHTML = '';
+        $('#fire').hidden = true;
+        $('#fire').disabled = true;
+        $('#msg').textContent = 'Czekam na automatyczny start walki…';
+      } else {
+        $('#cards').innerHTML = '';
+        $('#fire').hidden = true;
+      }
+      if (hostState.ph === 'draft' && guestBallId != null) {
+        $('#cards').innerHTML = '';
+        $('#msg').textContent = 'Kulę wybrano. Czekam na wybór hosta…';
+      }
+      hearts();
+      window.BVBGameplay?.onGuestState?.(hostState);
+      if (!G.finished) $('#ov').hidden = true; // A new online rematch clears the old end screen.
+      if (G.finished) {
+        const guestWon = G.h[0] > 0;
+        $('#ov').hidden = false;
+        $('#ovb').innerHTML = `<h2>${guestWon ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2><p style="margin:10px 0;color:var(--mu)">Wynik meczu online</p><button class="b graj" onclick="$('#ov').hidden=true;menu()">Menu główne</button>`;
+      }
+    }
+    if (data.type === 'tactic' && netRole === 'host') window.BVBGameplay?.applyRemoteTactic?.(data);
+    if (data.type === 'pick' && netRole === 'host') {
+      if (!G || G.m !== 12 || !['draft','aim'].includes(G.ph) || data.matchId !== G.matchId || data.rn !== G.rn) return;
+      // Gość może wybierać tylko spośród trzech kulek ze swojej talii.
+      remoteBallId = G?.bt?.find(b => b.id === data.id) || null;
+      if (!remoteBallId) return;
+      if (G && G.ph === 'aim') G.bb = remoteBallId;
+      if (G.ph === 'aim' && hostAimAngle != null && remoteAimAngle != null) launchMatch(remoteAimAngle);
+      else broadcastState();
+    }
+    if (data.type === 'fire' && netRole === 'host') {
+      if (!G || G.m !== 12 || !['draft','aim'].includes(G.ph) || data.matchId !== G.matchId || data.rn !== G.rn) return;
+      // The guest may be ready before the host chooses a ball; retain the input.
+      remoteAimAngle = Number.isFinite(data.angle) ? data.angle : -Math.PI / 2;
+      if (G.ph === 'aim' && hostAimAngle != null && remoteBallId != null) launchMatch(remoteAimAngle);
+    }
+    if (data.type === 'ping') netSend({type:'pong', at:data.at});
+  });
+  conn.on('close', () => {
+    clearTimeout(connectWatchdog);
+    if (activeConn !== conn) return;
+    activeConn = null;
+    const btn = $('#netStart'); if (btn) btn.hidden = true;
+    if (netRole === 'guest' && reconnectRoom && peer && !peer.destroyed) scheduleNetReconnect();
+    else netStatus('Połączenie zamknięte. Host może przyjąć ponowne połączenie.');
+  });
+  conn.on('error', err => {
+    netStatus('Błąd kanału: ' + (err.message || 'nieznany'));
+    if (activeConn === conn) { try { conn.close(); } catch (_) {} }
+  });
+}
+function netSend(data) {
+  try { if (activeConn && activeConn.open) activeConn.send(data); } catch (e) {}
+}
+function broadcastState() {
+  if (netRole !== 'host' || !activeConn || !activeConn.open || !G) return;
+  try { netSend({ type: 'state', state: JSON.parse(JSON.stringify(G)) }); } catch (e) {}
+}
+function scheduleNetReconnect() {
+  if (reconnectTries >= 6) { netStatus('Nie udało się odzyskać połączenia. Utwórz pokój ponownie.'); return; }
+  const attempt = ++reconnectTries, seq = ++reconnectSeq;
+  netStatus('Próba ponownego połączenia ' + attempt + '/6…');
+  setTimeout(() => {
+    if (seq !== reconnectSeq || netRole !== 'guest' || activeConn?.open || !reconnectRoom || !peer || peer.destroyed) return;
+    if (peer.disconnected) {
+      try { peer.reconnect(); } catch (_) {}
+      scheduleNetReconnect();
+      return;
+    }
+    try {
+      activeConn = peer.connect(reconnectRoom, { reliable:true });
+      setupNetConnection(activeConn);
+    } catch (_) { scheduleNetReconnect(); }
+  }, Math.min(12000, 900 * Math.pow(2, attempt - 1)));
+}
+function disconnectNet(updateStatus = true) {
+  reconnectSeq++; reconnectTries = 0; reconnectRoom = '';
+  try { if (activeConn) activeConn.close(); } catch (e) {}
+  try { if (peer && !peer.destroyed) peer.destroy(); } catch (e) {}
+  activeConn = null; peer = null; netRole = null; guestRound = -1; guestMatchId = null; guestBallId = null; guestAimSent = false; guestOnlineDeck = null;
+  if (updateStatus) netStatus('Rozłączono.');
+}
+let pendingBossIndex = 0, netRole = null, remoteBallId = null, remoteAimAngle = null, hostAimAngle = null, netSyncAt = 0, guestBallId = null, guestRound = -1, guestMatchId = null, guestAimSent = false, guestAimAngle = -Math.PI / 2, guestOnlineDeck = null;
+let reconnectSeq = 0, reconnectTries = 0, reconnectRoom = '';
+
+const ARENA_ACHIEVEMENTS = [
+  { id:'arenas', name:'🏆 Wędrowiec Aren', description:'Wygraj mecz na każdej z 6 aren.', coin:180, title:'Wędrowiec Aren', aura:'#fbbf24' },
+  { id:'portals', name:'🌑 Władca Portali', description:'Teleportuj kulki 10 razy.', coin:150, title:'Władca Portali', aura:'#a78bfa' },
+  { id:'bounces', name:'✨ Mistrz Odbić', description:'Odbij kulki od przeszkód 25 razy.', coin:150, title:'Mistrz Odbić', aura:'#38bdf8' }
+];
+function achievementProgress(id) {
+  return id==='arenas' ? Object.keys(S.ach.winsByArena).filter(k=>S.ach.winsByArena[k]).length : id==='portals' ? S.ach.portals : S.ach.bounces;
+}
+function achievementGoal(id) { return id==='arenas'?6:id==='portals'?10:25; }
+function checkAchievements() {
+  if (!S || !S.ach) return;
+  for (const a of ARENA_ACHIEVEMENTS) {
+    if (S.ach.claimed.includes(a.id) || achievementProgress(a.id) < achievementGoal(a.id)) continue;
+    S.ach.claimed.push(a.id); S.coins += a.coin;
+    if (!S.playerTitle) S.playerTitle = a.title;
+    if (!S.playerAura) S.playerAura = a.aura;
+    if (G) { G.pop ||= []; G.pop.push({x:180,y:145,age:0,life:2,text:'🏆 '+a.name,c:'#fbbf24'}); }
+  }
+  save();
+}
+function achievementsPanel(p) {
+  p.innerHTML = `<div class="cd"><h2>🏆 Osiągnięcia Aren</h2><p style="color:var(--mu);font-size:.83rem">Monety, tytuły i poświaty kulek odblokowują się automatycznie.</p></div>` + ARENA_ACHIEVEMENTS.map(a=>{
+    const progress=achievementProgress(a.id), goal=achievementGoal(a.id), done=S.ach.claimed.includes(a.id);
+    return `<div class="cd"><h3>${a.name} ${done?'✅':''}</h3><p>${a.description}</p><p style="margin:7px 0;color:#fde68a">Postęp: ${Math.min(progress,goal)}/${goal}</p><p style="font-size:.84rem">Nagroda: 🪙 ${a.coin}, tytuł „${a.title}”, świecący efekt kulki</p></div>`;
+  }).join('') + `<div class="cd"><h3>🏅 Aktywne nagrody</h3><label>Tytuł gracza</label><select class="inp" onchange="S.playerTitle=this.value;save()"><option value="">Bez tytułu</option>${ARENA_ACHIEVEMENTS.filter(a=>S.ach.claimed.includes(a.id)).map(a=>`<option value="${a.title}" ${S.playerTitle===a.title?'selected':''}>${a.title}</option>`).join('')}${S.campaign?.finalWon?`<option value="Pogromca Chaosu" ${S.playerTitle==='Pogromca Chaosu'?'selected':''}>👑 Pogromca Chaosu</option>`:''}</select><label>Efekt kulki</label><select class="inp" onchange="S.playerAura=this.value;save()"><option value="">Bez poświaty</option>${ARENA_ACHIEVEMENTS.filter(a=>S.ach.claimed.includes(a.id)).map(a=>`<option value="${a.aura}" ${S.playerAura===a.aura?'selected':''}>${a.name}</option>`).join('')}${S.campaign?.finalWon?`<option value="#facc15" ${S.playerAura==='#facc15'?'selected':''}>👑 Złota aura kampanii</option>`:''}</select></div>`;
+}
+function arenaMenuPanel(p) {
+  p.innerHTML = `<div class="cd"><h2>🏟️ Areny</h2><p style="color:var(--mu);font-size:.85rem">Każda arena dostępna od początku. Mapa jest losowana co nowy mecz.</p>
+    <button class="b ac" onclick="S.arenaPick=S.arenaPick==='random'?'manual':'random';save();panel('arena')">Tryb: ${S.arenaPick==='random'?'🎲 Losowy':'✋ Ręczny'} (kliknij, aby zmienić)</button>
+    ${S.arenaPick==='manual'?`<select class="inp" onchange="S.th=Number(this.value);save();panel('arena')">${ARENAS.map((a,i)=>`<option value="${i}" ${i===S.th?'selected':''}>${a.name}</option>`).join('')}</select>`:''}</div>`+
+    ARENAS.map((a,i)=>{const o=settingsForArena(i);return `<div class="cd"><h3>${a.name}</h3><div class="grid-2"><button class="b" onclick="settingsForArena(${i}).obstacles=!settingsForArena(${i}).obstacles;save();panel('arena')">Przeszkody: ${o.obstacles?'✅ Wł.':'❌ Wył.'}</button><button class="b" onclick="settingsForArena(${i}).fx=!settingsForArena(${i}).fx;save();panel('arena')">Efekty: ${o.fx?'✅ Wł.':'❌ Wył.'}</button></div><label>Liczba przeszkód: <b>${o.count}</b></label><input type="range" min="2" max="5" step="1" value="${o.count}" style="width:100%;margin-top:10px" oninput="settingsForArena(${i}).count=Number(this.value);this.previousElementSibling.querySelector('b').textContent=this.value;save()"></div>`;}).join('');
+}
+let arenaTransitionTimer = null;
+function arenaTransition(newArena, previous) {
+  const overlay=$('#arenaTransition');
+  clearTimeout(arenaTransitionTimer);
+  if (previous==null || newArena===previous) {overlay.hidden=true;return;}
+  $('#transitionName').textContent=ARENAS[newArena].name;
+  overlay.hidden=false;
+  arenaTransitionTimer=setTimeout(()=>{overlay.hidden=true;},2000+Math.floor(Math.random()*2001));
+}
+function cycleArena() {
+  S.th = ((S.th | 0) + 1) % TN.length;
+  SFX.tick();
+  save();
+  menu();
+}
+
+function menu() {
+  clearTimeout(arenaTransitionTimer); $('#arenaTransition').hidden=true;
+  if (peer || activeConn) disconnectNet(false);
+  $('#ov').hidden = true;
+  G = null;
+  show('menu');
+  $('#coinCount').textContent = S.coins;
+  $('#candyCount').textContent = S.candies;
+  document.querySelectorAll('.diff-btn').forEach((b, i) => b.classList.toggle('on', i === diff));
+  $('#svBtn').textContent = `Survival (rekord: fala ${S.best | 0})`;
+  $('#infBtn').innerHTML = `<span class="icon-inf">♾️</span> Nieskończoność (rekord: fala ${S.binf | 0})`;
+  $('#bbBtn').textContent = `Boss Rush (${S.bb | 0})`;
+  $('#msBtn').textContent = 'Efekty: ' + (MU.s ? 'wył.' : 'wł.');
+  $('#mmBtn').textContent = 'Muzyka: ' + (MU.m ? 'wył.' : 'wł.') + (halloweenSeason() ? ' 🎃' : '');
+  $('#thBtn').innerHTML = S.arenaPick==='random' ? '🎲 Areny:<br>Losowe' : '🏟️ Arena:<br>'+TN[clamp(S.th|0,0,5)];
+}
+
+let colSearch = '', colRarity = -1;
+
+function panel(k) {
+  refreshPeriods();
+  $('#pn').dataset.panel = k;
+  show('pn');
+  const p = $('#pb');
+  if (k === 'account') { if (window.BVBCloud?.renderAccount) window.BVBCloud.renderAccount(); else p.innerHTML='<div class="cd"><h2>👤 Konto BVB</h2><p>Aby korzystać z kont online, trzeba podłączyć Supabase. Gra bez konta działa bez zmian.</p></div>'; return; }
+  if (k === 'arena') {arenaMenuPanel(p);return;}
+  if (k === 'ach') {achievementsPanel(p);return;}
+
+  if (k == 'hw') {
+    const winCandy = DIFF_CANDY[diff];
+    const loseCandy = Math.round(winCandy * 0.25);
+    const hwBalls = B.filter(b => b.id >= 100);
+    p.innerHTML = `
+      <div class="cd hw-card">
+        <h2>🎃 HALLOWEEN EVENT (${hwBalls.length + 1} KULEK)</h2>
+        <p style="font-size:0.86rem;color:#fed7aa;margin-bottom:10px">
+          Walcz z <b>Królem Dyń</b> na mrocznych arenach Halloween, zdobywaj <b>Cukierki 🍬</b>, ulepszaj kulki Halloween i ewoluuj je przez duplikaty do V2 i V3!
+        </p>
+        <div style="background:rgba(0,0,0,0.35);padding:10px;border-radius:12px;margin-bottom:10px;font-size:0.84rem">
+          Wybrana trudność: <b>${DIFF_NAMES[diff]}</b><br>
+          🏆 Wygrana: <b>+${winCandy} 🍬</b> · 💀 Przegrana (25%): <b>+${loseCandy} 🍬</b>
+        </div>
+        <div class="grid-2">
+          <button class="b hw" onclick="startMatch(9)">🎃 Walcz z Królem Dyń</button>
+          <button class="b hw" onclick="startMatch(10)">🦇 Halloween Survival</button>
+        </div>
+      </div>
+
+      <div class="cd hw-card">
+        <h3>🎁 Skrzynia Halloween (50 🍬)</h3>
+        <p style="font-size:0.84rem;color:var(--mu);margin-bottom:10px">
+          Masz <b>🍬 ${S.candies}</b>. Gwarantowana kulka z ekskluzywnej puli kulek Halloween (ID 99–119)! Duplikat daje <b>+1 Duplikat do Ewolucji V2/V3</b>.
+        </p>
+        <button class="b hw" ${S.candies < 50 ? 'disabled' : ''} onclick="pull(true)">🎃 Otwórz Skrzynię Halloween (50 🍬)</button>
+      </div>
+
+      <div class="cd hw-card">
+        <h3>🕸️ Sklep i Katalog Halloween</h3>
+        <small style="color:var(--mu);display:block;margin-bottom:10px">Odblokuj wybraną kulkę Halloween za 80 🍬 lub kliknij ją, aby ulepszyć jej HP/DMG za cukierki!</small>
+        <div class="col-grid">
+          ${hwBalls.map(b => {
+            const own = S.own.includes(b.id);
+            const st = getBallStats(b.id);
+            return `
+              <div class="bs-card ${own ? '' : 'lk'}" style="--rc:${RC[b.r]}" onclick="openBallDetail(${b.id})">
+                ${own ? `<span class="bs-lv-badge">MOC ${1 + st.dmgLv + st.hpLv}</span><span class="bs-tier-badge">V${st.tier}</span>` : ''}
+                <div style="margin-top:14px">${orb(b)}</div>
+                <b>${b.n}</b>
+                <small style="font-size:0.7rem;color:#fed7aa">❤️ ${st.hp} · ⚔️ ${st.dmg}</small>
+                <small style="font-size:0.7rem;color:var(--mu)">${st.activeDesc}</small>
+                <button class="b ${own ? 'ac' : 'hw'}" style="padding:7px;margin-top:4px;font-size:0.73rem" onclick="event.stopPropagation();${own ? `openBallDetail(${b.id})` : `buyHwBall(${b.id})`}" ${!own && S.candies < 80 ? 'disabled' : ''}>
+                  ${own ? 'Ulepsz / V2-V3' : 'Kup za 80 🍬'}
+                </button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <button class="b" style="margin-top:12px" ${S.candies < 50 ? 'disabled' : ''} onclick="exchangeCandies()">🔄 Wymień 50 🍬 na 100 🪙 monet</button>
+      </div>
+    `;
+  }
+
+  if (k == 'shop') {
+    p.innerHTML = `
+      <div class="cd">
+        <h2>📦 Zwykła Skrzynka z Kulą</h2>
+        <p style="color:var(--mu);font-size:0.86rem;margin-bottom:10px">
+          Masz 🪙 <b>${S.coins}</b>. Losuje jedną ze standardowych kulek (ID 0–98). Jeśli trafisz duplikat posiadanej kulki, otrzymujesz <b>+1 Duplikat do Ewolucji V2/V3</b>!
+        </p>
+        <p style="font-size:0.8rem;color:var(--mu);margin-bottom:12px">
+          Szanse zgodne z rozkładem: Zwykła 45%, Rzadka 30%, Epicka 16%, Legendarna 7%, Mityczna 2%.
+        </p>
+        <button class="b graj" ${S.coins < 100 ? 'disabled' : ''} onclick="pull(false)">Otwórz za 100 🪙</button>
+      </div>
+      <div class="cd hw-card">
+        <h2>🎃 Skrzynka Halloween Event</h2>
+        <p style="color:#fed7aa;font-size:0.86rem;margin-bottom:10px">
+          Masz 🍬 <b>${S.candies}</b>. Gwarantowana kulka z puli kulek Halloween (ID 99–119)! Duplikat daje <b>+1 Duplikat do Ewolucji V2/V3</b>. Koszt: 50 🍬.
+        </p>
+        <button class="b hw" ${S.candies < 50 ? 'disabled' : ''} onclick="pull(true)">Otwórz Skrzynię Halloween (50 🍬)</button>
+      </div>
+    `;
+  }
+
+  if (k == 'col') {
+    renderBrawlInventory(p);
+  }
+  if (k == 'q') qp(p);
+  if (k == 'pr') prof(p);
+  if (k == 'set') setp(p);
+  if (k == 'st') stp(p);
+  if (k == 'bp') bpp(p);
+}
+
+function renderBrawlInventory(p) {
+  const filterFn = b => {
+    if (colRarity !== -1 && b.r !== colRarity) return false;
+    if (colSearch) {
+      const q = colSearch.toLowerCase();
+      return b.n.toLowerCase().includes(q) || String(b.id) === q;
+    }
+    return true;
+  };
+  const unlockedBalls = B.filter(b => S.own.includes(b.id) && filterFn(b));
+  const lockedBalls = B.filter(b => !S.own.includes(b.id) && filterFn(b));
+
+  const renderCard = (b, isOwn) => {
+    const st = getBallStats(b.id);
+    const v1Dup = S.dup[b.id] | 0;
+    const v2Dup = (S.dupV2[b.id] | 0) + Math.floor(v1Dup / 5);
+    const totalLv = 1 + st.dmgLv + st.hpLv;
+    const dupNeed = 5;
+    const dupCur = st.tier == 1 ? v1Dup : st.tier == 2 ? v2Dup : 5;
+    const dupPct = st.tier >= 3 ? 100 : Math.min(100, (dupCur / dupNeed) * 100);
+    const dupLabel = st.tier >= 3 ? 'MAX V3' : `${dupCur}/${dupNeed} dupl. → V${st.tier + 1}`;
+
+    return `
+      <div class="bs-card ${isOwn ? '' : 'lk'}" style="--rc:${RC[b.r]}" onclick="openBallDetail(${b.id})">
+        ${isOwn ? `<span class="bs-lv-badge">MOC ${totalLv}</span><span class="bs-tier-badge">V${st.tier}</span>` : ''}
+        <div style="margin-top:14px">${orb(b)}</div>
+        <b style="font-size:0.84rem">${b.n}</b>
+        <small style="color:${RC[b.r]};font-weight:800;font-size:0.7rem">${RN[b.r]}</small>
+        <small style="font-size:0.7rem;color:#e2e8f0">❤️ ${st.hp} · ⚔️ ${st.dmg}${st.cd ? ` · ⏱️ ${st.cd}s` : ''}</small>
+        ${isOwn ? `
+          <div class="dup-bar">
+            <i style="width:${dupPct}%"></i>
+            <span>${dupLabel}</span>
+          </div>
+          <button class="b ac" style="padding:6px;margin:4px 0 0;font-size:0.72rem">Szczegóły / Ulepsz</button>
+        ` : `
+          <small style="color:#fca5a5;font-size:0.68rem;margin-top:2px">${b.id >= 99 ? '🎃 Event Halloween' : '📦 Skrzynka / Sklep'}</small>
+          <button class="b" style="padding:6px;margin:4px 0 0;font-size:0.72rem">Podgląd (${b.id >= 99 ? '80 🍬' : '120 🪙'})</button>
+        `}
+      </div>
+    `;
+  };
+
+  p.innerHTML = `
+    <div class="bs-top">
+      <div>
+        <div class="bs-counter">🔮 ODBLOKOWANE KULKI: ${S.own.length} / ${B.length}</div>
+        <small style="color:var(--mu);font-size:0.76rem">Tylko kulki w sekcji „Odblokowane” należą do Ciebie. Pozostałe są podglądem do zdobycia.</small>
+      </div>
+      <input class="inp" style="margin:4px 0 0" placeholder="🔍 Szukaj kulki..." value="${colSearch.replace(/"/g, '')}" oninput="colSearch=this.value;renderBrawlInventory($('#pb'))" />
+      <div style="display:flex;gap:4px;flex-wrap:wrap;width:100%;margin-top:4px">
+        <button class="b ${colRarity === -1 ? 'ac' : ''}" style="width:auto;padding:5px 9px;margin:0;font-size:0.7rem" onclick="colRarity=-1;renderBrawlInventory($('#pb'))">Wszystkie</button>
+        ${RN.map((rn, idx) => `<button class="b ${colRarity === idx ? 'ac' : ''}" style="width:auto;padding:5px 8px;margin:0;font-size:0.7rem;border-color:${RC[idx]}" onclick="colRarity=${idx};renderBrawlInventory($('#pb'))">${rn}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="bs-sec-title">
+      <span>✅ ODBLOKOWANE KULKI (${unlockedBalls.length})</span>
+      <span>Gotowe do walki</span>
+    </div>
+    <div class="col-grid">
+      ${unlockedBalls.map(b => renderCard(b, true)).join('') || '<div class="cd" style="grid-column:1/-1;text-align:center">Brak odblokowanych kulek spełniających filtr.</div>'}
+    </div>
+
+    <div class="bs-sec-title" style="border-left-color:#64748b;color:#cbd5e1">
+      <span>🔒 ZABLOKOWANE KULKI (${lockedBalls.length})</span>
+      <span>Do zdobycia</span>
+    </div>
+    <div class="col-grid">
+      ${lockedBalls.map(b => renderCard(b, false)).join('') || '<div class="cd" style="grid-column:1/-1;text-align:center">Wszystkie kulki w tej kategorii zostały odblokowane! 🎉</div>'}
+    </div>
+  `;
+}
+
+function openBallDetail(id) {
+  const b = B[id];
+  if (!b) return;
+  const isOwn = S.own.includes(id);
+  const st = getBallStats(id);
+  const nextDmgSt = getBallStats(id, st.tier, Math.min(5, st.dmgLv + 1), st.hpLv);
+  const nextHpSt = getBallStats(id, st.tier, st.dmgLv, Math.min(5, st.hpLv + 1));
+  const nextTierSt = getBallStats(id, Math.min(3, st.tier + 1), st.dmgLv, st.hpLv);
+
+  const curIcon = st.isHw ? '🍬' : '🪙';
+  const walletAmt = st.isHw ? S.candies : S.coins;
+  const dmgCost = (st.isHw ? 35 : 60) * (st.dmgLv + 1);
+  const hpCost = (st.isHw ? 35 : 60) * (st.hpLv + 1);
+
+  const v1Dup = S.dup[id] | 0;
+  const v2DupRaw = S.dupV2[id] | 0;
+  const convertibleV2 = Math.floor(v1Dup / 5);
+  const totalV2Available = v2DupRaw + convertibleV2;
+
+  const canEvolveV2 = isOwn && st.tier === 1 && v1Dup >= 5;
+  const canEvolveV3 = isOwn && st.tier === 2 && totalV2Available >= 5;
+
+  $('#ov').hidden = false;
+  $('#ovb').innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;text-align:left;margin-bottom:10px">
+      <div class="rev" style="--rc:${RC[b.r]};margin:0">${orb(b)}</div>
+      <div>
+        <span style="background:${RC[b.r]};color:#000;font-weight:900;font-size:0.7rem;padding:2px 8px;border-radius:99px">${RN[b.r]}</span>
+        <h2 style="margin:4px 0 2px">${b.n}</h2>
+        <b style="color:#fde047;font-size:0.85rem">Ewolucja: V${st.tier} / V3 ${st.isHw ? '· 🎃 Kulka Halloween' : ''}</b>
+      </div>
+    </div>
+
+    <div class="stat-box-grid">
+      <div class="stat-pill">❤️ Zdrowie<b>${st.hp} HP</b></div>
+      <div class="stat-pill">⚔️ Obrażenia<b>${st.dmg} DMG</b></div>
+      <div class="stat-pill">⏱️ Cooldown<b>${st.cd ? st.cd + ' s' : 'Pasywna'}</b></div>
+    </div>
+
+    <div class="cd" style="text-align:left;margin:8px 0;font-size:0.8rem;line-height:1.45">
+      <b style="color:#38bdf8">⚡ Aktualna umiejętność (V${st.tier}):</b>
+      <p style="margin-top:4px;color:#f8fafc">${st.activeDesc}</p>
+      ${st.tier < 3 ? `
+        <hr style="border:0;border-top:1px solid #3b2d6e;margin:8px 0">
+        <b style="color:#fb923c">🔮 Podgląd kolejnej ewolucji (V${st.tier + 1}):</b>
+        <p style="margin-top:3px;color:var(--mu)">${st.tier === 1 ? b.d + ' [Ewolucja V2]' : b.d + ' [Ewolucja V3 MAX]'}</p>
+        <small style="color:#fde047;display:block;margin-top:4px">
+          Statystyki na V${st.tier + 1}: ❤️ ${ st.hp } → <b>${ nextTierSt.hp } HP</b> · ⚔️ ${ st.dmg } → <b>${ nextTierSt.dmg } DMG</b>
+        </small>
+      ` : '<p style="color:#4ade80;font-weight:800;margin-top:6px">✨ Osiągnięto maksymalną ewolucję V3!</p>'}
+    </div>
+
+    ${isOwn ? `
+      <div class="cd" style="text-align:left;margin:8px 0">
+        <h3 style="font-size:0.85rem">🛠️ Ulepszenia Statystyk (${st.isHw ? 'za Cukierki 🍬' : 'za Monety 🪙'})</h3>
+        <div class="grid-2" style="margin-top:8px;margin-bottom:0">
+          <button class="b ${st.isHw ? 'hw' : 'ac'}" style="flex-direction:column;gap:2px;padding:10px 6px;font-size:0.75rem" ${st.dmgLv >= 5 || walletAmt < dmgCost ? 'disabled' : ''} onclick="upgradeStat(${id}, 'dmg')">
+            <span>⚔️ Obrażenia Lv ${st.dmgLv}/5</span>
+            <small style="color:#fef08a">${st.dmgLv < 5 ? `${st.dmg} → ${nextDmgSt.dmg} DMG (${dmgCost} ${curIcon})` : 'MAKSYMALNY'}</small>
+          </button>
+          <button class="b ${st.isHw ? 'hw' : 'ac'}" style="flex-direction:column;gap:2px;padding:10px 6px;font-size:0.75rem" ${st.hpLv >= 5 || walletAmt < hpCost ? 'disabled' : ''} onclick="upgradeStat(${id}, 'hp')">
+            <span>❤️ Zdrowie Lv ${st.hpLv}/5</span>
+            <small style="color:#fef08a">${st.hpLv < 5 ? `${st.hp} → ${nextHpSt.hp} HP (${hpCost} ${curIcon})` : 'MAKSYMALNY'}</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="cd hw-card" style="text-align:left;margin:8px 0">
+        <h3 style="font-size:0.85rem">🧬 Duplikaty i Ewolucja V2 / V3</h3>
+        <p style="font-size:0.76rem;color:#fed7aa;margin-bottom:6px">
+          Duplikaty V1: <b>${v1Dup}</b> · Duplikaty V2: <b>${v2DupRaw}</b> ${convertibleV2 > 0 && st.tier === 2 ? `(w tym +${convertibleV2} z nadmiaru V1)` : ''}
+        </p>
+        ${st.tier === 1 ? `
+          <button class="b graj" style="font-size:0.86rem;padding:11px;margin:0" ${canEvolveV2 ? '' : 'disabled'} onclick="evolveWithDuplicates(${id})">
+            ✨ Ewoluuj do V2 (${v1Dup}/5 duplikatów V1)
+          </button>
+        ` : st.tier === 2 ? `
+          <button class="b graj" style="font-size:0.86rem;padding:11px;margin:0" ${canEvolveV3 ? '' : 'disabled'} onclick="evolveWithDuplicates(${id})">
+            🌟 Ewoluuj do V3 (${totalV2Available}/5 duplikatów V2)
+          </button>
+        ` : `
+          <div style="text-align:center;color:#fde047;font-weight:900;font-size:0.85rem">🏆 Kulka na poziomie mistrzowskim V3!</div>
+        `}
+      </div>
+    ` : `
+      <div class="cd" style="margin:8px 0">
+        <p style="font-size:0.82rem;color:var(--mu);margin-bottom:8px">Ta kulka jest jeszcze zablokowana. Odblokuj ją bezpośrednio:</p>
+        <button class="b ${st.isHw ? 'hw' : 'graj'}" style="font-size:0.9rem;padding:12px;margin:0" ${(st.isHw ? S.candies < 80 : S.coins < 120) ? 'disabled' : ''} onclick="buyBallDirect(${id});openBallDetail(${id})">
+          🔓 Odblokuj teraz za ${st.isHw ? '80 🍬' : '120 🪙'}
+        </button>
+      </div>
+    `}
+
+    <button class="b" style="margin:8px 0 0;padding:11px" onclick="$('#ov').hidden=true;if(!$('#pn').hidden)panel('col')">Zamknij</button>
+  `;
+}
+
+function upgradeStat(id, kind) {
+  if (!S.own.includes(id)) return;
+  const isHw = id >= 99;
+  const table = kind === 'dmg' ? S.upDmg : S.upHp;
+  const lv = table[id] | 0;
+  if (lv >= 5) return;
+  const cost = (isHw ? 35 : 60) * (lv + 1);
+  if (isHw) {
+    if (S.candies < cost) return;
+    S.candies -= cost;
+  } else {
+    if (S.coins < cost) return;
+    S.coins -= cost;
+  }
+  table[id] = lv + 1;
+  save();
+  SFX.win();
+  openBallDetail(id);
+  if (!$('#pn').hidden) renderBrawlInventory($('#pb'));
+}
+
+function evolveWithDuplicates(id) {
+  if (!S.own.includes(id)) return;
+  const tier = S.tr[id] || 1;
+  if (tier === 1) {
+    if ((S.dup[id] | 0) < 5) return;
+    S.dup[id] -= 5;
+    S.tr[id] = 2;
+  } else if (tier === 2) {
+    let v2 = S.dupV2[id] | 0;
+    let v1 = S.dup[id] | 0;
+    while (v2 < 5 && v1 >= 5) {
+      v1 -= 5;
+      v2 += 1;
+    }
+    if (v2 < 5) return;
+    v2 -= 5;
+    S.dup[id] = v1;
+    S.dupV2[id] = v2;
+    S.tr[id] = 3;
+  } else {
+    return;
+  }
+  save();
+  SFX.rare();
+  openBallDetail(id);
+  if (!$('#pn').hidden) renderBrawlInventory($('#pb'));
+}
+
+function buyBallDirect(id) {
+  if (!B[id] || S.own.includes(id)) return;
+  if (id >= 99) {
+    if (S.candies < 80) return;
+    S.candies -= 80;
+  } else {
+    if (S.coins < 120) return;
+    S.coins -= 120;
+  }
+  S.own.push(id);
+  save();
+  SFX.win();
+  if (!$('#pn').hidden) renderBrawlInventory($('#pb'));
+}
+
+function pull(isHalloween) {
+  if (isHalloween) {
+    if (S.candies < 50) return;
+    S.candies -= 50;
+    S.hwq.hwbox = (S.hwq.hwbox | 0) + 1;
+  } else {
+    if (S.coins < 100) return;
+    S.coins -= 100;
+    S.q.gacha++;
+  }
+  const w = roll(isHalloween), dup = S.own.includes(w.id);
+  let dupMsg = '🎉 Nowa kula odblokowana w kolekcji!';
+  if (dup) {
+    const curTier = S.tr[w.id] || 1;
+    if (curTier === 1) {
+      S.dup[w.id] = (S.dup[w.id] | 0) + 1;
+      dupMsg = `🧬 Duplikat V1! Zebrano ${S.dup[w.id]}/5 do ewolucji V2!`;
+    } else if (curTier === 2) {
+      S.dupV2[w.id] = (S.dupV2[w.id] | 0) + 1;
+      dupMsg = `🌟 Duplikat V2! Zebrano ${S.dupV2[w.id]}/5 do ewolucji V3!`;
+    } else {
+      if (isHalloween) { S.candies += 25; dupMsg = 'Kulka ma już V3 MAX! Bonus +25 🍬'; }
+      else { S.coins += 40; dupMsg = 'Kulka ma już V3 MAX! Bonus +40 🪙'; }
+    }
+  } else {
+    S.own.push(w.id);
+  }
+  save();
+
+  const IT = Array.from({ length: 45 }, () => roll(isHalloween));
+  IT[37] = w;
+  $('#ov').hidden = false;
+  $('#ovb').innerHTML = `
+    <h2>${isHalloween ? '🎃 Skrzynia Halloween…' : '📦 Otwieranie skrzynki…'}</h2>
+    <div class="cs">
+      <i class="mk"></i>
+      <div id="sp">
+        ${IT.map(b => `<div class="it" style="--rc:${RC[b.r]}">${orb(b)}<small>${b.n}</small></div>`).join('')}
+      </div>
+    </div>
+    <button class="b" onclick="skipPull()">Pomiń</button>
+  `;
+  const sp = $('#sp'), cw = $('.cs').clientWidth, IW = 98;
+  const tg = -(37 * IW + IW / 2 - cw / 2 + (Math.random() - 0.5) * 40);
+  let li = -1;
+  void sp.offsetWidth;
+  sp.style.transition = 'transform 5.2s cubic-bezier(.12,.72,.08,1)';
+  sp.style.transform = `translateX(${tg}px)`;
+  const iv = setInterval(() => {
+    if (!$('#sp')) return clearInterval(iv);
+    const i = Math.floor((cw / 2 - new DOMMatrix(getComputedStyle(sp).transform).m41) / IW);
+    if (i != li) { li = i; SFX.tick(); }
+  }, 30);
+  const done = () => {
+    if (!$('#sp')) return;
+    clearInterval(iv);
+    clearTimeout(tm);
+    w.r > 1 ? SFX.rare() : SFX.win();
+    $('#ovb').innerHTML = `
+      <div class="rev" style="--rc:${RC[w.r]}">${orb(w)}</div>
+      <h2>${w.n}</h2>
+      <b style="color:${RC[w.r]}">${RN[w.r]}</b>
+      <p style="font-size:0.88rem;color:var(--mu);margin:8px 0">${getBallStats(w.id).activeDesc}</p>
+      <p style="font-weight:800;color:#fde047;margin-bottom:12px">${dupMsg}</p>
+      <div class="grid-2">
+        <button class="b ac" style="padding:12px" onclick="openBallDetail(${w.id})">Pokaż w ekwipunku</button>
+        <button class="b graj" style="font-size:1rem;padding:12px" onclick="$('#ov').hidden=true;panel('${isHalloween ? 'hw' : 'shop'}')">OK</button>
+      </div>
+    `;
+  };
+  const tm = setTimeout(done, 5400);
+  window.skipPull = done;
+}
+
+function qp(p) {
+  const rw = (q, v, dn, f, nm, cur = '🪙') => `
+    <div class="cd">
+      <b>${nm || q.t}</b> (${Math.min(v, q.n)}/${q.n})
+      <div class="bar"><i style="width:${Math.min(v, q.n) / q.n * 100}%"></i></div>
+      <button class="b ac" style="margin:6px 0 0;padding:10px" ${v < q.n || dn ? 'disabled' : ''} onclick="${f}">
+        ${dn ? 'Odebrano ✓' : 'Odbierz ' + q.r + ' ' + cur}
+      </button>
+    </div>
+  `;
+  p.innerHTML = `
+    <div class="cd hw-card"><h2>🎃 Questy Halloween Event</h2></div>
+    ${HWQ.map((q, i) => rw(q, S.hwq[q.k] | 0, S.hwq.cl.includes(i), `claimhw(${i})`, 0, '🍬')).join('')}
+    <div class="cd"><h2>📜 Questy dzienne</h2></div>
+    ${Q.map((q, i) => rw(q, S.q[q.k] | 0, S.q.cl.includes(i), `claim(${i})`, q.k == 'tw' ? q.t + ' (' + (B[S.q.tb] ? B[S.q.tb].n : 'Szarża') + ')' : 0)).join('')}
+    <div class="cd"><h2>🏆 Questy tygodniowe</h2></div>
+    ${WQ.map((q, i) => rw(q, S.wq[q.k] | 0, S.wq.cl.includes(i), `claimw(${i})`)).join('')}
+  `;
+}
+function claim(i) { S.q.cl.push(i); S.coins += Q[i].r; save(); SFX.win(); panel('q'); }
+function claimw(i) { S.wq.cl.push(i); S.coins += WQ[i].r; save(); SFX.win(); panel('q'); }
+function claimhw(i) { S.hwq.cl.push(i); S.candies += HWQ[i].r; save(); SFX.win(); panel('q'); }
+
+function prof(p) {
+  const g = S.g | 0, w = S.wins | 0;
+  const online = Boolean(window.BVBCloud?.isOnline);
+  p.innerHTML = `
+    <div class="cd">
+      <h2>👤 Profil Gracza</h2>
+      <div style="display:flex;gap:10px;align-items:center;margin:10px 0">
+        <span style="font-size:38px">${S.av || AV[0]}</span>
+        <input class="inp" maxlength="16" value="${(S.nm || 'Gracz').replace(/["<>&]/g, '')}" ${online ? 'readonly title="Zmień nick w zakładce Konto"' : 'oninput="S.nm=this.value.slice(0,16);save()"'} placeholder="Twój nick..." />
+      </div>
+      ${online ? '<button class="b ac" onclick="panel(\'account\')">🔐 Zmień nick w Koncie</button>' : ''}
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        ${AV.map(a => `<button class="b" style="width:auto;padding:8px 12px;margin:0" onclick="S.av='${a}';save();panel('pr')">${a}</button>`).join('')}
+      </div>
+    </div>
+    <div class="cd" style="line-height:1.7;font-size:0.9rem">
+      <h3>📊 Statystyki</h3>
+      Rozegrane mecze: <b>${g}</b> · Wygrane: <b>${w}</b> (${g ? Math.round(w / g * 100) : 0}%)<br>
+      Monety: <b>🪙 ${S.coins}</b> · Cukierki Halloween: <b>🍬 ${S.candies}</b><br>
+      Odblokowane kule: <b>${S.own.length} / ${B.length}</b><br>
+      Rekord Survival: <b>fala ${S.best | 0}</b><br>
+      Rekord Nieskończoność: <b>fala ${S.binf | 0}</b><br>
+      Pokonani Bossowie: <b>${S.bb | 0}</b><br>
+      Tytuł: <b>${esc(S.playerTitle||'Brak')}</b><br>
+      <button class="b" onclick="panel('ach')">🏆 Nagrody za osiągnięcia</button>
+    </div>
+  `;
+}
+
+function setp(p) {
+  const o = S.o;
+  const tg = (k, l) => `<button class="b" onclick="S.o['${k}']^=1;save();panel('set')">${l}: ${o[k] ? 'Włączone' : 'Wyłączone'}</button>`;
+  p.innerHTML = `
+    <div class="cd">
+      <h2>⚙️ Ustawienia i Zapis Gry</h2>
+      <div style="margin:10px 0">
+        Głośność muzyki: <b>${Math.round(o.vm * 100)}%</b>
+        <input type="range" min="0" max="100" value="${Math.round(o.vm * 100)}" style="width:100%;margin-top:6px" oninput="S.o.vm=this.value/100;save();this.previousElementSibling.textContent=this.value+'%'">
+      </div>
+      <div style="margin:10px 0">
+        Głośność efektów: <b>${Math.round(o.vs * 100)}%</b>
+        <input type="range" min="0" max="100" value="${Math.round(o.vs * 100)}" style="width:100%;margin-top:6px" oninput="S.o.vs=this.value/100;save();this.previousElementSibling.textContent=this.value+'%'">
+      </div>
+      ${tg('nd', 'Liczby obrażeń na arenie')}
+      ${tg('sk', 'Drgania ekranu przy trafieniu')}
+      ${tg('vb', 'Wibracje telefonu')}
+      <div class="grid-2" style="margin-top:10px">
+        <button class="b ac" onclick="exportSaveModal()">📤 Eksportuj zapis</button>
+        <button class="b ac" onclick="importSaveModal()">📥 Importuj zapis</button>
+      </div>
+      <button class="b" style="background:#7f1d1d;border-color:#ef4444;margin-top:10px" onclick="askResetProgress()">🗑️ Resetuj cały postęp</button>
+    </div>
+  `;
+}
+
+function exportSaveModal() {
+  const code = btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+  $('#ov').hidden = false;
+  $('#ovb').innerHTML = `
+    <h2>📤 Eksport Zapisu Gry</h2>
+    <p style="font-size:0.82rem;color:var(--mu);margin:6px 0">Skopiuj poniższy kod, aby przenieść swoje kulki, duplikaty i waluty na inne urządzenie:</p>
+    <textarea class="inp" id="expArea" rows="4" readonly>${code}</textarea>
+    <div class="grid-2" style="margin-top:8px">
+      <button class="b graj" style="font-size:0.9rem;padding:11px" onclick="$('#expArea').select();document.execCommand('copy')">Kopiuj kod</button>
+      <button class="b" style="padding:11px" onclick="$('#ov').hidden=true">Zamknij</button>
+    </div>
+  `;
+}
+
+function importSaveModal() {
+  $('#ov').hidden = false;
+  $('#ovb').innerHTML = `
+    <h2>📥 Import Zapisu Gry</h2>
+    <p style="font-size:0.82rem;color:var(--mu);margin:6px 0">Wklej kod zapisu wygenerowany w oknie Eksportu:</p>
+    <textarea class="inp" id="impArea" rows="4" placeholder="Wklej kod tutaj..."></textarea>
+    <p id="impErr" style="color:#f87171;font-size:0.8rem;min-height:18px"></p>
+    <div class="grid-2" style="margin-top:8px">
+      <button class="b graj" style="font-size:0.9rem;padding:11px" onclick="doImportSave()">Wczytaj zapis</button>
+      <button class="b" style="padding:11px" onclick="$('#ov').hidden=true">Anuluj</button>
+    </div>
+  `;
+}
+
+function doImportSave() {
+  try {
+    const raw = JSON.parse(decodeURIComponent(escape(atob(($('#impArea').value || '').trim()))));
+    if (!raw || typeof raw !== 'object' || !Array.isArray(raw.own)) throw new Error('Invalid');
+    localStorage.setItem(K, JSON.stringify(raw));
+    load();
+    $('#ov').hidden = true;
+    panel('set');
+  } catch (e) {
+    const err = $('#impErr');
+    if (err) err.textContent = '❌ Nieprawidłowy kod zapisu.';
+  }
+}
+
+function askResetProgress() {
+  $('#ov').hidden = false;
+  $('#ovb').innerHTML = `
+    <h2>Skasować cały postęp?</h2>
+    <p style="color:var(--mu);font-size:0.86rem;margin:10px 0 16px">Wrócisz do stanu początkowego (100 🪙, 50 🍬 oraz 3 startowe kulki: Szarża, Topór i Trujący kolec).</p>
+    <div class="grid-2">
+      <button class="b" onclick="$('#ov').hidden=true">Anuluj</button>
+      <button class="b" style="background:#dc2626;border-color:#f87171" onclick="localStorage.removeItem(K);location.reload()">Tak, resetuj</button>
+    </div>
+  `;
+}
+
+function stp(p) {
+  p.innerHTML = `
+    <div class="cd">
+      <h2>🛒 Sklep Kosmetyczny</h2>
+      <small style="color:var(--mu)">Kupuj ślady, obwódki i efekty zwycięstwa za monety (masz 🪙 ${S.coins}).</small>
+    </div>
+    ${CAT.map(([k, n, L]) => `
+      <div class="cd">
+        <h3>${n}</h3>
+        ${L.map((it, i) => {
+          const own = S.sh[k].includes(i), eq = S.eq[k] == i;
+          return `
+            <div style="display:flex;justify-content:space-between;align-items:center;margin:8px 0;padding:8px;background:var(--cd-dark);border-radius:12px">
+              <span><b>${it.n}</b> ${own ? '' : '· ' + it.p + ' 🪙'}</span>
+              <button class="b ${eq ? 'ac' : ''}" style="width:auto;padding:8px 14px;margin:0;font-size:0.8rem" ${!own && S.coins < it.p ? 'disabled' : ''} onclick="buyCosmetic('${k}',${i})">
+                ${eq ? 'Założone' : own ? 'Załóż' : 'Kup'}
+              </button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `).join('')}
+  `;
+}
+
+function buyCosmetic(k, i) {
+  const cat = CAT.find(c => c[0] == k);
+  const it = cat && cat[2][i];
+  if (!it) return;
+  if (!S.sh[k].includes(i)) {
+    if (S.coins < it.p) return;
+    S.coins -= it.p;
+    S.sh[k].push(i);
+  }
+  S.eq[k] = i;
+  save();
+  SFX.win();
+  panel('st');
+}
+
+function bpp(p) {
+  const t = Math.floor(S.bp.p / 100);
+  p.innerHTML = `
+    <div class="cd hw-card">
+      <h2>🌙 Sezon Halloween</h2>
+      <p>Poziom <b>${Math.min(t, 20)} / 20</b> · (${S.bp.p % 100}/100 pkt)</p>
+      <div class="bar"><i style="width:${S.bp.p % 100}%"></i></div>
+      <small style="color:#fed7aa">Za każdy mecz zdobywasz punkty sezonowe!</small>
+    </div>
+    ${BPR.map((r, i) => `
+      <div class="cd" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Poziom ${i + 1}: <b>🪙 +${r.c} monet</b></span>
+        <button class="b ${t > i && !S.bp.cl.includes(i) ? 'ac' : ''}" style="width:auto;padding:8px 14px;margin:0" ${t > i && !S.bp.cl.includes(i) ? '' : 'disabled'} onclick="claimBp(${i})">
+          ${S.bp.cl.includes(i) ? 'Odebrano ✓' : 'Odbierz'}
+        </button>
+      </div>
+    `).join('')}
+  `;
+}
+
+function claimBp(i) {
+  if (!Number.isInteger(i) || !BPR[i]) return;
+  const t = Math.floor(S.bp.p / 100);
+  if (t <= i || S.bp.cl.includes(i)) return;
+  S.bp.cl.push(i);
+  S.coins += BPR[i].c;
+  save();
+  SFX.win();
+  panel('bp');
+}
+
+// ============================================================================
+// 3. WEKTOROWY GENERATOR SVG DLA WSZYSTKICH 130 KULEK + 5 BOSSÓW
+// ============================================================================
+const LIMIT = { projectiles: 96, zones: 48, particles: 150, events: 64, bounces: 8 };
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let fixedAccumulator = 0, frameLast = 0, serial = 0, peer = null, activeConn = null;
+const ART = new Map(), ART_IMAGES = new Map();
+
+function art(id) {
+  if (ART.has(id)) return ART.get(id);
+  const col = B[id]?.c || '#a855f7';
+  const path = (d, c = '#e2e8f0', w = 2) => `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const circle = (x, y, r, c = col) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`;
+  const poly = (pts, c = col) => `<polygon points="${pts}" fill="${c}" stroke="#f8fafc" stroke-width="1.2"/>`;
+  const line = (x, y, u, v, c = '#e2e8f0', w = 2) => path(`M${x} ${y}L${u} ${v}`, c, w);
+  const spokes = (n, r, shape) => Array.from({ length: n }, (_, i) => `<g transform="rotate(${i * 360 / n} 32 32)">${shape(r, i)}</g>`).join('');
+  let m = '';
+  switch (id) {
+    case 0: m = path('M6 22H23M3 32H19M8 42H23', '#7dd3fc', 3) + poly('24,14 53,32 24,50 31,32'); break;
+    case 1: m = line(20, 51, 43, 12, '#a16207', 6) + poly('31,13 51,10 56,29 39,34'); break;
+    case 2: m = poly('30,5 38,30 58,36 37,39 29,59 25,38 6,31 26,27') + circle(44, 14, 4, '#86efac'); break;
+    case 3: m = path('M13 23Q32 5 51 23L48 49Q32 58 16 49Z', col, 5) + path('M15 29Q32 38 49 29', '#111827', 7) + line(22, 29, 25, 29, '#fef08a', 3) + line(39, 29, 42, 29, '#fef08a', 3) + poly('43,43 54,49 45,57', '#fbbf24'); break;
+    case 4: m = poly('11,51 43,8 52,11 48,24 19,56') + line(13, 40, 28, 52, col, 5); break;
+    case 5: m = poly('8,27 46,23 57,28 57,34 30,37 22,52 14,49 17,36') + line(34, 17, 34, 24) + line(44, 14, 44, 24); break;
+    case 6: m = circle(32, 33, 12) + circle(32, 20, 7) + spokes(8, 25, () => path('M28 29L11 21L7 12', '#cbd5e1', 2)); break;
+    case 7: m = poly('9,12 32,22 55,12 50,54 32,43 14,54', '#6b123e') + circle(32, 27, 13, '#f8fafc') + poly('24,31 28,41 30,32', '#fff') + poly('35,32 37,41 41,31', '#fff'); break;
+    case 8: m = line(15, 52, 44, 16, '#92400e', 5) + poly('33,17 49,3 49,25 44,20'); break;
+    case 9: m = spokes(9, 24, () => poly('29,7 32,18 35,7', '#fdba74')) + poly('15,24 30,27 39,16 37,31 51,39 34,38 26,51 26,37 13,34'); break;
+    case 10: m = poly('17,52 49,52 42,43 44,21 32,11 16,23 27,29 22,36 24,43', '#f8fafc') + circle(35, 22, 2, '#0f172a') + path('M16 56H50', col, 4); break;
+    case 11: m = poly('12,14 46,9 55,45 20,55', '#dc2626') + circle(23, 24, 3, '#fff') + circle(42, 21, 3, '#fff') + circle(28, 41, 3, '#fff') + circle(46, 39, 3, '#fff') + circle(34, 32, 3, '#fff'); break;
+    case 12: m = poly('9,20 54,20 32,58', '#bae6fd') + path('M14 19Q15 1 29 9Q43-1 51 19', '#fff', 6) + path('M22 25L38 46M41 26L27 46', '#38bdf8'); break;
+    case 13: m = poly('6,24 23,24 23,40 6,40', '#475569') + line(24, 32, 60, 32, '#ef4444', 6) + line(24, 32, 60, 32, '#fff', 1); break;
+    case 14: m = path('M15 50C53 56 53 38 29 37S13 11 43 18', col, 9) + poly('38,10 56,18 42,25') + circle(47, 17, 2, '#fff'); break;
+    case 15: m = path('M36 6V41C36 59 10 57 13 36L23 43', col, 7) + circle(36, 9, 5, '#0f172a'); break;
+    case 16: m = poly('10,38 53,38 49,47 36,50 36,56 21,56 22,49 15,47', '#64748b') + line(33, 30, 45, 10, '#a16207', 6) + poly('30,8 52,17 48,28 25,19'); break;
+    case 17: m = path('M12 22C5 4 42 3 48 19S62 46 42 55S2 49 12 22', col, 4) + circle(26, 27, 9, '#5eead4') + circle(44, 41, 6, '#0f766e') + circle(18, 44, 4, '#99f6e4'); break;
+    case 18: m = poly('37,3 16,34 30,34 25,61 49,27 35,27', '#facc15') + path('M7 25L13 30M51 40L57 46'); break;
+    case 19: m = circle(32, 32, 22, '#312e81') + spokes(3, 25, () => path('M13 20Q32-2 51 20', '#a5b4fc', 3)) + circle(32, 32, 5, '#fff'); break;
+    case 20: m = poly('5,42 29,29 60,9 42,39 22,55') + line(7, 54, 42, 21, '#fff', 3) + path('M8 31L21 26M29 53L36 44'); break;
+    case 21: m = path('M11 11H53V53H11ZM25 11V53M39 11V53M11 25H53M11 39H53', col, 3) + circle(18, 18, 3, '#fff') + circle(32, 32, 4, '#fbbf24') + circle(46, 46, 3, '#fff'); break;
+    case 22: m = path('M31 21C1 2 2 58 25 55Q32 49 38 55C63 58 63 3 32 21', col, 6) + path('M31 21V10Q37 3 47 7Q43 17 32 14', '#4ade80', 4); break;
+    case 23: m = poly('11,25 47,18 57,35 18,42', '#475569') + circle(19, 47, 8, '#94a3b8') + circle(43, 45, 8, '#94a3b8') + circle(51, 26, 7, '#111827'); break;
+    case 24: m = spokes(8, 28, () => line(32, 15, 32, 4, col, 3) + circle(32, 4, 3)) + circle(32, 32, 18, '#4d7c0f') + circle(25, 26, 4, '#bef264') + circle(39, 39, 5, '#bef264'); break;
+    case 25: m = poly('32,2 55,54 32,47 9,54', '#94a3b8') + line(32, 11, 32, 43, '#fff', 3); break;
+    case 26: m = path('M20 7Q57 32 20 57L20 7', '#d97706', 3) + line(12, 32, 58, 32, '#f8fafc', 3) + poly('52,26 62,32 52,38'); break;
+    case 27: m = poly('9,23 15,45 49,45 55,23 42,32 32,13 23,32', '#eab308') + poly('34,25 26,36 33,36 30,44 39,32 32,32', '#fff'); break;
+    case 28: m = path('M8 32A24 24 0 1 1 32 56', col, 3) + path('M17 32A15 15 0 1 1 32 47', col, 3) + circle(32, 32, 5, '#fff') + poly('4,23 13,31 4,39'); break;
+    case 29: m = spokes(6, 27, () => path('M32 32V5M32 15L24 10M32 15L40 10', '#e0f2fe', 3)); break;
+    case 30: m = line(12, 53, 47, 12, col, 4) + path('M31 11H50V30M40 29L50 29M30 20V10', col, 3) + path('M11 52Q50 60 48 43', '#99f6e4'); break;
+    case 31: m = spokes(3, 23, () => circle(32, 14, 7, '#fbbf24') + path('M28 11L23 6M36 11L41 6', '#fff', 3)) + circle(32, 32, 8, '#78350f'); break;
+    case 32: m = poly('24,6 41,6 41,14 36,14 36,23 52,46 47,56 17,56 12,46 29,23 29,14 24,14', '#c084fc') + path('M20 39H44M24 47H38', '#f0abfc', 4); break;
+    case 33: m = path('M7 32Q32-5 57 32Q32 69 7 32', col, 3) + poly('34,12 21,35 32,34 29,53 43,29 32,29', '#fef08a'); break;
+    case 34: m = spokes(6, 28, () => path('M30 25L9 22L3 10', '#94a3b8', 2)) + poly('32,13 46,31 32,53 18,31', '#1e293b') + path('M25 27L32 36L39 27', '#ef4444', 3); break;
+    case 35: m = path('M15 55V22A17 17 0 0 1 49 22V55Z', '#9ca3af', 5) + path('M32 17V41M23 26H41', '#e2e8f0', 4) + line(10, 57, 54, 57, col, 4); break;
+    case 36: m = path('M11 48Q5 12 54 7Q48 40 11 48M11 48L48 14M18 37L19 23M29 28L41 28', col, 3); break;
+    case 37: m = poly('15,21 49,21 49,52 15,52', '#be185d') + line(32, 21, 32, 52, '#f9a8d4', 5) + path('M32 21C-1 4 34-7 32 21C33-6 63 4 32 21', '#f472b6', 4); break;
+    case 38: m = path('M7 48Q4 28 17 25Q18 4 37 14Q53 10 53 32Q65 49 49 54H14Z', col, 5) + circle(26, 35, 3, '#111827') + circle(43, 33, 3, '#111827'); break;
+    case 39: m = path('M8 22A10 10 0 1 0 27 25M36 40A10 10 0 1 0 55 43M23 28L41 36', '#a8a29e', 5) + circle(31, 32, 5, '#57534e'); break;
+    case 40: m = path('M25 6H39M28 7V27L12 49Q9 57 19 57H48Q56 57 50 48L36 27V7', col, 3) + path('M20 43H44', '#bef264', 7) + circle(32, 36, 3, '#fff'); break;
+    case 41: m = poly('5,18 17,12 59,43 49,55', '#fef08a') + line(12, 18, 53, 48, '#fff', 3) + path('M40 8V20M34 14H46M12 43V57M5 50H19', col, 2); break;
+    case 42: m = circle(20, 34, 14, '#4d7c0f') + circle(34, 26, 16, '#65a30d') + circle(48, 37, 12, '#4d7c0f') + path('M15 51Q20 44 25 51M37 52Q42 44 47 52', '#bef264', 3); break;
+    case 43: m = poly('32,4 38,23 58,18 43,33 54,53 34,43 15,57 21,37 3,25 25,24', '#cbd5e1') + circle(32, 32, 5, '#0f172a'); break;
+    case 44: m = path('M13 51C-4 8 59-2 56 34C54 58 21 63 20 36C18 16 45 17 44 33C44 44 29 44 30 33', col, 4); break;
+    case 45: m = path('M26 56V15Q32 4 38 15V56M26 37H15V23M38 33H49V19', col, 9) + path('M25 21L18 17M39 43L46 39M29 46L22 42', '#dcfce7', 2); break;
+    case 46: m = circle(29, 39, 20, '#334155') + path('M34 20Q33 4 49 11', '#d97706', 4) + poly('51,2 52,10 61,9 54,15 58,22 49,18 43,23 44,15 38,9 47,10', '#fb923c'); break;
+    case 47: m = `<ellipse cx="32" cy="32" rx="28" ry="11" transform="rotate(-30 32 32)" fill="none" stroke="#93c5fd" stroke-width="3"/>` + circle(32, 32, 15, '#1d4ed8') + circle(54, 19, 5, '#fbbf24'); break;
+    case 48: m = poly('23,8 41,8 41,23 56,23 56,41 41,41 41,56 23,56 23,41 8,41 8,23 23,23', '#f87171') + path('M15 33H23L28 25L35 42L41 33H50', '#fff', 2); break;
+    case 49: m = poly('32,3 57,32 32,61 7,32', '#a855f7') + poly('32,15 47,32 32,49 17,32', '#f5d0fe') + line(22, 32, 42, 32, col, 2); break;
+    case 50: m = poly('32,4 53,19 49,49 31,59 12,43 10,17', '#a5f3fc') + path('M32 4L25 23L41 31L30 43L31 59M10 17L25 23M41 31L49 49', '#0891b2', 2); break;
+    case 51: m = `<ellipse cx="32" cy="32" rx="15" ry="26" fill="#0f172a" stroke="#818cf8" stroke-width="5"/>` + path('M24 50Q46 38 23 29Q40 16 32 10', '#c4b5fd', 3); break;
+    case 52: m = poly('32,5 54,15 50,39 32,59 14,39 10,15', '#0891b2') + path('M32 12V49M18 20H45', '#a5f3fc', 3); break;
+    case 53: m = poly('18,10 46,10 44,44 20,44', '#581c87') + path('M9 44Q32 55 55 44', '#c084fc', 7) + poly('44,19 46,24 52,26 46,28 44,34 42,28 36,26 42,24', '#fff'); break;
+    case 54: m = path('M17 8H47M17 56H47M21 10C21 25 43 39 43 54M43 10C43 25 21 39 21 54', '#fbbf24', 4) + poly('25,50 32,38 39,50', '#fde68a'); break;
+    case 55: m = poly('10,14 32,8 54,14 50,50 32,56 14,50', '#1e293b') + path('M13 27H51', '#ef4444', 7) + line(22, 27, 25, 27, '#fff', 3) + line(39, 27, 42, 27, '#fff', 3) + path('M51 24L62 16M51 29L60 33', '#ef4444', 3); break;
+    case 56: m = poly('9,26 18,11 32,19 46,11 55,26', '#78350f') + circle(32, 36, 15, '#d6b58e') + path('M19 32H45', '#111827', 3) + circle(39, 33, 6, '#111827') + path('M25 44H38', '#fff', 2); break;
+    case 57: m = line(12, 55, 45, 13, '#92400e', 6) + path('M12 14Q37-1 57 30L39 22L26 25Z', '#facc15', 4); break;
+    case 58: m = poly('32,4 39,22 58,19 45,34 52,53 32,44 13,53 19,34 6,19 25,22', '#d97706') + circle(32, 32, 9, '#fef08a'); break;
+    case 59: m = poly('7,54 25,16 37,16 57,54', '#7c2d12') + path('M26 18L23 37L34 29L40 47M29 11L26 3M37 12L45 4', '#fb923c', 4); break;
+    case 60: m = path('M10 45Q0-1 34 15Q63-5 54 36Q60 65 31 49Q4 65 10 45', col, 4) + circle(32, 33, 10, '#fdf2f8') + path('M18 24L44 40M22 45L42 20', '#f9a8d4', 2); break;
+    case 61: m = poly('4,5 51,22 60,44 45,59 24,50', '#b91c1c') + circle(42, 39, 13, '#fb923c') + path('M8 9L32 31M19 9L39 26', '#fde68a', 3); break;
+    case 62: m = path('M8 10Q64 5 53 20Q-1 18 18 31Q55 24 45 40Q11 36 28 53L35 60', col, 5); break;
+    case 63: m = poly('32,5 60,54 4,54', '#c4b5fd') + path('M2 26H22', '#fff', 3) + path('M41 26L62 14', '#ef4444', 3) + path('M43 31H63', '#facc15', 3) + path('M46 36L62 48', '#22d3ee', 3); break;
+    case 64: m = path('M8 24L19 14V50L8 40ZM28 19Q46 32 28 45M37 10Q63 32 37 54', col, 4); break;
+    case 65: m = circle(32, 32, 12, '#0f172a') + spokes(4, 28, () => path('M12 20Q12 0 32 5L27 11M32 5L37 10', col, 3)); break;
+    case 66: m = circle(32, 9, 5, '#0f172a') + path('M32 14V52M19 25H45M8 38Q12 53 32 57Q52 53 56 38M8 38L6 49M8 38L19 39M56 38L45 39M56 38L58 49', col, 5); break;
+    case 67: m = `<ellipse cx="32" cy="27" rx="17" ry="22" fill="#bfdbfe" stroke="#cbd5e1" stroke-width="5"/>` + line(32, 50, 32, 59, '#94a3b8', 6) + path('M22 29L36 14M29 36L41 22', '#fff', 3); break;
+    case 68: m = circle(32, 32, 21, '#020617') + path('M5 32Q5 5 32 5M59 32Q59 59 32 59', col, 5) + path('M12 40Q0 2 39 14Q64 26 41 49Q9 65 17 30', '#a855f7', 2); break;
+    case 69: m = spokes(10, 29, () => poly('29,13 32,2 35,13', '#fbbf24')) + circle(32, 32, 15, '#facc15') + circle(27, 27, 5, '#fef3c7'); break;
+    case 70: m = path('M41 5A27 27 0 1 0 59 43A25 25 0 0 1 41 5Z', '#e2e8f0', 3) + circle(20, 36, 4, '#94a3b8') + circle(27, 48, 3, '#94a3b8'); break;
+    case 71: m = circle(31, 32, 23, '#fbbf24') + circle(39, 28, 23, '#1e1b4b') + path('M8 49Q32 67 55 45', '#818cf8', 3); break;
+    case 72: m = spokes(8, 29, () => poly('30,16 32,1 35,16', '#fef08a')) + poly('32,8 40,25 57,32 40,39 32,57 25,39 8,32 25,25', '#fde047'); break;
+    case 73: m = path('M8 43Q2 15 23 20Q29-3 44 17Q65 10 56 39Q67 59 39 51Q13 68 8 43', col, 5) + circle(24, 33, 2, '#fff') + circle(41, 25, 3, '#fff') + circle(38, 46, 2, '#fff'); break;
+    case 74: m = circle(32, 32, 10, '#ecfeff') + path('M6 32H19L25 10L32 52L40 20L46 32H58', col, 3) + path('M14 15A24 24 0 0 1 54 32M50 50A24 24 0 0 1 9 32', col, 2); break;
+    case 75: m = poly('6,8 30,26 32,30 34,26 58,8 41,32 58,56 34,38 32,34 30,38 6,56 23,32') + circle(32, 32, 9, '#fff'); break;
+    case 76: m = path('M4 12L39 23M4 29L34 31M10 48L36 39', '#7dd3fc', 4) + circle(43, 32, 15, '#0ea5e9') + path('M39 21L48 31L38 43', '#e0f2fe', 3); break;
+    case 77: m = poly('14,8 42,5 57,24 53,47 32,59 8,44 4,23', '#78716c') + circle(21, 25, 7, '#44403c') + circle(42, 39, 9, '#57534e') + circle(40, 16, 4, '#a8a29e'); break;
+    case 78: m = path('M9 19Q32-4 55 19L9 45Q32 68 55 45Z', col, 3) + circle(14, 19, 6, '#fff') + circle(50, 45, 6, '#fff') + path('M18 32H46', col, 2); break;
+    case 79: m = spokes(3, 26, () => `<ellipse cx="32" cy="32" rx="27" ry="10" fill="none" stroke="#6ee7b7" stroke-width="2"/>`) + circle(32, 32, 7, '#10b981') + circle(56, 25, 4, '#fff'); break;
+    case 80: m = circle(32, 32, 24, '#7f1d1d') + path('M17 32H47M32 17V47', '#fca5a5', 7); break;
+    case 81: m = circle(32, 32, 24, '#334155') + circle(32, 32, 13, '#94a3b8') + path('M13 15L19 21M45 43L51 49', '#e2e8f0', 4); break;
+    case 82: m = `<ellipse cx="32" cy="32" rx="28" ry="13" transform="rotate(-40 32 32)" fill="none" stroke="#fde047" stroke-width="2"/>` + circle(44, 18, 9, '#facc15') + line(39, 18, 49, 18, '#111827', 3); break;
+    case 83: m = spokes(5, 28, () => path('M32 32L29 16L36 13L32 3', col, 3)); break;
+    case 84: m = path('M32 3Q25 27 16 16Q-2 47 21 57Q7 42 32 28Q51 39 43 58Q70 44 43 13Q45 29 32 3', col, 4); break;
+    case 85: m = path('M4 54Q10 4 41 11Q59 16 51 31Q42 42 33 30Q42 30 40 23Q19 16 27 54Z', col, 5) + path('M5 58H59', '#bae6fd', 3); break;
+    case 86: m = path('M6 48H18L22 27L29 52L34 8L40 48H58', '#fbbf24', 4) + path('M5 57L17 54L31 60L44 54L59 57', col, 3); break;
+    case 87: m = path('M9 24Q3 10 19 13Q28-1 40 12Q58 7 57 26H9', col, 5) + poly('33,28 23,43 32,43 27,59 45,36 35,36', '#e0f2fe') + path('M5 36L17 33M48 49L59 43', col, 3); break;
+    case 88: m = path('M7 18Q16 3 29 12Q47 1 57 20H7', col, 5) + spokes(3, 22, () => path('M27 38L37 48M27 48L37 38M32 36V50', '#fff', 2)); break;
+    case 89: m = path('M8 51Q32 1 56 51M13 51Q32 15 51 51M18 51Q32 28 46 51', col, 3) + circle(32, 28, 5, '#fef3c7'); break;
+    case 90: m = path('M12 54V27Q10 4 32 6Q56 5 52 29V54L42 46L32 56L22 46Z', col, 4) + circle(24, 26, 4, '#fff') + circle(40, 26, 4, '#fff'); break;
+    case 91: m = poly('11,13 49,9 55,49 37,55 27,48 13,55', '#4338ca') + path('M17 24L26 21M38 20L47 24M23 39H42M30 39V47', '#c7d2fe', 4); break;
+    case 92: m = path('M6 54Q15 35 22 21Q23 8 34 9Q50 10 43 25Q36 32 58 51L43 47L35 58L27 47L17 56', col, 5) + path('M26 21L37 20', '#ddd6fe', 3); break;
+    case 93: m = line(16, 57, 40, 11, '#a16207', 5) + path('M20 13Q46-6 59 29Q39 12 28 28Z', '#cbd5e1', 3); break;
+    case 94: m = circle(32, 26, 20, '#f1f5f9') + poly('19,33 45,33 42,53 22,53', '#e2e8f0') + circle(24, 26, 6, '#111827') + circle(40, 26, 6, '#111827') + path('M27 43V50M36 43V50', '#111827', 3); break;
+    case 95: m = path('M8 17Q23 4 32 18Q46 4 56 17L51 46Q40 61 32 43Q22 61 13 46Z', col, 4) + path('M17 27L26 23M39 23L48 27M19 37Q26 46 30 36M36 38Q40 31 48 37', '#fce7f3', 3); break;
+    case 96: m = line(32, 7, 32, 53, '#e2e8f0', 4) + line(12, 21, 52, 21, '#e2e8f0', 4) + path('M12 21L4 40H23ZM52 21L42 40H61Z', col, 2) + poly('32,51 44,59 20,59', '#e2e8f0'); break;
+    case 97: m = poly('32,29 3,8 13,36 6,44 29,42 32,59 37,42 58,44 50,35 61,8', '#fb923c') + poly('32,8 40,25 32,42 24,25', '#fde047'); break;
+    case 98: m = circle(32, 22, 15, '#0f766e') + path('M20 32Q4 39 9 57M27 33Q14 48 25 58M36 33Q32 54 42 57M44 31Q62 39 56 57', '#2dd4bf', 5) + circle(26, 21, 3, '#fff') + circle(38, 21, 3, '#fff'); break;
+    case 99: m = path('M10 29Q10 13 24 18Q32 10 40 18Q57 13 55 35Q57 55 40 53Q32 59 24 53Q6 54 10 29', col, 6) + poly('17,28 26,32 17,36', '#fef08a') + poly('47,28 38,32 47,36', '#fef08a') + path('M22 44L29 40L34 46L42 40', '#fef08a', 3) + path('M32 17Q26 4 39 4', '#65a30d', 5); break;
+    case 100: m = poly('9,33 29,2 39,24 56,33', '#7e22ce') + path('M9 33H56', col, 5) + circle(32, 42, 13, '#bef264') + poly('23,38 28,40 23,43', '#111827') + path('M29 50H41', '#111827', 3); break;
+    case 101: m = path('M8 25H56L50 51Q32 63 14 51Z', '#15803d', 5) + path('M20 19Q12 10 23 4M34 19Q26 10 37 3M47 20Q40 11 51 4', '#a3e635', 3) + path('M5 25H59', '#cbd5e1', 4); break;
+    case 102: m = poly('12,10 29,20 38,19 54,8 51,42 39,54 23,53 12,43', '#0f172a') + path('M19 32L28 29M38 29L46 32', '#38bdf8', 4) + path('M27 42L33 46L39 42', '#94a3b8', 2); break;
+    case 103: m = poly('3,15 23,27 26,16 32,22 38,16 41,27 61,15 55,44 46,38 39,47 32,40 24,47 17,38 9,44', '#6366f1') + circle(29, 29, 2, '#fff') + circle(36, 29, 2, '#fff'); break;
+    case 104: m = poly('13,12 47,8 55,42 40,55 19,54 11,37', '#4d7c0f') + path('M18 18L29 21M24 16L23 24M36 20L43 19M18 39L43 42M24 37V45M36 38V46', '#d9f99d', 3); break;
+    case 105: m = circle(32, 18, 11, '#d97706') + path('M32 29V48M32 33L13 43M32 33L51 43M32 47L22 59M32 47L43 59', '#b45309', 8) + path('M25 15L29 20M29 15L25 20M37 15L41 20M41 15L37 20M12 8L28 31', '#fef3c7', 2); break;
+    case 106: m = poly('9,17 55,17 40,8 29,2 23,13', '#ca8a04') + circle(32, 29, 12, '#d6b58e') + path('M9 41H56M32 40V57M20 41L12 55M44 41L54 55', '#ca8a04', 6) + path('M25 26L29 30M29 26L25 30M37 26L41 30M41 26L37 30M25 35H42', '#422006', 2); break;
+    case 107: m = path('M34 3Q17 19 24 29Q5 22 9 43Q13 61 33 58Q58 57 54 35Q52 22 43 15Q45 33 34 3', col, 4) + path('M30 31Q16 52 32 54Q46 52 37 35Q36 45 30 31', '#cffafe', 3); break;
+    case 108: m = poly('14,6 50,6 56,48 8,48', '#b45309') + circle(22, 24, 5, '#fef08a') + circle(42, 24, 5, '#fef08a'); break;
+    case 109: m = path('M12 52Q32 10 52 52', '#a855f7', 5) + circle(32, 24, 8, '#e9d5ff'); break;
+    case 110: m = poly('20,4 44,4 52,56 12,56', '#64748b') + line(32, 10, 32, 50, '#f1f5f9', 4); break;
+    case 111: m = circle(32, 32, 24, '#dc2626') + path('M12 32H52', '#fff', 4); break;
+    case 112: m = spokes(6, 26, () => path('M32 32L24 10', '#f97316', 3)); break;
+    case 113: m = path('M10 40Q32 10 54 40Z', '#eab308', 4) + circle(32, 28, 6, '#fff'); break;
+    case 114: m = poly('16,12 48,12 44,52 20,52', '#475569') + path('M24 22H40', '#cbd5e1', 3); break;
+    case 115: m = circle(32, 32, 20, '#7e22ce') + path('M16 32H48', '#c084fc', 4); break;
+    case 116: m = `<ellipse cx="32" cy="32" rx="20" ry="24" fill="#1e1b4b" stroke="#ec4899" stroke-width="3"/>`; break;
+    case 117: m = circle(32, 32, 22, '#ef4444') + path('M12 22L52 42', '#fff', 3); break;
+    case 118: m = poly('12,50 32,12 52,50', '#ea580c') + circle(32, 34, 6, '#fef08a'); break;
+    case 119: m = circle(32, 32, 21, '#0f766e') + path('M20 20L44 44', '#5eead4', 4); break;
+    case 120: m = circle(32,28,13,'#a78bfa')+path('M23 29Q32 10 41 29M27 41H37', '#f5f3ff',4)+circle(32,45,7,'#6d28d9'); break;
+    case 121: m = spokes(6,25,()=>poly('32,5 40,17 32,24 24,17','#a5f3fc'))+circle(32,32,9,'#e0f2fe'); break;
+    case 122: m = path('M7 43L20 19 32 33 44 19 57 43', '#8b5cf6',6)+circle(32,31,8,'#111827')+circle(26,30,2,'#c4b5fd')+circle(38,30,2,'#c4b5fd'); break;
+    case 123: m = circle(32,36,21,'#f59e0b')+poly('21,31 28,30 25,37','#0f172a')+poly('36,30 43,30 39,37','#0f172a')+path('M20 45Q32 55 44 45','#082f49',5)+line(32,18,32,7,'#65a30d',5); break;
+    case 124: m = poly('32,3 54,17 49,45 32,60 15,45 10,17','#334155')+path('M19 24H45M32 15V52','#e2e8f0',5); break;
+    case 125: m = circle(32,32,22,'#f472b6')+spokes(5,20,()=>circle(32,10,4,'#fff'))+path('M20 38Q32 22 44 38','#7c2d12',6); break;
+    case 126: m = poly('14,36 5,22 25,25 32,11 39,25 59,22 50,36 44,48 20,48','#7c3aed')+circle(32,31,8,'#111827'); break;
+    case 127: m = poly('18,10 46,10 51,47 32,59 13,47','#65a30d')+circle(26,29,6,'#bef264')+circle(40,39,4,'#d9f99d'); break;
+    case 128: m = path('M13 14Q32 5 51 14L48 49Q32 58 16 49Z','#e879f9',5)+circle(23,29,4,'#fdf4ff')+circle(41,29,4,'#fdf4ff')+path('M22 42Q32 35 42 42','#581c87',4); break;
+    case 129: m = poly('32,3 51,20 45,48 32,61 19,48 13,20','#22d3ee')+path('M35 14L25 33 37 33 27 51','#fff',4); break;
+  }
+  const grain = Array.from({ length: 5 }, (_, k) => circle(12 + ((id * 13 + k * 17) % 41), 12 + ((id * 7 + k * 11) % 41), 0.6, '#ffffff38')).join('');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="${esc(B[id]?.n || 'Kula')}"><rect x="1" y="1" width="62" height="62" rx="18" fill="#0b081c" stroke="${col}" stroke-opacity=".55"/>${m}${grain}</svg>`;
+  ART.set(id, svg);
+  return svg;
+}
+
+const orbHTML = b => `<span class="orb" style="--oc:${b.c};--rc:${RC[b.r]};width:56px;height:56px">${art(b.id)}</span>`;
+
+function preloadArt() {
+  for (let i = 0; i < B.length; i++) {
+    const im = new Image();
+    im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(art(i));
+    ART_IMAGES.set(i, im);
+  }
+}
+
+function refreshPeriods() {
+  const day = new Date().toDateString(), wk = Math.floor(Date.now() / 6048e5);
+  if (S.q.d !== day) S.q = { d: day, play: 0, win: 0, gacha: 0, bn: 0, rare: 0, tw: 0, cl: [], tb: rnd(S.own) };
+  if (S.wq.k !== wk) S.wq = { k: wk, win: 0, play: 0, boss: 0, cl: [] };
+}
+
+// ============================================================================
+// 4. ROZGRYWKA I AI PREDYKCJI
+// ============================================================================
+// ───────────────────────── Arena physics & rendering ─────────────────────────
+function obstacleKinds(arena) {
+  return arena===0?['pumpkin','coffin','tomb']:arena===1?['asteroid','planet']:arena===2?['rock','basalt']:arena===3?['iceberg','crystal']:arena===4?['coral','shell']:['neon','hologram'];
+}
+function randomEmptyPoint(items, margin=63) {
+  for(let j=0;j<100;j++) {
+    const x=margin+Math.random()*(360-margin*2), y=95+Math.random()*170;
+    // Safe from two spawn positions, and from other obstacles/portal destinations.
+    if(Math.hypot(x-180,y-300)<64 || Math.hypot(x-180,y-60)<64) continue;
+    if(items.every(p=>Math.hypot(x-p.x,y-p.y)>(p.r||18)+37)) return {x,y};
+  }
+  return {x:55+Math.random()*250,y:125+Math.random()*110};
+}
+function createRoundArena(g) {
+  const cfg=settingsForArena(g.th), kinds=obstacleKinds(g.th);
+  g.obstacles=[];g.portal=null;g.arenaFxTime=0;
+  if(cfg.obstacles) {
+    const count=clamp(Number(cfg.count)||3,2,5);
+    for(let i=0;i<count;i++) {
+      const point=randomEmptyPoint(g.obstacles), kind=kinds[i%kinds.length];
+      const r=kind==='coffin'?21:kind==='tomb'?20:kind==='asteroid'?20:18;
+      g.obstacles.push({...point,r,kind,moving:g.th===0,
+        moveClock:3+Math.random()*6, moveDuration:0, dx:0,dy:0, seed:Math.random()*6.28});
+    }
+  }
+  if(Math.random()<0.38) {
+    const at=randomEmptyPoint(g.obstacles);
+    g.portal={...at,r:21,seed:Math.random()*6.28};
+  }
+}
+function obstacleSpark(x,y) {
+  if(!G || !settingsForArena(G.th).fx) return;
+  G.fx ||= [];
+  for(let i=0;i<5;i++) {
+    if(G.fx.length>140)break;
+    const a=Math.random()*Math.PI*2;
+    G.fx.push({x,y,vx:Math.cos(a)*(20+Math.random()*65),vy:Math.sin(a)*(20+Math.random()*65),r:1.2+Math.random()*1.8,c:'#fcd34d',life:.3,max:.3});
+  }
+}
+function portalVisual(o,x,y) {
+  if(!settingsForArena(G.th).fx)return;
+  G.rings ||= [];
+  G.rings.push({x:o.x,y:o.y,age:0,life:.55,radius:14,c:'#7c3aed'});
+  G.rings.push({x,y,age:0,life:.55,radius:11,c:'#a78bfa'});
+  obstacleSpark(x,y);
+}
+function moveArena(dt) {
+  if(!G)return;
+  G.arenaFxTime=(G.arenaFxTime||0)+dt;
+  for(const p of G.obstacles||[]) {
+    if(!p.moving)continue;
+    if(p.moveDuration>0) {
+      const dx=p.dx*dt,dy=p.dy*dt;
+      p.x=clamp(p.x+dx,35,325);p.y=clamp(p.y+dy,102,258);
+      p.moveDuration-=dt;
+    } else {
+      p.moveClock-=dt;
+      if(p.moveClock<=0) {
+        const kind=p.kind;
+        const gap=kind==='pumpkin'?5+Math.random()*5:kind==='coffin'?9+Math.random()*7:12+Math.random()*7;
+        p.moveClock=gap;
+        p.moveDuration=.45+Math.random()*.5;
+        const ang=Math.random()*Math.PI*2;
+        p.dx=Math.cos(ang)*(22+Math.random()*22);
+        p.dy=Math.sin(ang)*(22+Math.random()*22);
+      }
+    }
+  }
+}
+function collideWithArena(o,dt) {
+  o.portalCooldown=Math.max(0,(o.portalCooldown||0)-dt);
+  o.obstacleCooldown=Math.max(0,(o.obstacleCooldown||0)-dt);
+  for(const p of G.obstacles||[]) {
+    const dx=o.x-p.x,dy=o.y-p.y;
+    const dist=Math.hypot(dx,dy), minDist=o.r+p.r;
+    if(dist>=minDist)continue;
+    const nx=dist>0.001?dx/dist:1, ny=dist>0.001?dy/dist:0;
+    o.x=p.x+nx*(minDist+0.5);o.y=p.y+ny*(minDist+0.5);
+    const inward=o.vx*nx+o.vy*ny;
+    if(inward<0){o.vx-=2*inward*nx;o.vy-=2*inward*ny;}
+    o.x=clamp(o.x,o.r,360-o.r);o.y=clamp(o.y,o.r,360-o.r);
+    if(o.obstacleCooldown<=0){
+      obstacleSpark(o.x-nx*o.r,o.y-ny*o.r);
+      o.obstacleCooldown=.20;
+      if(netRole!=='guest') {S.ach.bounces++;S.q.bn=(S.q.bn||0)+1;checkAchievements();}
+    }
+  }
+  const portal=G.portal;
+  if(portal && o.portalCooldown<=0 && Math.hypot(o.x-portal.x,o.y-portal.y)<o.r+portal.r-5) {
+    const destination=randomEmptyPoint([...(G.obstacles||[]),portal,...G.bl.filter(t=>t!==o)] , 40);
+    o.x=destination.x;o.y=destination.y;
+    window.BVBCampaign?.onPortal?.(G,o);
+    o.portalCooldown=2+Math.random()*3;
+    portalVisual(portal,o.x,o.y);
+    if(netRole!=='guest') {S.ach.portals++;checkAchievements();}
+  }
+}
+const decorPoint=(i,salt=0)=>({x:((i*79+salt*37)%331)+13,y:((i*103+salt*51)%335)+13});
+function drawArenaBackground() {
+  const ar=ARENAS[G.th]||ARENAS[0];
+  let base=cx.createLinearGradient(0,0,360,360);
+  base.addColorStop(0, ar.bg);base.addColorStop(1,ar.bg2);
+  cx.fillStyle=base;cx.fillRect(0,0,360,360);
+  const t=(G.arenaFxTime||0), fx=settingsForArena(G.th).fx;
+  cx.save();
+  if(G.th===0){ // cmentarz Halloween
+    cx.fillStyle='#130d1c';cx.fillRect(0,265,360,95);
+    for(let i=0;i<8;i++){const x=15+i*48;cx.fillStyle='#403b53';cx.fillRect(x,252+(i%3)*11,16,30);cx.beginPath();cx.arc(x+8,252+(i%3)*11,8,Math.PI,0);cx.fill();}
+    cx.fillStyle='#ddd6fe';cx.globalAlpha=.4;cx.beginPath();cx.arc(295,48,26,0,7);cx.fill();
+    if(fx){for(let i=0;i<8;i++){cx.globalAlpha=.07+Math.sin(t*.8+i)*.025;cx.fillStyle='#d8b4fe';cx.beginPath();cx.ellipse(((i*61+t*8)%450)-40,130+i*24,90,12,0,0,7);cx.fill();}
+      for(let i=0;i<3;i++){cx.globalAlpha=.16;cx.font='23px serif';cx.fillText('👻',30+i*135+Math.sin(t*.6+i)*14,76+i*57+Math.cos(t+i)*9);}} 
+  } else if(G.th===1){ // gwiazdy, planety
+    for(let i=0;i<55;i++){const q=decorPoint(i);cx.globalAlpha=.3+((i%4)*.16);cx.fillStyle='#e0e7ff';cx.fillRect(q.x,q.y,i%7?1.3:2.2,i%7?1.3:2.2);}
+    cx.globalAlpha=.75;cx.fillStyle='#6474c5';cx.beginPath();cx.arc(294,80,38,0,7);cx.fill();cx.strokeStyle='#a5b4fc';cx.lineWidth=3;cx.beginPath();cx.ellipse(294,80,55,12,-.3,0,7);cx.stroke();
+    if(fx) {cx.globalAlpha=.6;cx.strokeStyle='#dbeafe';for(let i=0;i<2+(G.rare==='fx'?4:0);i++){const x=(t*54+i*173)%430-40;cx.beginPath();cx.moveTo(x,35+i*120);cx.lineTo(x-27,51+i*120);cx.stroke();}}
+  } else if(G.th===2){
+    for(let i=0;i<12;i++){const x=i*36;cx.fillStyle=i%2?'#552018':'#381616';cx.beginPath();cx.moveTo(x,315);cx.lineTo(x+18,245-(i%3)*16);cx.lineTo(x+40,315);cx.fill();}
+    cx.fillStyle='#fb451e';cx.globalAlpha=.35;cx.fillRect(0,326,360,34);
+    if(fx)for(let i=0;i<22;i++){const q=decorPoint(i);cx.fillStyle='#fb923c';cx.globalAlpha=.15+(i%4)*.1;cx.fillRect(q.x,((q.y-t*(10+i%4*4))%360+360)%360,2.3,5);}
+  } else if(G.th===3){
+    for(let i=0;i<14;i++){const x=i*27;cx.fillStyle=i%2?'#85d6fa':'#388aae';cx.globalAlpha=.15;cx.beginPath();cx.moveTo(x,360);cx.lineTo(x+15,272-i%4*14);cx.lineTo(x+30,360);cx.fill();}
+    if(fx)for(let i=0;i<39;i++){const q=decorPoint(i);cx.globalAlpha=.3+(i%3)*.12;cx.fillStyle='#dff7ff';cx.fillRect(q.x,((q.y+t*(6+i%3*4))%354),2,2);}
+  } else if(G.th===4){
+    for(let i=0;i<7;i++){const y=35+i*50;cx.strokeStyle='#0fa5ac';cx.globalAlpha=.25;cx.lineWidth=2;cx.beginPath();cx.moveTo(0,y);cx.quadraticCurveTo(180,y+24+Math.sin(t+i)*7,360,y);cx.stroke();}
+    for(let i=0;i<14;i++){cx.globalAlpha=.5;cx.fillStyle='#0d9488';cx.fillRect(i*29,335-i%4*12,4,40);}
+    if(fx)for(let i=0;i<16;i++){const q=decorPoint(i);cx.globalAlpha=.25;cx.strokeStyle='#d1fae5';cx.beginPath();cx.arc(q.x,((q.y-t*(13+i%5*3))%370+370)%370,3+i%3,0,7);cx.stroke();}
+  } else {
+    for(let i=0;i<9;i++){const x=i*43;cx.globalAlpha=.52;cx.fillStyle='#170e34';cx.fillRect(x,165+(i%4)*20,31,195);cx.strokeStyle=i%2?'#2dd4bf':'#f472b6';cx.lineWidth=2;cx.strokeRect(x+2,175+(i%4)*20,27,15);}
+    if(fx)for(let i=0;i<13;i++){const x=decorPoint(i).x;cx.globalAlpha=.12+(.08*Math.sin(t*2+i));cx.fillStyle=i%2?'#22d3ee':'#f472b6';cx.fillRect(x,0,2,360);}
+  }
+  cx.restore();
+  if(G.rare==='night'){cx.fillStyle='#03010b88';cx.fillRect(0,0,360,360);}
+  if(G.rare==='fx' && fx){for(let i=0;i<12;i++){const q=decorPoint(i,11),a=(Math.sin(t*2+i)+1)/2;cx.fillStyle=ar.ac;cx.globalAlpha=.12+.33*a;cx.beginPath();cx.arc(q.x,q.y,2+i%3,0,7);cx.fill();}cx.globalAlpha=1;}
+  cx.save();cx.strokeStyle=ar.ac;cx.globalAlpha=.45;cx.lineWidth=3;cx.strokeRect(2,2,356,356);cx.restore();
+  cx.save();cx.font='bold 12px Segoe UI, sans-serif';cx.fillStyle='#e2e8f0';cx.globalAlpha=.8;cx.fillText(ar.name+(G.rare==='night'?' 🌙':G.rare==='fx'?' ✨':''),12,20);cx.restore();
+}
+function drawArenaItems() {
+  const ar=ARENAS[G.th]||ARENAS[0],t=(G.arenaFxTime||0);
+  for(const p of G.obstacles||[]) {
+    cx.save();cx.translate(p.x,p.y);
+    cx.shadowColor=ar.ac;cx.shadowBlur=6;
+    if(p.kind==='pumpkin') {cx.fillStyle='#ea580c';cx.beginPath();cx.ellipse(0,2,18,16,0,0,7);cx.fill();cx.fillStyle='#166534';cx.fillRect(-3,-20,6,9);cx.fillStyle='#24100c';cx.beginPath();cx.moveTo(-10,-2);cx.lineTo(-4,-9);cx.lineTo(-1,-1);cx.moveTo(3,-2);cx.lineTo(9,-9);cx.lineTo(12,-2);cx.fill();cx.fillRect(-5,7,11,3);}
+    else if(p.kind==='coffin'||p.kind==='tomb'){cx.fillStyle=p.kind==='coffin'?'#71472d':'#737381';cx.strokeStyle='#ddd6fe';cx.lineWidth=2;cx.beginPath();cx.moveTo(-13,-15);cx.lineTo(13,-15);cx.lineTo(20,-7);cx.lineTo(14,17);cx.lineTo(-14,17);cx.lineTo(-20,-7);cx.closePath();cx.fill();cx.stroke();cx.strokeStyle='#e5e7eb';cx.beginPath();cx.moveTo(0,-10);cx.lineTo(0,11);cx.moveTo(-7,-2);cx.lineTo(7,-2);cx.stroke();}
+    else if(p.kind==='rock'||p.kind==='basalt'||p.kind==='asteroid'){cx.fillStyle=p.kind==='asteroid'?'#64748b':'#7c3423';cx.beginPath();for(let i=0;i<7;i++){const a=i*2*Math.PI/7;const r=p.r*(i%2?.78:1);i?cx.lineTo(Math.cos(a)*r,Math.sin(a)*r):cx.moveTo(Math.cos(a)*r,Math.sin(a)*r);}cx.closePath();cx.fill();}
+    else if(p.kind==='planet'){cx.fillStyle='#7c83d8';cx.beginPath();cx.arc(0,0,p.r,0,7);cx.fill();cx.strokeStyle='#a5b4fc';cx.beginPath();cx.ellipse(0,0,26,7,.4,0,7);cx.stroke();}
+    else if(p.kind==='iceberg'||p.kind==='crystal'){cx.fillStyle='#90dff7';cx.strokeStyle='#e0f2fe';cx.lineWidth=2;cx.beginPath();cx.moveTo(0,-21);cx.lineTo(18,10);cx.lineTo(9,18);cx.lineTo(-14,18);cx.lineTo(-20,5);cx.closePath();cx.fill();cx.stroke();}
+    else if(p.kind==='coral'||p.kind==='shell'){cx.strokeStyle='#5eead4';cx.lineWidth=5;for(let i=-1;i<=1;i++){cx.beginPath();cx.moveTo(0,16);cx.lineTo(i*8,-4);cx.lineTo(i*12,-16);cx.stroke();}}
+    else {cx.strokeStyle=p.kind==='neon'?'#22d3ee':'#f472b6';cx.lineWidth=4;cx.strokeRect(-16,-16,32,32);cx.fillStyle='#4c1d95';cx.globalAlpha=.5;cx.fillRect(-13,-13,26,26);}
+    cx.restore();
+  }
+  if(G.portal){const p=G.portal;cx.save();cx.translate(p.x,p.y);const rot=t*1.7+p.seed;cx.shadowColor='#7c3aed';cx.shadowBlur=18;for(let i=0;i<3;i++){cx.strokeStyle=['#8b5cf6','#a78bfa','#c084fc'][i];cx.lineWidth=4-i;cx.beginPath();cx.ellipse(0,0,13+i*4,9+i*3,rot+i*2,0,7);cx.stroke();}cx.fillStyle='#03000a';cx.beginPath();cx.arc(0,0,12,0,7);cx.fill();cx.restore();}
+}
+function computeBotAim(bx, by, px, py, pvx, pvy, dLevel) {
+  const leadTime = 0.35 + dLevel * 0.18;
+  let predX = px + pvx * 112 * leadTime;
+  let predY = py + pvy * 112 * leadTime;
+  if (predX < 20) predX = 40 - predX;
+  if (predX > W - 20) predX = 2 * (W - 20) - predX;
+  if (predY < 20) predY = 40 - predY;
+  if (predY > W - 20) predY = 2 * (W - 20) - predY;
+
+  const chosen = Math.atan2(predY - by, predX - bx);
+  const jitter = (Math.random() - 0.5) * 2 * ERR[clamp(dLevel, 0, 4)];
+  return chosen + jitter;
+}
+
+function actor(b, x, y, a, own, team = own, customTier, customDmgLv, customHpLv) {
+  const st = getBallStats(b.id, customTier, customDmgLv, customHpLv);
+  return {
+    uid: ++serial,
+    b: { ...b },
+    x, y, own, team,
+    r: b.isBoss ? 24 : 17,
+    tier: st.tier,
+    hp: b.isBoss ? Math.round(st.hp * (b.bossHpMult || 1.65)) : st.hp,
+    mh: b.isBoss ? Math.round(st.hp * (b.bossHpMult || 1.65)) : st.hp,
+    baseDmg: b.isBoss ? Math.round(st.dmg * (b.bossDmgMult || 1.15)) : st.dmg,
+    power: 1.0,
+    vx: Math.cos(a),
+    vy: Math.sin(a),
+    cd: 1.15,
+    abilityCd: 0.6 + (st.cd || 0),
+    contact: 0,
+    t: 0,
+    trail: [],
+    trailClock: 0,
+    status: {}
+  };
+}
+
+const alive = o => o && o.hp > 0 && !o.gone;
+
+function freshGame(mode, my, bt) {
+  return {
+    m: mode, my, bt,
+    sv: [1, 3, 7, 10].includes(mode),
+    w: 1,
+    h: [3, 3],
+    ph: 'draft',
+    pa: -Math.PI / 2,
+    bl: [], pr: [], z: [], events: [], fx: [], rings: [], pop: [],
+    rt: 0, th: chooseArena(), rare: (Math.random()<RARE_CHANCE ? (Math.random()<.5?'night':'fx') : ''),
+    obstacles:[], portal:null, arenaFxTime:0,
+    matchId: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    dn: 1, score: [0, 0], bossIndex: 0, rn: 0
+  };
+}
+
+function startMatch(mode = 0) {
+  if (netRole === 'guest' && activeConn) { netStatus('Host rozpoczyna mecz. Poczekaj na synchronizację.'); return; }
+  $('#ov').hidden = true;
+  refreshPeriods();
+  const own = B.filter(b => S.own.includes(b.id));
+  const myThree = mode === 4 ? B : (own.length >= 3 ? sh(own).slice(0, 3) : [B[0], B[1], B[2]]);
+  if (mode === 12 && (!activeConn?.open || netRole !== 'host' || !guestOnlineDeck)) {
+    netStatus('Poczekaj na połączenie i kolekcję znajomego.'); return;
+  }
+  const botThree = mode === 12 ? guestOnlineDeck.slice() :
+    (mode == 9 || mode == 10) ? [B[99], ...sh(B.filter(b => b.id >= 100)).slice(0, 2)] : sh(B.filter(b => b.id < 99)).slice(0, 3);
+  if (mode === 11) botThree[0] = { ...B[99], ...BOSSD[pendingBossIndex], isBoss: true };
+  const previousArena = G?.finished ? G.th : null;
+  G = freshGame(mode, myThree, botThree);
+  window.BVBGameplay?.newMatch?.(G);
+  window.BVBCampaign?.prepareMatch?.(G);
+  arenaTransition(G.th, previousArena);
+  if (mode === 11) G.bossIndex = pendingBossIndex;
+  show('game');
+  nextRound();
+}
+
+function nextRound() {
+  if (!G) return;
+  if (window.BVBCampaign?.intermission?.(G)) return;
+  G.ph = 'draft';
+  G.rn = (G.rn || 0) + 1;
+  G.bl = []; G.pr = []; G.z = []; G.fx = []; G.rings = []; G.pop = [];
+  G.v2 = null; // Round-based hazards and Spider webs expire only at round boundary.
+  createRoundArena(G);
+  window.BVBGameplay?.newRound?.(G);
+  window.BVBCampaign?.setupRound?.(G);
+  remoteAimAngle = null; hostAimAngle = null; remoteBallId = null;
+  renderDraft();
+  hearts();
+  broadcastState();
+}
+
+function renderDraft() {
+  if (!G) return;
+  $('#msg').textContent = G.m===13 ? 'Kampania '+G.campaignLevel+'/50: wybierz kulkę ze swojej drużyny, wyceluj i wystrzel!' : 'Wybierz jedną z 3 wylosowanych kulek, wyceluj procą i wystrzel:';
+  $('#cards').innerHTML = G.my.map((b, i) => {
+    const st = G.m === 12 ? getBallStats(b.id, 1, 0, 0) : getBallStats(b.id);
+    return `<button class="card" style="--rc:${RC[b.r]}" onclick="pick(${i})">
+      ${orb(b)}
+      <div>
+        <b>${esc(b.n)} · <span style="color:#fde047">V${st.tier}</span></b>
+        <small style="color:#cbd5e1;display:block">❤️ ${st.hp} HP · ⚔️ ${st.dmg} DMG</small>
+        <span class="d">${st.activeDesc}</span>
+        ${window.BVBGameplay?.badge?.(b.id) || ''}
+      </div>
+    </button>`;
+  }).join('');
+  $('#bset').innerHTML = `<b>${G.m === 13 ? '🗺️ Poziom '+G.campaignLevel+'/50 · Rywal:' : G.m === 12 ? '🌐 Kule rywala:' : '🤖 Kule Bota:'}</b>` + G.bt.map(b => `<span class="bs">${orb(b)}<small>${esc(b.n)}</small></span>`).join('');
+}
+
+function pick(i) {
+  if (!G || G.ph !== 'draft' || !G.my[i] || (netRole === 'guest' && guestBallId != null)) return;
+  G.pb = G.my[i];
+  if (netRole === 'guest' && activeConn) {
+    guestBallId = G.pb.id;
+    G.bb = G.bt?.[0] || B[0];
+    G.ph = 'aim';
+    netSend({ type: 'pick', id: G.pb.id, matchId: G.matchId, rn: G.rn });
+  } else {
+    G.bb = G.m===13 ? G.bt[0] : G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : ((G.m == 9 || G.m == 10) ? B[99] : (remoteBallId || rnd(G.bt)));
+    G.ph = 'aim';
+    broadcastState();
+  }
+  $('#cards').innerHTML = '';
+  $('#fire').hidden = netRole === 'guest' && activeConn && !G.bb;
+  $('#fire').disabled = false;
+  $('#msg').textContent = `${G.m === 11 ? '👹 Boss: ' : 'Przeciwnik wybrał: '}${G.bb.n}. Walka rozpocznie się automatycznie!`;
+  // All fights launch automatically; online still waits for both confirmed choices.
+  G.pa=-Math.PI/2;
+  if(G.m===12)fire();
+  else launchMatch(null);
+}
+
+function fire() {
+  if (!G || G.ph !== 'aim' || !Number.isFinite(G.pa)) return;
+  if (netRole === 'guest' && activeConn) {
+    guestAimSent = true;
+    guestAimAngle = G.pa;
+    window.BVBGameplay?.resendTactic?.();
+    netSend({ type: 'fire', angle: G.pa, matchId: G.matchId, rn: G.rn });
+    $('#fire').disabled = true;
+    $('#msg').textContent = 'Wysłano strzał. Oczekiwanie na ruch drugiego gracza…';
+    return;
+  }
+  if (netRole === 'host' && activeConn) {
+    hostAimAngle = G.pa;
+    if (remoteAimAngle == null || remoteBallId == null) {
+      $('#fire').disabled = true;
+      $('#msg').textContent = 'Twój strzał gotowy — czekam na strzał drugiego gracza…';
+      return;
+    }
+    launchMatch(remoteAimAngle);
+    return;
+  }
+  launchMatch(null);
+}
+function launchMatch(remoteAngle = null) {
+  if (!G || G.ph !== 'aim') return;
+  const p = G.m === 12 ? actor(G.pb, 180, 300, G.pa, 0, 0, 1, 0, 0) : actor(G.pb, 180, 300, G.pa, 0, 0);
+  const botAim = remoteAngle == null
+    ? computeBotAim(180, 60, 180, 300, Math.cos(G.pa), Math.sin(G.pa), diff)
+    : remoteAngle;
+  const enemyBall = G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : G.bb;
+  // The guest sees the same X axis and a mirrored Y axis: flip only the Y component.
+  const enemyAngle = remoteAngle == null ? botAim : -remoteAngle;
+  // Standard bot difficulty is one profile, not hidden V2 + upgrades + random boosts.
+  const normalBot = G.m === 0;
+  const difficulty = clamp(diff, 0, 4);
+  // Difficulty changes decision quality, not hidden HP/damage/evolution bonuses.
+  const botTier = normalBot ? 1 : G.m === 12 ? 1 : G.m === 11 ? 3 : 2;
+  const botLevel = normalBot ? 0 : G.m === 12 ? 0 : diff;
+  const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, botTier, botLevel, botLevel);
+  window.BVBGameplay?.prepareActors?.(G, p, e);
+  window.BVBCampaign?.applyActors?.(G,p,e);
+  window.BVB2?.prepareActors?.(G,p,e);
+  window.BVBRework?.prepareActors?.(G,p,e);
+  G.bl = [p, e];
+  G.ph = 'battle';
+  G.rt = 0;
+  window.BVBReworkUI?.startRound?.(G);
+  G.silence = 0; G.silenceBoost = 0; G.silenceBoostFading = false; G.hitStop = 0;
+  $('#fire').hidden = true;
+  $('#msg').textContent = '⚔️ Walka trwa!';
+  SFX.shot();
+  hearts();
+  broadcastState();
+}
+
+let cv = $('#cv'), cx = cv.getContext('2d');
+cv.width = cv.height = W * D;
+cx.setTransform(D, 0, 0, D, 0, 0);
+
+function aimEv(e) {
+  if (!G || G.ph !== 'aim') return;
+  const r = cv.getBoundingClientRect();
+  const x = (e.clientX - r.left) * 360 / r.width;
+  const y = (e.clientY - r.top) * 360 / r.height;
+  if (e.type === 'pointerdown') {
+    G.ds = { x, y };
+    return;
+  }
+  if (!G.ds) return;
+  const dx = G.ds.x - x, dy = G.ds.y - y;
+  G.pa = Math.hypot(dx, dy) < 8 ? -Math.PI / 2 : Math.atan2(dy, dx);
+  if (netRole === 'guest' && activeConn) guestAimAngle = G.pa;
+  $('#fire').disabled = netRole === 'guest' && guestAimSent;
+}
+cv.addEventListener('pointerdown', aimEv);
+cv.addEventListener('pointermove', e => { if (e.buttons || e.pointerType === 'touch') aimEv(e); });
+
+// Wyraźne, tematyczne efekty specjalne kulek (również kulek Halloween).
+const EFFECTS = {
+  fire: { color: '#fb923c', accent: '#facc15', text: '🔥 PODPALENIE' },
+  ice: { color: '#67e8f9', accent: '#e0f2fe', text: '❄️ ZAMROŻENIE' },
+  electric: { color: '#facc15', accent: '#ffffff', text: '⚡ PORAŻENIE' },
+  shadow: { color: '#a78bfa', accent: '#e879f9', text: '🌑 WYSYSANIE' },
+  poison: { color: '#a3e635', accent: '#22c55e', text: '☠️ TRUCIZNA' },
+  heal: { color: '#4ade80', accent: '#bbf7d0', text: '💚 REGENERACJA' },
+  shield: { color: '#38bdf8', accent: '#a5f3fc', text: '🛡️ OSŁONA' },
+  blast: { color: '#fb7185', accent: '#fdba74', text: '💥 WYBUCH' },
+  normal: { color: '#f8fafc', accent: '#93c5fd', text: '✨ MOC' }
+};
+function effectType(b) {
+  const d = `${b?.n || ''} ${b?.d || ''}`.toLowerCase();
+  if (/leczy|leczenie|regener|medyk|heal/.test(d)) return 'heal';
+  if (/tarcza|pancerz|bariera|osłona/.test(d)) return 'shield';
+  if (/lód|lodow|mroź|mróz|zamraża|zamroż|frost|freeze|śnieg/.test(d)) return 'ice';
+  if (/piorun|błyskawic|elektry|laser|plazma|prąd/.test(d)) return 'electric';
+  if (/ogień|płom|płon|podpal|lawa|magma|wulkan|meteor|dyni|ognik|erupcj/.test(d)) return 'fire';
+  if (/truciz|zatru|poison|toksy|jadow|kwas|wirus/.test(d)) return 'poison';
+  if (/wysysa|wampir|lifesteal|dusza|duch|mrok|cień|shadow|kląt|nekroman|żniwiarz/.test(d)) return 'shadow';
+  if (/wybuch|eksploz|bomba|bomb|fala uderzeniowa/.test(d)) return 'blast';
+  return 'normal';
+}
+function burst(o, kind, n = 12, label = true) {
+  if (!G || !o) return;
+  const e = EFFECTS[kind] || EFFECTS.normal;
+  G.fx ||= []; G.rings ||= []; G.pop ||= [];
+  if(window.BVBReworkUI?.fx?.()==='low')n=Math.min(n,4);
+  for (let i = 0; i < n; i++) {
+    const a = Math.PI * 2 * i / n + Math.random() * 0.45, sp = 18 + Math.random() * 63;
+    G.fx.push({ x: o.x, y: o.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      r: 1.7 + Math.random() * 2.7, life: 0.38 + Math.random() * 0.35, max: 0.75,
+      c: i % 3 ? e.color : e.accent });
+  }
+  G.rings.push({ x: o.x, y: o.y, age: 0, life: 0.45, c: e.color, radius: o.r + 3 });
+  if (label) G.pop.push({ x: o.x, y: Math.max(24, o.y - o.r - 19), age: 0, life: 0.9, text: e.text, c: e.accent });
+  if (G.fx.length > 120) G.fx.splice(0, G.fx.length - 120);
+  if (G.rings.length > 16) G.rings.splice(0, G.rings.length - 16);
+  if (G.pop.length > 12) G.pop.splice(0, G.pop.length - 12);
+}
+function specialAbility(o, foe) {
+  const kind = effectType(o.b);
+  if (!foe) return;
+  switch (kind) {
+    case 'fire':
+      foe.status.burn = Math.max(foe.status.burn || 0, 2.2);
+      burst(foe, kind, 14); break;
+    case 'ice':
+      foe.status.slow = Math.max(foe.status.slow || 0, 1.35);
+      burst(foe, kind, 13); break;
+    case 'electric':
+      foe.hp -= Math.max(1, o.baseDmg * 0.28);
+      foe.status.stun = Math.max(foe.status.stun || 0, 0.35);
+      burst(foe, kind, 16); break;
+    case 'shadow': {
+      const damage = Math.min(5, Math.max(1, foe.hp * 0.045));
+      foe.hp -= damage; o.hp = Math.min(o.mh, o.hp + damage);
+      burst(foe, kind, 12); break;
+    }
+    case 'poison':
+      foe.status.poison = Math.max(foe.status.poison || 0, 3.0);
+      burst(foe, kind, 10); break;
+    case 'heal':
+      o.hp = Math.min(o.mh, o.hp + 5);
+      burst(o, kind, 10); break;
+    case 'shield':
+      o.status.shield = Math.min(30, (o.status.shield || 0) + 11);
+      burst(o, kind, 10); break;
+    case 'blast':
+      foe.hp -= Math.max(2, o.baseDmg * 0.5);
+      burst(foe, kind, 18); break;
+    default:
+      // Pozostałe kulki również mają widoczne efekty aktywacji.
+      foe.hp -= Math.max(1, o.baseDmg * 0.13);
+      burst(o, kind, 8, false);
+  }
+}
+function applyDamage(target, damage) {
+  const blocked = Math.min(target.status.shield || 0, damage);
+  target.status.shield = Math.max(0, (target.status.shield || 0) - blocked);
+  target.hp -= damage - blocked;
+}
+function updateEffects(dt) {
+  for (const f of G.fx || []) { f.life -= dt; f.x += f.vx * dt; f.y += f.vy * dt; f.vx *= Math.max(0, 1 - dt * 1.7); f.vy *= Math.max(0, 1 - dt * 1.7); }
+  G.fx = (G.fx || []).filter(f => f.life > 0);
+  for (const r of G.rings || []) r.age += dt;
+  G.rings = (G.rings || []).filter(r => r.age < r.life);
+  for (const p of G.pop || []) { p.age += dt; p.y -= dt * 14; }
+  G.pop = (G.pop || []).filter(p => p.age < p.life);
+}
+
+function foeAliveForStatus(actorObj, actors) { return actors.some(t => t !== actorObj && alive(t)); }
+
+function step(dt) {
+  if (!G || G.ph !== 'battle') return;
+  if (G.hitStop > 0) { G.hitStop = Math.max(0, G.hitStop - dt); updateEffects(dt); return; }
+  G.rt += dt;
+  // +20% at round start; +5% every five seconds, up to +50%.
+  // After five seconds without contact an extra +10% smoothly fades on the next hit.
+  const previousGap = G.silence || 0;
+  G.silence = (G.silence || 0) + dt;
+  if (G.silence >= 5 && previousGap < 5) G.silenceBoost = .10;
+  if (G.silenceBoostFading) {
+    G.silenceBoost = Math.max(0, (G.silenceBoost || 0) - .1 * dt / 2);
+    if (!G.silenceBoost) G.silenceBoostFading = false;
+  }
+  G.speedRamp = Math.min(.5, Math.floor(G.rt / 5) * .05);
+  window.BVBRework?.beforeStep?.(G,dt);
+  moveArena(dt);
+  for (const o of G.bl) {
+    if (!alive(o)) continue;
+    o.contact = Math.max(0,(o.contact||0)-dt);
+    o.impactSlow = Math.max(0,(o.impactSlow||0)-dt);
+    const basePace = 1.2 + (G.speedRamp||0) + (G.silenceBoost||0) + (o.hp/o.mh < .15 ? .15 : 0);
+    const speedBoost = (G.m === 11 ? 1.08 : 1.15) * (o.speedFactor||1) *
+      basePace * (o.status.stun > 0 ? 0 : o.status.slow > 0 ? .55 : 1) *
+      (o.impactSlow > 0 ? .83 : 1);
+    o.actualPace = speedBoost;
+    o.x += o.vx * 110 * speedBoost * dt;
+    o.y += o.vy * 110 * speedBoost * dt;
+    o.trailClock = (o.trailClock || 0) + dt;
+    if (o.trailClock >= 0.075) {
+      o.trailClock = 0;
+      o.trail.push({ x: o.x, y: o.y });
+      if (o.trail.length > 9) o.trail.shift();
+    }
+    o.abilityCd -= dt;
+    const abilityTarget = G.bl.find(t => t !== o && alive(t));
+    if (o.abilityCd <= 0 && !(o.status.stun > 0) &&
+        (window.BVBRework?.abilityReady?.(o,abilityTarget,G,dt) ?? true)) {
+      specialAbility(o, abilityTarget);
+      if(o.combatStats)o.combatStats.abilities++;
+      window.BVBCampaign?.onAbility?.(G,o);
+      o.abilityCd = window.BVB2?.cooldown?.(o) ?? Math.max(1.0, ((o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6) * (o.abilityRate||1));
+    }
+    if (o.status.slow > 0) o.status.slow = Math.max(0, o.status.slow - dt);
+    if (o.status.stun > 0) o.status.stun = Math.max(0, o.status.stun - dt);
+    // Obrażenia od trucizny i ognia otrzymuje zatruty/podpalony, nie jego rywal.
+    if (o.status.poison > 0) { o.status.poison = Math.max(0, o.status.poison - dt); applyDamage(o, 2.6 * dt); }
+    if (o.status.burn > 0) { o.status.burn = Math.max(0, o.status.burn - dt); applyDamage(o, 3.5 * dt); }
+
+    if (o.x < o.r || o.x > W - o.r) {
+      o.vx *= -1; o.x = clamp(o.x, o.r, W - o.r);
+      const delta=(Math.random()<.5?-1:1)*(1+Math.random()*2)*Math.PI/180;
+      const vx=o.vx,vy=o.vy;o.vx=vx*Math.cos(delta)-vy*Math.sin(delta);o.vy=vx*Math.sin(delta)+vy*Math.cos(delta);
+    }
+    if (o.y < o.r || o.y > W - o.r) {
+      o.vy *= -1; o.y = clamp(o.y, o.r, W - o.r);
+      const delta=(Math.random()<.5?-1:1)*(1+Math.random()*2)*Math.PI/180;
+      const vx=o.vx,vy=o.vy;o.vx=vx*Math.cos(delta)-vy*Math.sin(delta);o.vy=vx*Math.sin(delta)+vy*Math.cos(delta);
+    }
+    collideWithArena(o, dt);
+  }
+  if (G.bl.length === 2) {
+    const [a, b] = G.bl;
+    if (alive(a) && alive(b)) {
+      const dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);
+      const minDist=a.r+b.r;
+      if (dist < minDist) {
+        // Separate overlapping balls before dealing damage; never hit every frame.
+        const nx=dist>0.001?dx/dist:1,ny=dist>0.001?dy/dist:0;
+        const penetration=minDist-dist+.75;
+        a.x=clamp(a.x+nx*penetration*.5,a.r,W-a.r);
+        a.y=clamp(a.y+ny*penetration*.5,a.r,W-a.r);
+        b.x=clamp(b.x-nx*penetration*.5,b.r,W-b.r);
+        b.y=clamp(b.y-ny*penetration*.5,b.r,W-b.r);
+        if (a.contact<=0 && b.contact<=0) {
+          a.contact=b.contact=.30;
+          G.silence = 0; G.silenceBoostFading = true;
+          const overtime=G.rt>=30?1.10:1;
+          const momentumA=1 + Math.min(.10,Math.max(0,(b.actualPace||1.2)-1.2)*.12);
+          const momentumB=1 + Math.min(.10,Math.max(0,(a.actualPace||1.2)-1.2)*.12);
+          const damageToA=Math.max(3,b.baseDmg*(b.power||1)*overtime*momentumA*(b.status.weaken>0?.8:1));
+          const damageToB=Math.max(3,a.baseDmg*(a.power||1)*overtime*momentumB*(a.status.weaken>0?.8:1));
+          const heavyImpact=Math.random()<.075; // Rare cinematic collisions: ~7.5%.
+          if(heavyImpact) {
+            G.hitStop=.075;
+            G.rings ||= [];
+            G.rings.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2,age:0,life:.7,radius:28,c:'#fff'});
+            G.pop ||= [];
+            G.pop.push({x:(a.x+b.x)/2,y:(a.y+b.y)/2-30,age:0,life:.85,text:'POWER CLASH!',c:'#facc15'});
+          }
+          const hitSlow = Math.min(.23,.065+Math.max(damageToA,damageToB)*.004);
+          a.impactSlow = b.impactSlow = hitSlow;
+          const impactA=damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15));
+          const impactB=damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15));
+          applyDamage(a,window.BVBRework?.contactDamage?.(b,a,impactA) ?? impactA);
+          applyDamage(b,window.BVBRework?.contactDamage?.(a,b,impactB) ?? impactB);
+          a.skillCharge=b.skillCharge=0;
+          if(a.skillReflect>0)applyDamage(b,Math.min(3,damageToA*.2));
+          if(b.skillReflect>0)applyDamage(a,Math.min(3,damageToB*.2));
+          window.BVBCampaign?.onImpact?.(G);
+          burst(a,effectType(b.b),8,false);
+          burst(b,effectType(a.b),8,false);
+          SFX.hit();
+        }
+        // Impulse-based collision: heavier balls lose less velocity on impact.
+        const invA=1/Math.max(.2,a.mass||1),invB=1/Math.max(.2,b.mass||1);
+        const approach=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;
+        if(approach<0){
+          const impulse=-(1+.91)*approach/(invA+invB);
+          a.vx+=impulse*nx*invA;a.vy+=impulse*ny*invA;
+          b.vx-=impulse*nx*invB;b.vy-=impulse*ny*invB;
+        }
+        // Gentle spin deflection avoids identical repeated trajectories.
+        for(const o of [a,b]){
+          const t=(o.spin||0)*.035+(Math.random()-.5)*.018;
+          const vx=o.vx,vy=o.vy;
+          o.vx=vx*Math.cos(t)-vy*Math.sin(t);o.vy=vx*Math.sin(t)+vy*Math.cos(t);
+        }
+      }
+    }
+  }
+  updateEffects(dt);
+  const team0 = G.bl.some(o => o.team === 0 && alive(o)), team1 = G.bl.some(o => o.team === 1 && alive(o));
+  if (!team0 || !team1) {
+    const winner=team0 && !team1 ? 0 : team1 && !team0 ? 1 : -1;
+    window.BVBCampaign?.onRoundEnd?.(G,winner);
+    roundEnd(winner);
+  }
+  if(G.ph==='battle')window.BVBRework?.afterStep?.(G,dt);
+}
+
+function roundEnd(winner) {
+  if (!G || G.ph !== 'battle') return;
+  G.ph = 'end';
+  window.BVBReworkUI?.endRound?.(G,winner);
+  if (winner >= 0) G.h[1 - winner]--;
+  hearts();
+  broadcastState();
+  setTimeout(() => {
+    if (!G || G.ph !== 'end') return;
+    if (G.h[0] > 0 && G.h[1] > 0) return nextRound();
+    over();
+  }, 1100);
+}
+
+function over() {
+  if (!G || G.finished) return;
+  G.finished = true;
+  broadcastState();
+  const win = G.h[0] > 0;
+  const isHw = (G.m == 9 || G.m == 10);
+  if (G.m === 11 && win) { S.bb = (S.bb | 0) + 1; S.bossWins[G.bossIndex || 0] = (S.bossWins[G.bossIndex || 0] | 0) + 1; }
+  const candyEarned = isHw ? (win ? DIFF_CANDY[diff] : Math.round(DIFF_CANDY[diff] * 0.25)) : (win ? 15 : 5);
+  const coinEarned = win ? DIFF_REW[diff] : Math.round(DIFF_REW[diff] * 0.25);
+  
+  if (G.m === 12) { /* Online 1vs1 is a friendly match, no ranked rewards. */ }
+  else { S.coins += coinEarned; S.candies += candyEarned; }
+  if (win && netRole!=='guest') S.ach.winsByArena[G.th]=true;
+  checkAchievements();
+  save();
+
+  win ? SFX.win() : SFX.lose();
+  $('#ov').hidden = false;
+  $('#ovb').innerHTML = `
+    <h2>${win ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2>${G.m === 11 ? `<p style="margin:8px 0">Boss: ${esc(BOSSD[G.bossIndex || 0].n)}</p>` : ''}
+    <p style="color:var(--mu);margin:10px 0">${G.m === 12 ? 'Mecz towarzyski online' : `+${coinEarned} 🪙 · +${candyEarned} 🍬`}</p>
+    ${window.BVBReworkUI?.victoryStats?.(G) || ''}
+    <button class="b graj" onclick="$('#ov').hidden=true;${G.m === 11 ? `startBossFight(${G.bossIndex || 0})` : `startMatch(${G.m})`}">Zagraj ponownie</button>
+    <button class="b" onclick="menu()">Menu główne</button>
+  `;
+}
+
+function hearts() {
+  if (!G) return;
+  const hh = n => '❤️'.repeat(Math.max(0, n)) + '🖤'.repeat(Math.max(0, 3 - n));
+  $('#hp').textContent = `😎 Ty ${hh(G.h[0])}`;
+  $('#hb').textContent = `${activeConn?.open ? '🌐 Rywal' : '🤖 Bot'} ${hh(G.h[1])}`;
+}
+
+function pz() {
+  if (!G) return;
+  if (G.ph==='battle' && G.m!==12 && window.BVBReworkUI?.togglePause) {
+    window.BVBReworkUI.togglePause();return;
+  }
+  $('#ov').hidden = false;
+  $('#ovb').innerHTML = '<h2>Pauza ⏸️</h2><button class="b graj" onclick="$(\'#ov\').hidden=true">Wznów grę</button><button class="b" onclick="menu()">Wyjdź do menu</button>';
+}
+
+function emo(i) {
+  if (!G || !EMO[i]) return;
+  SFX.tick();
+}
+
+function draw() {
+  if (!G) return;
+  cx.setTransform(D, 0, 0, D, 0, 0);
+  if(window.BVBReworkUI?.camera?.()==='dynamic' && G.ph==='battle'){
+    const pair=G.bl||[];
+    const gap=pair.length===2?Math.hypot(pair[0].x-pair[1].x,pair[0].y-pair[1].y):300;
+    const zoom=1+Math.max(0,Math.min(.105,(230-gap)/200*.105));
+    cx.translate(180,180);cx.scale(zoom,zoom);cx.translate(-180,-180);
+  }
+  drawArenaBackground();
+  drawArenaItems();
+
+  if (['draft', 'aim'].includes(G.ph)) {
+    cx.fillStyle = '#fef08a';
+    cx.beginPath(); cx.arc(PX, PY, 13, 0, Math.PI * 2); cx.fill();
+    cx.save();
+    cx.setLineDash([6, 5]);
+    cx.strokeStyle = '#fef08a';
+    cx.lineWidth = 2.5;
+    cx.beginPath();
+    cx.moveTo(PX, PY);
+    let x = PX, y = PY, vx = Math.cos(G.pa), vy = Math.sin(G.pa);
+    for (let i = 0; i < 90; i++) {
+      x += vx * 4; y += vy * 4;
+      if (x < 12 || x > 348) { vx *= -1; x = clamp(x, 12, 348); }
+      if (y < 12 || y > 348) { vy *= -1; y = clamp(y, 12, 348); }
+      cx.lineTo(x, y);
+    }
+    cx.stroke();
+    cx.restore();
+  }
+
+  // Świetliste kręgi oraz iskry podczas aktywowania mocy.
+  for (const ring of G.rings || []) {
+    const t = ring.age / ring.life;
+    cx.save(); cx.globalAlpha = (1 - t) * 0.8;
+    cx.strokeStyle = ring.c; cx.lineWidth = 3 * (1 - t) + 0.5;
+    cx.beginPath(); cx.arc(ring.x, ring.y, ring.radius + t * 33, 0, Math.PI * 2); cx.stroke(); cx.restore();
+  }
+  for (const f of G.fx || []) {
+    cx.save(); cx.globalAlpha = Math.min(1, Math.max(0, f.life / f.max));
+    cx.shadowColor = f.c; cx.shadowBlur = 12; cx.fillStyle = f.c;
+    cx.beginPath(); cx.arc(f.x, f.y, f.r, 0, Math.PI * 2); cx.fill(); cx.restore();
+  }
+  for (const o of G.bl || []) {
+    if (!alive(o)) continue;
+    cx.save();
+    const kind = effectType(o.b), effect = EFFECTS[kind];
+    for (let i = 0; i < (o.trail || []).length; i++) {
+      const pt = o.trail[i];
+      cx.globalAlpha = (i + 1) / o.trail.length * 0.27;
+      cx.fillStyle = effect.color;
+      cx.beginPath(); cx.arc(pt.x, pt.y, o.r * (0.25 + 0.55 * (i + 1) / o.trail.length), 0, Math.PI * 2); cx.fill();
+    }
+    cx.globalAlpha = 1;
+    cx.shadowColor = effect.color;
+    cx.shadowBlur = 11 + Math.sin((G.rt || 0) * 7) * 3;
+    const teamColor = o.team ? '#ef4444' : '#fbbf24';
+    if (o.team===0 && S.playerAura) {
+      cx.strokeStyle=S.playerAura;cx.lineWidth=2;
+      cx.beginPath();cx.arc(o.x,o.y,o.r+9+Math.sin((G.rt||0)*5)*2,0,6.283);cx.stroke();
+    }
+    cx.strokeStyle = teamColor;
+    cx.lineWidth = 3;
+    cx.beginPath(); cx.arc(o.x, o.y, o.r + 3, 0, 6.283); cx.stroke();
+
+    const im = ART_IMAGES.get(o.b.id);
+    if (im?.complete && im.naturalWidth) cx.drawImage(im, o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+    else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
+
+    cx.shadowBlur = 0;
+    if (o.status.shield > 0) {
+      cx.strokeStyle = '#67e8f9'; cx.lineWidth = 3;
+      cx.beginPath(); cx.arc(o.x, o.y, o.r + 8, 0, Math.PI * 2); cx.stroke();
+    }
+    if (o.status.burn > 0 || o.status.poison > 0 || o.status.slow > 0 || o.status.stun > 0) {
+      cx.fillStyle = o.status.burn > 0 ? '#fb923c' : o.status.poison > 0 ? '#a3e635' : o.status.stun > 0 ? '#fde047' : '#67e8f9';
+      cx.beginPath(); cx.arc(o.x + o.r - 1, o.y - o.r + 1, 5, 0, Math.PI * 2); cx.fill();
+    }
+    cx.fillStyle = '#090f20'; cx.fillRect(o.x - 22, o.y - o.r - 12, 44, 5);
+    cx.fillStyle = o.team ? '#ef4444' : '#4ade80'; cx.fillRect(o.x - 22, o.y - o.r - 12, 44 * clamp(o.hp / o.mh, 0, 1), 5);
+    cx.restore();
+  }
+  for (const p of G.pop || []) {
+    cx.save(); cx.globalAlpha = Math.max(0, 1 - p.age / p.life);
+    cx.font = 'bold 10px Segoe UI, sans-serif'; cx.textAlign = 'center';
+    cx.lineWidth = 3; cx.strokeStyle = '#070a18';
+    cx.strokeText(p.text, p.x, p.y); cx.fillStyle = p.c; cx.fillText(p.text, p.x, p.y);
+    cx.restore();
+  }
+}
+
+function loop(t) {
+  const elapsed = Math.min(0.1, Math.max(0, (t - (frameLast || t)) / 1000));
+  frameLast = t;
+  if (G) {
+    if (G.ph === 'battle' && netRole !== 'guest' && !window.BVBReworkUI?.paused?.()) {
+      fixedAccumulator += elapsed * (window.BVBReworkUI?.rate?.() ?? 1);
+      let steps = 0;
+      while (fixedAccumulator >= 1 / 60 && steps++ < 6 && G?.ph === 'battle') {
+        step(1 / 60);
+        fixedAccumulator -= 1 / 60;
+      }
+    }
+    window.BVBReworkUI?.frame?.(G,elapsed);
+    draw();
+    if (netRole === 'host' && activeConn && G.ph === 'battle' && t - netSyncAt > 120) {
+      netSyncAt = t; broadcastState();
+    }
+  }
+  requestAnimationFrame(loop);
+}
+
+// Safe interface between the classic game script and the optional account module.
+window.BVBGameBridge = {
+  getNickname: () => String(S.nm || 'Gracz'),
+  setNickname: name => { S.nm = String(name||'Gracz').trim().slice(0,16);save(); },
+  stats: () => ({wins:Math.max(0,S.wins|0),level:Math.max(1,S.lv|0)}),
+  exportState: () => JSON.stringify(S),
+  backup: () => {try {localStorage.setItem('bvb_cloud_backup_'+Date.now(),JSON.stringify(S));} catch(e) { /* local storage may be full */ }},
+  importState: data => {try {const x=JSON.parse(data);if(!x || !Array.isArray(x.own))return false;localStorage.setItem(K,JSON.stringify(x));load();return true;} catch(e){return false;}},
+  goMenu: () => menu(),
+  getRoom: () => (netRole==='host' && activeConn?.open || netRole==='host' && peer?.id) ? peer?.id : null,
+  joinRoom: room => {if(typeof room!=='string' || !room || room.length>150)return;mpMenu();$('#peerCode').value=room;joinNet();}
+};
+window.addEventListener('bvb-cloud-ready',()=>{
+  if ($('#pn')?.dataset.panel === 'account' && !$('#pn').hidden) window.BVBCloud?.renderAccount?.();
+});
+load();
+// Test build: unlock all 130 balls in the isolated beta save only.
+S.own=B.map(b=>b.id);
+save();
+menu();
+const invitedRoom = new URLSearchParams(location.search).get('room');
+if (invitedRoom && invitedRoom.length < 150) {
+  mpMenu();
+  $('#peerCode').value = invitedRoom;
+  netStatus('Kod pokoju wpisany. Kliknij „Dołącz do pokoju”, żeby połączyć się ze znajomym.');
+}
+requestAnimationFrame(loop);
+</script>
+<script src="./beta/bvb-anime-update.js"></script>
+<script src="./bvb-gameplay.js"></script>
+<script src="./bvb-campaign.js"></script>
+<script src="./beta/bvb-abilities-v2.js"></script>
+<script src="./beta/bvb-combat-rework.js"></script>
+<script src="./beta/bvb-combat-ui.js"></script>
+<script src="./bvb-preview-v2.js"></script>
+<script src="./bvb-ui-v2.js"></script>
+<script src="./bvb-main-menu-v3.js"></script>
+<script src="./bvb-changelog-v3.js"></script>
+</body>
+</html>
