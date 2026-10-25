@@ -2712,8 +2712,8 @@ function launchMatch(remoteAngle = null) {
   window.BVBRework?.prepareActors?.(G,p,e);
   G.bl = [p, e];
   G.ph = 'battle';
-  window.BVBReworkUI?.startRound?.(G);
   G.rt = 0;
+  window.BVBReworkUI?.startRound?.(G);
   G.silence = 0; G.silenceBoost = 0; G.silenceBoostFading = false; G.hitStop = 0;
   $('#fire').hidden = true;
   $('#msg').textContent = '⚔️ Walka trwa!';
