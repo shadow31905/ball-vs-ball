@@ -178,11 +178,12 @@ getBallStats=function(id,...args){
  const st=oldStats(id,...args);const d=abilityData[id]||abilityData[0];
  const tierMult=st.tier===3?1.32:st.tier===2?1.15:1;
  st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv)*tierMult);
- st.cd=d.kind==='web'?0:+(d.cooldown*(st.tier===3?.72:st.tier===2?.85:1)).toFixed(2);
+ st.cd=d.kind==='web'?0:+Math.max(2.25,d.cooldown*(st.tier===3?.78:st.tier===2?.90:1)).toFixed(2);
  st.activeDesc=d.title+': '+d.desc+(st.tier>1?' · Ewolucja V'+st.tier+': silniejszy efekt.':'');
  st.speed=d.speed;
  return st;
 };
+function abilityFor(o){return abilityData[o?.b?.abilityId ?? o?.b?.id] || abilityData[0];}
 function roundState(){
  if(!G)return null;
  G.v2 ||= {shots:[],hazards:[],webs:[],wallBeams:[],beams:[],effects:[],tick:0,serial:0};
@@ -259,7 +260,7 @@ function webPoint(o,side){
  o.v2WallAnchor=p;
 }
 function onWall(o,side){
- const d=abilityData[o.b.id];if(!d)return;
+ const d=abilityFor(o);if(!d)return;
  const st=roundState();if(!st)return;
  if(o.v2LastSide===side&&(G.rt-(o.v2LastWallAt||0))<.12)return;
  o.v2LastSide=side;o.v2LastWallAt=G.rt||0;
@@ -285,12 +286,12 @@ function onWall(o,side){
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
 }
 function cooldown(o){
- const d=abilityData[o.b.id];const rate=Math.max(.55,Math.min(1.5,o.abilityRate||1));
+ const d=abilityFor(o);const rate=Math.max(.55,Math.min(1.5,o.abilityRate||1));
  return Math.max(2.25,(d?.cooldown||4)*rate*(o.tier===3?.78:o.tier===2?.90:1));
 }
 function cast(o,foe){
  if(!o||!foe||!alive(foe)||!G)return;
- const d=abilityData[o.b.id]||abilityData[0],kind=d.kind;
+ const d=abilityFor(o),kind=d.kind;
  const scale=Math.min(1.26,1+(Math.max(1,o.tier||1)-1)*.12);
  const delta=Math.hypot(foe.x-o.x,foe.y-o.y);
  const lowHp=o.hp/Math.max(1,o.mh)<.35;
@@ -302,9 +303,10 @@ function cast(o,foe){
  case 'web': visual(o,o,'web',27,d.color,.5);break; // webs form only on actual wall impacts
  case 'charge': o.skillCharge=Math.min(5,(o.skillCharge||0)+1);dash(o,foe,.22);break;
  case 'orbit':
+  // Real gameplay blades: persistent, visible and collision-tested on every tick.
   o.skillSpin=(o.skillSpin||0)+1;
-  if(delta<90)strike(o,foe,o.baseDmg*(.28+Math.min(5,o.skillSpin)*.08)*(lowHp?1.18:1),{knock:.19});
-  visual(o,o,'orbit',34,d.color,.72);break;
+  o.axeOrbit={life:2.35,angle:0,radius:o.r+20,blades:3,nextHit:Object.create(null),color:d.color};
+  visual(o,o,'orbit',34,d.color,.45);break;
  case 'thorn': visual(o,o,'charge',24,d.color,.5);break; // only walls create spikes
  case 'volley': shoot(o,foe,{count:o.b.id===5?5:o.b.id===43?3:o.b.id===3?2:3,
    damage:o.baseDmg*(o.b.id===5?.2:.36)*scale,homing:.2,spread:.22,
@@ -436,6 +438,23 @@ function tick(dt){
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
   if(o.skillImpact>0)o.skillImpact=Math.max(0,o.skillImpact-dt);
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
+  const orbit=o.axeOrbit;
+  if(orbit){
+   orbit.life-=dt;orbit.angle+=dt*7.5;
+   if(orbit.life<=0){o.axeOrbit=null;continue;}
+   for(const foe of G.bl||[]){
+    if(!alive(foe)||foe.team===o.team||(orbit.nextHit[foe.uid]||0)>G.rt)continue;
+    for(let i=0;i<orbit.blades;i++){
+     const a=orbit.angle+i*Math.PI*2/orbit.blades;
+     const x=o.x+Math.cos(a)*orbit.radius,y=o.y+Math.sin(a)*orbit.radius;
+     if(Math.hypot(foe.x-x,foe.y-y)<=foe.r+9){
+      strike(o,foe,o.baseDmg*(o.hp/Math.max(1,o.mh)<.35?.29:.24),{knock:.08});
+      orbit.nextHit[foe.uid]=G.rt+.38;
+      break;
+     }
+    }
+   }
+  }
  }
  for(const s of st.shots){
   s.age+=dt;s.life-=dt;if(s.life<=0)continue;
@@ -449,8 +468,15 @@ function tick(dt){
    }
   }
   s.x+=s.vx*dt;s.y+=s.vy*dt;
-  if(s.x<7||s.x>353){if(s.bounces>0){s.vx*=-1;s.bounces--;s.x=clamp(s.x,7,353);}else s.life=0;}
-  if(s.y<7||s.y>353){if(s.bounces>0){s.vy*=-1;s.bounces--;s.y=clamp(s.y,7,353);}else s.life=0;}
+  const hitX=s.x<7||s.x>353,hitY=s.y<7||s.y>353;
+  if(hitX||hitY){
+   if(s.bounces>0){
+    if(hitX)s.vx*=-1;
+    if(hitY)s.vy*=-1;
+    s.bounces--; // A corner counts as one bounce, not two.
+    s.x=clamp(s.x,7,353);s.y=clamp(s.y,7,353);
+   }else s.life=0;
+  }
   if(s.life<=0)continue;
   const target=G.bl.find(o=>o.team!==s.team&&alive(o)&&closestToSegment(o.x,o.y,s.px,s.py,s.x,s.y)<o.r+s.r);
   if(target){
@@ -529,6 +555,21 @@ function drawOverlay(){
  const st=G.v2;
  const detailed=(Number(S?.o?.fxLevel??3)>0);
  cx.save();
+ // Draw active blades even with visual effects disabled.
+ for(const o of G.bl||[]){
+  if(!alive(o)||!o.axeOrbit)continue;
+  const orbit=o.axeOrbit;
+  for(let i=0;i<orbit.blades;i++){
+   const a=orbit.angle+i*Math.PI*2/orbit.blades;
+   const x=o.x+Math.cos(a)*orbit.radius,y=o.y+Math.sin(a)*orbit.radius;
+   cx.save();cx.translate(x,y);cx.rotate(a+Math.PI/2);
+   cx.shadowColor=orbit.color;cx.shadowBlur=12;cx.fillStyle=orbit.color;
+   cx.strokeStyle='#fff';cx.lineWidth=1.5;
+   cx.beginPath();cx.moveTo(0,-11);cx.lineTo(7,3);cx.lineTo(2,9);
+   cx.lineTo(-2,9);cx.lineTo(-7,3);cx.closePath();cx.fill();cx.stroke();
+   cx.restore();
+  }
+ }
  for(const w of st.webs||[]){
   const p=w.a,q=w.b;
   cx.lineWidth=1.6;cx.strokeStyle=w.color;cx.shadowColor='#cbd5e1';cx.shadowBlur=6;
@@ -629,7 +670,10 @@ function prepareActors(g,p,e){
   if(!o)continue;
   const data=abilityData[o.b.id];
   o.speedFactor=(o.speedFactor||1)*(data?.speed||1);
-  o.abilityCd=Math.min(o.abilityCd,1.5);
+  // Low difficulty bots should not fire their first ability almost instantly.
+  if(o===e&&g.m===0&&typeof diff==='number'){
+   o.abilityCd=diff===0?2.9:diff===1?2.4:Math.min(o.abilityCd,1.5);
+  }else o.abilityCd=Math.min(o.abilityCd,1.5);
  }
 }
 function afterLoad(){ART_IMAGES.clear();preloadArt();}
