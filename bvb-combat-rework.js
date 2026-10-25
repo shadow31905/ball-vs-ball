@@ -3,6 +3,40 @@
    Hooks are called by the authoritative battle loop, never by multiplayer guests. */
 (() => {
   'use strict';
+  // Seeded simulation RNG: presentation effects never consume this stream.
+  // Round IDs are stable on the authoritative host. Unit fixtures without
+  // matchId deliberately retain their injected Math.random.
+  function hashString(value) {
+    let hash=2166136261;
+    for(const c of String(value))hash=Math.imul(hash^c.charCodeAt(0),16777619);
+    return hash>>>0;
+  }
+  function setSeed(g, seed) {
+    if(!g)return 0;
+    g.rngSeed=(Number(seed)>>>0)||0x6d2b79f5;
+    g.rngState=g.rngSeed;
+    g.rngCalls=0;
+    return g.rngSeed;
+  }
+  function random(g=G) {
+    if(!g||g.rngState==null)return Math.random();
+    g.rngState=(g.rngState+0x6d2b79f5)>>>0;
+    let t=g.rngState;
+    t=Math.imul(t^(t>>>15),t|1);
+    t^=t+Math.imul(t^(t>>>7),t|61);
+    g.rngCalls=(g.rngCalls||0)+1;
+    return ((t^(t>>>14))>>>0)/4294967296;
+  }
+  function stateHash(g) {
+    if(!g)return '0';
+    const q=n=>Number.isFinite(n)?Math.round(n*1000):0;
+    const actors=(g.bl||[]).map(o=>[
+      o.b?.abilityId??o.b?.id,o.team,q(o.x),q(o.y),q(o.vx),q(o.vy),
+      q(o.hp),q(o.armor||0),q(o.status?.shield||0),q(o.superCharge||0),
+      o.bossPhase||0
+    ].join(',')).join('|');
+    return hashString([g.rn||0,q(g.rt||0),g.rngState||0,actors].join(';')).toString(16).padStart(8,'0');
+  }
   const clamp01 = n => Math.max(0, Math.min(1, n));
   const norm = (x,y) => { const m=Math.hypot(x,y)||1; return {x:x/m,y:y/m}; };
   const isAlive = o => o && o.hp > 0 && !o.gone;
@@ -15,6 +49,7 @@
 
   function prepareActors(g,p,e) {
     if(!g || netRole==='guest')return;
+    if(g.matchId)setSeed(g,hashString(String(g.matchId)+':'+String(g.rn||0)));
     for(const o of [p,e]) {
       if(!o)continue;
       const id=o.b.abilityId ?? o.b.id;
@@ -33,7 +68,7 @@
       o.resistFamily=attackFamilies[(id+2)%attackFamilies.length];
       o.superCharge=0;o.superUsed=0;o.passiveClock=0;o.reactionClock=0;
     }
-    g.arenaNextShift=11+Math.random()*4;
+    g.arenaNextShift=11+random()*4;
     g.arenaShiftCount=0;
     g.bossAttackAt=7;
     g.bossTelegraph=null;
@@ -69,7 +104,7 @@
     if(!isAlive(attacker)||!isAlive(defender))return base;
     const id=attacker.b.abilityId ?? attacker.b.id;
     const critChance=.045+(id%8)*.008;
-    const crit=Math.random()<critChance;
+    const crit=random()<critChance;
     const weakness=defender.weakTo===familyOf(abilityKind(attacker));
     const resistance=defender.resistFamily===familyOf(abilityKind(attacker))?.86:1;
     const passiveBoost=attacker.passiveType===0?1.06:attacker.passiveType===1&&attacker.hp/attacker.mh<.4?1.12:1;
@@ -78,9 +113,9 @@
     defender.superCharge=Math.min(100,(defender.superCharge||0)+5);
     if(attacker.passiveType===2)attacker.armor=Math.min(attacker.armorMax,attacker.armor+1.4);
     if(attacker.passiveType===3)attacker.status.shield=Math.min(32,(attacker.status.shield||0)+.8);
-    if(attacker.passiveType===4&&Math.random()<.16)defender.status.slow=Math.max(defender.status.slow||0,.42);
-    if(attacker.passiveType===5&&Math.random()<.12)defender.status.poison=Math.max(defender.status.poison||0,.65);
-    if(attacker.passiveType===6&&Math.random()<.12)defender.status.burn=Math.max(defender.status.burn||0,.65);
+    if(attacker.passiveType===4&&random()<.16)defender.status.slow=Math.max(defender.status.slow||0,.42);
+    if(attacker.passiveType===5&&random()<.12)defender.status.poison=Math.max(defender.status.poison||0,.65);
+    if(attacker.passiveType===6&&random()<.12)defender.status.burn=Math.max(defender.status.burn||0,.65);
     if(attacker.passiveType===7&&crit)attacker.hp=Math.min(attacker.mh,attacker.hp+2.2);
     if(attacker.passiveType===8&&crit)defender.status.weaken=Math.max(defender.status.weaken||0,.8);
     if(attacker.passiveType===9)attacker.abilityCd=Math.max(.3,attacker.abilityCd-.18);
@@ -139,10 +174,10 @@
 
   function shiftArena(g) {
     g.arenaShiftCount=(g.arenaShiftCount||0)+1;
-    g.arenaNextShift=g.rt+10+Math.random()*5;
+    g.arenaNextShift=g.rt+10+random()*5;
     const obstacles=g.obstacles||[];
     if(!obstacles.length) {
-      const x=55+Math.random()*250,y=110+Math.random()*140;
+      const x=55+random()*250,y=110+random()*140;
       if(g.bl.every(o=>Math.hypot(o.x-x,o.y-y)>o.r+50))
         obstacles.push({x,y,r:17,kind:'neon',moving:true,moveClock:0,moveDuration:0,dx:0,dy:0,seed:0});
     }
@@ -150,7 +185,7 @@
       p.moving=true;
       p.moveDuration=1.3;
       p.moveClock=10;
-      const angle=Math.random()*Math.PI*2;
+      const angle=random()*Math.PI*2;
       p.dx=Math.cos(angle)*35;p.dy=Math.sin(angle)*35;
     }
     if(g.pop?.length<12)g.pop.push({x:180,y:35,age:0,life:1.1,text:'ZMIANA ARENY',c:'#93c5fd'});
@@ -286,11 +321,11 @@
       const bPct=Math.max(0,(b?.hp||0)/(b?.mh||1));
       // A true draw would leave both hearts unchanged and could loop forever.
       // A fair coin resolves the extremely rare exact-HP tie.
-      const winner=Math.abs(aPct-bPct)<.0001?(Math.random()<.5?0:1):aPct>bPct?0:1;
+      const winner=Math.abs(aPct-bPct)<.0001?(random()<.5?0:1):aPct>bPct?0:1;
       window.BVBCampaign?.onRoundEnd?.(g,winner);
       roundEnd(winner);
     }
   }
 
-  window.BVBRework={prepareActors,contactDamage,abilityDamage,abilityReady,beforeStep,afterStep};
+  window.BVBRework={prepareActors,contactDamage,abilityDamage,abilityReady,beforeStep,afterStep,random,setSeed,stateHash};
 })();
