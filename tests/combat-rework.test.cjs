@@ -45,7 +45,7 @@ test('critical contact damage and weakness use controlled multipliers',()=>{
   const {g,api}=fixture(()=>0);
   const [a,b]=g.bl;b.weakTo='physical';
   const damage=api.contactDamage(a,b,10);
-  assert.ok(Math.abs(damage-14.784)<1e-9);
+  assert.ok(Math.abs(damage-(10*1.32*1.12*1.06))<1e-9);
   assert.equal(a.combatStats.crits,1);
   assert.equal(a.combatStats.contactHits,1);
 });
@@ -71,6 +71,33 @@ test('arena shifts, boss phase and 60s match limit',()=>{
   assert.equal(g.ph,'end');
   assert.equal(getResult(),0);
   assert.equal(getEvents(),1);
+});
+test('every one of 130 IDs has a passive/super signature and can charge a super',()=>{
+  const signatures=new Set();
+  for(let id=0;id<130;id++){
+    const {g,api}=fixture();
+    g.bl[0].b.id=id;
+    api.prepareActors(g,...g.bl);
+    const o=g.bl[0];
+    assert.ok(o.passiveType>=0&&o.passiveType<10);
+    assert.ok(o.superType>=0&&o.superType<10);
+    signatures.add(o.passiveType+':'+o.superType+':'+id%3);
+    o.superCharge=100;
+    api.afterStep(g,1/60);
+    assert.equal(o.superUsed,1);
+    assert.equal(o.superCharge,0);
+  }
+  assert.equal(signatures.size,130);
+});
+test('burn + freeze status reaction damages at most once per second',()=>{
+  const {g,api}=fixture();
+  const o=g.bl[0];o.status.shield=0;o.status.burn=2;o.status.slow=2;
+  const hp=o.hp;
+  api.beforeStep(g,1/60);
+  assert.ok(o.hp<hp);
+  const after=o.hp;
+  api.beforeStep(g,1/60);
+  assert.equal(o.hp,after);
 });
 test('main HTML includes all combat hooks and valid inline JS',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
