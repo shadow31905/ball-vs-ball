@@ -93,13 +93,14 @@ modal.innerHTML='<div class="bvb-v2-dialog"><h2>🎮 Ball VS Ball 2.0</h2>'+
  '<button class="b graj" id="bvbV2Close">▶ Przejdź do gry</button></div>';
 document.body.appendChild(modal);
 modal.querySelector('#bvbV2Close').addEventListener('click',()=>{modal.hidden=true;});
-let entranceSeen=false;
+let entranceTimer=null;
 function open(){modal.hidden=false;modal.querySelector('#bvbV2Close')?.focus();}
 function onEntered(){
- if(entranceSeen)return;
- entranceSeen=true;
- // Wait until the account gate has closed and the menu is rendered.
- setTimeout(()=>{if(document.querySelector('#accountGate')?.hidden)open();},220);
+ // Every successful re-entry (also after logout/login without refreshing).
+ clearTimeout(entranceTimer);
+ entranceTimer=setTimeout(()=>{
+  if(document.querySelector('#accountGate')?.hidden)open();
+ },220);
 }
 window.addEventListener('bvb-entered-game',onEntered);
 const btn=document.createElement('button');btn.className='b';btn.type='button';btn.id='bvbChangelogBtn';
