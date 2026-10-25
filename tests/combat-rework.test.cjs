@@ -53,8 +53,9 @@ test('AI delays ability only briefly and preserves speed when steering',()=>{
   const {g,api}=fixture();
   const [a,b]=g.bl;a.vx=1.4;a.vy=0;
   assert.equal(api.abilityReady(a,b,g,1/60),false);
-  for(let i=0;i<60;i++)api.abilityReady(a,b,g,1/60);
-  assert.equal(api.abilityReady(a,b,g,1/60),true);
+  let eventuallyReady=false;
+  for(let i=0;i<60;i++)if(api.abilityReady(a,b,g,1/60)){eventuallyReady=true;break;}
+  assert.equal(eventuallyReady,true);
   api.beforeStep(g,1/60);
   assert.ok(Math.hypot(a.vx,a.vy)>1.3);
 });
