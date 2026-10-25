@@ -36,6 +36,13 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.waitForFunction(()=>document.getElementById('ovb').textContent.includes('Ostatnie 5 sekund'));
    await page.click('#ovb button:has-text("Cała powtórka")');
    assert.equal(await page.locator('#bvbReplayOverlay').isVisible(),true,'replay overlay must open');
+   await page.click('#bvbReplaySave');
+   assert.equal(await page.evaluate(()=>
+     Object.keys(localStorage).some(k=>k.startsWith('bvb-rework-replays-'))),true,
+     'replay should persist locally');
+   await page.click('#bvbReplayLoad');
+   assert.ok((await page.locator('#bvbReplayTime').textContent()).includes('/'),
+     'saved replay should be seekable');
    await page.click('#bvbReplayClose');
    assert.equal(await page.locator('#bvbReplayOverlay').isVisible(),false,'replay overlay must close');
    await page.evaluate(()=>{startBossFight(0);pick(0);});
