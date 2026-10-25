@@ -282,6 +282,9 @@ function cast(o,foe){
  const delta=Math.hypot(foe.x-o.x,foe.y-o.y);
  const lowHp=o.hp/Math.max(1,o.mh)<.35;
  o.attackGlow=.7;G.v2SkillId=o.b.id;
+ G.pop ||= [];
+ if(G.pop.length<24)G.pop.push({x:o.x,y:Math.max(22,o.y-o.r-24),age:0,life:1.1,
+  text:d.title.length>21?d.title.slice(0,20)+'…':d.title,c:d.color});
  switch(kind){
  case 'web': visual(o,o,'web',27,d.color,.5);break; // webs form only on actual wall impacts
  case 'charge': o.skillCharge=Math.min(5,(o.skillCharge||0)+1);dash(o,foe,.22);break;
@@ -356,8 +359,7 @@ function cast(o,foe){
   o.hp=Math.min(o.mh,o.hp+7*scale);o.status.shield=Math.min(26,(o.status.shield||0)+5);
   visual(o,o,'heal',30,'#86efac',.62);break;
  case 'shard':
-  for(let j=0;j<5;j++){shoot(o,foe,{count:1,damage:o.baseDmg*.25,
-     spread:0,speed:155+12*j,bounces:1,color:d.color});}
+  shoot(o,foe,{count:5,damage:o.baseDmg*.25,spread:.28,speed:165,bounces:1,color:d.color});
   visual(o,o,'shard',32,d.color,.5);break;
  case 'blink':{
   const a=Math.atan2(o.y-foe.y,o.x-foe.x)+(Math.random()-.5)*1.1;
@@ -522,7 +524,19 @@ function drawOverlay(){
   if(e.kind==='slash'){cx.beginPath();cx.arc(e.x,e.y,e.size*(.45+t),-.6,1.95);cx.stroke();}
   else if(e.kind==='orbit'){for(let i=0;i<3;i++){cx.beginPath();cx.arc(e.x,e.y,e.size*(.4+t),i*2*Math.PI/3+t,i*2*Math.PI/3+.5+t);cx.stroke();}}
   else if(e.kind==='clock'){cx.beginPath();cx.arc(e.x,e.y,e.size*(.5+t),0,7);cx.stroke();cx.beginPath();cx.moveTo(e.x,e.y);cx.lineTo(e.x+e.size*.35,e.y-e.size*.3);cx.stroke();}
-  else {cx.beginPath();cx.arc(e.x,e.y,e.size*(.35+t),0,Math.PI*2);cx.stroke();}
+  else {
+   cx.beginPath();cx.arc(e.x,e.y,e.size*(.35+t),0,Math.PI*2);cx.stroke();
+   // Per-ball rune pattern: every ball uses a different rhythm and geometry.
+   const petals=3+(e.id%6),rot=(e.id%2?-1:1)*t*(.7+e.id%5*.16);
+   cx.globalAlpha*=.58;
+   for(let j=0;j<petals;j++){
+    const a=j*Math.PI*2/petals+rot,r=e.size*(.24+t*.63);
+    const x=e.x+Math.cos(a)*r,y=e.y+Math.sin(a)*r;
+    if(e.id%3===0){cx.strokeRect(x-2,y-2,4,4);}
+    else if(e.id%3===1){cx.beginPath();cx.arc(x,y,1.4+(e.id%3),0,7);cx.stroke();}
+    else {cx.beginPath();cx.moveTo(x,y-3);cx.lineTo(x+3,y);cx.lineTo(x,y+3);cx.closePath();cx.stroke();}
+   }
+  }
  }
  cx.restore();
 }
