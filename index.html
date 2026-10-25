@@ -2692,6 +2692,8 @@ function fire() {
 }
 function launchMatch(remoteAngle = null) {
   if (!G || G.ph !== 'aim') return;
+  // Start a new deterministic round with its own clock and event timeline.
+  G.rt=0;G.hitStop=0;
   const p = G.m === 12 ? actor(G.pb, 180, 300, G.pa, 0, 0, 1, 0, 0) : actor(G.pb, 180, 300, G.pa, 0, 0);
   const botAim = remoteAngle == null
     ? computeBotAim(180, 60, 180, 300, Math.cos(G.pa), Math.sin(G.pa), diff)
