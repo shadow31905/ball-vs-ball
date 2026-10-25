@@ -25,7 +25,13 @@
   function info(s){notice=s;const p=$('#accountMessage');if(p)p.textContent=s;}
   function refresh(){if($('#pn')?.dataset.panel==='account' && !$('#pn').hidden) renderAccount();}
   function gateMessage(s){const p=$('#gateMessage');if(p)p.textContent=s||'';}
-  function hideGate(){const p=$('#accountGate');if(p)p.hidden=true;}
+  function hideGate(){
+    const p=$('#accountGate');
+    if(!p || p.hidden) return;
+    p.hidden=true;
+    // Announce that the user actually entered the game, never while choosing an account.
+    window.dispatchEvent(new Event('bvb-entered-game'));
+  }
   function gateMode(mode='welcome'){
     gateView=mode;
     const root=$('#accountGate'),body=$('#gateBody');if(!root||!body)return;
