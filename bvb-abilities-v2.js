@@ -178,8 +178,9 @@ getBallStats=function(id,...args){
  const st=oldStats(id,...args);const d=abilityData[id]||abilityData[0];
  const tierMult=st.tier===3?1.32:st.tier===2?1.15:1;
  st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv)*tierMult);
- st.cd=+(d.cooldown*(st.tier===3?.72:st.tier===2?.85:1)).toFixed(2);
- st.activeDesc=d.desc+(st.tier>1?' · Ewolucja V'+st.tier+': silniejszy efekt.':'');
+ st.cd=d.kind==='web'?0:+(d.cooldown*(st.tier===3?.72:st.tier===2?.85:1)).toFixed(2);
+ st.activeDesc=d.title+': '+d.desc+(st.tier>1?' · Ewolucja V'+st.tier+': silniejszy efekt.':'');
+ st.speed=d.speed;
  return st;
 };
 function roundState(){
@@ -252,7 +253,7 @@ function webPoint(o,side){
  const p={x:o.x,y:o.y,side};
  const start=o.v2WallAnchor;
  if(start&&start.side!==side){
-  st.webs.push({a:start,b:p,team:o.team,id:o.b.id,owner:o.uid,cooldowns:{},color:o.b.id===34||o.b.id===117?'#aa83da':'#d4e7ff'});
+  st.webs.push({a:start,b:p,team:o.team,id:o.b.id,owner:o.uid,inside:{},color:o.b.id===34||o.b.id===117?'#aa83da':'#d4e7ff'});
   visual(o,{x:(start.x+p.x)/2,y:(start.y+p.y)/2},'web',38,'#dcecff',.7);
  }
  o.v2WallAnchor=p;
@@ -453,13 +454,12 @@ function tick(dt){
  for(const w of st.webs){
   for(const foe of G.bl||[]){
    if(!alive(foe)||foe.team===w.team)continue;
-   const now=G.rt||0,last=w.cooldowns[foe.uid]??-10;
-   if(now-last<.5)continue;
-   if(closestToSegment(foe.x,foe.y,w.a.x,w.a.y,w.b.x,w.b.y)<=foe.r+2){
+   const touched=closestToSegment(foe.x,foe.y,w.a.x,w.a.y,w.b.x,w.b.y)<=foe.r+2;
+   if(touched&&!w.inside[foe.uid]){
     const owner=G.bl.find(o=>o.uid===w.owner)||null;
     if(owner)strike(owner,foe,1,{poison:w.id===34||w.id===117?.4:0});
-    w.cooldowns[foe.uid]=now;
    }
+   w.inside[foe.uid]=touched;
   }
  }
  for(const p of st.effects)p.age+=dt;
@@ -550,8 +550,7 @@ function enhanceArt(id){
  // All 130 existing unique SVG foreground designs are retained, while the common
  // square backing is replaced with a lighted sphere and character accents.
  const square=/<rect x="1" y="1" width="62" height="62" rx="18"[^>]*\/>/;
- return old.replace(square,background)+'' /* Keep markup valid and self-contained */
-   .replace('</svg>',shine+extra+'</svg>');
+ return old.replace(square,background).replace('</svg>',shine+extra+'</svg>');
 }
 art=function(id){if(!ART.has('v2'+id))ART.set('v2'+id,enhanceArt(id));return ART.get('v2'+id);};
 ART_IMAGES.clear();preloadArt();
