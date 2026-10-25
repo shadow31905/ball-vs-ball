@@ -77,6 +77,12 @@
     const pick = keys[Math.floor(Math.random()*keys.length)];
     g.lastModifier = g.modifier = pick;
     g.tactics = {0:'balanced',1:Math.random()<.24?'balanced':(['strike','guard','rush'][Math.floor(Math.random()*3)])};
+    // Easy bots do not randomly gain Guard (+20% HP) or Rush (+26% speed).
+    // Medium bots may occasionally use a mild tactic, but never Rush.
+    if(g.m===0&&typeof diff==='number'){
+      if(diff===0)g.tactics[1]='balanced';
+      else if(diff===1)g.tactics[1]=Math.random()<.18?(['strike','guard'][Math.floor(Math.random()*2)]):'balanced';
+    }
     if(g.m===12)g.tactics[1] = 'balanced'; // Guest chooses their own stance.
     g.roundStartedAt = 0;
   }
