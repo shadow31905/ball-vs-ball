@@ -181,6 +181,8 @@ getBallStats=function(id,...args){
  st.cd=d.kind==='web'?0:+Math.max(2.25,d.cooldown*(st.tier===3?.78:st.tier===2?.90:1)).toFixed(2);
  st.activeDesc=d.title+': '+d.desc+(st.tier>1?' · Ewolucja V'+st.tier+': silniejszy efekt.':'');
  st.speed=d.speed;
+ const identity=window.BVBIdentities?.get?.(id);
+ if(identity){st.passiveName=identity.passive.name;st.passiveDesc=identity.passive.desc;st.superName=identity.super.name;st.superDesc=identity.super.desc;st.superThreshold=100;st.superLimit=2;}
  return st;
 };
 function abilityFor(o){return abilityData[o?.b?.abilityId ?? o?.b?.id] || abilityData[0];}
@@ -196,14 +198,18 @@ function visual(owner,point,kind='burst',size=24,color=null,duration=.48){
  if(state.effects.length>35)state.effects.splice(0,state.effects.length-35);
  if(owner && typeof burst==='function')burst(owner,effectType(owner.b),4,false);
 }
+function setStatus(source,target,key,seconds){
+ const kind=abilityFor(source).kind;
+ const family=/lava|sun|phoenix|meteor|pumpkin/.test(kind)?'fire':/frost|shard|moon/.test(kind)?'ice':/shock|storm|beam|grid/.test(kind)?'electric':/poison|gas|thorn|web/.test(kind)?'poison':/void|shadow|mirage|doom|eclipse|prism/.test(kind)?'arcane':'physical';
+ if(window.BVBRework?.applyStatus){window.BVBRework.applyStatus(target,key,seconds,family);return;}
+ if(target.statusImmunities?.includes(key))return;
+ target.status||={};target.status[key]=Math.max(target.status[key]||0,Math.min(key==='stun'?.55:5,seconds));
+}
 function strike(source,target,amount,options={}){
  if(!alive(target))return;
  const raw=Math.max(.5,amount*(source?.status?.weaken>0?.8:1));
  applyDamage(target,window.BVBRework?.abilityDamage?.(source,target,raw) ?? raw);
- if(options.poison)target.status.poison=Math.max(target.status.poison||0,options.poison);
- if(options.burn)target.status.burn=Math.max(target.status.burn||0,options.burn);
- if(options.slow)target.status.slow=Math.max(target.status.slow||0,options.slow);
- if(options.stun)target.status.stun=Math.max(target.status.stun||0,Math.min(.55,options.stun));
+ for(const key of ['poison','burn','slow','stun'])if(options[key])setStatus(source,target,key,options[key]);
  if(options.knock){
   let dx=target.x-(source?.x||180),dy=target.y-(source?.y||180),d=Math.hypot(dx,dy)||1;
   target.vx+=dx/d*options.knock;target.vy+=dy/d*options.knock;
@@ -384,8 +390,8 @@ function cast(o,foe){
   visual(o,o,'blink',33,d.color,.65);break;
  }
  case 'time':case 'eclipse':
-  foe.status.slow=Math.max(foe.status.slow||0,kind==='time'?1.2:.7);
-  if(kind==='eclipse')foe.status.weaken=Math.max(foe.status.weaken||0,1.6);
+  setStatus(o,foe,'slow',kind==='time'?1.2:.7);
+  if(kind==='eclipse')setStatus(o,foe,'weaken',1.6);
   visual(o,foe,'clock',41,d.color,.75);break;
  case 'lava':case 'sun':
   zone(o,foe.x,foe.y,kind==='lava'?'fire':'sun',31,2.8,.52);break;
@@ -678,5 +684,21 @@ function prepareActors(g,p,e){
  }
 }
 function afterLoad(){ART_IMAGES.clear();preloadArt();}
-window.BVB2={abilities:abilityData,onWall,cooldown,prepareActors,afterLoad,drawOverlay};
+// Render from live mechanics metadata so collection and prematch descriptions agree.
+function identityPanel(id){
+ const identity=window.BVBIdentities?.get?.(id);if(!identity)return null;
+ const box=document.createElement('section');box.className='cd bvb-identity-summary';
+ box.setAttribute('aria-label','Pasywna i superumiejętność: '+identity.name);
+ box.style.cssText='text-align:left;margin:10px 0;font-size:.79rem;line-height:1.5;overflow-wrap:break-word';
+ for(const [label,data] of [['Pasywna',identity.passive],['Super',identity.super]]){
+  const title=document.createElement('h3');title.style.cssText='font-size:.88rem;margin:10px 0 4px;color:#c4b5fd';title.textContent=label+' — '+data.name;
+  const description=document.createElement('p');description.textContent=data.desc;box.append(title,description);
+ }
+ const charge=document.createElement('p');charge.style.cssText='margin-top:9px;color:#fde68a';
+ charge.textContent='Super uruchamia się automatycznie przy 100 energii, maksymalnie 2 razy w rundzie. Energia: +3,6/s, +10 za własne zderzenie i +5 po trafieniu kontaktem. Ogłuszenie wstrzymuje aktywację.';
+ box.append(charge);return box;
+}
+const originalBallDetail=openBallDetail;
+openBallDetail=function(id){originalBallDetail(id);const details=identityPanel(id);if(details)document.querySelector('#ovb')?.appendChild(details);};
+window.BVB2={abilities:abilityData,onWall,cooldown,prepareActors,afterLoad,drawOverlay,identityPanel};
 })();

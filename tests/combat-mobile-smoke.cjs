@@ -1,9 +1,10 @@
 'use strict';
 const assert=require('node:assert/strict');
-const {chromium}=require('playwright');
+const browserName=process.env.BVB_BROWSER||'chromium';
+const browserEngine=require('playwright')[browserName];
 const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
 (async()=>{
- const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+ const browser=await browserEngine.launch({headless:true,...(browserName==='chromium'?{args:['--no-sandbox']}:{})});
  try{
    for(const width of [320,375,430]){
      const ctx=await browser.newContext({viewport:{width,height:760},deviceScaleFactor:2,

@@ -179,7 +179,7 @@ function addObstacles(g,n){
  }
 }
 function forcePortal(g){
- if(!g.portal){const p=randomEmptyPoint(g.obstacles||[],48);g.portal={...p,r:21,seed:Math.random()*6.28};}
+ if(!g.portal){const p=randomEmptyPoint(g.obstacles||[],48);g.portal={...p,r:21,seed:(window.BVBRework?.random?.(g) ?? Math.random())*6.28};}
 }
 function setupRound(g){
  if(!g||g.m!==13)return;
@@ -228,7 +228,7 @@ function intermission(g){
  if(!g||g.m!==13||g.rn<1||g.campaignEventHandled===g.rn||g.h[0]<=0||g.h[1]<=0)return false;
  g.campaignEventHandled=g.rn;
  const candidates=EVENTS.filter(e=>e.id!==g.lastEvent);
- const event=candidates[Math.floor(Math.random()*candidates.length)];
+ const event=candidates[Math.floor((window.BVBRework?.random?.(g) ?? Math.random())*candidates.length)];
  g.lastEvent=event.id;g.campaignEvent=event;g.ph='intermission';
  $('#fire').hidden=true;$('#cards').innerHTML='';
  $('#ov').hidden=false;

@@ -1,10 +1,11 @@
 'use strict';
 // End-to-end smoke tests: a real Chromium browser runs the complete game page.
 const assert=require('node:assert/strict');
-const {chromium}=require('playwright');
+const browserName=process.env.BVB_BROWSER||'chromium';
+const browserEngine=require('playwright')[browserName];
 const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
 (async()=>{
- const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+ const browser=await browserEngine.launch({headless:true,...(browserName==='chromium'?{args:['--no-sandbox']}:{})});
  const page=await browser.newPage({viewport:{width:430,height:900}});
  const errors=[];
  page.on('pageerror',error=>errors.push(String(error)));
@@ -37,6 +38,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.click('#ovb button:has-text("Cała powtórka")');
    assert.equal(await page.locator('#bvbReplayOverlay').isVisible(),true,'replay overlay must open');
    await page.click('#bvbReplaySave');
+   await page.waitForFunction(()=>document.getElementById('bvbReplaySave').textContent.includes('Zapisano'));
    assert.equal(await page.evaluate(()=>
      Object.keys(localStorage).some(k=>k.startsWith('bvb-rework-replays-'))),true,
      'replay should persist locally');

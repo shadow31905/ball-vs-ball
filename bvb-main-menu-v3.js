@@ -169,7 +169,8 @@ function chooseBall(id){
  replay.addEventListener('click',()=>window.BVB2Preview?.play?.(id));
  const simulationCaption=document.createElement('p');simulationCaption.className='bvb3-desc';
  simulationCaption.textContent='Schemat umiejętności — przebieg prawdziwego ataku zależy od sytuacji na arenie.';
- preview.replaceChildren(header,stats,ability,simulation,replay,simulationCaption);
+ const identity=window.BVB2?.identityPanel?.(id);
+ preview.replaceChildren(header,stats,ability,...(identity?[identity]:[]),simulation,replay,simulationCaption);
  ready.disabled=level===null;
  requestAnimationFrame(()=>{if(ballId===id&&document.getElementById('bvb-skill-preview-canvas')===simulation)
    window.BVB2Preview?.play?.(id);});

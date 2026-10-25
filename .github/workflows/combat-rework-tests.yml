@@ -7,9 +7,7 @@ on:
   pull_request:
     paths:
       - 'index.html'
-      - 'bvb-combat-*.js'
-      - 'bvb-abilities-v2.js'
-      - 'bvb-anime-update.js'
+      - 'bvb-*.js'
       - 'tests/**'
       - '.github/workflows/combat-rework-tests.yml'
 
@@ -19,36 +17,49 @@ permissions:
 jobs:
   combat:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Verify JavaScript syntax
-        run: |
-          node --check bvb-combat-rework.js
-          node --check bvb-combat-ui.js
-          node --check bvb-abilities-v2.js
-          node --check bvb-anime-update.js
-      - name: Run combat regression tests
-        run: node --test tests/combat-rework.test.cjs
-
-  browser:
-    runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Chromium and Playwright
+      - name: Verify scripts and full simulation regressions
+        run: |
+          for file in bvb-*.js; do node --check "$file"; done
+          node --test tests/*.test.cjs
+      - name: Run reproducible balance sample
+        env:
+          BVB_BALANCE_GAMES: '2600'
+          BVB_BALANCE_SEED: '90000'
+          BVB_BALANCE_OUT: balance-ci.json
+        run: node tests/balance.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: balance-sample
+          path: balance-ci.json
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    env:
+      BVB_BROWSER: ${{ matrix.browser }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser engine
         run: |
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
-      - name: Run full-page Chromium smoke test
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run full-page browser and mobile tests
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bvb-server.log 2>&1 &
           sleep 2
           node tests/combat-browser-smoke.cjs
-          node tests/combat-mobile-smoke.cjs
+          if [ "$BVB_BROWSER" != firefox ]; then node tests/combat-mobile-smoke.cjs; fi
+          if [ "$BVB_BROWSER" = chromium ]; then node tests/combat-network-browser.cjs; fi
