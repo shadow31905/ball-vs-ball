@@ -27,3 +27,16 @@ Ten plik jest **wewnętrzną listą projektu**, nie jest wczytywany przez stron�
 - Nie usuwać istniejących trybów / ustawień, jeśli użytkownik prosi tylko o przeorganizowanie menu.
 - Odróżniać przetestowane mechaniki od funkcji, które są jedynie obecne w kodzie.
 - Aktualizować tę notatkę po następnych zmianach, **bez udostępniania ich w grze** aż do wyraźnej prośby.
+
+## Aktualizacja 2026-10-25 — zaakceptowany nowy szkic wdrożony do kodu
+
+- Zatwierdzony projekt z 15 pytań: 4 animowane kafle, różne rozmiary, najważniejsze Tryby walki, ikona/nazwa/opis/podgląd.
+- Podłączono osobne widoki kategorii, dodatkowe tryby, wydarzenia i areny z ustawieniami.
+- Przed walką z botem lub bossem dodano wybór 5 poziomów, posiadanej kulki i „Gotowość”; przed walką z bossem również wybór bossa.
+- Nowe przygotowanie wstawia wybraną kulkę do dotychczasowego składu i automatycznie przechodzi do celowania; pozostałe tryby używają starej logiki.
+- Udostępniono podgląd nazwy, HP, DMG, cooldownu i opisu umiejętności na ekranie przygotowania.
+- Wznowiono Changelog w osobnym pliku, który wyświetla się po zdarzeniu „bvb-entered-game” — dopiero po zalogowaniu lub wejściu jako gość.
+- Changelog dostępny również ręcznie z kategorii Konto i ustawienia.
+- Zaplanowany tekst przed wdrożeniem zapisano w `BVB-CHANGELOG-2.0.md`.
+- Składnia JS przeszła walidację. Symulacja menu potwierdziła: 4 kafle, zachowanie 24 oryginalnych przycisków z akcjami, wybór trudności i kulki, gotowość uruchamiającą bot/boss, oraz brak Changeloga przed zamknięciem ekranu logowania.
+- **Do sprawdzenia ręcznie**: wygląd na małych telefonach, rzeczywisty przebieg całej walki, PvP i synchronizacja, działania konta z Supabase. Przeglądarka testowa nie uzyskała dostępu do publicznej strony (blokada sieciowa).
