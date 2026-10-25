@@ -3,10 +3,30 @@
 'use strict';
 const css=document.createElement('style');
 css.textContent=[
-'#menu .bvb-menu-hint{display:block;margin:5px auto 0;font-size:clamp(.58rem,1.75vw,.71rem);line-height:1.35;',
-'font-weight:500;letter-spacing:0;color:#cbd5e1;max-width:32rem;opacity:.95;text-wrap:balance}',
-'#menu .diff-row .bvb-menu-hint{font-size:.55rem;line-height:1.15}',
-'#menu .b:focus-visible{outline:3px solid #facc15;outline-offset:3px}',
+/* Entire menu button stacks title ABOVE the description, never side-by-side. */
+'#menu .bvb-menu-button{display:flex!important;flex-direction:column!important;align-items:center;',
+'justify-content:center;gap:4px;min-width:0;width:100%;height:auto;padding:13px 10px;',
+'text-align:center;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}',
+'#menu .bvb-menu-title{display:block;width:100%;font-weight:850;line-height:1.34;',
+'font-size:clamp(.83rem,2.8vw,.99rem);white-space:normal;overflow-wrap:normal;',
+'word-break:normal;hyphens:none;letter-spacing:0}',
+'#menu .bvb-menu-hint{display:block;width:100%;max-width:none;margin:3px 0 0;',
+'font-size:clamp(.73rem,2.2vw,.82rem);line-height:1.4;font-weight:500;',
+'color:#d5def6;letter-spacing:0;opacity:.96;white-space:normal;',
+'overflow-wrap:normal;word-break:normal;hyphens:none;text-wrap:wrap}',
+/* A narrow 3-column grid would split even simple words (Ustawienia). */
+'#menu .grid-3{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}',
+'#menu .grid-3>button:last-child:nth-child(odd){grid-column:1/-1}',
+'#menu .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}',
+'#menu .diff-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}',
+'#menu .diff-row>button:last-child:nth-child(odd){grid-column:1/-1}',
+'#menu .diff-row .bvb-menu-title{font-size:.87rem}',
+'#menu .diff-row .bvb-menu-hint{font-size:.75rem;line-height:1.35}',
+/* Compact phones: a full-width button per action, no word fragmentation. */
+'@media(max-width:380px){#menu .grid-2,#menu .grid-3,#menu .diff-row{grid-template-columns:minmax(0,1fr)}',
+'#menu .grid-3>button:last-child:nth-child(odd),#menu .diff-row>button:last-child:nth-child(odd){grid-column:auto}',
+'#menu .bvb-menu-button{padding:12px 12px}}',
+'#menu .b:focus-visible,#menu .diff-btn:focus-visible{outline:3px solid #facc15;outline-offset:3px}',
 '#bvbV2Updates{position:fixed;inset:0;z-index:350;background:#040715cc;padding:18px 12px;overflow:auto;display:grid;place-items:center}',
 '#bvbV2Updates[hidden]{display:none!important}',
 '.bvb-v2-dialog{position:relative;max-height:min(84vh,750px);overflow:auto;width:min(440px,100%);',
@@ -49,17 +69,31 @@ const details=[
  ['BVB2UI.open','Zobacz, co dodano, zmieniono i poprawiono.']
 ];
 function descriptions(){
- const menu=document.querySelector('#menu');if(!menu)return;
- const all=Array.from(menu.querySelectorAll('button'));
- const diff=Array.from(menu.querySelectorAll('.diff-btn'));
+ const root=document.querySelector('#menu');if(!root)return;
+ const all=Array.from(root.querySelectorAll('button'));
+ const difficulties=Array.from(root.querySelectorAll('.diff-btn'));
  for(const btn of all){
-  if(btn.querySelector('.bvb-menu-hint'))continue;
   const on=btn.getAttribute('onclick')||'';
-  let desc=btn.id==='bvbChangelogBtn'?'Zobacz szczegółowy opis najnowszej aktualizacji.':diff.includes(btn)?details[0][1][diff.indexOf(btn)]:null;
+  let desc=btn.id==='bvbChangelogBtn'?'Zobacz szczegółowy opis najnowszej aktualizacji.':
+   difficulties.includes(btn)?details[0][1][difficulties.indexOf(btn)]:null;
   if(!desc){const spec=details.slice(1).find(d=>on.includes(d[0]));desc=spec?.[1];}
   if(!desc)desc='Otwórz wybraną funkcję gry.';
-  const el=document.createElement('span');
-  el.className='bvb-menu-hint';el.textContent=desc;btn.appendChild(el);
+  btn.classList.add('bvb-menu-button');
+  // Preserve original icons and line breaks; wrap all existing title nodes.
+  // Some labels (Survival, music, arena) are updated by menu() using textContent/innerHTML.
+  // Whenever that happens, rebuild the title+description cleanly.
+  let title=Array.from(btn.children).find(el=>el.classList?.contains('bvb-menu-title'));
+  if(!title){
+   title=document.createElement('span');
+   title.className='bvb-menu-title';
+   const nodes=Array.from(btn.childNodes).filter(node=>
+    !(node.nodeType===1 && node.classList?.contains('bvb-menu-hint')));
+   for(const node of nodes)title.appendChild(node);
+   btn.insertBefore(title,btn.firstChild);
+  }
+  let hint=Array.from(btn.children).find(el=>el.classList?.contains('bvb-menu-hint'));
+  if(!hint){hint=document.createElement('span');hint.className='bvb-menu-hint';btn.appendChild(hint);}
+  hint.textContent=desc;
  }
 }
 const oldMenu=menu;
