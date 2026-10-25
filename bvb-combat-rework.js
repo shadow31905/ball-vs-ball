@@ -35,6 +35,8 @@
     }
     g.arenaNextShift=11+Math.random()*4;
     g.arenaShiftCount=0;
+    g.bossAttackAt=7;
+    g.bossTelegraph=null;
   }
 
   // Shield absorbs raw damage first; armor only mitigates HP damage and wears down.
