@@ -119,6 +119,33 @@ test('spectator module and automatic online handshake are wired',()=>{
   'remoteAimAngle != null) launchMatch(remoteAimAngle)'])
   assert.ok(html.includes(needle),needle);
 });
+test('seeded RNG repeats across runs and state hashes detect divergence',()=>{
+ const a=fixture(),b=fixture();
+ const seed=0x51bc35a7;
+ a.api.setSeed(a.g,seed);b.api.setSeed(b.g,seed);
+ const sequenceA=Array.from({length:100},()=>a.api.random());
+ const sequenceB=Array.from({length:100},()=>b.api.random());
+ assert.equal(JSON.stringify(sequenceA),JSON.stringify(sequenceB));
+ assert.equal(a.api.stateHash(a.g),b.api.stateHash(b.g));
+ b.g.bl[0].hp-=1;
+ assert.ok(a.api.stateHash(a.g)!==b.api.stateHash(b.g));
+ assert.ok(sequenceA.every(n=>n>=0&&n<1));
+});
+test('five AI profiles have distinct reaction times and target decisions',()=>{
+ const clocks=[];
+ for(let difficulty=0;difficulty<5;difficulty++){
+   const {g,api,context}=fixture();
+   context.diff=difficulty;
+   g.bl[1].x=90;g.bl[1].y=65;
+   g.bl[0].x=260;g.bl[0].y=280;
+   api.beforeStep(g,1/60);
+   clocks.push(g.bl[1].aiDecisionClock);
+   assert.ok(Number.isFinite(g.bl[1].aiTarget.vx));
+   assert.ok(Number.isFinite(g.bl[1].aiTarget.vy));
+ }
+ assert.equal(new Set(clocks.map(n=>n.toFixed(2))).size,5);
+ for(let i=1;i<5;i++)assert.ok(clocks[i]<clocks[i-1]);
+});
 test('main HTML includes all combat hooks and valid inline JS',()=>{
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   for(const needle of [
