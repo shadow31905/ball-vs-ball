@@ -19,7 +19,7 @@ W kodzie zaimplementowano:
 
 ## Testy i pomiary
 
-`node --test tests/*.test.cjs` uruchamia wszystkie testy regresyjne. GitHub Actions uruchamia również Chromium, Firefox i WebKit, emulację telefonów 320/375/430 px oraz test dwóch klientów WebRTC. Wczesny przebieg a55da53 potwierdził Chromium, Firefox i WebRTC; WebKit ujawnił opóźnienie pierwszego renderowania HUD. HUD jest teraz renderowany natychmiast przy starcie rundy; poprawka wymaga potwierdzenia w najnowszym CI.
+`node --test tests/*.test.cjs` uruchamia wszystkie testy regresyjne. GitHub Actions uruchamia również Chromium, Firefox i WebKit, emulację telefonów 320/375/430 px oraz test dwóch klientów WebRTC. Źródło 76e1e48: 87 testów lokalnych oraz wszystkie joby CI (Chromium, Firefox, WebKit i symulacje) przeszły. CI obejmuje zwykły runtime, oddzielną paczkę beta, trening V3 i dwa rzeczywiste kanały WebRTC. Przebieg: https://github.com/shadow31905/ball-vs-ball/actions/runs/40221214742 . Beta z tego źródła jest opublikowana w /beta/; wdrożenie GitHub Pages zakończyło się sukcesem. Działający interfejs bety sprawdzono również na publicznym adresie w przeglądarce.
 
 Balans ma jawną tabelę 130 współczynników, opartą na tysiącach walk. Po zmianach w aktywnych zdolnościach uruchomiono ponowne pomiary. Aktualne liczby i ograniczenia są w `BALANCE-REPORT.md`. Żaden skończony test nie potwierdza idealnego balansu wszystkich par; potrzebne są również obserwacje graczy.
 

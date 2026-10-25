@@ -1,40 +1,25 @@
-# Ball VS Ball — measured roster calibration
+# Ball VS Ball — pomiar balansu V1/V2/V3
 
-`bvb-balance.js`, table version 2, applies explicit HP and DMG coefficients to all 130 IDs. A global HP multiplier of 1.45 increases normal battle length. Evolution and upgrade multipliers remain in the underlying stats pipeline; displayed HP/DMG include the calibration. Cooldowns and movement are unchanged by this module.
+Źródło gry: 76e1e4878585838a757874a7713c40d5c2395916. Tabela współczynników: wersja 3; wcześniejsze dopasowanie wykorzystało 7800 walk. Po końcowych zmianach zdolności przeprowadzono kolejne 7800 walk — po 2600 dla V1, V2 i V3. SHA-256 wszystkich plików symulacji w raportach zgadza się z opublikowanym źródłem.
 
-The table was fitted using 2,600 initial full-engine battles, then a damped correction from 2,600 mirrored battles at the target tempo. This is a first measured calibration, not a claim of complete balance.
+Każda kulka ma 40 walk na ewolucję, z 20 różnymi rywalami; pary mają odwrócone strony startowe. Obie strony używają poziomu 4 AI, równych ewolucji, bez ulepszeń statystyk, z taktyką Balans i sześcioma arenami. Remis liczy się jako pół punktu w scoreRate. To próbka, nie wszystkie możliwe zestawienia i nie rozgrywki ludzi.
 
-## Independent validation
+| Wersja | Walki | Mediana | P10 / P90 | Limit czasu | Poniżej 30 s | Kulki poza 25–75% wyniku |
+|---|---:|---:|---:|---:|---:|---:|
+| V1 | 2600 | 31.98 s | 19.90 / 58.52 s | 246 | 1115 | 12 |
+| V2 | 2600 | 31.53 s | 19.58 / 56.30 s | 209 | 1132 | 13 |
+| V3 | 2600 | 31.17 s | 19.25 / 56.48 s | 223 | 1179 | 28 |
 
-Control and calibrated builds each ran **2,600 full-engine battles**, with identical seed base `200000`, opponent offset `9`, mirrored starting sides, V1 balls, no upgrades, level 4 AI for both sides, balanced tactics and six arenas. Each ball played 40 games against 20 distinct opponents. The validation seeds and opponent offsets were excluded from coefficient fitting. Draws count as half a point in `scoreRate`.
+Mediany mieszczą się w celu 30–60 s, ale około 43–45% walk kończy się przed 30 s, a około 8–10% rozstrzyga limit czasu. Wyniki na poziomie kulek nadal mają wyraźne skrajności, szczególnie V3. **Pełny balans nie jest jeszcze potwierdzony.** Potrzebne są dalsze korekty, większe próbki, testy graczy i osobny odbiór bossów oraz progresji. Czterdzieści walk nie daje precyzyjnej oceny indywidualnego win rate.
 
-| Metric | Control | Calibration v2 |
-|---|---:|---:|
-| Median battle length | 22.82 s | 32.27 s |
-| 10th percentile duration | 12.73 s | 20.50 s |
-| 90th percentile duration | 41.03 s | 60.02 s |
-| Time-limit decisions | 60 / 2600 | 261 / 2600 |
-| Battles below 30 seconds | 1869 / 2600 | 1059 / 2600 |
-| Lowest / highest roster score rate | 2.5% / 97.5% | 12.5% / 81.3% |
-| Balls outside 25–75% score rate | 33 | 12 |
-| Mean absolute distance from 50% | 17.77 percentage points | 12.12 percentage points |
+## Najbardziej odstające wyniki tej próbki
 
-The measured spread improves substantially and the median reaches the intended duration range. **Ten percent of games still end at the time limit**, and approximately 41% finish before 30 seconds. Defensive matchups, the remaining outliers, progression tiers, bosses and human play need further validation. Forty games per ball cannot establish precise individual win rates, and this sample does not cover every possible matchup.
+- V1: Przekuwacz (90%), WDC (76.3%), Król Elektryków (76.3%), Rój (20%), Fibonacci (77.5%), Pulsar (78.8%), Nawałnica (21.3%), Zagłada (76.3%), 🎃 Gargulec (23.8%), 🎃 Nekromanta (78.8%), 🎃 Grobowy Alchemik (20%), 🎃 Płacząca Marionetka (77.5%).
+- V2: Szarża (81.3%), Wampir (77.5%), Włócznia (80%), Komórka (20%), Jabłko (18.8%), Mróz (78.8%), Fibonacci (85%), Pulsar (80%), Widmo (17.5%), 🎃 Duch Latarni (23.8%), 🎃 Nekromanta (76.3%), 🎃 Dzwon Północy (83.8%), 🎃 Widmowy Rycerz (77.5%).
+- V3: Szarża (83.8%), Trujący kolec (21.3%), Wampir (83.8%), Włócznia (81.3%), Komórka (22.5%), Promień (77.5%), Jabłko (10%), Armata (17.5%), Rój (22.5%), Czarny Pająk (17.5%), Skrzydło Światła (80%), Szlam (20%), Shuriken (76.3%), Fibonacci (86.3%), Ninja (76.3%), Echo (83.8%), Słońce (22.5%), Pulsar (88.8%), Nawałnica (18.8%), Miraż (77.5%), Widmo (16.3%), Zjawa (83.8%), Porządek (22.5%), 🎃 Ognik (20%), 🎃 Pająk Wdowa (21.3%), 🎃 Żniwiarz Dusz (90%), 🎃 Dzwon Północy (83.8%), 🎃 Zgniła Dynia (22.5%).
 
-The 60.02-second reported maximum is the fixed-step boundary at the 60-second round limit. No new invulnerability period or minimum-duration gate was introduced.
+## Powtórzenie pomiaru
 
-## Reproduction
+Z katalogu repozytorium uruchom node --test tests/*.test.cjs, następnie node tests/balance.cjs. Parametry środowiska: BVB_BALANCE_GAMES=2600, BVB_BALANCE_TIER=1, BVB_BALANCE_SEED=900000, BVB_BALANCE_OFFSET=63, BVB_BALANCE_OUT=balance-v1.json. Dla V2 użyj tier=2, seed=910000, offset=71; dla V3 tier=3, seed=920000, offset=77. Raport zapisuje wyniki każdej walki, współczynniki i hashe źródeł. Nie ustawiaj BVB_BALANCE_DISABLE dla pomiaru wersji opublikowanej.
 
-Run the same holdout sample from the repository root:
-
-```powershell
-$env:BVB_BALANCE_GAMES='2600'
-$env:BVB_BALANCE_SEED='200000'
-$env:BVB_BALANCE_OFFSET='9'
-$env:BVB_BALANCE_OUT='balance-report.json'
-node tests/balance.cjs
-```
-
-For the control, also set `$env:BVB_BALANCE_DISABLE='1'`. Remove that variable for the calibrated run. Reports include results for each fight and each ball. New runs also record coefficient metadata and SHA-256 hashes of simulation source files for reproducibility.
-
-`node --test tests/balance.test.cjs` checks complete coefficient coverage, progression-aware repeatable stat scaling and deterministic full-engine combat. This harness runs actual simulation code without DOM rendering; browser, device and network testing remain separate requirements.
+Testy uruchamiają rzeczywisty silnik bez renderowania DOM; płynność urządzeń, publiczny multiplayer, TURN i działanie kont/chmury wymagają odrębnego odbioru. Wartość maksymalna 60,02 s wynika z granicy kroku 1/60 s; nie dodano okresu nietykalności wymuszającego minimalną długość walki.

@@ -56,3 +56,13 @@ Ten plik jest **wewnętrzną listą projektu**, nie jest wczytywany przez stron�
 - Changelog ma wersję 2.0.1 i pokaże się automatycznie raz dla tej aktualizacji, z zachowaniem ręcznego dostępu.
 - Walidacja: składnia zmienionych plików JS i skryptu w index.html OK. Symulacja modułu umiejętności: Topór tworzy 3 widoczne ostrza, trafia cel w zasięgu, nie trafia poza zasięgiem, ostrza wygasają. Symulacja 1000 losowań taktyk: 0 premii dla Łatwego, 0 Rush dla Średniego. Weryfikacja profili: 6 różnych umiejętności bossów, HP bossa większe niż bazowe, rosnące HP/DMG bota wraz z trudnością.
 - Ograniczenia: nie wykonano pełnych testów E2E w prawdziwej przeglądarce ani testów PvP i fizycznych urządzeń; balans wymaga dalszej obserwacji graczy.
+
+
+## Rework — beta 76e1e48
+
+- Wprowadzono 130 autorskich pasywek/superów, 18 faz bossów, realne ulepszenia aktywnych zdolności V2/V3, wyszukiwarkę treningową według rzadkości i wariantów ewolucji, finisher, animowane kwadratowe kategorie i prezentację zwycięskiej kulki.
+- Odtwarzanie zapisanych stanów każdego kroku obejmuje zdarzenia, dźwięki i muzykę; poprawiono zapis, import i odczyt. Zapis profilu ma normalizację, kopię i rollback.
+- Przywrócono progresję trybów, dodano walidację/synchronizację i wznowienie multiplayer, obsługę opcjonalnego TURN oraz diagnostykę trasy. Dwa klienty WebRTC przeszły test w Chromium.
+- 87 testów oraz CI w Chromium/Firefox/WebKit przeszło dla źródła 76e1e48. Osobna beta /beta/ ma izolowany zapis i wyłączoną chmurę; główny index stabilny nie został zmieniony.
+- Pomiary 7800 końcowych walk V1/V2/V3: mediany 31,98 / 31,53 / 31,17 s. Skrajne wyniki części kulek pozostają, więc nie deklarować pełnego balansu ani ukończonej stabilnej premiery. Szczegóły BALANCE-REPORT.md i docs/RELEASE-GATE.md.
+- Powiadomienie w tej rozmowie ma nastąpić dopiero po potwierdzonym ukończeniu i publikacji całości. Nie dodawano nowego automatycznego Changeloga dla graczy.
