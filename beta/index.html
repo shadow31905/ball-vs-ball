@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <base href="../">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Ball VS Ball — BETA reworku walki</title>
+  <meta name="bvb-beta-build" content="76e1e4878585838a757874a7713c40d5c2395916"><title>BETA · Ball VS Ball — Ultimate Edition (130 Kulek + Brawl Stars Inventory + V2/V3 + Multiplayer)</title>
+  <script src="./bvb-save.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
     :root {
@@ -551,7 +551,7 @@
   </style>
 </head>
 <body>
-  <div id="accountGate" hidden class="account-gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <div id="accountGate" class="account-gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
     <div class="account-gate-box">
       <h1 id="gateTitle">BALL <span>VS</span> BALL</h1>
       <p style="text-align:center;color:#bdcaff;margin-bottom:16px">🎮 Witaj w grze!</p>
@@ -565,7 +565,6 @@
     </div>
   </div>
   <div id="app">
-    <div style="margin:0 0 10px;padding:9px;border:1px solid #eab308;border-radius:10px;background:#302209;color:#fef08a;font-size:12px;text-align:center"><b>🧪 BETA REWORKU WALKI</b> · Wersja testowa, postęp oddzielony od głównej gry. <a href="./" style="color:#93c5fd">Wróć do wersji stabilnej</a></div>
     <div id="saveWarn" hidden>⚠️ Uwaga: Przeglądarka zablokowała zapis lokalny (localStorage). Użyj Eksportu w Ustawieniach, aby nie stracić postępu.</div>
     <header>
       <div class="title-box">
@@ -610,7 +609,7 @@
 
         <button class="b boss-button" onclick="bossMenu()">👹 BOSS FIGHT · 6 STRAŻNIKÓW</button>
         <button class="b" onclick="mpMenu()">
-          <span class="icon-globe">🌐</span> Multiplayer 1 vs 1 / Co-Op 2v2 (online)
+          <span class="icon-globe">🌐</span> Multiplayer 1 vs 1 (online)
         </button>
         <button class="b" id="svBtn" onclick="startMatch(1)">Survival (rekord: fala 0)</button>
         <button class="b" id="infBtn" onclick="startMatch(7)">
@@ -901,7 +900,7 @@ const INF_REWARD_PER_WAVE = 25, INF_HP_BASE = 1, INF_HP_LIN = 0.22, INF_HP_QUAD 
 const infHp = w => INF_HP_BASE + INF_HP_LIN * (w - 1) + INF_HP_QUAD * (w - 1) * (w - 1);
 const infDmg = w => 1 + INF_DMG_LIN * (w - 1);
 
-let K = 'bvb_hw_120_v3_beta_combat';
+let K = 'bvb_beta_rework_v4';
 let S, diff = 1, G = null, P = [], R = [], F = [], E = [], AC, MU = { s: 0, m: 0 }, bi = 0, bt = null;
 
 const DO = { vm: 0.7, vs: 0.8, nd: 1, sk: 1, pq: 1, vb: 1 };
@@ -995,7 +994,10 @@ function load() {
   let raw = null;
   try {
     const str = localStorage.getItem(K);
-    if (str) raw = JSON.parse(str);
+    if (str) {
+      try { raw=window.BVBSave.sanitize(JSON.parse(str)); }
+      catch(error) { try{if(!localStorage.getItem(K+'_corrupt_backup'))localStorage.setItem(K+'_corrupt_backup',str);}catch(_){} raw=null; }
+    }
   } catch (e) {
     raw = null;
   }
@@ -1092,6 +1094,8 @@ function save() {
 }
 
 function snd(f, d, t, v, s, m) {
+  window.BVBReworkUI?.recordSound?.(G,{f,d,type:t,v,s,m});
+  if(m && window.BVBReworkUI?.isReplaying?.()&&!window.BVBReworkUI?.isPlayingAudio?.())return;
   if (m ? MU.m : MU.s) return;
   v *= (m ? S.o.vm : S.o.vs) * 1.3;
   if (v < 0.001) return;
@@ -1143,6 +1147,8 @@ function musicTheme() {
 // Miękka synteza: mroczne dzwonki, drony i pulsujący bas.
 // Dźwięki kończą się automatycznie; nie pozostają aktywne po zmianie muzyki.
 function spookyTone(freq, duration, type = 'sine', volume = 0.025, cutoff = 1300, detune = 0) {
+  window.BVBReworkUI?.recordMusic?.(G,{freq,duration,type,volume,cutoff,detune});
+  if(window.BVBReworkUI?.isReplaying?.()&&!window.BVBReworkUI?.isPlayingAudio?.())return;
   if (MU.m || document.hidden || !freq || !S || !S.o) return;
   try {
     AC = AC || new (window.AudioContext || window.webkitAudioContext)();
@@ -1302,7 +1308,7 @@ function mpMenu() {
     <input id="peerCode" class="inp" autocomplete="off" placeholder="Wklej kod hosta" />
     <button class="b" onclick="joinNet()">Dołącz do pokoju</button>
     <div id="netFriendsHint" style="margin:8px 0;color:var(--mu);font-size:.85rem"></div>
-    <p id="netStatus" role="status" style="margin:10px 0;color:#93c5fd">Niepołączono.</p>
+    <p id="netRoute" role="status" style="color:var(--mu);font-size:.85rem">Trasa połączenia będzie widoczna po dołączeniu rywala.</p><p id="netStatus" role="status" style="margin:10px 0;color:#93c5fd">Niepołączono.</p>
     <button class="b" onclick="disconnectNet();mpMenu()">Rozłącz</button>`;
 }
 function startOnlineMatch() {
@@ -1338,49 +1344,57 @@ async function copyNetInvite() {
     window.prompt('Skopiuj ten link i wyślij znajomemu:', link.href);
   }
 }
-function hostNet() {
-  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
-  if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
+async function hostNet() {
+  if(typeof Peer==='undefined'){netStatus('Nie udało się załadować PeerJS. Sprawdź internet.');return;}
   disconnectNet(false);
-  try {
-    peer = new Peer();
-    peer.on('open', id => {
-      netRole = 'host'; netStatus('Pokój gotowy. Wyślij ten kod znajomemu: ' + id);
-      const el = $('#netStatus'); if (el) el.dataset.peerId = id;
-      const invite = $('#netInvite'); if (invite) invite.hidden = !['http:', 'https:'].includes(location.protocol);
+  const generation=netGeneration;
+  try{
+    const options=await window.BVBNetwork.refreshIce();
+    if(generation!==netGeneration)return;
+    const ownPeer=new Peer(options);peer=ownPeer;netRole='host';
+    const route=$('#netRoute');if(route)route.textContent=options.config.iceServers.some(s=>(Array.isArray(s.urls)?s.urls:[s.urls]).some(u=>/^turns?:/.test(u)))?'TURN jest skonfigurowany. Czekam na połączenie.':'TURN nie jest skonfigurowany. Część sieci może blokować połączenie.';
+    ownPeer.on('open',id=>{
+      if(peer!==ownPeer)return;
+      netStatus('Pokój gotowy. Wyślij ten kod znajomemu: '+id);
+      const el=$('#netStatus');if(el)el.dataset.peerId=id;
+      const invite=$('#netInvite');if(invite)invite.hidden=!['http:','https:'].includes(location.protocol);
       window.BVBCloud?.showLobbyFriends?.();
     });
-    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
-    peer.on('connection', conn => {
-      if (activeConn) { try { conn.close(); } catch(e) {} return; }
-      activeConn = conn; setupNetConnection(conn);
+    ownPeer.on('disconnected',()=>{if(peer===ownPeer&&!ownPeer.destroyed){try{ownPeer.reconnect();}catch(_){}}});
+    ownPeer.on('connection',conn=>{
+      if(peer!==ownPeer||activeConn||(acceptedGuest&&conn.peer!==acceptedGuest)){try{conn.close();}catch(_){}return;}
+      activeConn=conn;setupNetConnection(conn);
     });
-    peer.on('error', err => netStatus('Błąd połączenia: ' + (err.type || err.message || 'nieznany')));
-  } catch (e) { netStatus('Nie udało się utworzyć pokoju: ' + e.message); }
+    ownPeer.on('error',err=>{if(peer===ownPeer)netStatus('Błąd połączenia: '+(err.type||err.message||'nieznany'));});
+  }catch(e){if(generation===netGeneration)netStatus('Nie udało się utworzyć pokoju: '+e.message);}
 }
-function joinNet() {
-  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
-  const code = ($('#peerCode')?.value || '').trim();
-  if (!code) { netStatus('Najpierw wpisz kod pokoju.'); return; }
-  if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
-  disconnectNet(false);
-  reconnectRoom = code;
-  try {
-    peer = new Peer();
-    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
-    peer.on('open', () => {
-      netRole = 'guest';
-      activeConn = peer.connect(code, { reliable: true });
-      setupNetConnection(activeConn);
+async function joinNet() {
+  const code=($('#peerCode')?.value||'').trim();
+  if(!code||code.length>150){netStatus('Wpisz prawidłowy kod pokoju.');return;}
+  if(typeof Peer==='undefined'){netStatus('Nie udało się załadować PeerJS. Sprawdź internet.');return;}
+  disconnectNet(false);reconnectRoom=code;
+  const generation=netGeneration;
+  try{
+    const options=await window.BVBNetwork.refreshIce();
+    if(generation!==netGeneration)return;
+    const ownPeer=new Peer(options);peer=ownPeer;netRole='guest';
+    ownPeer.on('disconnected',()=>{if(peer===ownPeer&&!ownPeer.destroyed){try{ownPeer.reconnect();}catch(_){}}});
+    ownPeer.on('open',()=>{
+      if(peer!==ownPeer||activeConn)return;
+      activeConn=ownPeer.connect(code,{reliable:true});setupNetConnection(activeConn);
     });
-    peer.on('error', err => netStatus('Błąd połączenia: ' + (err.type || err.message || 'nieznany')));
-  } catch (e) { netStatus('Nie udało się dołączyć: ' + e.message); }
+    ownPeer.on('error',err=>{if(peer===ownPeer)netStatus('Błąd połączenia: '+(err.type||err.message||'nieznany'));});
+  }catch(e){if(generation===netGeneration)netStatus('Nie udało się dołączyć: '+e.message);}
 }
 function setupNetConnection(conn) {
+  const receiver=window.BVBNetwork.receiver();
   const connectWatchdog = setTimeout(() => { if (!conn.open && activeConn === conn) { try { conn.close(); } catch (_) {} } }, 10000);
   conn.on('open', () => {
+    if(activeConn!==conn)return;
+    if(netRole==='host')acceptedGuest=conn.peer;
     clearTimeout(connectWatchdog);
     reconnectSeq++; reconnectTries = 0;
+    setTimeout(async()=>{try{if(activeConn!==conn)return;const report=await window.BVBNetwork.connectionReport(conn);if(activeConn!==conn)return;const el=$('#netRoute');if(el)el.textContent=report.route==='relay'?'Połączenie przez serwer TURN':report.route==='direct'?'Połączenie bezpośrednie': 'Sprawdzanie trasy połączenia…';}catch(_){}},1500);
     netStatus('Połączono! Rola: ' + (netRole === 'host' ? 'host' : 'gość') + '. Kanał danych działa.');
     const btn = $('#netStart'); if (btn) btn.hidden = true;
     netSend({ type: 'hello', role: netRole, name: 'Ball VS Ball' });
@@ -1395,6 +1409,7 @@ function setupNetConnection(conn) {
     } else if (G?.m === 12) broadcastState();
   });
   conn.on('data', data => {
+    if(activeConn!==conn)return;
     if (!data || typeof data !== 'object') return;
     if (data.type === 'hello') {
       netStatus(netRole === 'host' ? 'Połączono. Czekam na kulki znajomego…' : 'Połączono ze znajomym. Czekam na rozpoczęcie meczu.');
@@ -1411,6 +1426,7 @@ function setupNetConnection(conn) {
       }
     }
     if (data.type === 'state' && netRole === 'guest' && data.state) {
+      if(!receiver.accept(data)){netStatus('Odrzucono niezgodny lub nieaktualny stan.');return;}
       // The host owns the simulation; reverse perspectives for the guest.
       const hostState = data.state;
       if (guestMatchId !== hostState.matchId || guestRound !== hostState.rn) {
@@ -1418,23 +1434,9 @@ function setupNetConnection(conn) {
         guestRound = hostState.rn; guestBallId = null; guestAimSent = false;
         guestAimAngle = -Math.PI / 2;
       }
-      const hostDeck = hostState.my, guestDeck = hostState.bt;
-      const hostBall = hostState.pb, guestBall = hostState.bb;
-      G = hostState;
-      G.my = guestDeck;
-      G.bt = hostDeck;
-      G.h = [hostState.h[1], hostState.h[0]];
-      G.lastRoundWinner = Number.isInteger(hostState.lastRoundWinner) && hostState.lastRoundWinner >= 0 ? 1 - hostState.lastRoundWinner : -1;
-      G.pb = guestBall;
-      G.bb = hostBall;
+      const hostBall = hostState.pb;
+      G = window.BVBNetwork.guestState(hostState);
       G.pa = guestAimAngle;
-      G.bl = (hostState.bl || []).map(o => ({ ...o, team: 1 - o.team, y: 360 - o.y, vy: -o.vy,
-        trail: (o.trail || []).map(p => ({ x: p.x, y: 360 - p.y })) }));
-      G.fx = (hostState.fx || []).map(f => ({ ...f, y: 360 - f.y, vy: -f.vy }));
-      G.rings = (hostState.rings || []).map(r => ({ ...r, y: 360 - r.y }));
-      G.pop = (hostState.pop || []).map(p => ({ ...p, y: 360 - p.y }));
-      G.obstacles=(hostState.obstacles||[]).map(p=>({...p,y:360-p.y,dy:-p.dy}));
-      G.portal=hostState.portal?{...hostState.portal,y:360-hostState.portal.y}:null;
       show('game');
       if (hostState.ph === 'draft' || (hostState.ph === 'aim' && guestBallId == null)) {
         G.ph = 'draft';
@@ -1492,6 +1494,7 @@ function setupNetConnection(conn) {
     else netStatus('Połączenie zamknięte. Host może przyjąć ponowne połączenie.');
   });
   conn.on('error', err => {
+    if(activeConn!==conn)return;
     netStatus('Błąd kanału: ' + (err.message || 'nieznany'));
     if (activeConn === conn) { try { conn.close(); } catch (_) {} }
   });
@@ -1501,7 +1504,7 @@ function netSend(data) {
 }
 function broadcastState() {
   if (netRole !== 'host' || !activeConn || !activeConn.open || !G) return;
-  try { netSend({ type: 'state', state: JSON.parse(JSON.stringify(G)) }); } catch (e) {}
+  try { netSend({ type: 'state', protocol:window.BVBNetwork.VERSION, seq:++netSequence, hash:window.BVBRework?.stateHash?.(G), state: JSON.parse(JSON.stringify(G)) }); } catch (e) {}
 }
 function scheduleNetReconnect() {
   if (reconnectTries >= 6) { netStatus('Nie udało się odzyskać połączenia. Utwórz pokój ponownie.'); return; }
@@ -1521,14 +1524,18 @@ function scheduleNetReconnect() {
   }, Math.min(12000, 900 * Math.pow(2, attempt - 1)));
 }
 function disconnectNet(updateStatus = true) {
-  reconnectSeq++; reconnectTries = 0; reconnectRoom = '';
-  try { if (activeConn) activeConn.close(); } catch (e) {}
-  try { if (peer && !peer.destroyed) peer.destroy(); } catch (e) {}
-  activeConn = null; peer = null; netRole = null; guestRound = -1; guestMatchId = null; guestBallId = null; guestAimSent = false; guestOnlineDeck = null;
-  if (updateStatus) netStatus('Rozłączono.');
+  netGeneration++;reconnectSeq++;reconnectTries=0;reconnectRoom='';acceptedGuest='';
+  const oldConn=activeConn,oldPeer=peer;
+  activeConn=null;peer=null;netRole=null;
+  guestRound=-1;guestMatchId=null;guestBallId=null;guestAimSent=false;guestOnlineDeck=null;
+  remoteBallId=null;remoteAimAngle=null;hostAimAngle=null;
+  try{oldConn?.close();}catch(_){}
+  try{if(oldPeer&&!oldPeer.destroyed)oldPeer.destroy();}catch(_){}
+  if(updateStatus)netStatus('Rozłączono.');
 }
+
 let pendingBossIndex = 0, netRole = null, remoteBallId = null, remoteAimAngle = null, hostAimAngle = null, netSyncAt = 0, guestBallId = null, guestRound = -1, guestMatchId = null, guestAimSent = false, guestAimAngle = -Math.PI / 2, guestOnlineDeck = null;
-let reconnectSeq = 0, reconnectTries = 0, reconnectRoom = '';
+let reconnectSeq = 0, reconnectTries = 0, reconnectRoom = '', netSequence = 0, netGeneration=0, acceptedGuest='';
 
 const ARENA_ACHIEVEMENTS = [
   { id:'arenas', name:'🏆 Wędrowiec Aren', description:'Wygraj mecz na każdej z 6 aren.', coin:180, title:'Wędrowiec Aren', aura:'#fbbf24' },
@@ -1579,6 +1586,7 @@ function cycleArena() {
 }
 
 function menu() {
+  if(window.BVBModes?.abandon?.(G))return;
   clearTimeout(arenaTransitionTimer); $('#arenaTransition').hidden=true;
   if (peer || activeConn) disconnectNet(false);
   $('#ov').hidden = true;
@@ -2385,12 +2393,12 @@ function obstacleKinds(arena) {
 }
 function randomEmptyPoint(items, margin=63) {
   for(let j=0;j<100;j++) {
-    const x=margin+Math.random()*(360-margin*2), y=95+Math.random()*170;
+    const x=margin+battleRandom()*(360-margin*2), y=95+battleRandom()*170;
     // Safe from two spawn positions, and from other obstacles/portal destinations.
     if(Math.hypot(x-180,y-300)<64 || Math.hypot(x-180,y-60)<64) continue;
     if(items.every(p=>Math.hypot(x-p.x,y-p.y)>(p.r||18)+37)) return {x,y};
   }
-  return {x:55+Math.random()*250,y:125+Math.random()*110};
+  return {x:55+battleRandom()*250,y:125+battleRandom()*110};
 }
 function createRoundArena(g) {
   const cfg=settingsForArena(g.th), kinds=obstacleKinds(g.th);
@@ -2401,12 +2409,12 @@ function createRoundArena(g) {
       const point=randomEmptyPoint(g.obstacles), kind=kinds[i%kinds.length];
       const r=kind==='coffin'?21:kind==='tomb'?20:kind==='asteroid'?20:18;
       g.obstacles.push({...point,r,kind,moving:g.th===0,
-        moveClock:3+Math.random()*6, moveDuration:0, dx:0,dy:0, seed:Math.random()*6.28});
+        moveClock:3+battleRandom()*6, moveDuration:0, dx:0,dy:0, seed:battleRandom()*6.28});
     }
   }
-  if(Math.random()<0.38) {
+  if(battleRandom()<0.38) {
     const at=randomEmptyPoint(g.obstacles);
-    g.portal={...at,r:21,seed:Math.random()*6.28};
+    g.portal={...at,r:21,seed:battleRandom()*6.28};
   }
 }
 function obstacleSpark(x,y) {
@@ -2463,7 +2471,7 @@ function collideWithArena(o,dt) {
     if(o.obstacleCooldown<=0){
       obstacleSpark(o.x-nx*o.r,o.y-ny*o.r);
       o.obstacleCooldown=.20;
-      if(netRole!=='guest') {S.ach.bounces++;S.q.bn=(S.q.bn||0)+1;checkAchievements();}
+      if(netRole!=='guest'&&G.m!==4) {S.ach.bounces++;S.q.bn=(S.q.bn||0)+1;checkAchievements();}
     }
   }
   const portal=G.portal;
@@ -2471,9 +2479,9 @@ function collideWithArena(o,dt) {
     const destination=randomEmptyPoint([...(G.obstacles||[]),portal,...G.bl.filter(t=>t!==o)] , 40);
     o.x=destination.x;o.y=destination.y;
     window.BVBCampaign?.onPortal?.(G,o);
-    o.portalCooldown=2+Math.random()*3;
+    o.portalCooldown=2+battleRandom()*3;
     portalVisual(portal,o.x,o.y);
-    if(netRole!=='guest') {S.ach.portals++;checkAchievements();}
+    if(netRole!=='guest'&&G.m!==4) {S.ach.portals++;checkAchievements();}
   }
 }
 const decorPoint=(i,salt=0)=>({x:((i*79+salt*37)%331)+13,y:((i*103+salt*51)%335)+13});
@@ -2541,12 +2549,13 @@ function computeBotAim(bx, by, px, py, pvx, pvy, dLevel) {
   if (predY > W - 20) predY = 2 * (W - 20) - predY;
 
   const chosen = Math.atan2(predY - by, predX - bx);
-  const jitter = (Math.random() - 0.5) * 2 * ERR[clamp(dLevel, 0, 4)];
+  const jitter = (battleRandom() - 0.5) * 2 * ERR[clamp(dLevel, 0, 4)];
   return chosen + jitter;
 }
 
 function actor(b, x, y, a, own, team = own, customTier, customDmgLv, customHpLv) {
   const st = getBallStats(b.id, customTier, customDmgLv, customHpLv);
+  if(b.isBoss&&st.balance){st.hp=Math.round(st.hp/st.balance.hp);st.dmg=Math.max(1,Math.round(st.dmg/st.balance.damage));}
   return {
     uid: ++serial,
     b: { ...b },
@@ -2602,6 +2611,7 @@ function startMatch(mode = 0) {
   const previousArena = G?.finished ? G.th : null;
   G = freshGame(mode, myThree, botThree);
   window.BVBGameplay?.newMatch?.(G);
+  window.BVBModes?.newMatch?.(G);
   window.BVBCampaign?.prepareMatch?.(G);
   arenaTransition(G.th, previousArena);
   if (mode === 11) G.bossIndex = pendingBossIndex;
@@ -2614,10 +2624,14 @@ function nextRound() {
   if (window.BVBCampaign?.intermission?.(G)) return;
   G.ph = 'draft';
   G.rn = (G.rn || 0) + 1;
+  fixedAccumulator=0;
+  const roundSeed=Array.from(String(G.matchId)+':'+G.rn).reduce((n,c)=>Math.imul(n^c.charCodeAt(0),16777619),2166136261)>>>0;
+  window.BVBRework?.setSeed?.(G,roundSeed);
   G.bl = []; G.pr = []; G.z = []; G.fx = []; G.rings = []; G.pop = [];
   G.v2 = null; // Round-based hazards and Spider webs expire only at round boundary.
-  createRoundArena(G);
   window.BVBGameplay?.newRound?.(G);
+  window.BVBModes?.newRound?.(G);
+  createRoundArena(G);
   window.BVBCampaign?.setupRound?.(G);
   remoteAimAngle = null; hostAimAngle = null; remoteBallId = null;
   renderDraft();
@@ -2627,6 +2641,7 @@ function nextRound() {
 
 function renderDraft() {
   if (!G) return;
+  if(window.BVBTraining?.render?.(G))return;
   $('#msg').textContent = G.m===13 ? 'Kampania '+G.campaignLevel+'/50: wybierz kulkę ze swojej drużyny, wyceluj i wystrzel!' : 'Wybierz jedną z 3 wylosowanych kulek, wyceluj procą i wystrzel:';
   $('#cards').innerHTML = G.my.map((b, i) => {
     const st = G.m === 12 ? getBallStats(b.id, 1, 0, 0) : getBallStats(b.id);
@@ -2646,13 +2661,13 @@ function renderDraft() {
 function pick(i) {
   if (!G || G.ph !== 'draft' || !G.my[i] || (netRole === 'guest' && guestBallId != null)) return;
   G.pb = G.my[i];
-  if (netRole === 'guest' && activeConn) {
+  if (netRole === 'guest' && G.m===12) {
     guestBallId = G.pb.id;
     G.bb = G.bt?.[0] || B[0];
     G.ph = 'aim';
     netSend({ type: 'pick', id: G.pb.id, matchId: G.matchId, rn: G.rn });
   } else {
-    G.bb = G.m===13 ? G.bt[0] : G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : ((G.m == 9 || G.m == 10) ? B[99] : (remoteBallId || rnd(G.bt)));
+    G.bb = G.m===13 ? G.bt[0] : G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : (G.m===9 ? G.bt[0] : (remoteBallId || G.bt[Math.floor(battleRandom()*G.bt.length)]));
     G.ph = 'aim';
     broadcastState();
   }
@@ -2668,7 +2683,7 @@ function pick(i) {
 
 function fire() {
   if (!G || G.ph !== 'aim' || !Number.isFinite(G.pa)) return;
-  if (netRole === 'guest' && activeConn) {
+  if (netRole === 'guest' && G.m===12) {
     guestAimSent = true;
     guestAimAngle = G.pa;
     window.BVBGameplay?.resendTactic?.();
@@ -2677,8 +2692,9 @@ function fire() {
     $('#msg').textContent = 'Wysłano strzał. Oczekiwanie na ruch drugiego gracza…';
     return;
   }
-  if (netRole === 'host' && activeConn) {
+  if (netRole === 'host' && G.m===12) {
     hostAimAngle = G.pa;
+    if(!activeConn?.open){$('#msg').textContent='Gotowość zapisana. Czekam na ponowne połączenie rywala…';return;}
     if (remoteAimAngle == null || remoteBallId == null) {
       $('#fire').disabled = true;
       $('#msg').textContent = 'Twój strzał gotowy — czekam na strzał drugiego gracza…';
@@ -2692,8 +2708,8 @@ function fire() {
 function launchMatch(remoteAngle = null) {
   if (!G || G.ph !== 'aim') return;
   // Start a new deterministic round with its own clock and event timeline.
-  G.rt=0;G.hitStop=0;
-  const p = G.m === 12 ? actor(G.pb, 180, 300, G.pa, 0, 0, 1, 0, 0) : actor(G.pb, 180, 300, G.pa, 0, 0);
+  G.rt=0;G.hitStop=0;G.simTick=0;fixedAccumulator=0;
+  const p = G.m===4 ? actor(G.pb,180,300,G.pa,0,0,G.trainingTier||1,0,0) : G.m === 12 ? actor(G.pb, 180, 300, G.pa, 0, 0, 1, 0, 0) : actor(G.pb, 180, 300, G.pa, 0, 0);
   const botAim = remoteAngle == null
     ? computeBotAim(180, 60, 180, 300, Math.cos(G.pa), Math.sin(G.pa), diff)
     : remoteAngle;
@@ -2706,10 +2722,11 @@ function launchMatch(remoteAngle = null) {
   // Difficulty changes decision quality, not hidden HP/damage/evolution bonuses.
   const botTier = normalBot ? 1 : G.m === 12 ? 1 : G.m === 11 ? 3 : 2;
   const botLevel = normalBot ? 0 : G.m === 12 ? 0 : diff;
-  const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, botTier, botLevel, botLevel);
+  const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, G.m===4?(G.trainingOpponentTier||1):botTier, G.m===4?0:botLevel, G.m===4?0:botLevel);
   window.BVBGameplay?.prepareActors?.(G, p, e);
   window.BVBCampaign?.applyActors?.(G,p,e);
   window.BVB2?.prepareActors?.(G,p,e);
+  window.BVBModes?.prepareActors?.(G,p,e);
   window.BVBRework?.prepareActors?.(G,p,e);
   G.bl = [p, e];
   G.ph = 'battle';
@@ -2879,6 +2896,7 @@ function step(dt) {
     if (o.abilityCd <= 0 && !(o.status.stun > 0) &&
         (window.BVBRework?.abilityReady?.(o,abilityTarget,G,dt) ?? true)) {
       specialAbility(o, abilityTarget);
+      window.BVBIdentities?.onActive?.(G,o,abilityTarget);
       if(o.combatStats)o.combatStats.abilities++;
       window.BVBCampaign?.onAbility?.(G,o);
       o.abilityCd = window.BVB2?.cooldown?.(o) ?? Math.max(1.0, ((o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6) * (o.abilityRate||1));
@@ -2891,11 +2909,13 @@ function step(dt) {
 
     if (o.x < o.r || o.x > W - o.r) {
       o.vx *= -1; o.x = clamp(o.x, o.r, W - o.r);
+      if(o._lastIdentityWallAt!==G.rt){o._lastIdentityWallAt=G.rt;window.BVBIdentities?.onWall?.(G,o);}
       const delta=(battleRandom()<.5?-1:1)*(1+battleRandom()*2)*Math.PI/180;
       const vx=o.vx,vy=o.vy;o.vx=vx*Math.cos(delta)-vy*Math.sin(delta);o.vy=vx*Math.sin(delta)+vy*Math.cos(delta);
     }
     if (o.y < o.r || o.y > W - o.r) {
       o.vy *= -1; o.y = clamp(o.y, o.r, W - o.r);
+      if(o._lastIdentityWallAt!==G.rt){o._lastIdentityWallAt=G.rt;window.BVBIdentities?.onWall?.(G,o);}
       const delta=(battleRandom()<.5?-1:1)*(1+battleRandom()*2)*Math.PI/180;
       const vx=o.vx,vy=o.vy;o.vx=vx*Math.cos(delta)-vy*Math.sin(delta);o.vy=vx*Math.sin(delta)+vy*Math.cos(delta);
     }
@@ -2932,8 +2952,10 @@ function step(dt) {
           }
           const hitSlow = Math.min(.23,.065+Math.max(damageToA,damageToB)*.004);
           a.impactSlow = b.impactSlow = hitSlow;
-          const impactA=damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15));
-          const impactB=damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15));
+          let impactA=damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15));
+          let impactB=damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15));
+          impactA=window.BVB2?.onContact?.(G,b,a,impactA)??impactA;
+          impactB=window.BVB2?.onContact?.(G,a,b,impactB)??impactB;
           applyDamage(a,window.BVBRework?.contactDamage?.(b,a,impactA) ?? impactA);
           applyDamage(b,window.BVBRework?.contactDamage?.(a,b,impactB) ?? impactB);
           a.skillCharge=b.skillCharge=0;
@@ -2944,20 +2966,8 @@ function step(dt) {
           burst(b,effectType(a.b),8,false);
           SFX.hit();
         }
-        // Impulse-based collision: heavier balls lose less velocity on impact.
-        const invA=1/Math.max(.2,a.mass||1),invB=1/Math.max(.2,b.mass||1);
-        const approach=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;
-        if(approach<0){
-          const impulse=-(1+.91)*approach/(invA+invB);
-          a.vx+=impulse*nx*invA;a.vy+=impulse*ny*invA;
-          b.vx-=impulse*nx*invB;b.vy-=impulse*ny*invB;
-        }
-        // Gentle spin deflection avoids identical repeated trajectories.
-        for(const o of [a,b]){
-          const t=(o.spin||0)*.035+(battleRandom()-.5)*.018;
-          const vx=o.vx,vy=o.vy;
-          o.vx=vx*Math.cos(t)-vy*Math.sin(t);o.vy=vx*Math.sin(t)+vy*Math.cos(t);
-        }
+        window.BVBRework?.contactImpulse?.(a,b,nx,ny);
+
       }
     }
   }
@@ -2973,9 +2983,12 @@ function step(dt) {
 
 function roundEnd(winner) {
   if (!G || G.ph !== 'battle') return;
+  window.BVBPresentation?.finish?.(G,winner);
   G.ph = 'end';
   window.BVBReworkUI?.endRound?.(G,winner);
   if (winner >= 0) G.h[1 - winner]--;
+  G.lastRoundWinner=winner;
+  window.BVBModes?.onRoundEnd?.(G,winner);
   hearts();
   broadcastState();
   setTimeout(() => {
@@ -2991,13 +3004,14 @@ function over() {
   broadcastState();
   const win = G.h[0] > 0;
   const isHw = (G.m == 9 || G.m == 10);
-  if (G.m === 11 && win) { S.bb = (S.bb | 0) + 1; S.bossWins[G.bossIndex || 0] = (S.bossWins[G.bossIndex || 0] | 0) + 1; }
-  const candyEarned = isHw ? (win ? DIFF_CANDY[diff] : Math.round(DIFF_CANDY[diff] * 0.25)) : (win ? 15 : 5);
-  const coinEarned = win ? DIFF_REW[diff] : Math.round(DIFF_REW[diff] * 0.25);
+  if (G.m === 11 && win) { S.bossWins[G.bossIndex || 0] = (S.bossWins[G.bossIndex || 0] | 0) + 1; }
+  let candyEarned = isHw ? (win ? DIFF_CANDY[diff] : Math.round(DIFF_CANDY[diff] * 0.25)) : (win ? 15 : 5);
+  let coinEarned = win ? DIFF_REW[diff] : Math.round(DIFF_REW[diff] * 0.25);
   
+  if(G.m!==12&&G.m!==13&&window.BVBModes){const reward=window.BVBModes.rewards(G,win,coinEarned,candyEarned);coinEarned=reward.coins;candyEarned=reward.candies;}
   if (G.m === 12) { /* Online 1vs1 is a friendly match, no ranked rewards. */ }
   else { S.coins += coinEarned; S.candies += candyEarned; }
-  if (win && netRole!=='guest') S.ach.winsByArena[G.th]=true;
+  if (win && netRole!=='guest' && G.m!==4) S.ach.winsByArena[G.th]=true;
   checkAchievements();
   save();
 
@@ -3006,6 +3020,7 @@ function over() {
   $('#ovb').innerHTML = `
     <h2>${win ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2>${G.m === 11 ? `<p style="margin:8px 0">Boss: ${esc(BOSSD[G.bossIndex || 0].n)}</p>` : ''}
     <p style="color:var(--mu);margin:10px 0">${G.m === 12 ? 'Mecz towarzyski online' : `+${coinEarned} 🪙 · +${candyEarned} 🍬`}</p>
+    <p>${esc(window.BVBModes?.summary?.(G)||'')}</p>
     ${window.BVBReworkUI?.victoryStats?.(G) || ''}
     <button class="b graj" onclick="$('#ov').hidden=true;${G.m === 11 ? `startBossFight(${G.bossIndex || 0})` : `startMatch(${G.m})`}">Zagraj ponownie</button>
     <button class="b" onclick="menu()">Menu główne</button>
@@ -3017,6 +3032,7 @@ function hearts() {
   const hh = n => '❤️'.repeat(Math.max(0, n)) + '🖤'.repeat(Math.max(0, 3 - n));
   $('#hp').textContent = `😎 Ty ${hh(G.h[0])}`;
   $('#hb').textContent = `${activeConn?.open ? '🌐 Rywal' : '🤖 Bot'} ${hh(G.h[1])}`;
+  const modeSummary=window.BVBModes?.summary?.(G);if(modeSummary)$('#hb').textContent=modeSummary+' · '+hh(G.h[1]);
 }
 
 function pz() {
@@ -3035,7 +3051,8 @@ function emo(i) {
 
 function draw() {
   if (!G) return;
-  cx.setTransform(D, 0, 0, D, 0, 0);
+  const renderScale=(cx.canvas?.width||W*D)/W;
+  cx.setTransform(renderScale, 0, 0, renderScale, 0, 0);
   if(window.BVBReworkUI?.camera?.()==='dynamic' && G.ph==='battle'){
     const pair=G.bl||[];
     const gap=pair.length===2?Math.hypot(pair[0].x-pair[1].x,pair[0].y-pair[1].y):300;
@@ -3044,6 +3061,7 @@ function draw() {
   }
   drawArenaBackground();
   drawArenaItems();
+  window.BVBRework?.drawBossTelegraph?.(cx,G);
 
   if (['draft', 'aim'].includes(G.ph)) {
     cx.fillStyle = '#fef08a';
@@ -3100,7 +3118,7 @@ function draw() {
     cx.beginPath(); cx.arc(o.x, o.y, o.r + 3, 0, 6.283); cx.stroke();
 
     const im = ART_IMAGES.get(o.b.id);
-    if (im?.complete && im.naturalWidth) cx.drawImage(im, o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+    if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
 
     cx.shadowBlur = 0;
@@ -3129,14 +3147,17 @@ function loop(t) {
   const elapsed = Math.min(0.1, Math.max(0, (t - (frameLast || t)) / 1000));
   frameLast = t;
   if (G) {
-    if (G.ph === 'battle' && netRole !== 'guest' && !window.BVBReworkUI?.paused?.()) {
+    if (G.ph === 'battle' && netRole !== 'guest' && !(G.m===12&&!activeConn?.open) && !window.BVBReworkUI?.paused?.()) {
       fixedAccumulator += elapsed * (window.BVBReworkUI?.rate?.() ?? 1);
       let steps = 0;
       while (fixedAccumulator >= 1 / 60 && steps++ < 6 && G?.ph === 'battle') {
+        G.simTick=(G.simTick||0)+1;
         step(1 / 60);
+        window.BVBReworkUI?.captureStep?.(G);
         fixedAccumulator -= 1 / 60;
       }
     }
+    window.BVBPresentation?.tick?.(G,elapsed);
     window.BVBReworkUI?.frame?.(G,elapsed);
     draw();
     if (netRole === 'host' && activeConn && G.ph === 'battle' && t - netSyncAt > 120) {
@@ -3153,7 +3174,7 @@ window.BVBGameBridge = {
   stats: () => ({wins:Math.max(0,S.wins|0),level:Math.max(1,S.lv|0)}),
   exportState: () => JSON.stringify(S),
   backup: () => {try {localStorage.setItem('bvb_cloud_backup_'+Date.now(),JSON.stringify(S));} catch(e) { /* local storage may be full */ }},
-  importState: data => {try {const x=JSON.parse(data);if(!x || !Array.isArray(x.own))return false;localStorage.setItem(K,JSON.stringify(x));load();return true;} catch(e){return false;}},
+  importState: data => {const previous=S;const result=window.BVBSave.transactionalImport({storage:localStorage,key:K,text:data,apply:()=>load(),rollback:()=>{S=previous;}});window.BVBGameBridge.lastImportError=result.ok?null:result.error;return result.ok;},
   goMenu: () => menu(),
   getRoom: () => (netRole==='host' && activeConn?.open || netRole==='host' && peer?.id) ? peer?.id : null,
   joinRoom: room => {if(typeof room!=='string' || !room || room.length>150)return;mpMenu();$('#peerCode').value=room;joinNet();}
@@ -3162,9 +3183,6 @@ window.addEventListener('bvb-cloud-ready',()=>{
   if ($('#pn')?.dataset.panel === 'account' && !$('#pn').hidden) window.BVBCloud?.renderAccount?.();
 });
 load();
-// Test build: unlock all 130 balls in the isolated beta save only.
-S.own=B.map(b=>b.id);
-save();
 menu();
 const invitedRoom = new URLSearchParams(location.search).get('room');
 if (invitedRoom && invitedRoom.length < 150) {
@@ -3172,17 +3190,25 @@ if (invitedRoom && invitedRoom.length < 150) {
   $('#peerCode').value = invitedRoom;
   netStatus('Kod pokoju wpisany. Kliknij „Dołącz do pokoju”, żeby połączyć się ze znajomym.');
 }
+window.BVBRenderReplay=(state,ctx,meta={})=>{const prevG=G,prevCx=cx,prevAura=S.playerAura,prevFx=S.o.fxLevel,prevFlag=window.BVBReplayRendering;try{window.BVBReplayRendering=true;G=state;cx=ctx;S.playerAura=meta.playerAura||'';S.o.fxLevel=meta.fxLevel??prevFx;draw();}finally{G=prevG;cx=prevCx;S.playerAura=prevAura;S.o.fxLevel=prevFx;window.BVBReplayRendering=prevFlag;}};
 requestAnimationFrame(loop);
 </script>
-<script src="./beta/bvb-anime-update.js"></script>
+<script src="./bvb-anime-update.js"></script>
 <script src="./bvb-gameplay.js"></script>
 <script src="./bvb-campaign.js"></script>
-<script src="./beta/bvb-abilities-v2.js"></script>
-<script src="./beta/bvb-combat-rework.js"></script>
-<script src="./beta/bvb-combat-ui.js"></script>
+<script src="./bvb-abilities-v2.js"></script>
+<script src="./bvb-identities.js"></script>
+<script src="./bvb-network.js"></script>
+<script src="./bvb-balance.js"></script>
+<script src="./bvb-modes.js"></script>
+<script src="./bvb-combat-rework.js"></script>
+<script src="./bvb-combat-ui.js"></script>
 <script src="./bvb-preview-v2.js"></script>
 <script src="./bvb-ui-v2.js"></script>
 <script src="./bvb-main-menu-v3.js"></script>
+<script src="./bvb-training.js"></script>
+<script src="./bvb-presentation.js"></script>
 <script src="./bvb-changelog-v3.js"></script>
+<script src="./bvb-beta-tools.js"></script>
 </body>
 </html>

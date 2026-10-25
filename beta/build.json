@@ -1,0 +1,26 @@
+{
+  "sourceRevision": "76e1e4878585838a757874a7713c40d5c2395916",
+  "builtAt": "2026-10-25T18:26:54.495Z",
+  "files": {
+    "bvb-abilities-v2.js": "308154cfc6339318d8957a09952a7c7f081624aabddb43a5ac15ff71da29e627",
+    "bvb-anime-update.js": "191cc345ad1a6c80922da26a168df513bab80784f0010fbdfdaae257b8979a45",
+    "bvb-balance.js": "c6e628a1575b85943bc721a920680f7adad0ceb334c40a28bc7f9d424a96167a",
+    "bvb-beta-tools.js": "8c84e6d3e9aa8e6cbe26b818993aa3d311ead33fd1691760d92ecc2e3532acdc",
+    "bvb-campaign.js": "25b9caa1691fb60f8774956f8c6561ad4d755c40b8acbbd08d583e8246d8e51e",
+    "bvb-changelog-v3.js": "e4d756b32a3ac6693fc17b7bfbbd54c0c3fe5b37e86652671cf595991df06c32",
+    "bvb-combat-rework.js": "a411e7f60c164ab8602e8ad4a97925af0f4fcc9f36024af05dfba4d94a776bea",
+    "bvb-combat-ui.js": "e84721e328d6ae9890890081a613f65202f37dfc5ebc7b16b3bb236fcad3ea9f",
+    "bvb-gameplay.js": "b9f9a0d64535a5a2003b76ffa723a3dc8e4850b30f002b9face306bf99cc1eec",
+    "bvb-identities.js": "fa4cd77fd166763a58e1e62eb7040dcbf0207abcf19f6f04ed2e5ed8d2dae01e",
+    "bvb-main-menu-v3.js": "5e298d5ae6e0a575f88b606b7be9780b88ce0f510d1cd3227762818f26972c63",
+    "bvb-modes.js": "80e911a3d71bbedb7755054ce85cdfc554861b92dcc5702c7a049b7504a5dbc8",
+    "bvb-navigation-v2.js": "1f79056aaa2e4bb2365957c558b50c7964a4ac427cbd18d3682bbbc7aed22507",
+    "bvb-network.js": "70956317e9366d002098630ff2e14d5c3e477655723189348bb3a6ef513b97a2",
+    "bvb-presentation.js": "7471ee1ddb273bbd88bffcd43b4b12bfc3e398e7ecb0fe6f7bc31c794ed3f7fd",
+    "bvb-preview-v2.js": "2afc679144d1790233b87bf9e09bfe5fa8f360aeb00a44b905b940cbb3d4d9de",
+    "bvb-save.js": "f16c548d0f286abbdbe243daf4281196bb73d58c10f9620177f773431cb56a8b",
+    "bvb-training.js": "c23b562cfb5af46eeaaa1cd1f51911261b1988c7a66957aeaffac20f13d75dbb",
+    "bvb-ui-v2.js": "a686ef1a3a400335c472be4c7519979e24a7e45c713fa13f0f1bfa70e05b1753",
+    "index.html": "a3250719ce3999f72917e10f97c72a277c0acac2861bab3087bc6a7207dda459"
+  }
+}
