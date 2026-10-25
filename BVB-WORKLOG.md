@@ -40,3 +40,6 @@ Ten plik jest **wewnętrzną listą projektu**, nie jest wczytywany przez stron�
 - Zaplanowany tekst przed wdrożeniem zapisano w `BVB-CHANGELOG-2.0.md`.
 - Składnia JS przeszła walidację. Symulacja menu potwierdziła: 4 kafle, zachowanie 24 oryginalnych przycisków z akcjami, wybór trudności i kulki, gotowość uruchamiającą bot/boss, oraz brak Changeloga przed zamknięciem ekranu logowania.
 - **Do sprawdzenia ręcznie**: wygląd na małych telefonach, rzeczywisty przebieg całej walki, PvP i synchronizacja, działania konta z Supabase. Przeglądarka testowa nie uzyskała dostępu do publicznej strony (blokada sieciowa).
+
+- **Dalsza poprawka:** w ekranie przygotowania przed walką dodano odtwarzalną animację umiejętności wybranej kulki, wykorzystując istniejący podgląd z kolekcji; na telefonach cztery kafelki pozostają w układzie 2×2.
+- Kontrola statyczna: moduły menu, podglądu i Changeloga oraz skrypt gry nie zawierają błędów składni; pełny test w przeglądarce i test PvP nadal wymagane.
