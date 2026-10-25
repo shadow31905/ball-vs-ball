@@ -1,0 +1,33 @@
+name: Combat rework regression tests
+
+on:
+  push:
+    branches:
+      - rework/combat-3-foundation
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'bvb-combat-*.js'
+      - 'bvb-abilities-v2.js'
+      - 'tests/**'
+      - '.github/workflows/combat-rework-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  combat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify JavaScript syntax
+        run: |
+          node --check bvb-combat-rework.js
+          node --check bvb-combat-ui.js
+          node --check bvb-abilities-v2.js
+      - name: Run combat regression tests
+        run: node --test tests/combat-rework.test.cjs
