@@ -165,10 +165,10 @@ function renderReplay(){
  el('bvbReplayTime').textContent=time(t)+' / '+time(lastReplay[lastReplay.length-1].t);
  el('bvbReplaySeek').value=String(Math.round(1000*t/Math.max(.01,lastReplay[lastReplay.length-1].t)));
 }
-function openReplay(){
+function openReplay(finalOnly=false){
  if(!lastReplay.length)return;
  wasPaused=paused;paused=true;
- replayState={t:0,playing:true,speed:1};
+ replayState={t:finalOnly?Math.max(0,lastReplay[lastReplay.length-1].t-5):0,playing:true,speed:1};
  overlay.hidden=false;el('bvbReplayPlay').textContent='⏸️';
  renderReplay();
  el('bvbReplayClose').focus();
@@ -208,9 +208,12 @@ requestAnimationFrame(replayLoop);
 function victoryStats(g){
  const r=g?.reworkRoundStats;if(!r)return '';
  const names=r.fighter.map(f=>`${f.team===0?'🔵':'🔴'} ${String(f.name).replace(/[&<>"']/g,'')}: ${f.hits} zderzeń · ${f.crits} kryt. · ${f.abilities} mocy`);
- return `<p style="font-size:12px;color:#cbd5e1">⏱️ Ostatnia runda: ${r.duration}s</p>
- <p style="font-size:12px;color:#cbd5e1">${names.join('<br>')}</p>
- <button class="b" onclick="window.BVBReworkUI.openReplay()">🎞️ Obejrzyj powtórkę</button>`;
+ const winnerName=String(r.winnerName).replace(/[&<>"']/g,'');
+ return `<div style="border:1px solid #fbbf24;border-radius:12px;padding:9px;margin:8px 0;background:#fbbf2412">
+ <strong style="color:#fef08a">🏆 ${winnerName}</strong><p style="font-size:12px;color:#cbd5e1">⏱️ Ostatnia runda: ${r.duration}s</p>
+ <p style="font-size:12px;color:#cbd5e1">${names.join('<br>')}</p></div>
+ <button class="b" onclick="window.BVBReworkUI.openReplay(true)">🎬 Ostatnie 5 sekund</button>
+ <button class="b" onclick="window.BVBReworkUI.openReplay()">🎞️ Cała powtórka</button>`;
 }
 window.BVBReworkUI={frame,startRound,endRound,paused:()=>paused,rate:()=>opts.speed,
  camera:()=>opts.camera,fx:()=>opts.fx,openReplay,togglePause,victoryStats};
