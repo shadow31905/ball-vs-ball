@@ -43,3 +43,6 @@ Ten plik jest **wewnętrzną listą projektu**, nie jest wczytywany przez stron�
 
 - **Dalsza poprawka:** w ekranie przygotowania przed walką dodano odtwarzalną animację umiejętności wybranej kulki, wykorzystując istniejący podgląd z kolekcji; na telefonach cztery kafelki pozostają w układzie 2×2.
 - Kontrola statyczna: moduły menu, podglądu i Changeloga oraz skrypt gry nie zawierają błędów składni; pełny test w przeglądarce i test PvP nadal wymagane.
+
+- Optymalizacja: animowany podgląd umiejętności wstrzymuje pracę, kiedy ekran wyboru lub kolekcja jest ukryty, aby nie obciążać urządzenia podczas walki.
+- Test wykonany z uproszczoną symulacją interfejsu: wykryto cztery kafelki; ścieżka bot → poziom 2 → kulka ID 1 → Gotowość przeszła do celowania z wybraną kulką, a animacja została uruchomiona. To nie zastępuje rzeczywistego testu w przeglądarce.
