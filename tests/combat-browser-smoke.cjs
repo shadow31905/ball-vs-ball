@@ -12,7 +12,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
    await page.waitForFunction(()=>typeof window.startMatch==='function'&&!!window.BVBReworkUI&&!!window.BVBRework,{timeout:30000});
    await page.evaluate(()=>{document.getElementById('accountGate').hidden=true;startMatch(0);pick(0);});
-   await page.waitForFunction(()=>window.G?.ph==='battle'&&window.G?.bl?.length===2,{timeout:15000});
+   await page.waitForFunction(()=>typeof G!=='undefined'&&G?.ph==='battle'&&G?.bl?.length===2,{timeout:15000});
    await page.waitForTimeout(500);
    const state=await page.evaluate(()=>({
      hp:G.bl.map(o=>o.hp),hud:document.getElementById('bvbCombatHud').textContent,
