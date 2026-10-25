@@ -1,4 +1,4 @@
-/* Ball VS Ball 2.0 — objaśnienia menu i historia zmian po wejściu do gry */
+/* Ball VS Ball 2.0 — czytelne opisy i sekcje menu dla nowych graczy. */
 (() => {
 'use strict';
 const css=document.createElement('style');
@@ -27,15 +27,28 @@ css.textContent=[
 '#menu .grid-3>button:last-child:nth-child(odd),#menu .diff-row>button:last-child:nth-child(odd){grid-column:auto}',
 '#menu .bvb-menu-button{padding:12px 12px}}',
 '#menu .b:focus-visible,#menu .diff-btn:focus-visible{outline:3px solid #facc15;outline-offset:3px}',
-'#bvbV2Updates{position:fixed;inset:0;z-index:350;background:#040715cc;padding:18px 12px;overflow:auto;display:grid;place-items:center}',
-'#bvbV2Updates[hidden]{display:none!important}',
-'.bvb-v2-dialog{position:relative;max-height:min(84vh,750px);overflow:auto;width:min(440px,100%);',
-'border:1px solid #647cf7;border-radius:19px;background:linear-gradient(150deg,#1b2557,#0b102a);',
-'box-shadow:0 18px 65px #000b;padding:22px 18px}',
-'.bvb-v2-dialog h2{margin:0 0 8px;color:#fef08a}',
-'.bvb-v2-dialog h3{font-size:.88rem;color:#c4b5fd;margin:13px 0 3px}',
-'.bvb-v2-dialog ul{margin:5px 0;padding-left:19px;color:#e2e8f0;font-size:.81rem;line-height:1.55}',
-'.bvb-v2-dialog .b{width:100%;margin-top:15px}',
+/* All content stays visible: visual grouping instead of extra navigation. */
+'#menu .bvb-welcome-guide{border:1px solid #4968b7;background:linear-gradient(135deg,#233c76,#131c41);',
+'border-radius:17px;padding:15px 14px;margin:0 0 15px;box-shadow:0 4px 12px #0003}',
+'#menu .bvb-welcome-guide strong{display:block;color:#fef08a;font-size:1rem;margin-bottom:7px}',
+'#menu .bvb-welcome-guide p{font-size:.82rem;line-height:1.55;color:#e2e8f0}',
+'#menu .bvb-menu-section{margin:0 0 15px;padding:15px 12px 13px;border-radius:18px;',
+'background:linear-gradient(155deg,#171f43,#11162d);border:1px solid #34477f;min-width:0}',
+'#menu .bvb-menu-section h2{color:#f5f3ff;text-align:left;font-size:1.06rem;',
+'font-weight:900;line-height:1.3;margin:0 0 5px;letter-spacing:0}',
+'#menu .bvb-section-caption{font-size:.78rem;line-height:1.5;color:#bfcdee;',
+'margin:0 0 14px;text-align:left}',
+'#menu .bvb-difficulty-guide{color:#e0e7ff;font-size:.84rem;font-weight:800;',
+'text-align:center;margin:13px 0 8px}',
+'#menu .bvb-difficulty-guide small{display:block;font-size:.72rem;',
+'font-weight:500;color:#aebfe5;margin-top:4px}',
+'#menu .bvb-subsection-label{font-size:.92rem;font-weight:800;color:#fed7aa;',
+'border-top:1px solid #37406c;padding-top:14px;margin:15px 0 11px}',
+'#menu .bvb-menu-section .grid-2,#menu .bvb-menu-section .grid-3{margin-bottom:10px}',
+'#menu .bvb-menu-section>.grid-2:last-child,#menu .bvb-menu-section>.grid-3:last-child{margin-bottom:0}',
+'#menu .bvb-menu-first{border-color:#6f84dc;background:linear-gradient(155deg,#213361,#141a37)}',
+'@media(max-width:360px){#menu .bvb-menu-section{padding:13px 10px}',
+'#menu .bvb-welcome-guide{padding:13px 11px}}',
 ].join('');
 document.head.appendChild(css);
 const details=[
@@ -65,19 +78,15 @@ const details=[
  ["panel('set')",'Dostosuj wygląd, efekty i ustawienia gry.'],
  ["panel('ach')",'Sprawdź osiągnięcia zdobyte na arenach.'],
  ["panel('st')",'Kupuj przedmioty i dodatki za monety.'],
- ["panel('bp')",'Sprawdź sezon i dostępne nagrody.'],
- ['BVB2UI.open','Zobacz, co dodano, zmieniono i poprawiono.']
+ ["panel('bp')",'Sprawdź sezon i dostępne nagrody.']
 ];
 function descriptions(){
  const root=document.querySelector('#menu');if(!root)return;
  const all=Array.from(root.querySelectorAll('button'));
  const difficulties=Array.from(root.querySelectorAll('.diff-btn'));
  for(const btn of all){
-  // Navigation category buttons already have their own title and explanation.
-  if(btn.classList.contains('bvb-nav-entry'))continue;
   const on=btn.getAttribute('onclick')||'';
-  let desc=btn.id==='bvbChangelogBtn'?'Zobacz szczegółowy opis najnowszej aktualizacji.':
-   difficulties.includes(btn)?details[0][1][difficulties.indexOf(btn)]:null;
+  let desc=difficulties.includes(btn)?details[0][1][difficulties.indexOf(btn)]:null;
   if(!desc){const spec=details.slice(1).find(d=>on.includes(d[0]));desc=spec?.[1];}
   if(!desc)desc='Otwórz wybraną funkcję gry.';
   btn.classList.add('bvb-menu-button');
@@ -100,49 +109,6 @@ function descriptions(){
 }
 const oldMenu=menu;
 menu=function(){oldMenu();descriptions();};
-const changeSections=[
- ['Dodano',[
-  'Przebudowę umiejętności kulek i nowe, charakterystyczne efekty.',
-  'Trwałe pajęczyny Pająka między punktami odbicia od ścian.',
-  'Opisy funkcji bezpośrednio pod przyciskami menu.',
-  'Nowe projekty graficzne oraz podglądy mocy w kolekcji.'
- ]],
- ['Zmieniono',[
-  'Sposoby działania specjalnych ataków i ich tempo.',
-  'Parametry zdrowia, szybkości i obrażeń wybranych kulek.'
- ]],
- ['Poprawiono',[
-  'Celowanie pocisków, odczytywanie kolizji i kontrolę nad efektami.',
-  'Widoczność ataków i rozróżnianie rodzajów umiejętności.'
- ]],
- ['Ulepszono',[
-  'Różnorodność pojedynków, animacje i balans.',
-  'Czytelność menu na telefonach i przejrzysty podział funkcji na kategorie.'
- ]]
-];
-const modal=document.createElement('section');
-modal.id='bvbV2Updates';modal.hidden=true;
-modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Historia zmian Ball VS Ball 2.0');
-modal.innerHTML='<div class="bvb-v2-dialog"><h2>🎮 Ball VS Ball 2.0</h2>'+
- '<p style="font-size:.83rem;color:#cbd5e1">Co nowego w grze?</p>'+
- changeSections.map(([title,items])=>'<h3>'+title+'</h3><ul>'+items.map(s=>'<li>'+s+'</li>').join('')+'</ul>').join('')+
- '<button class="b graj" id="bvbV2Close">▶ Przejdź do gry</button></div>';
-document.body.appendChild(modal);
-modal.querySelector('#bvbV2Close').addEventListener('click',()=>{modal.hidden=true;});
-let entranceTimer=null;
-function open(){modal.hidden=false;modal.querySelector('#bvbV2Close')?.focus();}
-function onEntered(){
- // Every successful re-entry (also after logout/login without refreshing).
- clearTimeout(entranceTimer);
- entranceTimer=setTimeout(()=>{
-  if(document.querySelector('#accountGate')?.hidden)open();
- },220);
-}
-window.addEventListener('bvb-entered-game',onEntered);
-const btn=document.createElement('button');btn.className='b';btn.type='button';btn.id='bvbChangelogBtn';
-btn.textContent='📋 Historia zmian 2.0';
-btn.addEventListener('click',open);
-document.querySelector('#menu')?.appendChild(btn);
-window.BVB2UI={open,descriptions,onEntered};
+window.BVB2UI={descriptions};
 descriptions();
 })();
