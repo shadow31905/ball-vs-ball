@@ -38,7 +38,9 @@ function play(id){
   else circle(x,y,r,B[ball]?.c||'#fff');
  }
  function frame(now){
-  if(token!==ticket||!document.getElementById('bvb-skill-preview-canvas')||canvas!==document.getElementById('bvb-skill-preview-canvas'))return;
+  // Stop the preview when the menu, collection window or its parent view is hidden.
+  // Otherwise requestAnimationFrame would keep rendering during the actual fight on phones.
+  if(token!==ticket||canvas!==document.getElementById('bvb-skill-preview-canvas')||canvas.closest?.('[hidden]'))return;
   const phase=((now-start)/1000)%2.9,t=Math.min(1,Math.max(0,(phase-.35)/1.2));
   ctx.clearRect(0,0,W,H);
   const grad=ctx.createLinearGradient(0,0,W,H);grad.addColorStop(0,'#0b1433');grad.addColorStop(1,'#1c1647');
