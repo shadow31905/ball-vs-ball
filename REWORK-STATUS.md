@@ -1,48 +1,52 @@
-# Ball VS Ball 2.0 — status wielkiego reworku walki
+# Ball VS Ball 2.0 — status reworku systemu walki
 
-**Gałąź robocza:** `rework/combat-3-foundation`  
-**Publikacja:** jedna duża aktualizacja po zakończeniu i testach; nie scalać częściowych zmian do `main`.  
-**Decyzje projektowe:** 1–40 zaakceptowane; pytania 41–60 pozostają bez odpowiedzi.
+**Gałąź:** `rework/combat-3-foundation`  
+**Wersja publiczna:** `main` pozostaje niezmieniona.  
+**Strategia:** osobna gałąź rozwojowa i jedna finalna publikacja po testach.  
+**Uzgodnienia:** odpowiedzi na pytania 1–19; pytanie 20 o strategię wdrożenia nie miało jednoznacznej odpowiedzi, dlatego przyjęto bezpieczną osobną gałąź.
 
-## Zrobione na gałęzi (pierwszy fundament, nie cały rework)
+## Wykonane — kod dostępny na gałęzi
 
-- [x] Oddzielona gałąź robocza, obecna gra na `main` niezmieniona.
-- [x] Osobny moduł `bvb-combat-rework.js` z integracją w pętli walki.
-- [x] Tarcze jako dodatkowe HP, stopniowo zużywany pancerz i redukcja obrażeń.
-- [x] Krytyczne zderzenia zależne od kulki i stałe słabości wobec rodzin ataków.
-- [x] Fizyczne odbicie z uwzględnieniem masy i rotacji.
-- [x] Kierowanie AI ku przeciwnikowi, wyprzedzanie ruchu i omijanie przeszkód.
-- [x] AI może opóźnić użycie zdolności maksymalnie o 0,75 s.
-- [x] Mechanizm antyblokady dla aktorów, którzy pozostają w miejscu.
-- [x] Przesunięcia przeszkód co ok. 10–15 s; sygnalizacja zmiany areny.
-- [x] Podstawowe przejścia bossów do fazy II i III (efekty i zmiana areny).
-- [x] Limit 60 s i rozstrzygnięcie według procentu pozostałego HP; losowanie przy dokładnym remisie.
-- [x] Automatyczny start pojedynku po wyborze kulki w trybach solo (bez ręcznej procy).
-- [x] Dodane testy regresyjne `tests/combat-rework.test.cjs`.
+- [x] Oddzielny moduł `bvb-combat-rework.js`, połączony z istniejącą pętlą.
+- [x] Pancerz, zużywanie pancerza, tarcze, krytyki, słabości i odporności.
+- [x] Impulsy zderzeniowe zależne od masy i rotacji.
+- [x] Automatyczny ruch wszystkich walczących kulek; AI kieruje się na cel, przewiduje pozycję i omija przeszkody.
+- [x] Pięć poziomów parametrów decyzyjnych AI; wycofano dodatkowe bonusy HP/obrażeń dla zwykłego bota zależne od poziomu.
+- [x] Reakcje ogień + spowolnienie i ogień + trucizna, ograniczenie częstotliwości.
+- [x] Prototyp pasywki i superumiejętności dla każdego ID 0–129, z osobnymi konfiguracjami. **Nie są to jeszcze 130 ręcznie dopracowanych unikalnych mechanik.**
+- [x] Istniejące 130 nazwanych zdolności aktywnych z `bvb-abilities-v2.js` zachowane.
+- [x] Bossowie: 3 fazy, sygnalizowane ataki areny i 6 różnych typów ataku (prototypy).
+- [x] Przemieszczanie przeszkód, mechanizm antyblokady.
+- [x] Limit rundy 60 sekund i rozstrzygnięcie przy upływie czasu.
+- [x] Automatyczny start walki po wyborze kulki w trybach solo oraz automatyczna wymiana sygnałów gotowości online.
+- [x] HUD: HP, pancerz, tarcza, aktywne statusy, zegar.
+- [x] Przełącznik kamery statycznej i dynamicznej.
+- [x] Pauza i szybkość 0,5×/1×/2× (solo).
+- [x] Nagrywanie próbek przebiegu rundy i oglądanie powtórki z przewijaniem.
+- [x] Statystyki ostatniej rundy na ekranie zwycięstwa.
+- [x] Ustawienie lekkich efektów ograniczające liczbę cząstek.
+- [x] Plik testów `tests/combat-rework.test.cjs` i workflow GitHub Actions.
 
-## Nadal do wykonania — obowiązkowe przed premierą
+## Wciąż do ukończenia przed premierą
 
-- [ ] Pełny system AI 5 poziomów: odrębne strategie, taktyka, kontry i uczciwy balans.
-- [ ] Wszystkie 130 kulek: **atak + unikalna pasywka + superumiejętność** (390 elementów, z indywidualnymi animacjami).
-- [ ] Pełny system reakcji statusów, odporności, ograniczeń efektów i kontr.
-- [ ] Dopasowanie fizyki, masy, pędu, tarcia i unikalnych stylów ruchu do każdej kulki.
-- [ ] Kompletny rework wszystkich bossów: trzy odrębne fazy, wydarzenia i unikalny finał.
-- [ ] Dynamiczne areny z dopracowanymi przeszkodami, bez nieuczciwych obrażeń.
-- [ ] Automatyczna walka i poprawna synchronizacja w trybie online.
-- [ ] HUD z HP, pancerzem, tarczą, statusami i czasem.
-- [ ] Wybór kamery statycznej/dynamicznej.
-- [ ] Pauza, zmiana prędkości, restart, zapis i przewijanie powtórek.
-- [ ] Ekran zwycięstwa z podsumowaniem i powtórką finałowej akcji.
-- [ ] Pełna oprawa VFX, dźwięki zdolności i niezależne suwaki audio.
-- [ ] Automatyczna jakość grafiki i optymalizacja mobilna.
-- [ ] Powtarzalne symulacje tysięcy walk, testy 130 kulek i bossów oraz testy w przeglądarce.
-- [ ] Testy regresji trybów, kampanii, kont, PvP i zapisanych postępów.
-- [ ] Jedna finalna publikacja po przejściu testów.
+- [ ] 130 ręcznie zaprojektowanych i zbalansowanych pasywek oraz 130 superumiejętności; obecne to prototypy wykorzystujące wspólne rodziny mechanik.
+- [ ] Każdy z 6 bossów: unikalny zestaw ataków dla każdej z 3 faz, osobne animacje i dopracowana walka.
+- [ ] Więcej złożonych reakcji statusów, testy wszystkich odporności, kontr i limitów.
+- [ ] Pełna fizyka z tarciem, kątami uderzeń, animacjami rotacji i kontrolą niestabilności.
+- [ ] Inteligencja przeciwników: pełne profile 5 poziomów z różnymi strategiami i adaptacją, a nie tylko z różną dokładnością/siłą skrętu.
+- [ ] Powtórki wierne 1:1 z VFX, areną, pociskami i dźwiękiem. Obecne powtórki to **wizualizacja zapisanych pozycji i HP**, nie pełna rekonstrukcja.
+- [ ] Kinowy ekran zwycięstwa, odtworzenie ostatniej akcji i prezentacja zwycięskiej kulki.
+- [ ] Rozbudowane dźwięki poszczególnych zdolności, ulepszenie muzyki, dopracowanie istniejących suwaków głośności.
+- [ ] Usprawnienia mobilne i automatyczne ustawianie jakości.
+- [ ] Pełne testy przeglądarkowe i sieciowe host/gość; obecna zmiana online **nie została sprawdzona na dwóch prawdziwych klientach**.
+- [ ] Tysiące automatycznych walk testowych: 130 kulek, 6 bossów, balans, czas 30–60 s, wydajność.
+- [ ] Testy kampanii, turnieju, survivalu, zapisów i wszystkich pozostałych trybów.
+- [ ] Finalny przegląd bezpieczeństwa zapisu stanu i regresji, dopiero potem merge do `main`.
 
-## Sprawdzenie
+## Kontrola jakości
 
-- Składnia nowego modułu i kodu inline `index.html`: sprawdzona w izolowanym parserze JS.
-- Przepływ tarcza → pancerz → HP, krytyki, opóźnienie zdolności, zmiana areny, timeout i hooki: sprawdzone w izolowanej symulacji.
-- Testy Node: `node --test tests/combat-rework.test.cjs` (plik testowy dodany; brak uruchomienia Node w tym środowisku).
-- **Nie wykonano pełnych testów end-to-end w przeglądarce ani testów mobilnych.**
-- Nie publikować gałęzi jako ukończonego reworku.
+Składnia skryptów `index.html`, `bvb-combat-rework.js`, `bvb-combat-ui.js`, `bvb-abilities-v2.js` oraz testów została sprawdzona parserem JS. W izolowanej symulacji przeszły: pancerz, trafienia, reakcje statusów, superumiejętności, ostrzeżenia bossów i timeout.
+
+`node --test tests/combat-rework.test.cjs` uruchamia zestaw regresyjny w środowisku Node; workflow CI dodany, ale jego wynik nie został jeszcze potwierdzony.
+
+**Brak potwierdzonych testów end-to-end w przeglądarce. Nie publikować jako ukończonego reworku.**
