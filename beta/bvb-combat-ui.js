@@ -42,7 +42,8 @@ controls.innerHTML=`<span class="bvb-clock" id="bvbBattleClock">00:00 / 01:00</s
 <select id="bvbSpeed" aria-label="Prędkość walki"><option value="0.5">0,5×</option><option value="1">1×</option><option value="2">2×</option></select>
 <button id="bvbCamera" title="Zmień kamerę">📷 Statyczna</button>
 <button id="bvbFx" title="Jakość efektów">✨ Pełne FX</button>
-<button id="bvbReplay" title="Powtórka ostatniej rundy">🎞️ Powtórka</button>`;
+<button id="bvbReplay" title="Powtórka ostatniej rundy">🎞️ Powtórka</button>
+<button id="bvbSaved" title="Wczytaj ostatnio zapisaną powtórkę">📂 Zapisane</button>`;
 canvas.after(controls);
 const el=id=>document.getElementById(id);
 let paused=false,frames=[],lastReplay=[],captureClock=0,frameClock=0,matchKey='',replayState=null,wasPaused=false;
@@ -102,6 +103,7 @@ function updateButtons(g){
  el('bvbPause').textContent=paused?'▶️':'⏸️';
  el('bvbSpeed').disabled=online;
  el('bvbReplay').disabled=online||!lastReplay.length;
+ el('bvbSaved').disabled=online||!storedReplays().length;
  el('bvbSpeed').value=String(opts.speed);
  el('bvbCamera').textContent=opts.camera==='dynamic'?'📷 Dynamiczna':'📷 Statyczna';
  el('bvbFx').textContent=opts.fx==='low'?'✨ Lekkie FX':'✨ Pełne FX';
@@ -210,6 +212,7 @@ function saveReplay(){
  try{
    localStorage.setItem(replayStoreKey,JSON.stringify(saved.slice(0,3)));
    el('bvbReplaySave').textContent='✅ Zapisano';
+   updateButtons(G);
  }catch(_){el('bvbReplaySave').textContent='⚠️ Brak miejsca';}
 }
 function loadReplay(){
@@ -227,6 +230,12 @@ function downloadJson(name,data){
  link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1500);
 }
+el('bvbSaved').addEventListener('click',()=>{
+ const saved=storedReplays();if(!saved.length||G?.m===12)return;
+ lastReplay=saved[0].frames;
+ openReplay(false);replayState.playing=false;
+ el('bvbReplayPlay').textContent='▶️';
+});
 el('bvbReplaySave').addEventListener('click',saveReplay);
 el('bvbReplayLoad').addEventListener('click',loadReplay);
 el('bvbReplayDownload').addEventListener('click',()=>{
