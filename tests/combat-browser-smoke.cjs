@@ -45,6 +45,14 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      'saved replay should be seekable');
    await page.click('#bvbReplayClose');
    assert.equal(await page.locator('#bvbReplayOverlay').isVisible(),false,'replay overlay must close');
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>!!window.BVBReworkUI&&typeof startMatch==='function');
+   await page.evaluate(()=>{document.getElementById('accountGate').hidden=true;startMatch(0);pick(0);});
+   await page.waitForFunction(()=>G?.ph==='battle');
+   await page.click('#bvbSaved');
+   assert.equal(await page.locator('#bvbReplayOverlay').isVisible(),true,
+     'saved replay should still open after a reload');
+   await page.click('#bvbReplayClose');
    await page.evaluate(()=>{startBossFight(0);pick(0);});
    await page.waitForFunction(()=>G?.ph==='battle'&&G?.bl?.[1]?.b?.isBoss===true);
    const boss=await page.evaluate(()=>{
