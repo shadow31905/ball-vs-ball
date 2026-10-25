@@ -46,3 +46,13 @@ Ten plik jest **wewnętrzną listą projektu**, nie jest wczytywany przez stron�
 
 - Optymalizacja: animowany podgląd umiejętności wstrzymuje pracę, kiedy ekran wyboru lub kolekcja jest ukryty, aby nie obciążać urządzenia podczas walki.
 - Test wykonany z uproszczoną symulacją interfejsu: wykryto cztery kafelki; ścieżka bot → poziom 2 → kulka ID 1 → Gotowość przeszła do celowania z wybraną kulką, a animacja została uruchomiona. To nie zastępuje rzeczywistego testu w przeglądarce.
+
+## Aktualizacja 2.0.1 — poprawki po audycie walki
+
+- Naprawiono orbitujące ostrza Topora (i innych kulek typu orbit): stan ataku trwa 2,35 s, ostrza są rysowane podczas walki, mają rzeczywiste hitboxy, limit trafień na cel i znikają po zakończeniu aktywacji.
+- Zmieniono konfigurację standardowego bota (tryb 0) na 5 profili trudności: Łatwy i Średni nie dostają automatycznie V2; Łatwy nie losuje Guard/Rush/Strike, Średni nie losuje Rush; dostosowano statystyki i czas pierwszej aktywacji umiejętności.
+- Naprawiono samodzielny Boss Fight: sześciu bossów ma oddzielne identyfikatory umiejętności przy zachowaniu wyglądu i ID bazowej kulki; HP bossa nie jest już obniżane do 55% wartości bazowej.
+- Poprawiono spójność cooldownu wyświetlanego w kolekcji z czasem odnowienia w walce, blokowanie używania umiejętności podczas ogłuszenia, wpływ weaken na obrażenia i pojedyncze zużycie rykoszetu w narożniku.
+- Changelog ma wersję 2.0.1 i pokaże się automatycznie raz dla tej aktualizacji, z zachowaniem ręcznego dostępu.
+- Walidacja: składnia zmienionych plików JS i skryptu w index.html OK. Symulacja modułu umiejętności: Topór tworzy 3 widoczne ostrza, trafia cel w zasięgu, nie trafia poza zasięgiem, ostrza wygasają. Symulacja 1000 losowań taktyk: 0 premii dla Łatwego, 0 Rush dla Średniego. Weryfikacja profili: 6 różnych umiejętności bossów, HP bossa większe niż bazowe, rosnące HP/DMG bota wraz z trudnością.
+- Ograniczenia: nie wykonano pełnych testów E2E w prawdziwej przeglądarce ani testów PvP i fizycznych urządzeń; balans wymaga dalszej obserwacji graczy.
