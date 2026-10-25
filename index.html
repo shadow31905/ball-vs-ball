@@ -583,68 +583,90 @@
     </header>
 
     <div id="menu">
-      <div class="diff-row">
-        <button class="diff-btn" onclick="setDiff(0)">Łatwy</button>
-        <button class="diff-btn on" onclick="setDiff(1)">Średni</button>
-        <button class="diff-btn" onclick="setDiff(2)">Trudny</button>
-        <button class="diff-btn" onclick="setDiff(3)">Ekstremalny</button>
-        <button class="diff-btn" onclick="setDiff(4)">Koszmar</button>
+      <div class="bvb-welcome-guide">
+        <strong>👋 Pierwszy raz w Ball VS Ball?</strong>
+        <p>Wybierz <b>GRAJ</b>, żeby stoczyć pierwszy pojedynek, albo <b>Kampanię</b>, żeby przechodzić kolejne poziomy. Wszystkie pozostałe funkcje są opisane poniżej.</p>
       </div>
 
-      <button class="b graj" onclick="startMatch(0)">GRAJ</button>
-      <button class="b ac" onclick="window.BVBCampaign?.open?.()">🗺️ KAMPANIA · 50 WYJĄTKOWYCH POZIOMÓW</button>
-      <button class="b boss-button" onclick="bossMenu()">👹 BOSS FIGHT · 6 STRAŻNIKÓW</button>
+      <section class="bvb-menu-section bvb-menu-first" aria-labelledby="bvb-menu-start">
+        <h2 id="bvb-menu-start">🚀 Zacznij tutaj</h2>
+        <p class="bvb-section-caption">Główne sposoby rozpoczęcia gry.</p>
 
-      <div class="grid-2">
-        <button class="b hw" onclick="startMatch(9)">🎃 Halloween Event<br>(Król Dyń)</button>
-        <button class="b hw" onclick="panel('hw')">🍬 Skrzynia i Sklep<br>Halloween</button>
-      </div>
+        <button class="b graj" onclick="startMatch(0)">⚔️ GRAJ</button>
+        <button class="b ac" onclick="window.BVBCampaign?.open?.()">🗺️ KAMPANIA · 50 POZIOMÓW</button>
 
-      <button class="b" onclick="mpMenu()">
-        <span class="icon-globe">🌐</span> Multiplayer 1 vs 1 / Co-Op 2v2 (online)
-      </button>
-      <button class="b ac" onclick="panel('account')">👤 Konto · Znajomi · Ranking</button>
+        <div class="bvb-difficulty-guide">🎚️ Poziom trudności <small>Wybierz przed rozpoczęciem walki z botem.</small></div>
+        <div class="diff-row">
+          <button class="diff-btn" onclick="setDiff(0)">Łatwy</button>
+          <button class="diff-btn on" onclick="setDiff(1)">Średni</button>
+          <button class="diff-btn" onclick="setDiff(2)">Trudny</button>
+          <button class="diff-btn" onclick="setDiff(3)">Ekstremalny</button>
+          <button class="diff-btn" onclick="setDiff(4)">Koszmar</button>
+        </div>
+      </section>
 
-      <button class="b" id="svBtn" onclick="startMatch(1)">
-        Survival (rekord: fala 0)
-      </button>
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-modes">
+        <h2 id="bvb-menu-modes">⚔️ Tryby walki</h2>
+        <p class="bvb-section-caption">Inne wyzwania, bossowie oraz gra ze znajomymi.</p>
 
-      <button class="b" id="infBtn" onclick="startMatch(7)">
-        <span class="icon-inf">♾️</span> Nieskończoność (rekord: fala 0)
-      </button>
+        <button class="b boss-button" onclick="bossMenu()">👹 BOSS FIGHT · 6 STRAŻNIKÓW</button>
+        <button class="b" onclick="mpMenu()">
+          <span class="icon-globe">🌐</span> Multiplayer 1 vs 1 / Co-Op 2v2 (online)
+        </button>
+        <button class="b" id="svBtn" onclick="startMatch(1)">Survival (rekord: fala 0)</button>
+        <button class="b" id="infBtn" onclick="startMatch(7)">
+          <span class="icon-inf">♾️</span> Nieskończoność (rekord: fala 0)
+        </button>
+        <div class="grid-2">
+          <button class="b" id="bbBtn" onclick="startMatch(3)">Boss Rush (0)</button>
+          <button class="b" onclick="startMatch(4)">Trening</button>
+        </div>
+        <div class="grid-2">
+          <button class="b" onclick="startMatch(5)">Chaos</button>
+          <button class="b" onclick="startMatch(6)">Turniej</button>
+        </div>
+      </section>
 
-      <div class="grid-2">
-        <button class="b" id="bbBtn" onclick="startMatch(3)">Boss Rush (0)</button>
-        <button class="b" onclick="startMatch(4)">Trening</button>
-      </div>
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-balls">
+        <h2 id="bvb-menu-balls">🔮 Kulki i sklep</h2>
+        <p class="bvb-section-caption">Zdobywaj, oglądaj i ulepszaj swoje kulki.</p>
+        <div class="grid-3">
+          <button class="b" onclick="panel('shop')">Skrzynki</button>
+          <button class="b" onclick="panel('col')">Kolekcja</button>
+          <button class="b" onclick="panel('st')">Sklep</button>
+        </div>
+      </section>
 
-      <div class="grid-2">
-        <button class="b" onclick="startMatch(5)">Chaos</button>
-        <button class="b" onclick="startMatch(6)">Turniej</button>
-      </div>
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-rewards">
+        <h2 id="bvb-menu-rewards">🎁 Nagrody i wydarzenia</h2>
+        <p class="bvb-section-caption">Wykonuj zadania i zdobywaj dodatkowe nagrody.</p>
+        <div class="grid-3">
+          <button class="b" onclick="panel('q')">Questy</button>
+          <button class="b" onclick="panel('ach')">🏆 Osiągnięcia aren</button>
+          <button class="b" onclick="panel('bp')">Sezon</button>
+        </div>
+        <div class="bvb-subsection-label">🎃 Halloween</div>
+        <div class="grid-2">
+          <button class="b hw" onclick="startMatch(9)">🎃 Halloween Event<br>(Król Dyń)</button>
+          <button class="b hw" onclick="panel('hw')">🍬 Skrzynia i Sklep<br>Halloween</button>
+        </div>
+      </section>
 
-      <div class="grid-3">
-        <button class="b" onclick="panel('shop')">Skrzynki</button>
-        <button class="b" onclick="panel('col')">Kolekcja</button>
-        <button class="b" onclick="panel('q')">Questy</button>
-      </div>
+      <section class="bvb-menu-section" aria-labelledby="bvb-menu-settings">
+        <h2 id="bvb-menu-settings">⚙️ Konto i ustawienia</h2>
+        <p class="bvb-section-caption">Profil gracza, wygląd areny i dźwięki.</p>
 
-      <div class="grid-2">
-        <button class="b" id="msBtn" onclick="toggleSfx()">Efekty: wł.</button>
-        <button class="b" id="mmBtn" onclick="toggleMusic()">Muzyka: wł.</button>
-      </div>
-
-      <div class="grid-3">
-        <button class="b" id="thBtn" onclick="panel('arena')">🎲 Areny: losowe</button>
-        <button class="b" onclick="panel('pr')">Profil</button>
-        <button class="b" onclick="panel('set')">Ustawienia</button>
-      </div>
-
-      <button class="b" onclick="panel('ach')">🏆 Osiągnięcia aren</button>
-      <div class="grid-2">
-        <button class="b" onclick="panel('st')">Sklep</button>
-        <button class="b" onclick="panel('bp')">Sezon</button>
-      </div>
+        <button class="b ac" onclick="panel('account')">👤 Konto · Znajomi · Ranking</button>
+        <div class="grid-3">
+          <button class="b" id="thBtn" onclick="panel('arena')">🎲 Areny: losowe</button>
+          <button class="b" onclick="panel('pr')">Profil</button>
+          <button class="b" onclick="panel('set')">Ustawienia</button>
+        </div>
+        <div class="grid-2">
+          <button class="b" id="msBtn" onclick="toggleSfx()">Efekty: wł.</button>
+          <button class="b" id="mmBtn" onclick="toggleMusic()">Muzyka: wł.</button>
+        </div>
+      </section>
     </div>
 
     <div id="pn" hidden>
@@ -3115,6 +3137,5 @@ requestAnimationFrame(loop);
 <script src="./bvb-abilities-v2.js"></script>
 <script src="./bvb-preview-v2.js"></script>
 <script src="./bvb-ui-v2.js"></script>
-<script src="./bvb-navigation-v2.js"></script>
 </body>
 </html>
