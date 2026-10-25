@@ -129,14 +129,25 @@
     return damage;
   }
 
-  // Smart cooldowns: basic bots cast immediately; advanced AI can wait briefly
-  // to combine an ability with an approaching collision.
+  // Five tactical profiles: direct movement, tracking, prediction, flanking and
+  // combo planning. Difficulty changes decisions, not secret HP/damage boosts.
+  const AI_PROFILES=[
+    {reaction:.75,lead:0,turn:.27,jitter:.26,avoid:.1,flank:0,hold:0},
+    {reaction:.45,lead:.06,turn:.44,jitter:.14,avoid:.35,flank:0,hold:0},
+    {reaction:.24,lead:.19,turn:.57,jitter:.06,avoid:.65,flank:.1,hold:.2},
+    {reaction:.12,lead:.29,turn:.72,jitter:.025,avoid:1,flank:.38,hold:.55},
+    {reaction:.06,lead:.39,turn:.9,jitter:0,avoid:1.3,flank:.57,hold:.75}
+  ];
+  const profileLevel=(o,g)=>o.team===0?3:
+    g.m===0?Math.max(0,Math.min(4,diff)):3;
   function abilityReady(o,foe,g,dt) {
     if(!isAlive(foe))return true;
-    const level=o.team===0?3:(g.m===0?Math.max(0,Math.min(4,diff)):3);
-    if(level<2)return true;
+    const p=AI_PROFILES[profileLevel(o,g)];
+    if(!p.hold)return true;
     const distance=Math.hypot(o.x-foe.x,o.y-foe.y);
-    if(distance<120 || (o.abilityHold||0)>=.75) {
+    const facing=(o.vx*(foe.x-o.x)+o.vy*(foe.y-o.y))>0;
+    const goodCombo=distance<105 || (distance<165&&facing);
+    if(goodCombo||(o.abilityHold||0)>=Math.max(.18,p.hold)) {
       o.abilityHold=0;return true;
     }
     o.abilityHold=(o.abilityHold||0)+dt;
@@ -147,27 +158,52 @@
     if(!isAlive(o)||o.status?.stun>0)return;
     const foe=g.bl.find(t=>t.team!==o.team&&isAlive(t));
     if(!foe)return;
-    const id=o.b.abilityId ?? o.b.id;
-    const level=o.team===0?3:(g.m===0?Math.max(0,Math.min(4,diff)):3);
-    const lead=(.10+level*.065);
-    let tx=foe.x+foe.vx*110*lead,ty=foe.y+foe.vy*110*lead;
-    tx=Math.max(22,Math.min(338,tx));ty=Math.max(22,Math.min(338,ty));
-    let dx=tx-o.x,dy=ty-o.y;
-    // Some balls flank instead of charging directly; all still seek contact.
-    const flank=(id%5===0?1:id%5===1?-1:0)*Math.min(38,Math.hypot(dx,dy)*.2);
-    const direction=norm(dx,dy);
-    dx+=-direction.y*flank;dy+=direction.x*flank;
-    for(const p of g.obstacles||[]) {
-      const ox=o.x-p.x,oy=o.y-p.y,d=Math.hypot(ox,oy)||1;
-      if(d<o.r+p.r+32) {
-        const push=(o.r+p.r+32-d)*2.2;
+    const level=profileLevel(o,g),p=AI_PROFILES[level];
+    const id=o.b.abilityId??o.b.id;
+    o.aiDecisionClock=(o.aiDecisionClock||0)-dt;
+    if(o.aiDecisionClock<=0||!o.aiTarget) {
+      o.aiDecisionClock=p.reaction;
+      const lead=p.lead;
+      // Predict future position and reflect at walls when the profile allows.
+      let tx=foe.x+foe.vx*110*(foe.actualPace||1.2)*lead;
+      let ty=foe.y+foe.vy*110*(foe.actualPace||1.2)*lead;
+      const bounce=v=>{
+        let n=v;for(let j=0;j<3&&(n<20||n>340);j++){if(n<20)n=40-n;if(n>340)n=680-n;}
+        return Math.max(20,Math.min(340,n));
+      };
+      tx=bounce(tx);ty=bounce(ty);
+      let dx=tx-o.x,dy=ty-o.y;
+      const dist=Math.hypot(dx,dy)||1;
+      // Low HP is a strategic choice: evasive types kite, chargers commit.
+      const evade=level>=3&&o.hp/o.mh<.32&&[1,3,6,8].includes(id%10);
+      if(evade&&dist<120){dx=-dx*.72;dy=-dy*.72;}
+      const tangent=id%2?1:-1;
+      const flank=(level>=2?p.flank:0)*Math.min(90,dist*.35);
+      const dir=norm(dx,dy);
+      tx+=-dir.y*flank*tangent;ty+=dir.x*flank*tangent;
+      const wanderAngle=(random()-.5)*2*p.jitter;
+      const v=norm(tx-o.x,ty-o.y);
+      o.aiTarget={vx:v.x*Math.cos(wanderAngle)-v.y*Math.sin(wanderAngle),
+                  vy:v.x*Math.sin(wanderAngle)+v.y*Math.cos(wanderAngle)};
+    }
+    let dx=o.aiTarget.vx,dy=o.aiTarget.vy;
+    for(const ob of g.obstacles||[]) {
+      const ox=o.x-ob.x,oy=o.y-ob.y,d=Math.hypot(ox,oy)||1;
+      const radius=o.r+ob.r+28;
+      if(d<radius) {
+        const push=(radius-d)/radius*p.avoid*2.4;
         dx+=ox/d*push;dy+=oy/d*push;
       }
     }
+    // High level predicts hazardous boss telegraphs, rather than standing still.
+    if(level>=3 && g.bossTelegraph && o.team===0) {
+      const mark=g.bossTelegraph,ox=o.x-mark.x,oy=o.y-mark.y;
+      const d=Math.hypot(ox,oy)||1;
+      if(d<mark.radius+o.r+26){dx+=ox/d*2;dy+=oy/d*2;}
+    }
     const wanted=norm(dx,dy);
-    const turn=Math.min(.075,dt*(.34+level*.12+(id%4)*.025));
+    const turn=Math.min(.085,dt*p.turn);
     const adjusted=norm(o.vx*(1-turn)+wanted.x*turn,o.vy*(1-turn)+wanted.y*turn);
-    // Preserve ability impulses and mass-driven collisions instead of resetting speed.
     const speed=Math.max(.65,Math.min(1.5,Math.hypot(o.vx,o.vy)));
     o.vx=adjusted.x*speed;o.vy=adjusted.y*speed;
   }
