@@ -73,6 +73,8 @@ function descriptions(){
  const all=Array.from(root.querySelectorAll('button'));
  const difficulties=Array.from(root.querySelectorAll('.diff-btn'));
  for(const btn of all){
+  // Navigation category buttons already have their own title and explanation.
+  if(btn.classList.contains('bvb-nav-entry'))continue;
   const on=btn.getAttribute('onclick')||'';
   let desc=btn.id==='bvbChangelogBtn'?'Zobacz szczegółowy opis najnowszej aktualizacji.':
    difficulties.includes(btn)?details[0][1][difficulties.indexOf(btn)]:null;
@@ -115,7 +117,7 @@ const changeSections=[
  ]],
  ['Ulepszono',[
   'Różnorodność pojedynków, animacje i balans.',
-  'Czytelność menu na telefonach.'
+  'Czytelność menu na telefonach i przejrzysty podział funkcji na kategorie.'
  ]]
 ];
 const modal=document.createElement('section');
