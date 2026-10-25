@@ -3,6 +3,7 @@
 (() => {
 'use strict';
 const storeKey='bvb-rework-view-v1';
+const replayStoreKey='bvb-rework-replays-'+(location.pathname.includes('/beta/')?'beta':'main')+'-v2';
 const defaults={camera:'static',fx:'full',speed:1};
 let opts={...defaults};
 try {const saved=JSON.parse(localStorage.getItem(storeKey)||'{}');if(saved&&typeof saved==='object')opts={...opts,...saved};}catch(e){}
@@ -51,6 +52,11 @@ const snap=g=>({
   x:+o.x.toFixed(1),y:+o.y.toFixed(1),r:o.r,team:o.team,hp:o.hp,mh:o.mh,
   shield:o.status?.shield||0,armor:o.armor||0})),
  rings:(g.rings||[]).slice(-12).map(r=>({x:r.x,y:r.y,radius:r.radius,c:r.c})),
+ shots:(g.v2?.shots||[]).slice(-35).map(p=>({x:p.x,y:p.y,r:p.r,c:p.color})),
+ hazards:(g.v2?.hazards||[]).slice(-20).map(p=>({x:p.x,y:p.y,r:p.radius,c:p.color})),
+ obstacles:(g.obstacles||[]).slice(-20).map(p=>({x:p.x,y:p.y,r:p.r,c:p.c||'#94a3b8'})),
+ fx:(g.fx||[]).slice(-30).map(p=>({x:p.x,y:p.y,r:p.r,c:p.c})),
+ hash:window.BVBRework?.stateHash?.(g)||null,
 });
 function capture(g,force=false){
  if(!g?.bl?.length||(!force&&captureClock<.1))return;
@@ -137,6 +143,11 @@ overlay.innerHTML=`<div id="bvbReplayPanel" role="dialog" aria-modal="true" aria
 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap"><span id="bvbReplayTime">00:00</span><div>
 <button id="bvbReplayPlay">⏸️</button><button id="bvbReplayHalf">0,5×</button>
 <button id="bvbReplayNormal">1×</button><button id="bvbReplayDouble">2×</button></div></div>
+<div style="display:flex;gap:3px;flex-wrap:wrap">
+<button id="bvbReplaySave">💾 Zapisz</button>
+<button id="bvbReplayLoad">📂 Otwórz zapis</button>
+<button id="bvbReplayDownload">⬇️ Pobierz JSON</button>
+<button id="bvbReplayDebug">🔎 Raport błędu</button></div>
 </div>`;
 document.body.appendChild(overlay);
 const rcanvas=el('bvbReplayCanvas'),rc=rcanvas.getContext('2d');
@@ -151,6 +162,12 @@ function renderReplay(){
  const bg=['#19132d','#101b3e','#381515','#0b2a42','#082d2b','#201237'][a.arena%6]||'#10182f';
  rc.fillStyle=bg;rc.fillRect(0,0,360,360);
  rc.strokeStyle='#94a3b8';rc.lineWidth=3;rc.strokeRect(3,3,354,354);
+ for(const o of a.obstacles||[]){rc.fillStyle=o.c;rc.globalAlpha=.55;rc.beginPath();rc.arc(o.x,o.y,o.r||14,0,7);rc.fill();}
+ for(const h of a.hazards||[]){rc.fillStyle=h.c||'#f97316';rc.globalAlpha=.22;rc.beginPath();rc.arc(h.x,h.y,h.r||20,0,7);rc.fill();}
+ rc.globalAlpha=1;
+ for(const shot of a.shots||[]){rc.fillStyle=shot.c||'#fff';rc.beginPath();rc.arc(shot.x,shot.y,shot.r||3,0,7);rc.fill();}
+ for(const f of a.fx||[]){rc.globalAlpha=.45;rc.fillStyle=f.c||'#fff';rc.beginPath();rc.arc(f.x,f.y,f.r||2,0,7);rc.fill();}
+ rc.globalAlpha=1;
  for(const ring of a.rings){rc.globalAlpha=.45;rc.strokeStyle=ring.c||'#fff';rc.beginPath();rc.arc(ring.x,ring.y,ring.radius||20,0,7);rc.stroke();}
  rc.globalAlpha=1;
  a.actors.forEach((o,i)=>{
