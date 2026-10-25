@@ -224,6 +224,7 @@
   };
   roundEnd = function(winner) {
     if (!G || G.ph !== 'battle') return;
+    window.BVBPresentation?.finish?.(G,winner);
     G.ph = 'end';
     window.BVBReworkUI?.endRound?.(G,winner);
     if(winner>=0) G.h[1-winner]--;
@@ -321,7 +322,7 @@
   draw = function() {
     if (!G) return;
     const oldPos = [];
-    if(netRole === 'guest' && G.ph === 'battle'){
+    if(!window.BVBReplayRendering&&netRole === 'guest' && G.ph === 'battle'){
       const key=G.matchId+':'+G.rn;
       if(visualRound!==key){visualRound=key;smooth.clear();}
       for(const o of G.bl||[]){

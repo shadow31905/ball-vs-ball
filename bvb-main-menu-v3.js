@@ -160,7 +160,7 @@ function chooseBall(id){
  }
  const ability=document.createElement('p');ability.className='bvb3-power';
  const label=document.createElement('b');label.textContent=(skill?.title||'✨ Umiejętność')+': ';
- ability.append(label,document.createTextNode(skill?.desc||s.activeDesc||b.d||'Specjalna umiejętność.'));
+ ability.append(label,document.createTextNode(s.activeDesc||skill?.desc||b.d||'Specjalna umiejętność.'));
  const simulation=document.createElement('canvas');
  simulation.id='bvb-skill-preview-canvas';simulation.width=320;simulation.height=150;
  simulation.setAttribute('aria-label','Animowany schemat umiejętności wybranej kulki');

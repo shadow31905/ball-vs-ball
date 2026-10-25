@@ -39,6 +39,8 @@ function safeTree(value) {
     if(keys.length>1200)return false;
     for(const key of keys){
       if(['__proto__','constructor','prototype'].includes(key)||key.length>160||!visit(v[key],depth+1))return false;
+      if(['r','radius','inner','width','size'].includes(key)&&(!Number.isFinite(v[key])||v[key]<0||v[key]>10000))return false;
+      if(['x','y','x1','y1','x2','y2','px','py'].includes(key)&&(!Number.isFinite(v[key])||Math.abs(v[key])>1000000))return false;
     }
     return true;
   }

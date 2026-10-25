@@ -12,9 +12,9 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
  try{
    await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
    await page.waitForFunction(()=>typeof window.startMatch==='function'&&!!window.BVBReworkUI&&!!window.BVBRework,{timeout:30000});
-   await page.evaluate(()=>{document.getElementById('accountGate').hidden=true;startMatch(0);pick(0);});
+   await page.evaluate(()=>{if(document.getElementById('accountGate'))document.getElementById('accountGate').hidden=true;startMatch(0);pick(0);});
    await page.waitForFunction(()=>typeof G!=='undefined'&&G?.ph==='battle'&&G?.bl?.length===2,{timeout:15000});
-   await page.waitForTimeout(500);
+   await page.waitForFunction(()=>document.getElementById('bvbCombatHud')?.textContent.includes('❤️'),null,{timeout:15000});
    const state=await page.evaluate(()=>({
      hp:G.bl.map(o=>o.hp),hud:document.getElementById('bvbCombatHud').textContent,
      paused:BVBReworkUI.paused(),rate:BVBReworkUI.rate(),all130:B.length
@@ -37,6 +37,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.waitForFunction(()=>document.getElementById('ovb').textContent.includes('Ostatnie 5 sekund'));
    await page.click('#ovb button:has-text("Cała powtórka")');
    assert.equal(await page.locator('#bvbReplayOverlay').isVisible(),true,'replay overlay must open');
+   assert.ok(await page.evaluate(()=>{const c=document.getElementById('bvbReplayCanvas');return c.getContext('2d').getImageData(c.width-10,c.height-10,1,1).data[3]>0;}),'native replay renderer must cover its full canvas at any display density');
    await page.click('#bvbReplaySave');
    await page.waitForFunction(()=>document.getElementById('bvbReplaySave').textContent.includes('Zapisano'));
    assert.equal(await page.evaluate(()=>

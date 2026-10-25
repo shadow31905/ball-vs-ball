@@ -134,6 +134,8 @@ const entries=[
 ['tether','Sznurki Marionetki','Świetliste nici przyciągają i spowalniają przeciwnika.'],
 ['shard','Kryształ Zaświatów','Mroźne kryształy rozpryskują się na boki.']
 ];
+const verifiedDescriptions={"13":"Aktywacja trafia promieniem, a odbicie od ściany tworzy wzdłuż niej laser.","24":"Tworzy toksyczne pole; przez 3 sekundy kontakt dodatkowo zatruwa rywala.","29":"Lodowe pociski spowalniają, a odbicia zostawiają strefy szronu.","41":"Aktywacja trafia promieniem, a odbicia tworzą lasery wzdłuż ścian.","49":"Celuje prostą wiązką i trafia w aktualną pozycję rywala.","51":"Teleportuje kulkę w pobliże rywala, pozostawiając widoczny błysk.","61":"Trzy płonące meteory lecą wachlarzem i mogą raz odbić się od ściany.","65":"Przyciąga rywala do właściciela i uderza pobliski cel falą.","76":"Trzy meteory zostawiają płonące trafienia i raz odbijają się od ściany.","125":"Cukierkowe pociski lecą wachlarzem i lekko naprowadzają się na rywala."};
+for(const [id,desc] of Object.entries(verifiedDescriptions))entries[Number(id)][2]=desc;
 if(entries.length!==130)throw new Error('BVB 2.0: expected exactly 130 abilities');
 const descriptions={
  charge:'Wzmocnione kolejne zderzenie',orbit:'Obracający się atak wokół kulki',
@@ -179,12 +181,52 @@ getBallStats=function(id,...args){
  const tierMult=st.tier===3?1.32:st.tier===2?1.15:1;
  st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv)*tierMult);
  st.cd=d.kind==='web'?0:+Math.max(2.25,d.cooldown*(st.tier===3?.78:st.tier===2?.90:1)).toFixed(2);
- st.activeDesc=d.title+': '+d.desc+(st.tier>1?' · Ewolucja V'+st.tier+': silniejszy efekt.':'');
+ st.activeDesc=d.title+': '+d.desc+' · '+evolutionDescription(id,st.tier);
+ st.evolutionDesc=evolutionDescription(id,st.tier);
  st.speed=d.speed;
  const identity=window.BVBIdentities?.get?.(id);
  if(identity){st.passiveName=identity.passive.name;st.passiveDesc=identity.passive.desc;st.superName=identity.super.name;st.superDesc=identity.super.desc;st.superThreshold=100;st.superLimit=2;}
  return st;
 };
+
+const evolutionStage=o=>Math.max(0,Math.min(2,(o?.tier||1)-1));
+function evolutionDescription(id,tier=1){
+ const kind=abilityData[id]?.kind,stage=Math.max(0,Math.min(2,tier-1));
+ if(!stage)return 'V1: podstawowa wersja zdolności.';
+ const labels={
+ orbit:'więcej ostrzy, większa orbita i dłuższa aktywacja',
+ web:'sieć dodatkowo spowalnia'+(stage===2?' i zatruwa':''),
+ thorn:'większe i trwalsze kolce przy ścianach',
+ charge:'szybsza szarża i więcej ładunków następnego zderzenia',
+ dash:'szybszy doskok, dodatkowa osłona i mocniejszy następny kontakt',
+ chess:'dodatkowe pociski po ruchu po liniach',
+ drain:'większy zasięg wysysania i skuteczniejsze leczenie',
+ beam:'dłuższy promień wizualny i dodatkowe spowolnienie; lasery ścienne są szersze',
+ tail:'dłuższy jadowity ogon',growth:'większy wzrost i dłuższa strefa szlamu',
+ tether:'mocniejsze przyciąganie i dłuższe spowolnienie',
+ pet:'pomocnik działa dłużej i strzela silniej',turret:'wieżyczka działa dłużej i strzela silniej',
+ train:'większy, trwalszy pociąg',dice:'dłuższe efekty sześciu wyników kostki',
+ potion:'większy obszar i trwalsze efekty eliksiru',
+ shield:'większa tarcza i oczyszczenie '+(stage===1?'ognia':'ognia, trucizny i spowolnienia'),
+ reflect:'większa tarcza i dłuższe odbijanie',heal:'skuteczniejsze leczenie i oczyszczanie statusów',
+ blink:stage===1?'pocisk cienia po teleportacji':'dwa pociski cienia i osłona po teleportacji',
+ time:'dłuższe zatrzymanie tempa rywala',eclipse:'dłuższe spowolnienie i osłabienie',
+ mirage:'większa osłona, silniejszy doskok i dłuższa dezorientacja',
+ cyclone:'większy zasięg i mocniejszy odrzut',gravity:'większy zasięg i silniejsze przyciąganie',
+ void:'mocniejsze wysysanie energii i leczenie',shadow:'dodatkowe widmowe pociski',
+ phoenix:'więcej leczenia i większy pierścień ognia',pumpkin:'większy zasięg fali dyni'
+ };
+ return 'V'+tier+': '+(labels[kind]||(['zone','gas','poison','grid','mine','doom','lava','sun','echo'].includes(kind)?'większe pola, dłuższe działanie i silniejsze impulsy':'dodatkowe pociski z lepszym naprowadzaniem'))+'.';
+}
+function onContact(g,o,foe,base){
+ if(!o||!foe||!g||netRole==='guest')return base;
+ if(o.v2InfectUntil>g.rt)setStatus(o,foe,'poison',.7+evolutionStage(o)*.2);
+ if(o.v2ShockUntil>g.rt)setStatus(o,foe,'stun',.12+evolutionStage(o)*.04);
+ if(o.v2ShatterUntil>g.rt){o.v2ShatterUntil=0;shoot(o,foe,{count:3,damage:o.baseDmg*.12,spread:.6,bounces:1});}
+ if(o.b.id===44){o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);base+=Math.min(4,[0,1,1,2,3,5,8][o.v2FibHit]*.5);}
+ return base;
+}
+
 function abilityFor(o){return abilityData[o?.b?.abilityId ?? o?.b?.id] || abilityData[0];}
 function roundState(){
  if(!G)return null;
@@ -220,39 +262,43 @@ function strike(source,target,amount,options={}){
 }
 function shoot(o,foe,opts={}){
  if(!foe||!alive(foe))return;
- const st=roundState(),count=Math.max(1,Math.min(7,opts.count||1)),speed=opts.speed||145;
+ const stage=evolutionStage(o),st=roundState(),count=Math.max(1,Math.min(7,(opts.count||1)+stage)),speed=(opts.speed||145)*(1+stage*.04);
  const lead=Math.min(.42,Math.hypot(foe.x-o.x,foe.y-o.y)/Math.max(120,speed))*((opts.homing||0)>.5?.85:.55);
  const targetX=Math.max(18,Math.min(342,foe.x+foe.vx*110*lead));
  const targetY=Math.max(18,Math.min(342,foe.y+foe.vy*110*lead));
  const heading=Math.atan2(targetY-o.y,targetX-o.x);
  for(let i=0;i<count;i++){
-  const a=heading+(i-(count-1)/2)*(opts.spread??.18);
+  const a=(opts.randomAim?(window.BVBRework?.random?.()??Math.random())*Math.PI*2:heading)+(i-(count-1)/2)*(opts.spread??.18);
   st.shots.push({x:o.x+Math.cos(a)*(o.r+5),y:o.y+Math.sin(a)*(o.r+5),
    px:o.x,py:o.y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,
-   owner:o.uid,team:o.team,id:o.b.id,damage:opts.damage||o.baseDmg*.45,
-   r:opts.r||4,life:opts.life||2.2,age:0,homing:opts.homing||0,bounces:opts.bounces||0,
-   slow:opts.slow||0,poison:opts.poison||0,burn:opts.burn||0,stun:opts.stun||0,
+   owner:o.uid,team:o.team,id:o.b.id,damage:(opts.damage||o.baseDmg*.45)*(1+stage*.08),ghost:!!opts.ghost,
+   r:opts.r||4,life:opts.life||2.2,age:0,homing:(opts.homing||0)+stage*.18,bounces:(opts.bounces||0)+(abilityFor(o).kind==='arrow'?stage:0),
+   healOnHit:opts.healOnHit||0,slow:opts.slow||0,poison:opts.poison||0,burn:opts.burn||0,stun:opts.stun||0,
    knock:opts.knock||0,color:opts.color||abilityData[o.b.id].color});
  }
  if(st.shots.length>80)st.shots.splice(0,st.shots.length-80);
  visual(o,o,'charge',17,abilityData[o.b.id].color,.34);
 }
 function zone(o,x,y,kind='zone',radius=29,life=3,power=1){
+ const stage=evolutionStage(o);radius*=1+stage*.1;life*=1+stage*.15;power*=1+stage*.1;
  const st=roundState();if(!st)return;
+ if(['pet','turret'].includes(kind)){const old=st.hazards.find(h=>h.owner===o.uid&&h.kind===kind&&h.life>0);if(old){old.life=Math.max(old.life,life);old.max=Math.max(old.max,life);old.power=Math.max(old.power,power);return old;}}
  st.hazards.push({x,y,kind,owner:o.uid,team:o.team,id:o.b.id,radius,life,max:life,
-  power,age:0,cooldown:0,color:abilityData[o.b.id].color});
+  power,age:0,cooldown:0,armAt:kind==='doom'?1:kind==='mine'?.75:kind==='echo'?.5:0,nextShot:.35,color:abilityData[o.b.id].color});
  if(st.hazards.length>45)st.hazards.splice(0,st.hazards.length-45);
  visual(o,{x,y},'circle',radius,abilityData[o.b.id].color,.55);
 }
 function radial(o,foe,mult=.55,opts={}){
+ opts={...opts,radius:(opts.radius||93)*(1+evolutionStage(o)*.1)};
  if(!foe||!alive(foe))return;
  visual(o,o,'ring',Math.max(o.r+12,Math.min(110,opts.radius||60)),abilityData[o.b.id].color,.65);
  if(Math.hypot(foe.x-o.x,foe.y-o.y)<(opts.radius||93))strike(o,foe,o.baseDmg*mult,opts);
 }
 function dash(o,foe,strength=.32,opts={}){
- if(!foe)return;const d=Math.hypot(foe.x-o.x,foe.y-o.y)||1;
+ if(!foe)return;const stage=evolutionStage(o);strength+=stage*.1;const d=Math.hypot(foe.x-o.x,foe.y-o.y)||1;
  o.vx=(foe.x-o.x)/d*(1+strength);o.vy=(foe.y-o.y)/d*(1+strength);
- o.skillImpact=Math.max(o.skillImpact||0,1.5);
+ o.skillImpact=Math.max(o.skillImpact||0,1.5+stage*.25);
+ if(stage)o.status.shield=Math.min(32,(o.status.shield||0)+stage*2);
  if(opts.shield)o.status.shield=(o.status.shield||0)+opts.shield;
  visual(o,o,'slash',39,abilityData[o.b.id].color,.55);
 }
@@ -261,7 +307,7 @@ function webPoint(o,side){
  const p={x:o.x,y:o.y,side};
  const start=o.v2WallAnchor;
  if(start&&start.side!==side){
-  st.webs.push({a:start,b:p,team:o.team,id:o.b.id,owner:o.uid,inside:{},color:o.b.id===34||o.b.id===117?'#aa83da':'#d4e7ff'});
+  st.webs.push({a:start,b:p,team:o.team,id:o.b.id,owner:o.uid,stage:evolutionStage(o),inside:{},color:o.b.id===34||o.b.id===117?'#aa83da':'#d4e7ff'});
   visual(o,{x:(start.x+p.x)/2,y:(start.y+p.y)/2},'web',38,'#dcecff',.7);
  }
  o.v2WallAnchor=p;
@@ -272,12 +318,13 @@ function onWall(o,side){
  if(o.v2LastSide===side&&(G.rt-(o.v2LastWallAt||0))<.12)return;
  o.v2LastSide=side;o.v2LastWallAt=G.rt||0;
  if(d.kind==='web')webPoint(o,side);
+ if(d.kind==='pet')o.v2PetPower=Math.min(2,(o.v2PetPower||1)+.1);
  if(d.kind==='thorn')zone(o,o.x,o.y,'thorn',15,16,.65);
  if(d.kind==='beam'&&(o.b.id===13||o.b.id===41)){
   const vertical=side==='left'||side==='right';
   st.wallBeams.push({a:{x:vertical?o.x:0,y:vertical?0:o.y},
    b:{x:vertical?o.x:W,y:vertical?W:o.y},owner:o.uid,
-   team:o.team,color:d.color,life:3.4,inside:{}});
+   team:o.team,color:d.color,life:3.4+evolutionStage(o)*.5,width:2+evolutionStage(o)*2,inside:{}});
   if(st.wallBeams.length>12)st.wallBeams.splice(0,st.wallBeams.length-12);
   visual(o,o,'beam',23,d.color,.48);
  }
@@ -308,112 +355,133 @@ function cast(o,foe){
   text:d.title.length>21?d.title.slice(0,20)+'…':d.title,c:d.color});
  switch(kind){
  case 'web': visual(o,o,'web',27,d.color,.5);break; // webs form only on actual wall impacts
- case 'charge': o.skillCharge=Math.min(5,(o.skillCharge||0)+1);dash(o,foe,.22);break;
+ case 'charge': o.skillCharge=Math.min(5,(o.skillCharge||0)+1+evolutionStage(o));dash(o,foe,.22);break;
  case 'orbit':
   // Real gameplay blades: persistent, visible and collision-tested on every tick.
   o.skillSpin=(o.skillSpin||0)+1;
-  o.axeOrbit={life:2.35,angle:0,radius:o.r+20,blades:3,nextHit:Object.create(null),color:d.color};
+  o.axeOrbit={life:2.35+evolutionStage(o)*.35,angle:0,radius:o.r+20+evolutionStage(o)*6+(o.b.id===1&&lowHp?9:0),blades:Math.min(6,3+evolutionStage(o)+(o.b.id===4?Math.floor(o.skillSpin/2):0)),nextHit:Object.create(null),color:d.color};
   visual(o,o,'orbit',34,d.color,.45);break;
  case 'thorn': visual(o,o,'charge',24,d.color,.5);break; // only walls create spikes
  case 'volley': shoot(o,foe,{count:o.b.id===5?5:o.b.id===43?3:o.b.id===3?2:3,
    damage:o.baseDmg*(o.b.id===5?.2:.36)*scale,homing:.2,spread:.22,
    speed:lowHp&&o.b.id===3?195:168,slow:o.b.id===37?.4:0});break;
  case 'drain':
-  if(delta<128){strike(o,foe,Math.min(8,foe.hp*.06)*scale,{slow:.25});
-    o.hp=Math.min(o.mh,o.hp+Math.min(7,o.baseDmg*.4));}
+  if(delta<128+evolutionStage(o)*22){strike(o,foe,Math.min(8,foe.hp*.06)*scale,{slow:.25});
+    o.hp=Math.min(o.mh,o.hp+Math.min(9,o.baseDmg*.4)*(1+evolutionStage(o)*.15));}
   else dash(o,foe,.15);
   visual(o,o,'tether',25,d.color,.58);break;
- case 'dash':dash(o,foe,.35, {shield:o.b.id===114?6:0});break;
+ case 'dash':dash(o,foe,o.b.id===108&&lowHp?.6:.35, {shield:o.b.id===114?6:0});break;
  case 'chess':
   o.vx=Math.abs(foe.x-o.x)>Math.abs(foe.y-o.y)?Math.sign(foe.x-o.x)||1:0;
   o.vy=o.vx===0?Math.sign(foe.y-o.y)||1:0;
   visual(o,o,'chess',42,d.color,.65);
+  if(evolutionStage(o))shoot(o,foe,{count:evolutionStage(o),damage:o.baseDmg*.14,spread:.7});
   if(delta<96)strike(o,foe,o.baseDmg*.55,{knock:.24});break;
- case 'dice':case 'potion': {
+ case 'dice': {
+  const roll=Math.floor((window.BVBRework?.random?.()??Math.random())*6);o.v2LastRoll=roll+1;
+  if(roll===0)shoot(o,foe,{damage:o.baseDmg*.45});
+  if(roll===1)setStatus(o,foe,'slow',.8+evolutionStage(o)*.2);
+  if(roll===2)o.status.shield=Math.min(32,(o.status.shield||0)+9+evolutionStage(o)*2);
+  if(roll===3)o.hp=Math.min(o.mh,o.hp+5+evolutionStage(o));
+  if(roll===4)zone(o,foe.x,foe.y,'fire',26,2,.45);
+  if(roll===5)zone(o,foe.x,foe.y,'poison',30,3,.38);
+  visual(o,o,'dice',28,d.color,.6);break;
+ }
+ case 'potion': {
   const roll=Math.floor((window.BVBRework?.random?.() ?? Math.random())*3);
-  if(roll===0)shoot(o,foe,{damage:o.baseDmg*.45,slow:.65,color:d.color});
+  if(o.b.id===95){if(roll===0)zone(o,foe.x,foe.y,'fire',30,2.4,.4);else if(roll===1)shoot(o,foe,{damage:o.baseDmg*.35,slow:.85});else o.status.shield=Math.min(32,(o.status.shield||0)+9+evolutionStage(o)*2);}
+  else if(o.b.id===127){if(roll===0)zone(o,foe.x,foe.y,'poison',30,2.8,.38);else if(roll===1)shoot(o,foe,{damage:o.baseDmg*.35,slow:.85});else o.hp=Math.min(o.mh,o.hp+6+evolutionStage(o));}
+  else if(roll===0)shoot(o,foe,{damage:o.baseDmg*.45,slow:.65,color:d.color});
   else if(roll===1)zone(o,foe.x,foe.y,'poison',30,2.8,.38);
-  else {o.status.shield=(o.status.shield||0)+9;visual(o,o,'shield',33,d.color,.55);}
+  else {o.status.shield=Math.min(32,(o.status.shield||0)+9+evolutionStage(o)*2);visual(o,o,'shield',33,d.color,.55);}
   break;
  }
  case 'frost':
   shoot(o,foe,{count:o.b.id===12?3:2,damage:o.baseDmg*.24,slow:1.05,spread:.26,color:'#a5f3fc'});break;
  case 'beam':{
   const lead=.19,target={x:foe.x+foe.vx*22*lead,y:foe.y+foe.vy*22*lead};
-  roundState().beams.push({x:o.x,y:o.y,x2:target.x,y2:target.y,color:d.color,life:.35,max:.35,id:o.b.id});
-  strike(o,foe,o.baseDmg*.43*scale,{stun:o.b.id===20?.12:0});visual(o,o,'beam',23,d.color,.55);break;
+  roundState().beams.push({x:o.x,y:o.y,x2:target.x,y2:target.y,color:d.color,life:.35+evolutionStage(o)*.1,max:.35+evolutionStage(o)*.1,id:o.b.id});
+  strike(o,foe,o.baseDmg*.43*scale,{slow:evolutionStage(o)*.15,stun:o.b.id===20?.12:0});visual(o,o,'beam',23,d.color,.55);break;
  }
  case 'tail':case 'growth':{
-  o.skillScale=Math.min(1.23,(o.skillScale||1)+.025);
+  o.skillScale=Math.min(1.23,(o.skillScale||1)+.025+evolutionStage(o)*.01);
+  if(kind==='tail')o.v2Tail={life:3.5+evolutionStage(o)*.5,length:Math.min(9,5+evolutionStage(o)*2+Math.floor((o.skillScale-1)*15)),nextHit:0};
+  else {o.v2BaseRadius??=o.r;o.r=Math.min(o.v2BaseRadius*1.23,o.v2BaseRadius*o.skillScale);}
   o.hp=Math.min(o.mh,o.hp+3.3*scale);
   zone(o,o.x,o.y,kind==='tail'?'tail':'slime',24,3,.29);
   visual(o,o,'growth',28,d.color,.7);break;
  }
  case 'tether':
-  if(delta<240){const f=.32;foe.vx+=(o.x-foe.x)/Math.max(1,delta)*f;
+  if(delta<240+evolutionStage(o)*15){const f=.32+evolutionStage(o)*.08;foe.vx+=(o.x-foe.x)/Math.max(1,delta)*f;
    foe.vy+=(o.y-foe.y)/Math.max(1,delta)*f;
-   strike(o,foe,o.baseDmg*.4,{slow:.45});}
+   strike(o,foe,o.baseDmg*.4,{slow:.45+evolutionStage(o)*.2});}
   roundState().beams.push({x:o.x,y:o.y,x2:foe.x,y2:foe.y,color:d.color,life:.3,max:.3,id:o.b.id});
   visual(o,o,'tether',20,d.color,.4);break;
- case 'pet':case 'turret':case 'train':zone(o,o.x,o.y,kind,22,5,.7);break;
+ case 'pet':case 'turret':zone(o,o.x,o.y,kind,22,5,.7);break;
+ case 'train':{zone(o,o.x,o.y,kind,22,3,.7);const h=roundState().hazards.at(-1),a=Math.atan2(foe.y-o.y,foe.x-o.x);h.vx=Math.cos(a)*160;h.vy=Math.sin(a)*160;break;}
  case 'shock':case 'storm':
-  shoot(o,foe,{count:kind==='storm'?3:1,damage:o.baseDmg*.32,stun:.22,homing:.45,color:'#fde047',spread:.23});break;
+  shoot(o,foe,{count:kind==='storm'?3:o.b.id===83?2:1,damage:o.baseDmg*.32,stun:.22,homing:.45,color:'#fde047',spread:.23,randomAim:kind==='storm'});o.v2ShockUntil=G.rt+1.5+evolutionStage(o)*.2;break;
  case 'zone':case 'gas':case 'poison':
-  zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);break;
+  zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);if(kind==='poison')o.v2InfectUntil=G.rt+3;break;
  case 'grid':
-  zone(o,foe.x,foe.y,'grid',46,2.8,.45);break;
+  for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)zone(o,clamp(foe.x+x*31,12,348),clamp(foe.y+y*31,12,348),'grid',16,2.8,.06+(x+1)*.02+(y+1)*.01);break;
  case 'healshot':
-  o.hp=Math.min(o.mh,o.hp+4.5*scale);
-  shoot(o,foe,{damage:o.baseDmg*.38,homing:.13,color:'#fbbf24'});break;
+  shoot(o,foe,{damage:o.baseDmg*.38,healOnHit:4.5*scale,homing:.13,color:'#fbbf24'});break;
  case 'arrow':
   shoot(o,foe,{damage:o.baseDmg*.6,bounces:3,speed:180,r:3,color:'#fef08a'});break;
  case 'pulse':case 'wave':case 'quake':case 'nova':
+  if(o.b.id===74||o.b.id===120)o.v2Echo={clock:.35,remaining:2+evolutionStage(o),power:.18,radius:100};
   radial(o,foe,kind==='nova'?.73:.5,{radius:kind==='wave'?155:kind==='nova'?130:100,
      knock:kind==='wave'||kind==='quake'?.36:.18,slow:kind==='pulse'?.18:0});break;
  case 'swarm':shoot(o,foe,{count:o.b.id===31?3:2,damage:o.baseDmg*.22,homing:2.5,
    poison:o.b.id===31?.8:0,speed:118,life:3.1,color:d.color});break;
- case 'mine':zone(o,foe.x,foe.y,'mine',24,5,.72);break;
+ case 'mine':{const stage=evolutionStage(o),lead=.75*110*(foe.actualPace||1.38);for(let i=0;i<=stage;i++)zone(o,clamp(foe.x+foe.vx*lead+(i-stage/2)*26,20,340),clamp(foe.y+foe.vy*lead,20,340),'mine',24,5,.72/(1+stage*.3));break;}
  case 'reflect':case 'shield':
+  if(o.b.id===96){o.status.stun=0;o.status.slow=0;o.status.weaken=0;}
   o.status.shield=Math.min(32,(o.status.shield||0)+(kind==='shield'?13:8)*scale);
-  o.skillReflect=kind==='reflect'?1.7:0;
+  o.skillReflect=kind==='reflect'?1.7+evolutionStage(o)*.4:0;
+  if(kind==='shield'&&evolutionStage(o)){o.status.burn=0;if(evolutionStage(o)===2){o.status.poison=0;o.status.slow=0;}}
   visual(o,o,'shield',34,d.color,.68);break;
  case 'heal':
   o.hp=Math.min(o.mh,o.hp+7*scale);o.status.shield=Math.min(26,(o.status.shield||0)+5);
+  if(evolutionStage(o))o.status.burn=0;if(evolutionStage(o)===2){o.status.poison=0;o.status.slow=0;}
   visual(o,o,'heal',30,'#86efac',.62);break;
  case 'shard':
-  shoot(o,foe,{count:5,damage:o.baseDmg*.25,spread:.28,speed:165,bounces:1,color:d.color});
-  visual(o,o,'shard',32,d.color,.5);break;
+  shoot(o,foe,{count:5,damage:o.baseDmg*.25,spread:.28,speed:165,bounces:1,slow:o.b.id===129?.35:0,color:d.color});
+  o.v2ShatterUntil=G.rt+2;visual(o,o,'shard',32,d.color,.5);break;
  case 'blink':{
   const a=Math.atan2(o.y-foe.y,o.x-foe.x)+((window.BVBRework?.random?.() ?? Math.random())-.5)*1.1;
   o.x=clamp(foe.x+Math.cos(a)*80,o.r,W-o.r);
   o.y=clamp(foe.y+Math.sin(a)*80,o.r,W-o.r);
+  if(evolutionStage(o))shoot(o,foe,{count:1,damage:o.baseDmg*.14,ghost:true,homing:.6});if(evolutionStage(o)===2)o.status.shield=Math.min(32,(o.status.shield||0)+2);
   visual(o,o,'blink',33,d.color,.65);break;
  }
  case 'time':case 'eclipse':
-  setStatus(o,foe,'slow',kind==='time'?1.2:.7);
-  if(kind==='eclipse')setStatus(o,foe,'weaken',1.6);
+  setStatus(o,foe,'slow',(kind==='time'?1.2:.7)*(1+evolutionStage(o)*.2));
+  if(kind==='eclipse')setStatus(o,foe,'weaken',1.6+evolutionStage(o)*.3);
   visual(o,foe,'clock',41,d.color,.75);break;
  case 'lava':case 'sun':
   zone(o,foe.x,foe.y,kind==='lava'?'fire':'sun',31,2.8,.52);break;
  case 'meteor':shoot(o,foe,{count:3,damage:o.baseDmg*.29,spread:.36,burn:.65,bounces:1,speed:145});break;
  case 'cyclone':case 'gravity':{
   const dir=kind==='gravity'?-1:1;
-  foe.vx+=(foe.x-o.x)/Math.max(1,delta)*.26*dir;foe.vy+=(foe.y-o.y)/Math.max(1,delta)*.26*dir;
+  foe.vx+=(foe.x-o.x)/Math.max(1,delta)*(.26+evolutionStage(o)*.07)*dir;foe.vy+=(foe.y-o.y)/Math.max(1,delta)*(.26+evolutionStage(o)*.07)*dir;
   radial(o,foe,.29,{radius:175,knock:kind==='cyclone'?.2:0});break;
  }
  case 'prism':shoot(o,foe,{count:3,damage:o.baseDmg*.3,spread:.33,color:'#a5b4fc'});break;
  case 'echo':{
   radial(o,foe,.32,{radius:130});
-  zone(o,foe.x,foe.y,'echo',26,1.8,.38);break;
+  o.v2Echo={clock:.5,remaining:1+evolutionStage(o),power:.22,radius:130};break;
  }
- case 'void':case 'shadow':
+ case 'shadow':shoot(o,foe,{damage:o.baseDmg*.42,slow:.38,ghost:true,homing:.5,color:d.color});break;
+ case 'void':
   strike(o,foe,o.baseDmg*.42,{slow:.38});
-  if(kind==='void')o.hp=Math.min(o.mh,o.hp+2);
+  o.hp=Math.min(o.mh,o.hp+2+evolutionStage(o));
   visual(o,foe,'shadow',32,d.color,.65);break;
  case 'moon':shoot(o,foe,{count:2,damage:o.baseDmg*.38,spread:.17,bounces:1,color:'#c4b5fd'});break;
- case 'mirage':o.status.shield=(o.status.shield||0)+8;dash(o,foe,.12);break;
- case 'doom':zone(o,foe.x,foe.y,'doom',22,2,.65);break;
- case 'phoenix':o.hp=Math.min(o.mh,o.hp+4);zone(o,o.x,o.y,'fire',31,3,.32);break;
+ case 'mirage':o.status.shield=Math.min(32,(o.status.shield||0)+8+evolutionStage(o)*2);foe.aiTarget={vx:-foe.vy,vy:foe.vx};foe.aiDecisionClock=.4+evolutionStage(o)*.2;dash(o,foe,.12);visual(o,o,'mirage',35,d.color,.6);break;
+ case 'doom':zone(o,foe.x,foe.y,'doom',22,2,.65);roundState().hazards.at(-1).targetUid=foe.uid;break;
+ case 'phoenix':o.hp=Math.min(o.mh,o.hp+4+evolutionStage(o)*2);zone(o,o.x,o.y,'fire',31,3,.32);break;
  case 'pumpkin':radial(o,foe,.47,{radius:115,knock:.18});break;
  default:shoot(o,foe,{damage:o.baseDmg*.5,homing:.15});
  }
@@ -445,6 +513,9 @@ function tick(dt){
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
   if(o.skillImpact>0)o.skillImpact=Math.max(0,o.skillImpact-dt);
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
+  const echo=o.v2Echo;if(echo){echo.clock-=dt;if(echo.clock<=0){const foe=G.bl.find(t=>t.team!==o.team&&alive(t));if(foe)radial(o,foe,echo.power,{radius:echo.radius});echo.remaining--;echo.clock+=.5;if(echo.remaining<=0)o.v2Echo=null;}}
+  const tail=o.v2Tail;
+  if(tail){tail.life-=dt;tail.nextHit=Math.max(0,tail.nextHit-dt);if(tail.life<=0)o.v2Tail=null;else {const foe=G.bl.find(t=>t.team!==o.team&&alive(t)),points=(o.trail||[]).slice(-tail.length);if(foe&&tail.nextHit<=0&&points.some(p=>Math.hypot(foe.x-p.x,foe.y-p.y)<foe.r+8)){strike(o,foe,o.baseDmg*.16,{poison:.4,knock:.08});tail.nextHit=.6;}}}
   const orbit=o.axeOrbit;
   if(orbit){
    orbit.life-=dt;orbit.angle+=dt*7.5;
@@ -485,31 +556,43 @@ function tick(dt){
    }else s.life=0;
   }
   if(s.life<=0)continue;
+  if(!s.ghost&&(G.obstacles||[]).some(ob=>closestToSegment(ob.x,ob.y,s.px,s.py,s.x,s.y)<ob.r+s.r)){s.life=0;continue;}
   const target=G.bl.find(o=>o.team!==s.team&&alive(o)&&closestToSegment(o.x,o.y,s.px,s.py,s.x,s.y)<o.r+s.r);
   if(target){
    const owner=G.bl.find(o=>o.uid===s.owner);
    if(owner)strike(owner,target,s.damage,{slow:s.slow,poison:s.poison,burn:s.burn,stun:s.stun,knock:s.knock});
+   if(owner&&s.healOnHit&&alive(owner))owner.hp=Math.min(owner.mh,owner.hp+s.healOnHit);
    s.life=0;
   }
  }
  st.shots=st.shots.filter(p=>p.life>0);
  for(const h of st.hazards){
   h.age+=dt;h.life-=dt;h.cooldown-=dt;
+  if(h.kind==='doom'&&h.age<(h.armAt||0)){const target=G.bl.find(o=>o.uid===h.targetUid&&alive(o));if(target){h.x=target.x;h.y=target.y;}}
   if(h.kind==='train'){h.x+=(h.vx||0)*dt;h.y+=(h.vy||0)*dt;}
   if(h.kind==='train'&&(h.x<-25||h.x>W+25||h.y<-25||h.y>W+25))h.life=0;
   if(h.life<=0)continue;
+  const summoner=G.bl.find(o=>o.uid===h.owner&&alive(o));
+  if(summoner&&['pet','turret'].includes(h.kind)){
+   const target=G.bl.find(o=>o.team!==h.team&&alive(o));
+   if(target){if(h.kind==='pet'){const d=Math.hypot(target.x-h.x,target.y-h.y)||1;if(d>42){h.x+=(target.x-h.x)/d*60*dt;h.y+=(target.y-h.y)/d*60*dt;}}
+    h.nextShot=(h.nextShot||0)-dt;if(h.nextShot<=0){shoot({...summoner,x:h.x,y:h.y},target,{damage:summoner.baseDmg*.14*h.power*(summoner.v2PetPower||1),homing:.35,speed:145,life:2});h.nextShot=1.0;}}
+  }
+  if(h.age<(h.armAt||0))continue;
   const foe=G.bl.find(o=>o.team!==h.team&&alive(o)&&Math.hypot(o.x-h.x,o.y-h.y)<o.r+h.radius);
   if(!foe||h.cooldown>0)continue;
   const owner=G.bl.find(o=>o.uid===h.owner)||null;
   if(!owner)continue;
-  if(h.kind==='shock')strike(owner,foe,3*h.power,{stun:.19});
+  if(h.kind==='thorn')strike(owner,foe,2*h.power,{poison:.6});
+  else if(h.kind==='shock')strike(owner,foe,3*h.power,{stun:.19});
   else if(h.kind==='frost')strike(owner,foe,2*h.power,{slow:.9});
   else if(h.kind==='poison'||h.kind==='gas'||h.kind==='tail'||h.kind==='slime')
-   strike(owner,foe,2*h.power,{poison:.65,slow:h.kind==='slime'?.6:0});
+   strike(owner,foe,2*h.power,{poison:.65,slow:h.kind==='slime'?.6:h.kind==='gas'?.4:0});
   else if(h.kind==='fire'||h.kind==='sun')strike(owner,foe,3*h.power,{burn:.8});
-  else if(h.kind==='mine'||h.kind==='doom'||h.kind==='train')strike(owner,foe,7*h.power,{knock:.28});
+  else if(h.kind==='mine'||h.kind==='doom'||h.kind==='train')strike(owner,foe,7*h.power,{knock:.28,stun:h.id===39?.3:0});
   else strike(owner,foe,3*h.power,{knock:h.kind==='zone'?.1:0});
-  h.cooldown=h.kind==='mine'||h.kind==='doom'?99:.62;
+  if(h.id===40)setStatus(owner,foe,'weaken',.5);
+  h.cooldown=h.kind==='mine'||h.kind==='doom'||h.kind==='echo'?99:.62;
  }
  st.hazards=st.hazards.filter(h=>h.life>0);
  for(const beam of st.wallBeams||[]){
@@ -517,7 +600,7 @@ function tick(dt){
   if(beam.life<=0)continue;
   for(const foe of G.bl){
    if(!alive(foe)||foe.team===beam.team)continue;
-   const touched=closestToSegment(foe.x,foe.y,beam.a.x,beam.a.y,beam.b.x,beam.b.y)<foe.r+2;
+   const touched=closestToSegment(foe.x,foe.y,beam.a.x,beam.a.y,beam.b.x,beam.b.y)<foe.r+(beam.width||2);
    if(touched&&!beam.inside[foe.uid]){
     const owner=G.bl.find(o=>o.uid===beam.owner);
     if(owner)strike(owner,foe,2.5,{slow:.2});
@@ -532,7 +615,7 @@ function tick(dt){
    const touched=closestToSegment(foe.x,foe.y,w.a.x,w.a.y,w.b.x,w.b.y)<=foe.r+2;
    if(touched&&!w.inside[foe.uid]){
     const owner=G.bl.find(o=>o.uid===w.owner)||null;
-    if(owner)strike(owner,foe,1,{poison:w.id===34||w.id===117?.4:0});
+    if(owner)strike(owner,foe,1,{slow:(w.stage||0)*.15,poison:w.id===34||w.id===117||(w.stage||0)===2?.4:0});
    }
    w.inside[foe.uid]=touched;
   }
@@ -562,7 +645,8 @@ function drawOverlay(){
  const st=G.v2;
  const detailed=(Number(S?.o?.fxLevel??3)>0);
  cx.save();
- // Draw active blades even with visual effects disabled.
+ // Draw gameplay tails and active blades even with visual effects disabled.
+ for(const o of G.bl||[]){if(!o.v2Tail||!alive(o))continue;const points=(o.trail||[]).slice(-o.v2Tail.length);cx.strokeStyle=o.b.c;cx.lineWidth=6;cx.globalAlpha=.65;cx.beginPath();for(let i=0;i<points.length;i++){const p=points[i];i?cx.lineTo(p.x,p.y):cx.moveTo(p.x,p.y);}cx.lineTo(o.x,o.y);cx.stroke();cx.globalAlpha=1;}
  for(const o of G.bl||[]){
   if(!alive(o)||!o.axeOrbit)continue;
   const orbit=o.axeOrbit;
@@ -700,5 +784,5 @@ function identityPanel(id){
 }
 const originalBallDetail=openBallDetail;
 openBallDetail=function(id){originalBallDetail(id);const details=identityPanel(id);if(details)document.querySelector('#ovb')?.appendChild(details);};
-window.BVB2={abilities:abilityData,onWall,cooldown,prepareActors,afterLoad,drawOverlay,identityPanel};
+window.BVB2={abilities:abilityData,evolutionDescription,onContact,onWall,cooldown,prepareActors,afterLoad,drawOverlay,identityPanel};
 })();

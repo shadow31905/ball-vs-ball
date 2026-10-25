@@ -32,6 +32,14 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      assert.equal(await page.evaluate(()=>BVBReworkUI.fx()),'low');
      await page.locator('#bvbFx').tap();
      assert.equal(await page.evaluate(()=>BVBReworkUI.fx()),'full');
+     await page.evaluate(()=>startMatch(4));
+     await page.fill('#trainingSearch','topor');
+     assert.equal(await page.locator('#trainingBalls .training-ball').count(),1,'training should search all balls ignoring accents');
+     await page.selectOption('#trainingTier','3');await page.selectOption('#trainingOpponentTier','2');await page.selectOption('#trainingOpponent','0');
+     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+4),'training catalog must fit the phone');
+     await page.locator('#trainingBalls .training-ball').tap();
+     await page.waitForFunction(()=>G?.ph==='battle'&&G.bl[0].tier===3&&G.bl[1].tier===2);
+     const blades=await page.evaluate(()=>{specialAbility(G.bl[0],G.bl[1]);return G.bl[0].axeOrbit.blades;});assert.equal(blades,5,'V3 Topor must actually create five blades');
      assert.deepEqual(errors,[]);
      await ctx.close();
    }

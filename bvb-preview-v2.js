@@ -23,7 +23,7 @@ function play(id){
  const canvas=document.getElementById('bvb-skill-preview-canvas');
  if(!canvas||!B[id])return;
  const ctx=canvas.getContext('2d');if(!ctx)return;
- const skill=window.BVB2.abilities[id],type=skill.kind,color=colors[type]||skill.color||'#c4b5fd';
+ const evolution=getBallStats(id).tier,skill=window.BVB2.abilities[id],type=skill.kind,color=colors[type]||skill.color||'#c4b5fd';
  const token=++ticket,start=performance.now(),W=320,H=150;
  function circle(x,y,r,c){
   ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
@@ -86,8 +86,8 @@ function play(id){
    circle(px-1,py-2,2,'#ffffff');
   }
   if(type==='orbit'||type==='shard'||type==='swarm'){
-    for(let i=0;i<3;i++){
-     const angle=(now-start)/500+i*2*Math.PI/3;
+    for(let i=0;i<evolution+2;i++){
+     const angle=(now-start)/500+i*2*Math.PI/(evolution+2);
      circle(ox+Math.cos(angle)*27,oy+Math.sin(angle)*27,4,color);
     }
   }
@@ -114,7 +114,7 @@ openBallDetail=function(id){
  const weakness=heavy?'wolniejszy ruch':fast?'mniej zdrowia':'wymaga właściwego trafienia lub ustawienia';
  box.innerHTML='<h3>✨ '+esc(d.title)+' — podgląd animacji</h3>'+
   '<canvas id="bvb-skill-preview-canvas" width="320" height="150" aria-label="Animowany podgląd umiejętności"></canvas>'+
-  '<p><b>⚔️ Działanie:</b> '+esc(d.desc)+'</p>'+
+  '<p><b>⚔️ Działanie:</b> '+esc(d.desc)+'</p>'+'<p>'+esc(s.evolutionDesc||'')+'</p>'+
   '<p><b>⏱️ Odnowienie:</b> '+(d.kind==='web'?'pasywna (odbicia)':s.cd+' s')+
   ' · <b>💨 Prędkość:</b> '+(d.speed>1?'+':'')+Math.round((d.speed-1)*100)+'%</p>'+
   '<p><b>✅ Zaleta:</b> '+strength+' · <b>⚠️ Słabość:</b> '+weakness+'</p>'+

@@ -174,3 +174,12 @@ test('campaign intermission choices, portal placement and subsequent round hashe
  }
  assert.equal(run(),run());
 });
+
+test('leaving an endless run pays completed waves once before returning to the menu',()=>{
+ const g=game();launch(g,7);winRound(g);next(g);
+ const coins=g.run("S.coins");
+ g.run("menu()");
+ assert.equal(g.run("G.finished"),true);assert.equal(g.run("G.h[0]"),0);
+ assert.equal(g.run("S.coins"),coins+25);assert.equal(g.run("S.binf"),1);
+ g.run("menu()");assert.equal(g.run("G"),null);assert.equal(g.run("S.coins"),coins+25);
+});

@@ -70,3 +70,16 @@ test('real game snapshots including uint32 RNG and identity jobs survive protoco
   game.run("for(let i=0;i<120&&G.ph==='battle';i++)step(1/60)");
  }
 });
+
+test('nested drawing geometry rejects negative radii and invalid coordinates before reaching canvas',()=>{
+ const n=api();
+ for(const mutate of [
+  s=>{s.v2.shots[0].r=-1;},
+  s=>{s.v2.hazards.push({x:30,y:40,radius:-5});},
+  s=>{s.bossTelegraph.zones=[{kind:'ring',x:180,y:180,r:100,inner:-20}];},
+  s=>{s.v2.effects.push({x:0,y:0,size:1e14});},
+  s=>{s.v2.shots[0].x='-100';}
+ ]){
+  const s=state();mutate(s);assert.equal(n.validState(s),false);
+ }
+});

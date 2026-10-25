@@ -169,7 +169,7 @@
       '<p class="bvb-hint">Taktyka ustawia też rodzaj COMBO. Zasada rundy działa jednakowo na obie kulki.</p>';
   }
 
-  draw = function() { oldDraw(); displayPanel(); };
+  draw = function() { oldDraw(); if(!window.BVBReplayRendering)displayPanel(); };
   function updateMission(winner, participant) {
     if(winner!==0 || !participant || !G?.mission || G.mission.complete || G.m===12 || G.m===4)return;
     const mission=G.mission, task=MISSIONS[mission.key];

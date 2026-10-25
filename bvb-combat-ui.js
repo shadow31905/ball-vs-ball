@@ -23,7 +23,7 @@ function clone(value,depth=0){
 }
 const visualFields=['m','ph','rt','th','rare','rn','bl','pr','z','fx','rings','pop','v2','obstacles','portal',
  'arenaFxTime','bossIndex','bossTelegraph','bossEcho','bossZones','bossEffects','bossHazards','lightning','shake','lastRoundWinner',
- 'recentHitAt','lastDodgeAt','arenaShiftCount'];
+ 'recentHitAt','lastDodgeAt','arenaShiftCount','finisher'];
 function visualState(g){
  const out={};
  for(const key of visualFields)if(g[key]!==undefined)out[key]=clone(g[key]);
@@ -206,20 +206,20 @@ function startRound(g){
  if(!g)return;
  matchKey=String(g.matchId)+':'+String(g.rn);
  recording=g.m===12?null:new codec.Recording({seed:g.rngSeed??null,matchId:g.matchId||'',round:g.rn||0,
-  arena:g.th,camera:opts.camera,fx:opts.fx,playerAura:typeof S!=='undefined'?S.playerAura||'':'',created:new Date().toISOString()});
+  arena:g.th,camera:opts.camera,fx:opts.fx,fxLevel:typeof S!=='undefined'?S.o.fxLevel??3:3,playerAura:typeof S!=='undefined'?S.playerAura||'':'',created:new Date().toISOString()});
  lastReplay=[];lastData=null;decodeCache=null;recordingEnded=false;paused=false;
- captureStep(g);updateButtons(g);
+ captureStep(g);frameClock=.12;frame(g,0);updateButtons(g);
 }
 function recordEvent(g,type,detail={}){
  if(!recording||g?.m===12||String(g?.matchId)+':'+String(g?.rn)!==matchKey)return;
  recording.event(g.rt||0,type,detail);
 }
 function recordSound(g,params){
- if(replayingSound||!recording||g?.m===12||g?.ph!=='battle')return;
+ if(replayingSound||!recording||g?.m===12||g?.ph!=='battle'||(params.m&&paused))return;
  recording.sound(g.rt||0,params);
 }
 function recordMusic(g,params){
- if(replayingSound||!recording||g?.m===12||g?.ph!=='battle')return;
+ if(replayingSound||!recording||g?.m===12||g?.ph!=='battle'||paused)return;
  recording.music(g.rt||0,params);
 }
 function endRound(g,winner){
@@ -537,7 +537,7 @@ function victoryStats(g){
  const r=g?.reworkRoundStats;if(!r)return '';
  const names=r.fighter.map(f=>codec.escapeHTML((f.team===0?'🔵':'🔴')+' '+f.name)+': '+f.hits+' zderzeń · '+f.crits+' kryt. · '+f.abilities+' mocy');
  const color=/^#[0-9a-f]{3,8}$/i.test(r.winnerColor)?r.winnerColor:'#facc15';
- return '<div class="bvb-victory"><div class="bvb-winner-orb" style="--winner-color:'+color+'" aria-hidden="true">🏆</div>'+
+ return '<div class="bvb-victory"><div class="bvb-winner-orb" style="--winner-color:'+color+'" aria-hidden="true">'+(typeof B!=='undefined'&&B[r.winnerId]?orb(B[r.winnerId]):'🏆')+'</div>'+
  '<strong style="color:#fef08a;font-size:22px">'+codec.escapeHTML(r.winnerName)+'</strong><p>ZWYCIĘZCA RUNDY</p>'+
  '<p style="font-size:12px;color:#cbd5e1">⏱️ Ostatnia runda: '+r.duration.toFixed(1)+'s</p>'+
  '<p style="font-size:12px;color:#cbd5e1">'+names.join('<br>')+'</p></div>'+

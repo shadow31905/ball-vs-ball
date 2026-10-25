@@ -49,7 +49,7 @@
     const actors=(g.bl||[]).map(o=>{
       const state={id:o.b?.id,abilityId:o.b?.abilityId,isBoss:!!o.b?.isBoss};
       for(const key of actorKeys)if(o[key]!==undefined)state[key]=o[key];
-      for(const key of Object.keys(o))if(key.startsWith('skill')||key.startsWith('identity')||key.startsWith('_identity'))state[key]=o[key];
+      for(const key of Object.keys(o))if(key.startsWith('v2')||key.startsWith('skill')||key.startsWith('identity')||key.startsWith('_identity'))state[key]=o[key];
       return state;
     });
     const v2=g.v2?{tick:g.v2.tick,serial:g.v2.serial,shots:g.v2.shots,hazards:g.v2.hazards,

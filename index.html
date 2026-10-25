@@ -1366,7 +1366,7 @@ async function hostNet() {
     ownPeer.on('disconnected',()=>{if(peer===ownPeer&&!ownPeer.destroyed){try{ownPeer.reconnect();}catch(_){}}});
     ownPeer.on('connection',conn=>{
       if(peer!==ownPeer||activeConn||(acceptedGuest&&conn.peer!==acceptedGuest)){try{conn.close();}catch(_){}return;}
-      acceptedGuest=conn.peer;activeConn=conn;setupNetConnection(conn);
+      activeConn=conn;setupNetConnection(conn);
     });
     ownPeer.on('error',err=>{if(peer===ownPeer)netStatus('Błąd połączenia: '+(err.type||err.message||'nieznany'));});
   }catch(e){if(generation===netGeneration)netStatus('Nie udało się utworzyć pokoju: '+e.message);}
@@ -1394,6 +1394,7 @@ function setupNetConnection(conn) {
   const connectWatchdog = setTimeout(() => { if (!conn.open && activeConn === conn) { try { conn.close(); } catch (_) {} } }, 10000);
   conn.on('open', () => {
     if(activeConn!==conn)return;
+    if(netRole==='host')acceptedGuest=conn.peer;
     clearTimeout(connectWatchdog);
     reconnectSeq++; reconnectTries = 0;
     setTimeout(async()=>{try{if(activeConn!==conn)return;const report=await window.BVBNetwork.connectionReport(conn);if(activeConn!==conn)return;const el=$('#netRoute');if(el)el.textContent=report.route==='relay'?'Połączenie przez serwer TURN':report.route==='direct'?'Połączenie bezpośrednie': 'Sprawdzanie trasy połączenia…';}catch(_){}},1500);
@@ -2643,6 +2644,7 @@ function nextRound() {
 
 function renderDraft() {
   if (!G) return;
+  if(window.BVBTraining?.render?.(G))return;
   $('#msg').textContent = G.m===13 ? 'Kampania '+G.campaignLevel+'/50: wybierz kulkę ze swojej drużyny, wyceluj i wystrzel!' : 'Wybierz jedną z 3 wylosowanych kulek, wyceluj procą i wystrzel:';
   $('#cards').innerHTML = G.my.map((b, i) => {
     const st = G.m === 12 ? getBallStats(b.id, 1, 0, 0) : getBallStats(b.id);
@@ -2710,7 +2712,7 @@ function launchMatch(remoteAngle = null) {
   if (!G || G.ph !== 'aim') return;
   // Start a new deterministic round with its own clock and event timeline.
   G.rt=0;G.hitStop=0;G.simTick=0;fixedAccumulator=0;
-  const p = G.m === 12 ? actor(G.pb, 180, 300, G.pa, 0, 0, 1, 0, 0) : actor(G.pb, 180, 300, G.pa, 0, 0);
+  const p = G.m===4 ? actor(G.pb,180,300,G.pa,0,0,G.trainingTier||1,0,0) : G.m === 12 ? actor(G.pb, 180, 300, G.pa, 0, 0, 1, 0, 0) : actor(G.pb, 180, 300, G.pa, 0, 0);
   const botAim = remoteAngle == null
     ? computeBotAim(180, 60, 180, 300, Math.cos(G.pa), Math.sin(G.pa), diff)
     : remoteAngle;
@@ -2723,7 +2725,7 @@ function launchMatch(remoteAngle = null) {
   // Difficulty changes decision quality, not hidden HP/damage/evolution bonuses.
   const botTier = normalBot ? 1 : G.m === 12 ? 1 : G.m === 11 ? 3 : 2;
   const botLevel = normalBot ? 0 : G.m === 12 ? 0 : diff;
-  const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, botTier, botLevel, botLevel);
+  const e = actor(enemyBall, 180, 60, enemyAngle, 1, 1, G.m===4?(G.trainingOpponentTier||1):botTier, G.m===4?0:botLevel, G.m===4?0:botLevel);
   window.BVBGameplay?.prepareActors?.(G, p, e);
   window.BVBCampaign?.applyActors?.(G,p,e);
   window.BVB2?.prepareActors?.(G,p,e);
@@ -2953,8 +2955,10 @@ function step(dt) {
           }
           const hitSlow = Math.min(.23,.065+Math.max(damageToA,damageToB)*.004);
           a.impactSlow = b.impactSlow = hitSlow;
-          const impactA=damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15));
-          const impactB=damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15));
+          let impactA=damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15));
+          let impactB=damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15));
+          impactA=window.BVB2?.onContact?.(G,b,a,impactA)??impactA;
+          impactB=window.BVB2?.onContact?.(G,a,b,impactB)??impactB;
           applyDamage(a,window.BVBRework?.contactDamage?.(b,a,impactA) ?? impactA);
           applyDamage(b,window.BVBRework?.contactDamage?.(a,b,impactB) ?? impactB);
           a.skillCharge=b.skillCharge=0;
@@ -2982,6 +2986,7 @@ function step(dt) {
 
 function roundEnd(winner) {
   if (!G || G.ph !== 'battle') return;
+  window.BVBPresentation?.finish?.(G,winner);
   G.ph = 'end';
   window.BVBReworkUI?.endRound?.(G,winner);
   if (winner >= 0) G.h[1 - winner]--;
@@ -3002,7 +3007,7 @@ function over() {
   broadcastState();
   const win = G.h[0] > 0;
   const isHw = (G.m == 9 || G.m == 10);
-  if (G.m === 11 && win) { S.bb = (S.bb | 0) + 1; S.bossWins[G.bossIndex || 0] = (S.bossWins[G.bossIndex || 0] | 0) + 1; }
+  if (G.m === 11 && win) { S.bossWins[G.bossIndex || 0] = (S.bossWins[G.bossIndex || 0] | 0) + 1; }
   let candyEarned = isHw ? (win ? DIFF_CANDY[diff] : Math.round(DIFF_CANDY[diff] * 0.25)) : (win ? 15 : 5);
   let coinEarned = win ? DIFF_REW[diff] : Math.round(DIFF_REW[diff] * 0.25);
   
@@ -3049,7 +3054,8 @@ function emo(i) {
 
 function draw() {
   if (!G) return;
-  cx.setTransform(D, 0, 0, D, 0, 0);
+  const renderScale=(cx.canvas?.width||W*D)/W;
+  cx.setTransform(renderScale, 0, 0, renderScale, 0, 0);
   if(window.BVBReworkUI?.camera?.()==='dynamic' && G.ph==='battle'){
     const pair=G.bl||[];
     const gap=pair.length===2?Math.hypot(pair[0].x-pair[1].x,pair[0].y-pair[1].y):300;
@@ -3154,6 +3160,7 @@ function loop(t) {
         fixedAccumulator -= 1 / 60;
       }
     }
+    window.BVBPresentation?.tick?.(G,elapsed);
     window.BVBReworkUI?.frame?.(G,elapsed);
     draw();
     if (netRole === 'host' && activeConn && G.ph === 'battle' && t - netSyncAt > 120) {
@@ -3186,7 +3193,7 @@ if (invitedRoom && invitedRoom.length < 150) {
   $('#peerCode').value = invitedRoom;
   netStatus('Kod pokoju wpisany. Kliknij „Dołącz do pokoju”, żeby połączyć się ze znajomym.');
 }
-window.BVBRenderReplay=(state,ctx,meta={})=>{const prevG=G,prevCx=cx,prevAura=S.playerAura;try{G=state;cx=ctx;S.playerAura=meta.playerAura||'';draw();}finally{G=prevG;cx=prevCx;S.playerAura=prevAura;}};
+window.BVBRenderReplay=(state,ctx,meta={})=>{const prevG=G,prevCx=cx,prevAura=S.playerAura,prevFx=S.o.fxLevel,prevFlag=window.BVBReplayRendering;try{window.BVBReplayRendering=true;G=state;cx=ctx;S.playerAura=meta.playerAura||'';S.o.fxLevel=meta.fxLevel??prevFx;draw();}finally{G=prevG;cx=prevCx;S.playerAura=prevAura;S.o.fxLevel=prevFx;window.BVBReplayRendering=prevFlag;}};
 requestAnimationFrame(loop);
 </script>
 <script src="./bvb-anime-update.js"></script>
@@ -3202,6 +3209,8 @@ requestAnimationFrame(loop);
 <script src="./bvb-preview-v2.js"></script>
 <script src="./bvb-ui-v2.js"></script>
 <script src="./bvb-main-menu-v3.js"></script>
+<script src="./bvb-training.js"></script>
+<script src="./bvb-presentation.js"></script>
 <script src="./bvb-changelog-v3.js"></script>
 </body>
 </html>

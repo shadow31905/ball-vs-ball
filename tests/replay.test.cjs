@@ -136,3 +136,5 @@ test('replay calls original music synthesis under audio guard and its toggle mut
  f.nodes.get('bvbReplayClose').click();f.nodes.get('bvbReplaySound').click();f.api.openReplay();
  f.raf.shift()(1017);assert.equal(heard.length,2,'muted replay must not call either synthesis path');
 });
+
+test('HUD is rendered on round start without waiting for animation frames',()=>{const f=uiFixture();f.api.startRound(f.g);assert.ok(f.nodes.get('bvbCombatHud').innerHTML.includes('❤️'));});
