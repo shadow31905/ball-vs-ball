@@ -55,7 +55,7 @@ function descriptions(){
  for(const btn of all){
   if(btn.querySelector('.bvb-menu-hint'))continue;
   const on=btn.getAttribute('onclick')||'';
-  let desc=diff.includes(btn)?details[0][1][diff.indexOf(btn)]:null;
+  let desc=btn.id==='bvbChangelogBtn'?'Zobacz szczegółowy opis najnowszej aktualizacji.':diff.includes(btn)?details[0][1][diff.indexOf(btn)]:null;
   if(!desc){const spec=details.slice(1).find(d=>on.includes(d[0]));desc=spec?.[1];}
   if(!desc)desc='Otwórz wybraną funkcję gry.';
   const el=document.createElement('span');
@@ -102,7 +102,7 @@ function onEntered(){
  setTimeout(()=>{if(document.querySelector('#accountGate')?.hidden)open();},220);
 }
 window.addEventListener('bvb-entered-game',onEntered);
-const btn=document.createElement('button');btn.className='b';btn.type='button';
+const btn=document.createElement('button');btn.className='b';btn.type='button';btn.id='bvbChangelogBtn';
 btn.textContent='📋 Historia zmian 2.0';
 btn.addEventListener('click',open);
 document.querySelector('#menu')?.appendChild(btn);
