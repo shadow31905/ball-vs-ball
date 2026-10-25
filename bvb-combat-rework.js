@@ -37,6 +37,24 @@
     ].join(',')).join('|');
     return hashString([g.rn||0,q(g.rt||0),g.rngState||0,actors].join(';')).toString(16).padStart(8,'0');
   }
+  const eventLog=[];
+  function trace(g,type,detail={}) {
+    if(!g)return;
+    const evt={tick:Math.round((g.rt||0)*60),type,...detail};
+    eventLog.push(evt);
+    if(eventLog.length>250)eventLog.shift();
+  }
+  function diagnostics(g=G) {
+    if(!g)return {schemaVersion:1,events:[]};
+    return {schemaVersion:1,seed:g.rngSeed||null,rngCalls:g.rngCalls||0,
+      mode:g.m,arena:g.th,round:g.rn||0,tick:Math.round((g.rt||0)*60),
+      stateHash:stateHash(g),
+      fighters:(g.bl||[]).map(o=>({id:o.b?.abilityId??o.b?.id,team:o.team,
+        x:Number(o.x.toFixed(2)),y:Number(o.y.toFixed(2)),
+        hp:Number(o.hp.toFixed(2)),armor:Number((o.armor||0).toFixed(2)),
+        shield:Number((o.status?.shield||0).toFixed(2))})),
+      events:eventLog.slice()};
+  }
   const clamp01 = n => Math.max(0, Math.min(1, n));
   const norm = (x,y) => { const m=Math.hypot(x,y)||1; return {x:x/m,y:y/m}; };
   const isAlive = o => o && o.hp > 0 && !o.gone;
@@ -49,7 +67,9 @@
 
   function prepareActors(g,p,e) {
     if(!g || netRole==='guest')return;
+    eventLog.length=0;
     if(g.matchId)setSeed(g,hashString(String(g.matchId)+':'+String(g.rn||0)));
+    trace(g,'ROUND_START',{seed:g.rngSeed||null});
     for(const o of [p,e]) {
       if(!o)continue;
       const id=o.b.abilityId ?? o.b.id;
@@ -124,6 +144,9 @@
       attacker.combatStats.damageDealt+=damage;
       if(crit)attacker.combatStats.crits++;
     }
+    if(crit)trace(G,'CRIT',{actor:attacker.team,target:defender.team,damage:Math.round(damage*100)/100});
+    if(G?.rt!=null && Math.floor(G.rt*10)%10===0 && attacker.combatStats?.contactHits===1)
+      trace(G,'CONTACT',{actor:attacker.team,target:defender.team});
     if(crit && G?.pop?.length<12)G.pop.push({x:defender.x,y:defender.y-defender.r-18,
       age:0,life:.65,text:'KRYTYK!',c:'#facc15'});
     return damage;
@@ -210,6 +233,7 @@
 
   function shiftArena(g) {
     g.arenaShiftCount=(g.arenaShiftCount||0)+1;
+    trace(g,'ARENA_SHIFT',{index:g.arenaShiftCount});
     g.arenaNextShift=g.rt+10+random()*5;
     const obstacles=g.obstacles||[];
     if(!obstacles.length) {
@@ -234,9 +258,11 @@
     // Controlled reactions prevent stacking hundreds of DOT ticks per second.
     if(st.burn>0&&st.slow>0){
       applyDamage(o,2.2);st.slow=Math.max(0,st.slow-.3);o.reactionClock=1;
+      trace(G,'STATUS_REACTION',{team:o.team,kind:'thermal'});
       if(G.pop?.length<12)G.pop.push({x:o.x,y:o.y-o.r-20,age:0,life:.7,text:'SZOK TERMICZNY',c:'#7dd3fc'});
     }else if(st.burn>0&&st.poison>0){
       applyDamage(o,2.8);st.poison=Math.max(0,st.poison-.3);o.reactionClock=1;
+      trace(G,'STATUS_REACTION',{team:o.team,kind:'ignition'});
       if(G.pop?.length<12)G.pop.push({x:o.x,y:o.y-o.r-20,age:0,life:.7,text:'ZAPŁON',c:'#fb923c'});
     }
   }
@@ -262,6 +288,7 @@
     if(id%3===1)foe.status.slow=Math.max(foe.status.slow||0,.2);
     if(id%3===2)o.hp=Math.min(o.mh,o.hp+2);
     o.superUsed++;o.superCharge=0;
+    trace(g,'SUPER',{team:o.team,type:o.superType,id});
     if(g.rings?.length<16)g.rings.push({x:o.x,y:o.y,age:0,life:.75,radius:40,c:'#fbbf24'});
     if(g.pop?.length<12)g.pop.push({x:o.x,y:o.y-o.r-23,age:0,life:.9,text:'SUPER!',c:'#fef08a'});
   }
@@ -286,6 +313,7 @@
     if(!g.bossTelegraph&&g.rt>=g.bossAttackAt){
       const radius=46+index%3*11;
       g.bossTelegraph={index,x:foe.x,y:foe.y,radius,at:g.rt+1.2};
+      trace(g,'BOSS_TELEGRAPH',{index,phase:boss.bossPhase});
       g.bossAttackAt=g.rt+Math.max(4.5,8.2-boss.bossPhase*.7);
       if(g.rings?.length<16)g.rings.push({x:foe.x,y:foe.y,age:0,life:1.2,radius,c:'#f97316'});
       if(g.pop?.length<12)g.pop.push({x:foe.x,y:Math.max(22,foe.y-35),age:0,life:1.1,
@@ -336,11 +364,13 @@
         o.x=Math.max(o.r,Math.min(360-o.r,o.x+direction.x*3));
         o.y=Math.max(o.r,Math.min(360-o.r,o.y+direction.y*3));
         o.stuckTime=0;
+        trace(g,'STUCK_RECOVERY',{team:o.team});
       }
       if(o.b.isBoss) {
         const phase=o.hp/o.mh<=.33?3:o.hp/o.mh<=.66?2:1;
         if(phase>o.bossPhase) {
           o.bossPhase=phase;
+          trace(g,'BOSS_PHASE',{phase});
           if(g.rings?.length<16)g.rings.push({x:o.x,y:o.y,age:0,life:.9,radius:30,c:phase===3?'#fb7185':'#fbbf24'});
           if(g.pop?.length<12)g.pop.push({x:o.x,y:o.y-o.r-22,age:0,life:.95,
             text:phase===3?'FAZA FINAŁOWA!':'FAZA II!',c:'#fbbf24'});
@@ -351,6 +381,10 @@
       }
     }
     // Hard upper bound; compare remaining HP percentages rather than raw HP.
+    if(Math.floor(g.rt*60)%60===0 && g._lastHashTick!==Math.floor(g.rt*60)){
+      g._lastHashTick=Math.floor(g.rt*60);
+      trace(g,'CHECKPOINT',{hash:stateHash(g)});
+    }
     if(g.rt>=60) {
       const a=g.bl.find(o=>o.team===0),b=g.bl.find(o=>o.team===1);
       const aPct=Math.max(0,(a?.hp||0)/(a?.mh||1));
@@ -359,9 +393,10 @@
       // A fair coin resolves the extremely rare exact-HP tie.
       const winner=Math.abs(aPct-bPct)<.0001?(random()<.5?0:1):aPct>bPct?0:1;
       window.BVBCampaign?.onRoundEnd?.(g,winner);
+      trace(g,'TIMEOUT',{winner});
       roundEnd(winner);
     }
   }
 
-  window.BVBRework={prepareActors,contactDamage,abilityDamage,abilityReady,beforeStep,afterStep,random,setSeed,stateHash};
+  window.BVBRework={prepareActors,contactDamage,abilityDamage,abilityReady,beforeStep,afterStep,random,setSeed,stateHash,trace,diagnostics};
 })();
