@@ -196,6 +196,46 @@ function closeReplay(){
 }
 el('bvbReplay').addEventListener('click',()=>openReplay(false));
 el('bvbReplayClose').addEventListener('click',closeReplay);
+function storedReplays(){
+ try{
+   const data=JSON.parse(localStorage.getItem(replayStoreKey)||'[]');
+   return Array.isArray(data)?data.filter(x=>x&&x.version===2&&Array.isArray(x.frames)&&x.frames.length>1).slice(0,3):[];
+ }catch(_){return [];}
+}
+function saveReplay(){
+ if(!lastReplay.length||G?.m===12)return;
+ const saved=storedReplays();
+ const label=(lastReplay[0].actors||[]).map(o=>String(o.name).slice(0,25)).join(' vs ');
+ saved.unshift({version:2,created:new Date().toISOString(),label,frames:lastReplay});
+ try{
+   localStorage.setItem(replayStoreKey,JSON.stringify(saved.slice(0,3)));
+   el('bvbReplaySave').textContent='✅ Zapisano';
+ }catch(_){el('bvbReplaySave').textContent='⚠️ Brak miejsca';}
+}
+function loadReplay(){
+ const saved=storedReplays();
+ if(!saved.length){el('bvbReplayLoad').textContent='Brak zapisów';return;}
+ lastReplay=saved[0].frames;
+ replayState={t:0,playing:false,speed:1};
+ el('bvbReplayPlay').textContent='▶️';
+ renderReplay();
+ el('bvbReplayLoad').textContent='📂 '+saved[0].label.slice(0,15);
+}
+function downloadJson(name,data){
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),link=document.createElement('a');
+ link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+el('bvbReplaySave').addEventListener('click',saveReplay);
+el('bvbReplayLoad').addEventListener('click',loadReplay);
+el('bvbReplayDownload').addEventListener('click',()=>{
+ if(lastReplay.length)downloadJson('bvb-replay-v2.json',
+  {version:2,tickRate:60,kind:'snapshots',frames:lastReplay});
+});
+el('bvbReplayDebug').addEventListener('click',()=>{
+ downloadJson('bvb-diagnostics.json',window.BVBRework?.diagnostics?.()||{message:'No diagnostic data'});
+});
 overlay.addEventListener('click',e=>{if(e.target===overlay)closeReplay();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&replayState)closeReplay();});
 el('bvbReplayPlay').addEventListener('click',()=>{
