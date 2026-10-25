@@ -216,14 +216,14 @@ function evolutionDescription(id,tier=1){
  void:'mocniejsze wysysanie energii i leczenie',shadow:'dodatkowe widmowe pociski',
  phoenix:'więcej leczenia i większy pierścień ognia',pumpkin:'większy zasięg fali dyni'
  };
- return 'V'+tier+': '+(labels[kind]||(['zone','gas','poison','grid','mine','doom','lava','sun','echo'].includes(kind)?'większe pola, dłuższe działanie i silniejsze impulsy':'dodatkowe pociski z lepszym naprowadzaniem'))+'.';
+ return 'V'+tier+': '+(labels[kind]||(['zone','gas','poison','grid','mine','doom','lava','sun','echo'].includes(kind)?'większe pola, dłuższe działanie i silniejsze impulsy':'dodatkowe pociski z lepszym naprowadzaniem i podziałem obrażeń salwy'))+'.';
 }
 function onContact(g,o,foe,base){
  if(!o||!foe||!g||netRole==='guest')return base;
  if(o.v2InfectUntil>g.rt)setStatus(o,foe,'poison',.7+evolutionStage(o)*.2);
  if(o.v2ShockUntil>g.rt)setStatus(o,foe,'stun',.12+evolutionStage(o)*.04);
  if(o.v2ShatterUntil>g.rt){o.v2ShatterUntil=0;shoot(o,foe,{count:3,damage:o.baseDmg*.12,spread:.6,bounces:1});}
- if(o.b.id===44){o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);base+=Math.min(4,[0,1,1,2,3,5,8][o.v2FibHit]*.5);}
+ if(o.b.id===44){o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);base+=Math.min(3,[0,1,1,2,3,5,8][o.v2FibHit]*.5);}
  return base;
 }
 
@@ -271,9 +271,9 @@ function shoot(o,foe,opts={}){
   const a=(opts.randomAim?(window.BVBRework?.random?.()??Math.random())*Math.PI*2:heading)+(i-(count-1)/2)*(opts.spread??.18);
   st.shots.push({x:o.x+Math.cos(a)*(o.r+5),y:o.y+Math.sin(a)*(o.r+5),
    px:o.x,py:o.y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,
-   owner:o.uid,team:o.team,id:o.b.id,damage:(opts.damage||o.baseDmg*.45)*(1+stage*.08),ghost:!!opts.ghost,
+   owner:o.uid,team:o.team,id:o.b.id,damage:(opts.damage||o.baseDmg*.45)*(1+stage*.08)*Math.min(1,(opts.count||1)/count),ghost:!!opts.ghost,
    r:opts.r||4,life:opts.life||2.2,age:0,homing:(opts.homing||0)+stage*.18,bounces:(opts.bounces||0)+(abilityFor(o).kind==='arrow'?stage:0),
-   healOnHit:opts.healOnHit||0,slow:opts.slow||0,poison:opts.poison||0,burn:opts.burn||0,stun:opts.stun||0,
+   healOnHit:(opts.healOnHit||0)*Math.min(1,(opts.count||1)/count),slow:opts.slow||0,poison:opts.poison||0,burn:opts.burn||0,stun:opts.stun||0,
    knock:opts.knock||0,color:opts.color||abilityData[o.b.id].color});
  }
  if(st.shots.length>80)st.shots.splice(0,st.shots.length-80);
@@ -318,7 +318,7 @@ function onWall(o,side){
  if(o.v2LastSide===side&&(G.rt-(o.v2LastWallAt||0))<.12)return;
  o.v2LastSide=side;o.v2LastWallAt=G.rt||0;
  if(d.kind==='web')webPoint(o,side);
- if(d.kind==='pet')o.v2PetPower=Math.min(2,(o.v2PetPower||1)+.1);
+ if(d.kind==='pet')o.v2PetPower=Math.min(1.5,(o.v2PetPower||1)+.1);
  if(d.kind==='thorn')zone(o,o.x,o.y,'thorn',15,16,.65);
  if(d.kind==='beam'&&(o.b.id===13||o.b.id===41)){
   const vertical=side==='left'||side==='right';
@@ -418,7 +418,7 @@ function cast(o,foe){
   roundState().beams.push({x:o.x,y:o.y,x2:foe.x,y2:foe.y,color:d.color,life:.3,max:.3,id:o.b.id});
   visual(o,o,'tether',20,d.color,.4);break;
  case 'pet':case 'turret':zone(o,o.x,o.y,kind,22,5,.7);break;
- case 'train':{zone(o,o.x,o.y,kind,22,3,.7);const h=roundState().hazards.at(-1),a=Math.atan2(foe.y-o.y,foe.x-o.x);h.vx=Math.cos(a)*160;h.vy=Math.sin(a)*160;break;}
+ case 'train':{zone(o,o.x,o.y,kind,22,3,.7);const h=roundState().hazards.at(-1),a=Math.atan2(foe.y+foe.vy*50-o.y,foe.x+foe.vx*50-o.x);h.vx=Math.cos(a)*160;h.vy=Math.sin(a)*160;break;}
  case 'shock':case 'storm':
   shoot(o,foe,{count:kind==='storm'?3:o.b.id===83?2:1,damage:o.baseDmg*.32,stun:.22,homing:.45,color:'#fde047',spread:.23,randomAim:kind==='storm'});o.v2ShockUntil=G.rt+1.5+evolutionStage(o)*.2;break;
  case 'zone':case 'gas':case 'poison':
@@ -426,7 +426,7 @@ function cast(o,foe){
  case 'grid':
   for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)zone(o,clamp(foe.x+x*31,12,348),clamp(foe.y+y*31,12,348),'grid',16,2.8,.06+(x+1)*.02+(y+1)*.01);break;
  case 'healshot':
-  shoot(o,foe,{damage:o.baseDmg*.38,healOnHit:4.5*scale,homing:.13,color:'#fbbf24'});break;
+  shoot(o,foe,{damage:o.baseDmg*.38,healOnHit:7*scale,speed:170,homing:.3,color:'#fbbf24'});break;
  case 'arrow':
   shoot(o,foe,{damage:o.baseDmg*.6,bounces:3,speed:180,r:3,color:'#fef08a'});break;
  case 'pulse':case 'wave':case 'quake':case 'nova':
@@ -576,7 +576,7 @@ function tick(dt){
   if(summoner&&['pet','turret'].includes(h.kind)){
    const target=G.bl.find(o=>o.team!==h.team&&alive(o));
    if(target){if(h.kind==='pet'){const d=Math.hypot(target.x-h.x,target.y-h.y)||1;if(d>42){h.x+=(target.x-h.x)/d*60*dt;h.y+=(target.y-h.y)/d*60*dt;}}
-    h.nextShot=(h.nextShot||0)-dt;if(h.nextShot<=0){shoot({...summoner,x:h.x,y:h.y},target,{damage:summoner.baseDmg*.14*h.power*(summoner.v2PetPower||1),homing:.35,speed:145,life:2});h.nextShot=1.0;}}
+    h.nextShot=(h.nextShot||0)-dt;if(h.nextShot<=0){shoot({...summoner,x:h.x,y:h.y},target,{damage:summoner.baseDmg*.08*h.power*(summoner.v2PetPower||1),homing:.35,speed:145,life:2});h.nextShot=1.0;}}
   }
   if(h.age<(h.armAt||0))continue;
   const foe=G.bl.find(o=>o.team!==h.team&&alive(o)&&Math.hypot(o.x-h.x,o.y-h.y)<o.r+h.radius);
