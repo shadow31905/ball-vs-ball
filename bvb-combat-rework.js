@@ -204,6 +204,39 @@
     }
   }
 
+  function bossArenaTick(g,boss){
+    if(g.m!==11||!isAlive(boss))return;
+    const foe=g.bl.find(o=>o.team!==boss.team&&isAlive(o));
+    if(!foe)return;
+    const index=Math.max(0,Math.min(5,g.bossIndex||0));
+    if(!g.bossAttackAt)g.bossAttackAt=7;
+    if(!g.bossTelegraph&&g.rt>=g.bossAttackAt){
+      const radius=46+index%3*11;
+      g.bossTelegraph={index,x:foe.x,y:foe.y,radius,at:g.rt+1.2};
+      g.bossAttackAt=g.rt+Math.max(4.5,8.2-boss.bossPhase*.7);
+      if(g.rings?.length<16)g.rings.push({x:foe.x,y:foe.y,age:0,life:1.2,radius,c:'#f97316'});
+      if(g.pop?.length<12)g.pop.push({x:foe.x,y:Math.max(22,foe.y-35),age:0,life:1.1,
+        text:['KRĄG OGNIA','CIĘŻAR ARENY','LUSTRZANA FALA','BURZA','MROŹNY WYBUCH','KLĄTWA'][index],
+        c:'#fef08a'});
+    }
+    const mark=g.bossTelegraph;
+    if(!mark||g.rt<mark.at)return;
+    g.bossTelegraph=null;
+    if(index===2)boss.status.shield=Math.min(32,(boss.status.shield||0)+6);
+    if(index===1){
+      const d=norm(mark.x-foe.x,mark.y-foe.y);
+      foe.vx+=d.x*.22;foe.vy+=d.y*.22;
+    }
+    if(Math.hypot(foe.x-mark.x,foe.y-mark.y)>mark.radius+foe.r)return;
+    applyDamage(foe,3.5+boss.bossPhase*1.2);
+    if(index===0)foe.status.burn=Math.max(foe.status.burn||0,1.1);
+    if(index===1)foe.status.slow=Math.max(foe.status.slow||0,.7);
+    if(index===2)foe.status.weaken=Math.max(foe.status.weaken||0,.8);
+    if(index===3)foe.status.stun=Math.max(foe.status.stun||0,.28);
+    if(index===4)foe.status.slow=Math.max(foe.status.slow||0,1.3);
+    if(index===5)foe.status.poison=Math.max(foe.status.poison||0,1.4);
+  }
+
   function afterStep(g,dt) {
     if(netRole==='guest'||g.ph!=='battle')return;
     for(const o of g.bl) {
@@ -241,6 +274,7 @@
           shiftArena(g);
           if(phase===3)o.abilityCd=Math.min(o.abilityCd,.25);
         }
+        bossArenaTick(g,o);
       }
     }
     // Hard upper bound; compare remaining HP percentages rather than raw HP.
