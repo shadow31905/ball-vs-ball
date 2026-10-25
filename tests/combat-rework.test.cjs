@@ -81,7 +81,7 @@ test('every one of 130 IDs has a passive/super signature and can charge a super'
     const o=g.bl[0];
     assert.ok(o.passiveType>=0&&o.passiveType<10);
     assert.ok(o.superType>=0&&o.superType<10);
-    signatures.add(o.passiveType+':'+o.superType+':'+id%3);
+    signatures.add(o.passiveType+':'+o.superType+':'+id%7);
     o.superCharge=100;
     api.afterStep(g,1/60);
     assert.equal(o.superUsed,1);
