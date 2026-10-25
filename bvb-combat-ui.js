@@ -114,10 +114,11 @@ function frame(g,dt){
  hud.innerHTML=(g.bl||[]).slice().sort((a,b)=>a.team-b.team).map(fighter).join('');
  updateButtons(g);
 }
-el('bvbPause').addEventListener('click',()=>{
+function togglePause(){
  if(!G||G.m===12||G.ph!=='battle')return;
  paused=!paused;updateButtons(G);
-});
+}
+el('bvbPause').addEventListener('click',togglePause);
 el('bvbSpeed').addEventListener('change',e=>{
  const v=Number(e.target.value);if(![.5,1,2].includes(v))return;
  opts.speed=v;save();
@@ -212,5 +213,5 @@ function victoryStats(g){
  <button class="b" onclick="window.BVBReworkUI.openReplay()">🎞️ Obejrzyj powtórkę</button>`;
 }
 window.BVBReworkUI={frame,startRound,endRound,paused:()=>paused,rate:()=>opts.speed,
- camera:()=>opts.camera,fx:()=>opts.fx,openReplay,victoryStats};
+ camera:()=>opts.camera,fx:()=>opts.fx,openReplay,togglePause,victoryStats};
 })();
