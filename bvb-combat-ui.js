@@ -177,7 +177,7 @@ function closeReplay(){
  overlay.hidden=true;replayState=null;paused=wasPaused;
  updateButtons(G);
 }
-el('bvbReplay').addEventListener('click',openReplay);
+el('bvbReplay').addEventListener('click',()=>openReplay(false));
 el('bvbReplayClose').addEventListener('click',closeReplay);
 overlay.addEventListener('click',e=>{if(e.target===overlay)closeReplay();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&replayState)closeReplay();});
