@@ -185,7 +185,7 @@ getBallStats=function(id,...args){
 };
 function roundState(){
  if(!G)return null;
- G.v2 ||= {shots:[],hazards:[],webs:[],beams:[],effects:[],tick:0,serial:0};
+ G.v2 ||= {shots:[],hazards:[],webs:[],wallBeams:[],beams:[],effects:[],tick:0,serial:0};
  return G.v2;
 }
 function visual(owner,point,kind='burst',size=24,color=null,duration=.48){
@@ -265,7 +265,14 @@ function onWall(o,side){
  o.v2LastSide=side;o.v2LastWallAt=G.rt||0;
  if(d.kind==='web')webPoint(o,side);
  if(d.kind==='thorn')zone(o,o.x,o.y,'thorn',15,16,.65);
- if(d.kind==='beam'&&(o.b.id===13||o.b.id===41))zone(o,o.x,o.y,'laser',17,3,.45);
+ if(d.kind==='beam'&&(o.b.id===13||o.b.id===41)){
+  const vertical=side==='left'||side==='right';
+  st.wallBeams.push({a:{x:vertical?o.x:0,y:vertical?0:o.y},
+   b:{x:vertical?o.x:W,y:vertical?W:o.y},owner:o.uid,
+   team:o.team,color:d.color,life:3.4,inside:{}});
+  if(st.wallBeams.length>12)st.wallBeams.splice(0,st.wallBeams.length-12);
+  visual(o,o,'beam',23,d.color,.48);
+ }
  if(d.kind==='turret'||d.kind==='pet'||d.kind==='train')zone(o,o.x,o.y,d.kind,23,4,.65);
  if(d.kind==='grid'&&o.b.id===27)zone(o,o.x,o.y,'shock',30,2,.55);
  if(d.kind==='frost'&&o.b.id===29)zone(o,o.x,o.y,'frost',19,3,.38);
@@ -453,6 +460,20 @@ function tick(dt){
   h.cooldown=h.kind==='mine'||h.kind==='doom'?99:.62;
  }
  st.hazards=st.hazards.filter(h=>h.life>0);
+ for(const beam of st.wallBeams||[]){
+  beam.life-=dt;
+  if(beam.life<=0)continue;
+  for(const foe of G.bl){
+   if(!alive(foe)||foe.team===beam.team)continue;
+   const touched=closestToSegment(foe.x,foe.y,beam.a.x,beam.a.y,beam.b.x,beam.b.y)<foe.r+2;
+   if(touched&&!beam.inside[foe.uid]){
+    const owner=G.bl.find(o=>o.uid===beam.owner);
+    if(owner)strike(owner,foe,2.5,{slow:.2});
+   }
+   beam.inside[foe.uid]=touched;
+  }
+ }
+ st.wallBeams=(st.wallBeams||[]).filter(b=>b.life>0);
  for(const w of st.webs){
   for(const foe of G.bl||[]){
    if(!alive(foe)||foe.team===w.team)continue;
@@ -487,6 +508,7 @@ step=function(dt){
 function drawOverlay(){
  if(!G||!G.v2)return;
  const st=G.v2;
+ const detailed=(Number(S?.o?.fxLevel??3)>0);
  cx.save();
  for(const w of st.webs||[]){
   const p=w.a,q=w.b;
@@ -499,6 +521,12 @@ function drawOverlay(){
   }
   cx.globalAlpha=1;
  }
+ for(const beam of st.wallBeams||[]){
+  cx.save();cx.globalAlpha=Math.min(.95,beam.life*.6);
+  cx.strokeStyle=beam.color;cx.shadowColor=beam.color;cx.shadowBlur=19;cx.lineWidth=5;
+  cx.beginPath();cx.moveTo(beam.a.x,beam.a.y);cx.lineTo(beam.b.x,beam.b.y);cx.stroke();
+  cx.strokeStyle='#fff';cx.lineWidth=1.2;cx.stroke();cx.restore();
+ }
  for(const h of st.hazards||[]){
   cx.globalAlpha=Math.min(.5,.16+.34*Math.min(1,h.life/.6));cx.fillStyle=h.color;cx.strokeStyle=h.color;
   cx.shadowColor=h.color;cx.shadowBlur=10;
@@ -506,7 +534,7 @@ function drawOverlay(){
   cx.globalAlpha=.9;cx.lineWidth=2;cx.stroke();
  }
  for(const p of st.shots||[]){
-  cx.globalAlpha=.4;cx.lineWidth=Math.max(2,p.r*.85);cx.lineCap='round';
+  cx.globalAlpha=detailed?.4:.16;cx.lineWidth=Math.max(2,p.r*.85);cx.lineCap='round';
   cx.strokeStyle=p.color;cx.beginPath();cx.moveTo(p.px,p.py);cx.lineTo(p.x,p.y);cx.stroke();
   cx.globalAlpha=1;cx.shadowColor=p.color;cx.shadowBlur=14;cx.fillStyle=p.color;
   cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fill();
@@ -517,7 +545,7 @@ function drawOverlay(){
   cx.shadowBlur=17;cx.lineWidth=7;cx.beginPath();cx.moveTo(b.x,b.y);cx.lineTo(b.x2,b.y2);cx.stroke();
   cx.shadowBlur=0;cx.strokeStyle='#f8fafc';cx.lineWidth=2;cx.stroke();
  }
- for(const e of st.effects||[]){
+ for(const e of detailed?(st.effects||[]):[]){
   const t=Math.min(1,e.age/e.life),alpha=(1-t)*(1-t);
   cx.globalAlpha=Math.min(1,alpha);cx.shadowBlur=12;cx.shadowColor=e.color;
   cx.strokeStyle=e.color;cx.lineWidth=Math.max(.7,3*(1-t));
