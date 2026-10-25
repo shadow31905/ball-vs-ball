@@ -10,7 +10,7 @@ const sections=[
   'Nowe menu główne: cztery animowane kafelki z ikonami, opisami i podglądem zawartości.',
   'Osobne ekrany trybów walki, kulek i sklepu, nagród oraz konta i ustawień.',
   'Wybór jednego z pięciu poziomów trudności przed walką z botem lub bossem.',
-  'Przygotowanie do walki: wybór kulki, podgląd jej statystyk i umiejętności oraz przycisk „Gotowość”.',
+  'Przygotowanie do walki: wybór kulki, jej statystyki, animowany podgląd umiejętności i przycisk „Gotowość”.',
   'Podmenu „Więcej trybów”, osobny ekran wydarzeń i podmenu aren.',
   'Rozbudowane umiejętności specjalne 130 kulek i animowane podglądy ich działania w kolekcji.',
   'Pajęczyny Pająka utrzymujące się do końca rundy po połączeniu dwóch punktów odbicia.'
@@ -26,6 +26,7 @@ const sections=[
  ]],
  ['🚀 Ulepszono',[
   'Efekty wizualne menu: subtelne animacje w spoczynku i mocniejsze po kliknięciu.',
+  'Układ czterech kafelków w dwóch kolumnach również na węższych ekranach.',
   'Podgląd kulek, różnorodność ataków i wstępny balans.',
   'Dostęp do konta, znajomych, rankingu i ustawień bez przeszukiwania długiego menu.'
  ]]
