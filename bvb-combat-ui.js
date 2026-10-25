@@ -61,13 +61,13 @@ function capture(g,force=false){
 function startRound(g){
  if(!g)return;
  matchKey=String(g.matchId)+':'+String(g.rn);
- frames=[];captureClock=0;paused=false;
+ frames=[];lastReplay=[];captureClock=0;paused=false;
  capture(g,true);
  updateButtons(g);
 }
 function endRound(g,winner){
  capture(g,true);
- if(frames.length)lastReplay=frames.map(f=>({...f}));
+ lastReplay=g.m===12?[]:frames.map(f=>({...f}));
  const winnerActor=g.bl.find(o=>o.team===winner);
  g.reworkRoundStats={duration:+g.rt.toFixed(1),winner,
   fighter:g.bl.map(o=>({name:o.b?.n||'Kulka',team:o.team,
@@ -95,7 +95,7 @@ function updateButtons(g){
  el('bvbPause').disabled=online||g?.ph!=='battle';
  el('bvbPause').textContent=paused?'▶️':'⏸️';
  el('bvbSpeed').disabled=online;
- el('bvbReplay').disabled=!lastReplay.length;
+ el('bvbReplay').disabled=online||!lastReplay.length;
  el('bvbSpeed').value=String(opts.speed);
  el('bvbCamera').textContent=opts.camera==='dynamic'?'📷 Dynamiczna':'📷 Statyczna';
  el('bvbFx').textContent=opts.fx==='low'?'✨ Lekkie FX':'✨ Pełne FX';
@@ -166,7 +166,7 @@ function renderReplay(){
  el('bvbReplaySeek').value=String(Math.round(1000*t/Math.max(.01,lastReplay[lastReplay.length-1].t)));
 }
 function openReplay(finalOnly=false){
- if(!lastReplay.length)return;
+ if(!lastReplay.length||G?.m===12)return;
  wasPaused=paused;paused=true;
  replayState={t:finalOnly?Math.max(0,lastReplay[lastReplay.length-1].t-5):0,playing:true,speed:1};
  overlay.hidden=false;el('bvbReplayPlay').textContent='⏸️';
@@ -212,9 +212,9 @@ function victoryStats(g){
  return `<div style="border:1px solid #fbbf24;border-radius:12px;padding:9px;margin:8px 0;background:#fbbf2412">
  <strong style="color:#fef08a">🏆 ${winnerName}</strong><p style="font-size:12px;color:#cbd5e1">⏱️ Ostatnia runda: ${r.duration}s</p>
  <p style="font-size:12px;color:#cbd5e1">${names.join('<br>')}</p></div>
- <button class="b" onclick="window.BVBReworkUI.openReplay(true)">🎬 Ostatnie 5 sekund</button>
- <button class="b" onclick="window.BVBReworkUI.openReplay()">🎞️ Cała powtórka</button>`;
+ ${lastReplay.length?`<button class="b" onclick="window.BVBReworkUI.openReplay(true)">🎬 Ostatnie 5 sekund</button>
+ <button class="b" onclick="window.BVBReworkUI.openReplay()">🎞️ Cała powtórka</button>`:''}`;
 }
-window.BVBReworkUI={frame,startRound,endRound,paused:()=>paused,rate:()=>opts.speed,
+window.BVBReworkUI={frame,startRound,endRound,paused:()=>G?.m!==12&&paused,rate:()=>G?.m===12?1:opts.speed,
  camera:()=>opts.camera,fx:()=>opts.fx,openReplay,togglePause,victoryStats};
 })();
