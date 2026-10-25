@@ -29,7 +29,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.click('#bvbCamera');
    assert.equal(await page.evaluate(()=>BVBReworkUI.camera()),'dynamic','camera switch must work');
    console.log('Before forced end:',await page.evaluate(()=>({phase:G.ph,seconds:G.rt,hp:G.bl.map(o=>o.hp),stats:!!G.reworkRoundStats,errors:[]})));
-   await page.evaluate(()=>{if(G.ph==='battle')roundEnd(0);});
+   console.log('After forced end:',await page.evaluate(()=>{const before=G;const phase=G.ph;const handler=typeof BVBReworkUI.endRound;roundEnd(0);return {same:G===before,phaseBefore:phase,phaseAfter:G.ph,handler,stats:G.reworkRoundStats||null,func:roundEnd.toString().slice(0,350)};}));
    await page.waitForTimeout(250);
    assert.equal(await page.evaluate(()=>!!G.reworkRoundStats),true,'round stats must be present');
    await page.evaluate(()=>over());
