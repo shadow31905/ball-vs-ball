@@ -85,8 +85,11 @@ function descriptions(){
  const all=Array.from(root.querySelectorAll('button'));
  const difficulties=Array.from(root.querySelectorAll('.diff-btn'));
  for(const btn of all){
+  // New navigation buttons already carry hand-written descriptions.
+  if(btn.matches('.bvb3-custom,.bvb3-tile,.bvb3-boss,.bvb3-level,.bvb3-ball'))continue;
   const on=btn.getAttribute('onclick')||'';
-  let desc=difficulties.includes(btn)?details[0][1][difficulties.indexOf(btn)]:null;
+  let desc=btn.dataset.bvbMenuDescription||
+   (difficulties.includes(btn)?details[0][1][difficulties.indexOf(btn)]:null);
   if(!desc){const spec=details.slice(1).find(d=>on.includes(d[0]));desc=spec?.[1];}
   if(!desc)desc='Otwórz wybraną funkcję gry.';
   btn.classList.add('bvb-menu-button');
