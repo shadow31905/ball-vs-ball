@@ -2658,7 +2658,9 @@ function pick(i) {
   $('#cards').innerHTML = '';
   $('#fire').hidden = netRole === 'guest' && activeConn && !G.bb;
   $('#fire').disabled = false;
-  $('#msg').textContent = `${G.m === 11 ? '👹 Boss: ' : 'Przeciwnik wybrał: '}${G.bb.n}. Naciągnij procą na arenie i kliknij WYSTRZEL!`;
+  $('#msg').textContent = `${G.m === 11 ? '👹 Boss: ' : 'Przeciwnik wybrał: '}${G.bb.n}. Walka rozpocznie się automatycznie!`;
+  // Solo fights are fully automatic; online handshake remains unchanged until sync is reworked.
+  if(G.m!==12 && !activeConn?.open)launchMatch(null);
 }
 
 function fire() {
@@ -2708,6 +2710,7 @@ function launchMatch(remoteAngle = null) {
   }
   window.BVBCampaign?.applyActors?.(G,p,e);
   window.BVB2?.prepareActors?.(G,p,e);
+  window.BVBRework?.prepareActors?.(G,p,e);
   G.bl = [p, e];
   G.ph = 'battle';
   G.rt = 0;
@@ -2848,6 +2851,7 @@ function step(dt) {
     if (!G.silenceBoost) G.silenceBoostFading = false;
   }
   G.speedRamp = Math.min(.5, Math.floor(G.rt / 5) * .05);
+  window.BVBRework?.beforeStep?.(G,dt);
   moveArena(dt);
   for (const o of G.bl) {
     if (!alive(o)) continue;
@@ -2867,9 +2871,11 @@ function step(dt) {
       if (o.trail.length > 9) o.trail.shift();
     }
     o.abilityCd -= dt;
-    if (o.abilityCd <= 0 && !(o.status.stun > 0)) {
-      const foe = G.bl.find(t => t !== o && alive(t));
-      specialAbility(o, foe);
+    const abilityTarget = G.bl.find(t => t !== o && alive(t));
+    if (o.abilityCd <= 0 && !(o.status.stun > 0) &&
+        (window.BVBRework?.abilityReady?.(o,abilityTarget,G,dt) ?? true)) {
+      specialAbility(o, abilityTarget);
+      if(o.combatStats)o.combatStats.abilities++;
       window.BVBCampaign?.onAbility?.(G,o);
       o.abilityCd = window.BVB2?.cooldown?.(o) ?? Math.max(1.0, ((o.b.isBoss ? 2.0 : 3.4) - (o.tier - 1) * 0.6) * (o.abilityRate||1));
     }
@@ -2922,8 +2928,10 @@ function step(dt) {
           }
           const hitSlow = Math.min(.23,.065+Math.max(damageToA,damageToB)*.004);
           a.impactSlow = b.impactSlow = hitSlow;
-          applyDamage(a,damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15)));
-          applyDamage(b,damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15)));
+          const impactA=damageToA*(1+Math.min(.35,(b.skillCharge||0)*.07+(b.skillImpact||0)*.15));
+          const impactB=damageToB*(1+Math.min(.35,(a.skillCharge||0)*.07+(a.skillImpact||0)*.15));
+          applyDamage(a,window.BVBRework?.contactDamage?.(b,a,impactA) ?? impactA);
+          applyDamage(b,window.BVBRework?.contactDamage?.(a,b,impactB) ?? impactB);
           a.skillCharge=b.skillCharge=0;
           if(a.skillReflect>0)applyDamage(b,Math.min(3,damageToA*.2));
           if(b.skillReflect>0)applyDamage(a,Math.min(3,damageToB*.2));
@@ -2952,6 +2960,7 @@ function step(dt) {
     window.BVBCampaign?.onRoundEnd?.(G,winner);
     roundEnd(winner);
   }
+  if(G.ph==='battle')window.BVBRework?.afterStep?.(G,dt);
 }
 
 function roundEnd(winner) {
@@ -3146,6 +3155,7 @@ requestAnimationFrame(loop);
 <script src="./bvb-gameplay.js"></script>
 <script src="./bvb-campaign.js"></script>
 <script src="./bvb-abilities-v2.js"></script>
+<script src="./bvb-combat-rework.js"></script>
 <script src="./bvb-preview-v2.js"></script>
 <script src="./bvb-ui-v2.js"></script>
 <script src="./bvb-main-menu-v3.js"></script>
