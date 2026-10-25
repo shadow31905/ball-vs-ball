@@ -104,7 +104,9 @@
     const wanted=norm(dx,dy);
     const turn=Math.min(.075,dt*(.34+level*.12+(id%4)*.025));
     const adjusted=norm(o.vx*(1-turn)+wanted.x*turn,o.vy*(1-turn)+wanted.y*turn);
-    o.vx=adjusted.x;o.vy=adjusted.y;
+    // Preserve ability impulses and mass-driven collisions instead of resetting speed.
+    const speed=Math.max(.65,Math.min(1.5,Math.hypot(o.vx,o.vy)));
+    o.vx=adjusted.x*speed;o.vy=adjusted.y*speed;
   }
 
   function shiftArena(g) {
@@ -167,7 +169,9 @@
       const a=g.bl.find(o=>o.team===0),b=g.bl.find(o=>o.team===1);
       const aPct=Math.max(0,(a?.hp||0)/(a?.mh||1));
       const bPct=Math.max(0,(b?.hp||0)/(b?.mh||1));
-      const winner=Math.abs(aPct-bPct)<.0001?-1:aPct>bPct?0:1;
+      // A true draw would leave both hearts unchanged and could loop forever.
+      // A fair coin resolves the extremely rare exact-HP tie.
+      const winner=Math.abs(aPct-bPct)<.0001?(Math.random()<.5?0:1):aPct>bPct?0:1;
       window.BVBCampaign?.onRoundEnd?.(g,winner);
       roundEnd(winner);
     }
