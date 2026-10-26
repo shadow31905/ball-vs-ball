@@ -6,44 +6,88 @@ const css=document.createElement('style');
 css.textContent="\n#bvb2ReleaseModal[hidden]{display:none!important}\n#bvb2ReleaseModal{position:fixed;inset:0;z-index:350;display:grid;place-items:center;\nbackground:#06091dd9;padding:12px;overflow-y:auto}\n.bvb2-release-card{width:min(520px,100%);max-height:min(90vh,880px);overflow-y:auto;\npadding:22px 19px;background:linear-gradient(145deg,#1e2856,#0c1532);\nborder:2px solid #6c7cdb;border-radius:19px;box-shadow:0 0 45px #162f96aa,0 20px 55px #000b}\n.bvb2-release-head{display:block;margin:0 0 13px}\n.bvb2-release-head h2{font-size:1.42rem;letter-spacing:.4px;color:#fef08a;margin-bottom:4px}\n.bvb2-release-head p{font-size:.83rem;color:#cbd5e1}\n.bvb2-release-card h3{font-size:1rem;color:#bcb7ff;margin:13px 0 6px}\n.bvb2-release-card ul{padding-left:19px;font-size:.82rem;line-height:1.55;color:#e6e9ff}\n.bvb2-release-card li{margin:0 0 5px}\n.bvb2-release-card>.b{width:100%;margin:12px 0 0}\n.bvb2-release-card>.bvb2-release-optout{background:#243152;border:1px solid #8993b5;color:#e2e8f0}\n.bvb2-release-card>.bvb2-release-optout:hover{background:#33466c}\n@media(max-width:390px){.bvb2-release-card{padding:16px 13px}.bvb2-release-card h2{font-size:1.15rem}}\n";
 document.head.append(css);
 const sections=[
- ['🛠️ Naprawiono w 2.0.1',[
-  'Topór i pozostałe kulki z orbitującymi ostrzami mają teraz widoczne ostrza w walce, które naprawdę trafiają przeciwnika.',
-  'Łatwy bot ma słabsze statystyki, bez ukrytej ewolucji V2 i losowych premii do szarży lub pancerza.',
-  'Średni bot nie otrzymuje losowej taktyki Szarża, a jego siła lepiej odpowiada wybranemu poziomowi.',
-  'Sześciu bossów korzysta z różnych umiejętności; poprawiono ich zdrowie i obrażenia.',
-  'Poprawiono spójność czasów odnowienia umiejętności, osłabienie, ogłuszenie oraz rykoszety w narożnikach.'
- ]],
- ['✨ Dodano',[
-  'Nowe menu główne: cztery animowane kafelki z ikonami, opisami i podglądem zawartości.',
-  'Osobne ekrany trybów walki, kulek i sklepu, nagród oraz konta i ustawień.',
-  'Wybór jednego z pięciu poziomów trudności przed walką z botem lub bossem.',
-  'Przygotowanie do walki: wybór kulki, jej statystyki, animowany podgląd umiejętności i przycisk „Gotowość”.',
-  'Podmenu „Więcej trybów”, osobny ekran wydarzeń i podmenu aren.',
-  'Rozbudowane umiejętności specjalne 130 kulek i animowane podglądy ich działania w kolekcji.',
-  'Pajęczyny Pająka utrzymujące się do końca rundy po połączeniu dwóch punktów odbicia.'
- ]],
- ['🔄 Zmieniono',[
-  'Uporządkowano funkcje gry według czterech czytelnych kategorii.',
-  'Przeniesiono wybór trudności na ekran przygotowania przed walką z botem lub bossem.',
-  'Zmieniono wybrane umiejętności, ich czas odnowienia oraz parametry kulek.'
- ]],
- ['🛠️ Poprawiono',[
-  'Czytelność napisów na urządzeniach mobilnych: nazwy przycisków znajdują się nad opisami.',
-  'Wybrane efekty specjalne, ich widoczność i działanie przy kolizjach.'
- ]],
- ['🚀 Ulepszono',[
-  'Efekty wizualne menu: subtelne animacje w spoczynku i mocniejsze po kliknięciu.',
-  'Układ czterech kafelków w dwóch kolumnach również na węższych ekranach.',
-  'Podgląd kulek, różnorodność ataków i wstępny balans.',
-  'Dostęp do konta, znajomych, rankingu i ustawień bez przeszukiwania długiego menu.'
- ]]
+ [
+  "⚔️ Kulki i ewolucje",
+  [
+   "130 pasywek i superumiejętności przygotowanych indywidualnie dla kulek.",
+   "130 aktywnych zdolności oraz działające warianty V1, V2 i V3.",
+   "Ewolucje zmieniają także mechanikę: m.in. liczbę pocisków i ostrzy, pola, zasięg, czas działania, statusy, oczyszczanie i pomocników.",
+   "Rozszerzone opisy i animowane podglądy zdolności w kolekcji i podczas przygotowania do walki."
+  ]
+ ],
+ [
+  "👹 Bossowie i starcia",
+  [
+   "Sześciu bossów, każdy z trzema fazami i własnymi atakami (18 faz łącznie).",
+   "Sygnalizowane obszary ataków bossów oraz nowe efekty walki.",
+   "Efekt kończącego uderzenia i prezentacja zwycięskiej kulki.",
+   "Pięć poziomów trudności do wyboru przed pojedynkiem z botem lub bossem."
+  ]
+ ],
+ [
+  "🧭 Menu i wygląd",
+  [
+   "Cztery animowane, kwadratowe kategorie menu z ikonami i opisami.",
+   "Osobne ekrany trybów, kulek i sklepu, nagród, konta oraz ustawień.",
+   "Podmenu dodatkowych trybów, wydarzeń i aren oraz ekran przygotowania z przyciskiem Gotowość.",
+   "Animacje kafelków, przycisków i przejść, dopasowanie do węższych ekranów.",
+   "Obsługa ograniczania efektów i systemowego ustawienia zmniejszonych animacji."
+  ]
+ ],
+ [
+  "🧪 Trening i tryby",
+  [
+   "Trening z możliwością wybrania dowolnej ze 130 kulek jako gracza i przeciwnika.",
+   "Wyszukiwanie nazw również bez polskich znaków, filtry i sortowanie według rzadkości.",
+   "Osobny wybór ewolucji V1/V2/V3 dla obu uczestników treningu.",
+   "Trening bez wydawania zasobów i bez zmieniania zwykłego postępu.",
+   "Kampania (50 poziomów), Survival, Infinity, Boss Fight, Boss Rush, Turniej, Chaos i Halloween — wraz z obsługą progresji, rekordów i nagród."
+  ]
+ ],
+ [
+  "🎬 Powtórki walk",
+  [
+   "Nagrywanie kolejnych stanów walki: pozycje, pociski, przeszkody, pola, statusy i efekty.",
+   "Odtwarzanie zdarzeń, dźwięków i muzyki razem z przebiegiem walki.",
+   "Przewijanie, zapisywanie i ponowne otwieranie powtórek oraz import i eksport.",
+   "Kompresja gzip, sprawdzanie importowanych danych i oznaczanie niepełnych nagrań."
+  ]
+ ],
+ [
+  "🌐 Multiplayer",
+  [
+   "Tryb 1v1 z tworzeniem i dołączaniem do pokoju, gotowością graczy oraz synchronizacją walki.",
+   "Walidacja pakietów, kolejność wiadomości, hash stanu i poprawiona perspektywa drugiego gracza.",
+   "Zatrzymywanie walki hosta po rozłączeniu oraz możliwość ponownego połączenia.",
+   "Opcjonalna konfiguracja TURN i informacje diagnostyczne o połączeniu (wymaga osobnej usługi TURN)."
+  ]
+ ],
+ [
+  "💾 Zapis i wersja beta",
+  [
+   "Bezpieczniejszy zapis: walidacja, migracje, kopia bezpieczeństwa przed importem i wycofanie przy błędzie.",
+   "Oddzielna wersja beta z własnym profilem oraz narzędziami do testowania ewolucji.",
+   "Chmura i konto wyłączone w becie, żeby nie zmieniać zapisu stabilnej gry.",
+   "Lista zmian automatycznie wyświetlana tylko raz na wersję; można ją później otworzyć w ustawieniach."
+  ]
+ ],
+ [
+  "🛠️ Naprawy i ulepszenia",
+  [
+   "Topór i pozostałe kulki z orbitującymi ostrzami mają widoczne ostrza, które trafiają rywala.",
+   "Poprawiono ustawienia łatwego i średniego bota oraz zachowanie ataków wybranych bossów.",
+   "Dopracowano niektóre czasy odnowienia, osłabienie, ogłuszenie i rykoszety w narożnikach.",
+   "Poprawiono widoczność efektów, kolizje i czytelność przycisków na telefonach.",
+   "Pajęczyny Pająka pozostają na arenie po połączeniu dwóch punktów odbicia aż do końca rundy."
+  ]
+ ]
 ];
 const modal=document.createElement('div');modal.id='bvb2ReleaseModal';modal.hidden=true;
 modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Historia zmian Ball VS Ball 2.0.1');
 const body=document.createElement('div');body.className='bvb2-release-card';
 const header=document.createElement('header');header.className='bvb2-release-head';
 const title=document.createElement('h2');title.textContent='🎮 BALL VS BALL 2.0.1';
-const subtitle=document.createElement('p');subtitle.textContent='Co nowego w aktualizacji?';
+const subtitle=document.createElement('p');subtitle.textContent='Pełna lista nowych funkcji, zmian i poprawek.';
 header.append(title,subtitle);body.append(header);
 for(const [name,lines] of sections){
  const h=document.createElement('h3');h.textContent=name;body.append(h);
