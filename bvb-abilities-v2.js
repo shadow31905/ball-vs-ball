@@ -223,6 +223,17 @@ function onContact(g,o,foe,base){
  if(o.v2InfectUntil>g.rt)setStatus(o,foe,'poison',.7+evolutionStage(o)*.2);
  if(o.v2ShockUntil>g.rt)setStatus(o,foe,'stun',.12+evolutionStage(o)*.04);
  if(o.v2ShatterUntil>g.rt){o.v2ShatterUntil=0;shoot(o,foe,{count:3,damage:o.baseDmg*.12,spread:.6,bounces:1});}
+ if(o.b.id===8&&(o.skillImpact||0)>0){
+  // Spear's finishing thrust applies an actual push on contact.
+  // Only the live, recent dash can trigger it; V2/V3 increase its strength.
+  const dx=foe.x-o.x,dy=foe.y-o.y,len=Math.hypot(dx,dy)||1;
+  const power=.22+evolutionStage(o)*.07;
+  foe.vx=(foe.vx||0)+dx/len*power;
+  foe.vy=(foe.vy||0)+dy/len*power;
+  const speed=Math.hypot(foe.vx,foe.vy);
+  if(speed>1.35){foe.vx*=1.35/speed;foe.vy*=1.35/speed;}
+  o.skillImpact=0; // One thrust per activation; no repeated bonus on the next hit.
+ }
  if(o.b.id===44){o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);base+=Math.min(3,[0,1,1,2,3,5,8][o.v2FibHit]*.5);}
  return base;
 }
