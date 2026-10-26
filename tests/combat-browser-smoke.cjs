@@ -150,7 +150,11 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      document.getElementById('bvbCamera').addEventListener('click',()=>window.__cameraClickCount++);
    });
    await page.click('#bvbCamera');
-   await page.waitForTimeout(70);
+   // Wait for both the real click event and the changed setting in WebKit.
+   await page.waitForFunction(previous=>
+     window.__cameraClickCount===1&&
+     BVBReworkUI.camera()===(previous==='static'?'dynamic':'static'),
+   priorCamera,{timeout:5000});
    const cameraDiagnostic=await page.evaluate(()=>({
      reported:BVBReworkUI.camera(),
      label:document.getElementById('bvbCamera').textContent,

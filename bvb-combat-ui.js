@@ -295,13 +295,17 @@ function fighter(o){
 function updateButtons(g){
  const online=g?.m===12;
  el('bvbPause').disabled=online||g?.ph!=='battle';
- el('bvbPause').textContent=paused?'▶️':'⏸️';
+ // Replacing button text nodes every frame can suppress a pointer click in WebKit.
+ const pauseLabel=paused?'▶️':'⏸️';
+ if(el('bvbPause').textContent!==pauseLabel)el('bvbPause').textContent=pauseLabel;
  el('bvbSpeed').disabled=online;
  el('bvbReplay').disabled=online||!lastReplay.length;
  el('bvbSaved').disabled=online||!storedReplays().length;
  el('bvbSpeed').value=String(opts.speed);
- el('bvbCamera').textContent=opts.camera==='dynamic'?'📷 Dynamiczna':'📷 Statyczna';
- el('bvbFx').textContent=opts.fx==='low'?'✨ Lekkie FX':'✨ Pełne FX';
+ const cameraLabel=opts.camera==='dynamic'?'📷 Dynamiczna':'📷 Statyczna';
+ if(el('bvbCamera').textContent!==cameraLabel)el('bvbCamera').textContent=cameraLabel;
+ const fxLabel=opts.fx==='low'?'✨ Lekkie FX':'✨ Pełne FX';
+ if(el('bvbFx').textContent!==fxLabel)el('bvbFx').textContent=fxLabel;
 }
 function frame(g,dt){
  if(!g)return;
