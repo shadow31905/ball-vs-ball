@@ -95,7 +95,7 @@ test('Strefa: V2 moves damage aura with owner, V3 adds an actual gravity pull an
   const [o,foe]=personalCase(19,tier,60);
   specialAbility(o,foe);
   const aura=o.v2Pressure;
-  o.x+=15;
+  o.x-=12; // Move the aura, but keep fighter bodies apart to isolate its gravity pull.
   const hp=foe.hp,oldVx=foe.vx;
   timeline(.3);
   rows.push({tier,aura:aura?{radius:aura.radius,pull:aura.pull}:null,
