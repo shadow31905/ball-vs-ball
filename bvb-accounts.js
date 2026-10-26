@@ -21,7 +21,7 @@
     return m.slice(0,160) || 'Wystąpił błąd połączenia.';
   };
   let db=null,user=null,profileNick='',profileReady=false,cloudSave=null,cloudActive=false;
-  let notice='',guestChoice=false,syncTimer=null,syncBusy=false,syncAfter=false,gateView='welcome',authSerial=0;
+  let notice='',guestChoice=false,syncTimer=null,syncBusy=false,syncAfter=false,activeFlush=null,gateView='welcome',authSerial=0;
   function info(s){notice=s;const p=$('#accountMessage');if(p)p.textContent=s;}
   function refresh(){if($('#pn')?.dataset.panel==='account' && !$('#pn').hidden) renderAccount();}
   function gateMessage(s){const p=$('#gateMessage');if(p)p.textContent=s||'';}
@@ -120,20 +120,42 @@
   }
   function scheduleSave(){if(!db||!user||!profileReady||!cloudActive)return;clearTimeout(syncTimer);syncTimer=setTimeout(()=>{syncTimer=null;void flush();},1800);}
   async function flush(){
-    if(!cloudActive||!user||!profileReady||!db)return;
-    if(syncBusy){syncAfter=true;return;}
+    if(!cloudActive||!user||!profileReady||!db)return false;
+    // A second request must wait for the in-flight save; on logout we cannot
+    // sign out before the first database operation has finished.
+    if(syncBusy){syncAfter=true;return activeFlush||false;}
     syncBusy=true;
-    try{
-      const state=game()?.exportState?.();
-      if(!state||state.length>350000)throw new Error('Zapis gry jest zbyt duży.');
-      const a=await db.from('saves').upsert({user_id:user.id,state,updated_at:new Date().toISOString()},{onConflict:'user_id'});
-      if(a.error)throw a.error;
-      const s=stats();
-      const b=await db.from('profiles').update({wins:Math.max(0,s.wins|0),level:Math.max(1,s.level|0),updated_at:new Date().toISOString()}).eq('id',user.id);
-      if(b.error)throw b.error;
-      info('☁️ Postęp zapisany w chmurze.');
-    }catch(e){info('⚠️ Chmura: '+errorText(e)+' Zapis lokalny nadal działa.');}
-    finally{syncBusy=false;if(syncAfter){syncAfter=false;scheduleSave();}}
+    const accountId=user.id,session=authSerial;
+    const current=()=>authSerial===session&&user?.id===accountId&&cloudActive&&profileReady;
+    const task=(async()=>{
+      try{
+        const state=game()?.exportState?.();
+        if(!state||state.length>350000)throw new Error('Zapis gry jest zbyt duży.');
+        const a=await db.from('saves').upsert({user_id:accountId,state,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+        if(a.error)throw a.error;
+        // A sign-out or change of account during the network request must
+        // never write the old player's statistics into the new profile.
+        if(!current())return false;
+        const statsNow=stats();
+        const b=await db.from('profiles').update({
+          wins:Math.max(0,statsNow.wins|0),level:Math.max(1,statsNow.level|0),
+          updated_at:new Date().toISOString()
+        }).eq('id',accountId);
+        if(b.error)throw b.error;
+        if(!current())return false;
+        info('☁️ Postęp zapisany w chmurze.');
+        return true;
+      }catch(e){
+        if(current())info('⚠️ Chmura: '+errorText(e)+' Zapis lokalny nadal działa.');
+        return false;
+      }finally{
+        syncBusy=false;
+        if(syncAfter){syncAfter=false;if(current())scheduleSave();}
+      }
+    })();
+    activeFlush=task;
+    try{return await task;}
+    finally{if(activeFlush===task)activeFlush=null;}
   }
   async function useLocal(){
     if(!user||!profileReady)return;
@@ -157,8 +179,12 @@
     if(!db)return;
     clearTimeout(syncTimer);syncTimer=null;
     if(cloudActive)await flush();
+    // flush() may have queued a debounce while completing. Never let it
+    // upload a previous player's local data after signing out.
+    clearTimeout(syncTimer);syncTimer=null;syncAfter=false;
     cloudActive=false;profileReady=false;profileNick='';cloudSave=null;
-    const {error}=await db.auth.signOut();if(error){info(errorText(error));return;}
+    // Local scope keeps the other player's devices signed in.
+    const {error}=await db.auth.signOut({scope:'local'});if(error){info(errorText(error));return;}
     user=null;guestChoice=false;info('Wylogowano. Zapis lokalny nadal istnieje.');gateMode('welcome');refresh();
   }
   async function updateNick(){
