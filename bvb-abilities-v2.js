@@ -835,10 +835,12 @@ function zone(o,x,y,kind='zone',radius=29,life=3,power=1){
  const stage=evolutionStage(o);radius*=1+stage*.1;life*=1+stage*.15;power*=1+stage*.1;
  const st=roundState();if(!st)return;
  if(['pet','turret'].includes(kind)){const old=st.hazards.find(h=>h.owner===o.uid&&h.kind===kind&&h.life>0);if(old){old.life=Math.max(old.life,life);old.max=Math.max(old.max,life);old.power=Math.max(old.power,power);return old;}}
- st.hazards.push({x,y,kind,owner:o.uid,team:o.team,id:o.b.id,radius,life,max:life,
-  power,age:0,cooldown:0,armAt:kind==='doom'?1:kind==='mine'?.75:kind==='echo'?.5:0,nextShot:.35,color:abilityData[o.b.id].color});
+ const hazard={x,y,kind,owner:o.uid,team:o.team,id:o.b.id,radius,life,max:life,
+  power,age:0,cooldown:0,armAt:kind==='doom'?1:kind==='mine'?.75:kind==='echo'?.5:0,nextShot:.35,color:abilityData[o.b.id].color};
+ st.hazards.push(hazard);
  if(st.hazards.length>45)st.hazards.splice(0,st.hazards.length-45);
  visual(o,{x,y},'circle',radius,abilityData[o.b.id].color,.55);
+ return hazard;
 }
 function radial(o,foe,mult=.55,opts={}){
  opts={...opts,radius:(opts.radius||93)*(1+evolutionStage(o)*.1)};
@@ -962,6 +964,7 @@ function cast(o,foe){
   else dash(o,foe,.15);
   visual(o,o,'tether',25,d.color,.58);break;
  case 'dash':
+  if(o.b.id===36)o.v2LightOrigin={x:o.x,y:o.y};
   dash(o,foe,o.b.id===108&&lowHp?.6:.35,{shield:o.b.id===114?6:0});
   // The light-ball's advertised impact wave must really hit nearby enemies,
   // not merely recolor the standard dash. Evolutions widen the hit area.
