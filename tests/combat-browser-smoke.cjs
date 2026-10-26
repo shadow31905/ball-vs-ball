@@ -12,7 +12,45 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
  try{
    await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
    await page.waitForFunction(()=>typeof window.startMatch==='function'&&!!window.BVBReworkUI&&!!window.BVBRework,{timeout:30000});
-   await page.evaluate(()=>{if(document.getElementById('accountGate'))document.getElementById('accountGate').hidden=true;startMatch(0);pick(0);});
+   await page.evaluate(()=>{if(document.getElementById('accountGate'))document.getElementById('accountGate').hidden=true;});
+   if(new URL(base).pathname.split('/').includes('beta')){
+     await page.waitForSelector('#bvbBetaPanelOpen');
+     await page.click('#bvbBetaPanelOpen');
+     assert.equal(await page.locator('#bvbBetaDialog').isVisible(),true,'beta panel must be accessible');
+     await page.fill('#bvbBetaCoins','123456789');
+     await page.fill('#bvbBetaCandies','654321');
+     await page.click('#bvbBetaSaveCurrencies');
+     await page.click('#bvbBetaUnlockAll');
+     await page.selectOption('#bvbBetaTarget','all');
+     await page.selectOption('#bvbBetaTier','3');
+     await page.click('#bvbBetaApplyTier');
+     const adminState=await page.evaluate(()=>({
+       coins:S.coins,candies:S.candies,unlocked:S.own.length,
+       allV3:B.every(b=>S.tr[b.id]===3),
+       saved:JSON.parse(localStorage.getItem('bvb_beta_rework_v4')),
+       stableKey:localStorage.getItem('bvb_hw_120_v3')
+     }));
+     assert.equal(adminState.coins,123456789);
+     assert.equal(adminState.candies,654321);
+     assert.equal(adminState.unlocked,130);
+     assert.equal(adminState.allV3,true,'panel must enable actual evolution tier for every ball');
+     assert.equal(adminState.saved.tr[0],3);
+     assert.equal(adminState.saved.coins,123456789);
+     assert.equal(adminState.stableKey,null,'beta panel must not write stable storage');
+     await page.selectOption('#bvbBetaTarget','1');
+     await page.selectOption('#bvbBetaTier','2');
+     await page.click('#bvbBetaApplyTier');
+     assert.deepEqual(await page.evaluate(()=>[S.tr[0],S.tr[1],getBallStats(1).tier]),[3,2,2]);
+     await page.fill('#bvbBetaCoins','-10');
+     await page.click('#bvbBetaSaveCurrencies');
+     assert.equal(await page.evaluate(()=>S.coins),123456789,'negative money must be rejected');
+     await page.click('#bvbBetaClose');
+     assert.equal(await page.locator('#bvbBetaDialog').isVisible(),false);
+   }else{
+     assert.equal(await page.locator('#bvbBetaPanelOpen').count(),0,'stable page must not include admin panel');
+     assert.equal(await page.evaluate(()=>typeof window.BVBBetaAdmin),'undefined');
+   }
+   await page.evaluate(()=>{startMatch(0);pick(0);});
    await page.waitForFunction(()=>typeof G!=='undefined'&&G?.ph==='battle'&&G?.bl?.length===2,{timeout:15000});
    await page.waitForFunction(()=>document.getElementById('bvbCombatHud')?.textContent.includes('❤️'),null,{timeout:15000});
    const state=await page.evaluate(()=>({
