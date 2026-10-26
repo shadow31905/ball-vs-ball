@@ -858,7 +858,8 @@ function shoot(o,foe,opts={}){
    owner:o.uid,team:o.team,id:o.b.id,damage:(opts.damage||o.baseDmg*.45)*(1+stage*.08)*Math.min(1,(opts.count||1)/count),ghost:!!opts.ghost,
    r:opts.r||4,life:opts.life||2.2,age:0,homing:(opts.homing||0)+stage*.18,bounces:(opts.bounces||0)+(abilityFor(o).kind==='arrow'?stage:0),
    healOnHit:(opts.healOnHit||0)*Math.min(1,(opts.count||1)/count),slow:opts.slow||0,poison:opts.poison||0,burn:opts.burn||0,stun:opts.stun||0,
-   knock:opts.knock||0,ricochetSplit:opts.ricochetSplit||0,color:opts.color||abilityData[o.b.id].color});
+   knock:opts.knock||0,ricochetSplit:opts.ricochetSplit||0,
+   starTrail:!!opts.starTrail,color:opts.color||abilityData[o.b.id].color});
  }
  if(st.shots.length>80)st.shots.splice(0,st.shots.length-80);
  visual(o,o,'charge',17,abilityData[o.b.id].color,.34);
@@ -1578,6 +1579,15 @@ function tick(dt){
     if(hitX)s.vx*=-1;
     if(hitY)s.vy*=-1;
     s.bounces--; // A corner counts as one bounce, not two.
+    if(s.id===43&&s.starTrail){
+     const owner=G.bl.find(o=>o.uid===s.owner&&alive(o));
+     if(owner){
+      zone(owner,clamp(s.x,18,342),clamp(s.y,18,342),
+        'shock',15,1.5,.31);
+      owner.v2StarTrails=(owner.v2StarTrails||0)+1;
+     }
+     s.starTrail=false;
+    }
     if(s.id===26&&s.ricochetSplit>0){
      const archer=G.bl.find(o=>o.uid===s.owner&&alive(o));
      const target=G.bl.find(o=>o.team!==s.team&&alive(o));
