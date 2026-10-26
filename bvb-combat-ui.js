@@ -96,6 +96,21 @@ class Recording{
  }
  export(){return {version:3,tickRate:60,kind:'state-deltas',meta:clone(this.meta),frames:this.frames,events:this.events,sounds:this.sounds};}
 }
+// Extends the visual replay timeline after the authoritative battle clock stops.
+// All extra frames are presentation snapshots; game G, damage and RNG stay intact.
+function captureFinisherTail(rec,g){
+ if(!rec||!g?.finisher||!Number.isFinite(g.rt))return 0;
+ const f=g.finisher;
+ if(!Number.isInteger(f.variant)||f.variant<0||f.variant>4||!Number.isFinite(f.life)||f.life<=0)return 0;
+ const count=Math.min(120,Math.floor(Math.min(f.life,Math.max(0,65-g.rt))*60+1e-6));
+ let added=0;
+ for(let frame=1;frame<=count;frame++){
+  const age=frame/60,visual={...g,rt:g.rt+age,finisher:{...f,age}};
+  if(!rec.capture(visual))break;
+  added++;
+ }
+ return added;
+}
 function validate(data){
  if(!data||data.version!==3||data.kind!=='state-deltas'||data.tickRate!==60||!Array.isArray(data.frames)||
     data.frames.length<1||data.frames.length>MAX_FRAMES||!Array.isArray(data.events)||data.events.length>MAX_EVENTS||
@@ -133,7 +148,7 @@ function stateAt(data,index){
  for(let i=k+1;i<=index;i++)state=data.frames[i].key?clone(data.frames[i].key):applyDelta(state,data.frames[i].delta);
  return state;
 }
-window.BVBReplayCodec={Recording,visualState,difference,applyDelta,stateAt,validate,escapeHTML,limits:{MAX_FRAMES,MAX_BYTES,MAX_EVENTS,MAX_SOUNDS}};
+window.BVBReplayCodec={Recording,captureFinisherTail,visualState,difference,applyDelta,stateAt,validate,escapeHTML,limits:{MAX_FRAMES,MAX_BYTES,MAX_EVENTS,MAX_SOUNDS}};
 })();
 /* BVB Combat Rework — spectator HUD, camera, playback and round statistics.
    Replays store every authoritative simulation step; no gameplay is re-simulated. */
@@ -224,17 +239,7 @@ function recordMusic(g,params){
 }
 function endRound(g,winner){
  captureStep(g);
- // The battle clock stops on K.O. Record a short presentation-only tail so
- // seeking, exporting and reopening a replay reproduces the SAME chosen scene,
- // without simulating extra attacks or mutating the authoritative game state.
- if(recording&&g.finisher&&Number.isInteger(g.finisher.variant)&&g.finisher.variant>=0&&g.finisher.variant<5){
-  const duration=Math.min(1.2,Math.max(0,Number(g.finisher.life)||0),Math.max(0,65-g.rt));
-  for(let frame=1;frame<=Math.floor(duration*60+1e-6);frame++){
-   const age=frame/60;
-   const visual={...g,rt:g.rt+age,finisher:{...g.finisher,age}};
-   if(!recording.capture(visual))break;
-  }
- }
+ codec.captureFinisherTail(recording,g);
  lastData=recording?.export()||lastData;lastReplay=lastData?.frames||[];recordingEnded=!!recording;decodeCache=null;
  const winnerActor=g.bl.find(o=>o.team===winner);
  g.reworkRoundStats={duration:g.rt,winner,
