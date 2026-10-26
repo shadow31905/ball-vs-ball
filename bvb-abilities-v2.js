@@ -189,10 +189,276 @@ getBallStats=function(id,...args){
  return st;
 };
 
+
+/*
+ * Per-ball V2/V3 combat upgrades for the 114 identities not covered by the
+ * initial 0–15 manual rework. Every listed ball retains its V1 skill.
+ * V2 introduces the first extra attack/support mechanic. V3 keeps and
+ * strengthens it AND adds a different second mechanic. Both are visible in
+ * real combat, not just in the preview. All effects are host authoritative.
+ */
+const authoredUpgrades=Object.freeze({
+ 16:['petBolt','guard'],
+ 17:['healing','slowField'],
+ 18:['sparkShot','shockField'],
+ 19:['slowField','venomShot'],
+ 20:['pierceShot','shockwave'],
+ 21:['shockShot','shockField'],
+ 22:['healing','healingShot'],
+ 23:['sparkShot','heavyShot'],
+ 24:['venomShot','venomField'],
+ 25:['thornField','venomShot'],
+ 26:['bounceShot','scatter'],
+ 27:['shockField','sparkShot'],
+ 28:['pushwave','echo'],
+ 29:['frostField','frostShot'],
+ 30:['pull','stun'],
+ 31:['venomField','venomShot'],
+ 32:['cleanse','scatter'],
+ 33:['shockwave','mineField'],
+ 34:['slowField','venomField'],
+ 35:['weaken','mineField'],
+ 36:['guard','pushwave'],
+ 37:['frostShot','lure'],
+ 38:['slowField','healing'],
+ 39:['stun','mineField'],
+ 40:['weaken','venomField'],
+ 41:['bounceShot','pierceShot'],
+ 42:['venomField','slowField'],
+ 43:['scatter','bounceShot'],
+ 44:['pushwave','guard'],
+ 45:['mirror','thornField'],
+ 46:['mineField','burnwave'],
+ 47:['guard','sparkShot'],
+ 48:['cleanse','healing'],
+ 49:['pierceShot','stun'],
+ 50:['scatter','frostField'],
+ 51:['ghostShot','guard'],
+ 52:['cleanse','mirror'],
+ 53:['sparkShot','healing'],
+ 54:['slowField','stun'],
+ 55:['ghostShot','stun'],
+ 56:['bounceShot','slowField'],
+ 57:['mineField','guard'],
+ 58:['pull','stun'],
+ 59:['fireField','burnwave'],
+ 60:['shockField','sparkShot'],
+ 61:['fireField','scatterFire'],
+ 62:['pushwave','slowField'],
+ 63:['scatter','sparkShot'],
+ 64:['echo','pushwave'],
+ 65:['pull','slowField'],
+ 66:['slowField','pull'],
+ 67:['mirror','sparkShot'],
+ 68:['drain','ghostShot'],
+ 69:['burnwave','guard'],
+ 70:['bounceShot','slowField'],
+ 71:['weaken','guard'],
+ 72:['burnwave','pushwave'],
+ 73:['slowField','venomShot'],
+ 74:['echo','sparkShot'],
+ 75:['pierceShot','shockwave'],
+ 76:['burnwave','fireField'],
+ 77:['scatter','mineField'],
+ 78:['ghostShot','cleanse'],
+ 79:['guard','mirror'],
+ 80:['pushwave','sparkShot'],
+ 81:['cleanse','guard'],
+ 82:['shockField','sparkShot'],
+ 83:['sparkShot','shockField'],
+ 84:['burnwave','fireField'],
+ 85:['slowField','pushwave'],
+ 86:['mineField','stun'],
+ 87:['sparkShot','shockField'],
+ 88:['frostField','frostShot'],
+ 89:['lure','ghostShot'],
+ 90:['ghostShot','weaken'],
+ 91:['lure','ghostShot'],
+ 92:['slowField','drain'],
+ 93:['pull','ghostShot'],
+ 94:['weaken','mineField'],
+ 95:['burnwave','frostShot'],
+ 96:['cleanse','guard'],
+ 97:['healing','fireField'],
+ 98:['pull','slowField'],
+ 99:['burnwave','fireField'],
+ 100:['venomField','healing'],
+ 101:['slowField','weaken'],
+ 102:['lure','guard'],
+ 103:['ghostShot','venomShot'],
+ 104:['healing','slowField'],
+ 105:['weaken','mineField'],
+ 106:['lure','mineField'],
+ 107:['sparkShot','scatterFire'],
+ 108:['pushwave','guard'],
+ 109:['pushwave','stun'],
+ 110:['guard','mirror'],
+ 111:['weaken','venomShot'],
+ 112:['burnwave','fireField'],
+ 113:['cleanse','guard'],
+ 114:['guard','pushwave'],
+ 115:['ghostShot','guard'],
+ 116:['mirror','weaken'],
+ 117:['slowField','venomField'],
+ 118:['ghostShot','pushwave'],
+ 119:['drain','weaken'],
+ 120:['echo','pushwave'],
+ 121:['frostField','ghostShot'],
+ 122:['ghostShot','weaken'],
+ 123:['venomField','venomShot'],
+ 124:['guard','mirror'],
+ 125:['scatter','slowField'],
+ 126:['ghostShot','guard'],
+ 127:['cleanse','venomField'],
+ 128:['pull','stun'],
+ 129:['frostField','scatter'],
+});
+const upgradeCaptions=Object.freeze({
+ petBolt:'pomocniczy elektryczny pocisk',
+ guard:'dodatkowa osłona wokół kulki',
+ healing:'dodatkowa regeneracja zdrowia',
+ sparkShot:'samocelująca elektryczna iskra',
+ shockField:'elektryczne pole rażące przeciwnika',
+ slowField:'pole spowolnienia przy przeciwniku',
+ venomShot:'zatruty pocisk szukający celu',
+ pierceShot:'pocisk przenikający przez przeszkody',
+ shockwave:'fala uderzeniowa',
+ healingShot:'pocisk leczniczy po trafieniu',
+ heavyShot:'ciężki pocisk z odrzutem',
+ venomField:'toksyczna strefa z obrażeniami',
+ thornField:'kolczasta pułapka przy przeciwniku',
+ bounceShot:'dodatkowy odbijający się pocisk',
+ scatter:'rozproszona salwa wielu pocisków',
+ pushwave:'rozszerzona fala z odrzutem',
+ echo:'opóźnione kolejne impulsy',
+ frostField:'mroźne pole spowalniające',
+ frostShot:'lodowy pocisk spowalniający',
+ pull:'silniejsze przyciągnięcie przeciwnika',
+ stun:'krótkie porażenie przeciwnika',
+ cleanse:'oczyszczenie z osłabień i tarcza',
+ mineField:'opóźniona mina na arenie',
+ lure:'dezorientacja i osłabienie ruchu rywala',
+ weaken:'czasowe osłabienie siły ataku',
+ mirror:'tarcza odwetowa na czas walki',
+ burnwave:'płomienna fala podpalająca',
+ ghostShot:'widmowy pocisk omijający przeszkody',
+ fireField:'płonący obszar trafień',
+ scatterFire:'wachlarz płonących pocisków',
+ drain:'dodatkowe wysysanie życia'
+});
+if(Object.keys(authoredUpgrades).length!==114)throw Error('114 authored V2/V3 profiles expected');
+function authoredUpgradeDescription(id,stage){
+ const actions=authoredUpgrades[id];
+ if(!actions||stage<1)return null;
+ const extra=stage===2?' oraz '+upgradeCaptions[actions[1]]:'';
+ return 'V'+(stage+1)+': '+upgradeCaptions[actions[0]]+extra+'; mocniejsze efekty aktywnej zdolności.';
+}
+function applyAuthoredUpgrade(o,foe){
+ const level=evolutionStage(o),profile=authoredUpgrades[o?.b?.id];
+ if(level===0||!profile||!foe||!alive(foe)||netRole==='guest')return;
+ const id=o.b.id,boost=level===2?1.28:1,unique=1+(id%5)*.04;
+ const accent=id>=99?'#d8b4fe':o.b.c;
+ function action(kind){
+  const color=kind.includes('frost')?'#a5f3fc':kind.includes('venom')?'#bef264':kind.includes('fire')||kind==='burnwave'||kind==='scatterFire'?'#fb923c':accent;
+  if(['petBolt','sparkShot','venomShot','pierceShot','healingShot','heavyShot','bounceShot','scatter','frostShot','ghostShot','scatterFire'].includes(kind)){
+   const options={damage:o.baseDmg*.18*boost*unique,speed:165,homing:.36,life:2.5,color};
+   if(kind==='petBolt'||kind==='sparkShot'){options.stun=.12;options.homing=.65;}
+   if(kind==='venomShot')options.poison=.78*boost;
+   if(kind==='pierceShot'||kind==='ghostShot'){options.ghost=true;options.homing=.3;}
+   if(kind==='healingShot')options.healOnHit=5*boost;
+   if(kind==='heavyShot'){options.knock=.24*boost;options.speed=125;}
+   if(kind==='bounceShot')options.bounces=2+level;
+   if(kind==='scatter'||kind==='scatterFire'){options.count=2;options.spread=.48;}
+   if(kind==='frostShot')options.slow=.7*boost;
+   if(kind==='scatterFire')options.burn=.65*boost;
+   shoot(o,foe,options);
+   return;
+  }
+  if(['shockField','slowField','venomField','thornField','mineField','frostField','fireField'].includes(kind)){
+   const name={shockField:'shock',slowField:'slime',venomField:'poison',thornField:'thorn',mineField:'mine',frostField:'frost',fireField:'fire'}[kind];
+   const center=kind==='thornField'?o:foe;
+   // Existing collision and status systems do the actual work; effects expire
+   // through the usual hazard lifecycle and are stored in replay snapshots.
+   zone(o,center.x,center.y,name,24+id%7,2.4+level*.25,.27*boost*unique);
+   return;
+  }
+  if(['shockwave','pushwave','burnwave'].includes(kind)){
+   const options={radius:kind==='shockwave'?115:kind==='pushwave'?120:108,
+    knock:kind==='pushwave'?.18*boost:0,burn:kind==='burnwave'?.6*boost:0,
+    stun:kind==='shockwave'?.12:0};
+   radial(o,foe,.19*boost*unique,options);
+   return;
+  }
+  if(kind==='guard'||kind==='mirror'||kind==='cleanse'){
+   o.status||={};
+   o.status.shield=Math.min(32,(o.status.shield||0)+5*boost*unique);
+   if(kind==='mirror')o.skillReflect=Math.max(o.skillReflect||0,1.25+level*.4);
+   if(kind==='cleanse'){
+    for(const key of ['poison','slow','burn','weaken'])o.status[key]=0;
+   }
+   visual(o,o,'shield',33*boost,color,.55);
+   return;
+  }
+  if(kind==='healing'){
+   o.hp=Math.min(o.mh,o.hp+5*boost*unique);
+   visual(o,o,'heal',32*boost,color,.55);
+   return;
+  }
+  if(kind==='pull'){
+   const distance=Math.hypot(o.x-foe.x,o.y-foe.y)||1;
+   if(distance<230){
+    const power=.29*boost*unique;
+    foe.vx=(foe.vx||0)+(o.x-foe.x)/distance*power;
+    foe.vy=(foe.vy||0)+(o.y-foe.y)/distance*power;
+    setStatus(o,foe,'slow',.4*boost);
+   }
+   visual(o,foe,'tether',39,color,.6);
+   return;
+  }
+  if(kind==='stun'||kind==='weaken'||kind==='lure'){
+   if(Math.hypot(foe.x-o.x,foe.y-o.y)<220){
+    setStatus(o,foe,kind==='stun'?'stun':kind==='weaken'?'weaken':'slow',kind==='stun'?.16:kind==='weaken'?1.0*boost:.6*boost);
+    if(kind==='lure'){
+     foe.aiTarget={vx:-(foe.vy||0),vy:foe.vx||0};
+     foe.aiDecisionClock=Math.max(foe.aiDecisionClock||0,.45*boost);
+    }
+   }
+   visual(o,foe,kind==='lure'?'mirage':'clock',40*boost,color,.6);
+   return;
+  }
+  if(kind==='drain'){
+   const distance=Math.hypot(o.x-foe.x,o.y-foe.y);
+   if(distance<175){
+    strike(o,foe,o.baseDmg*.18*boost*unique,{slow:.2});
+    o.hp=Math.min(o.mh,o.hp+3*boost*unique);
+   }
+   visual(o,foe,'tether',32*boost,color,.5);
+   return;
+  }
+  if(kind==='echo'){
+   // V3 includes more pulses: the standard tick() will trigger them later.
+   const pulses=1+level;
+   o.v2Echo={clock:.4,remaining:Math.max(o.v2Echo?.remaining||0,pulses),power:.18*boost*unique,radius:118};
+   visual(o,o,'ring',39*boost,color,.7);
+   return;
+  }
+  throw new Error('Unknown authored evolution '+kind);
+ }
+ // V3 retains the exact V2 action, strengthened, then adds a second identity
+ // upgrade. No additional gameplay rolls: finishing scene RNG is separate.
+ action(profile[0]);
+ if(level===2)action(profile[1]);
+ // A clearer tier-specific ring is presentation-only; changing reduced-motion
+ // settings may suppress it without suppressing the combat mechanics.
+ visual(o,o,'ring',level===2?48:31,accent,level===2?.75:.55);
+}
+
 const evolutionStage=o=>Math.max(0,Math.min(2,(o?.tier||1)-1));
 function evolutionDescription(id,tier=1){
  const kind=abilityData[id]?.kind,stage=Math.max(0,Math.min(2,tier-1));
  if(!stage)return 'V1: podstawowa wersja zdolności.';
+ const bespoke=authoredUpgradeDescription(id,stage);
+ if(bespoke)return bespoke;
  const labels={
  orbit:'więcej ostrzy, większa orbita i dłuższa aktywacja',
  web:'sieć dodatkowo spowalnia'+(stage===2?' i zatruwa':''),
@@ -501,6 +767,7 @@ function cast(o,foe){
  case 'pumpkin':radial(o,foe,.47,{radius:115,knock:.18});break;
  default:shoot(o,foe,{damage:o.baseDmg*.5,homing:.15});
  }
+ applyAuthoredUpgrade(o,foe);
  if(typeof snd==='function'&&o.b.id%5===0)snd(420+(o.b.id*19)%650,.11,'triangle',.018,180);
 }
 const oldSpecial=specialAbility;
@@ -800,5 +1067,5 @@ function identityPanel(id){
 }
 const originalBallDetail=openBallDetail;
 openBallDetail=function(id){originalBallDetail(id);const details=identityPanel(id);if(details)document.querySelector('#ovb')?.appendChild(details);};
-window.BVB2={abilities:abilityData,evolutionDescription,onContact,onWall,cooldown,prepareActors,afterLoad,drawOverlay,identityPanel};
+window.BVB2={abilities:abilityData,evolutionDescription,authoredUpgrades,onContact,onWall,cooldown,prepareActors,afterLoad,drawOverlay,identityPanel};
 })();
