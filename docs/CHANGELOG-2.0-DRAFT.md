@@ -12,7 +12,7 @@
 - Sześciu bossów z trzema fazami każdy (18 faz).
 - Ostrzeżenia obszarowe przed atakami bossów.
 - Prezentacja zwycięskiej kulki i efekty rozstrzygającego uderzenia.
-- Dodano w kodzie **pięć wizualnych wariantów finishera**, losowanych z równym prawdopodobieństwem 20% i zapisanych w stanie walki (commit c319624). **Niepotwierdzone jeszcze:** zgodność wariantu między klientami, dokładne odtworzenie w replayu i testy końcowe.
+- **Pięć wizualnych wariantów finishera** z niewidocznym wyborem 20% każdy. Wybrany wariant zapisuje się w stanie gry. Poprawiono położenie efektu z perspektywy gościa, jednorazowy dźwięk K.O., czyszczenie sceny w kolejnej rundzie i czas przejścia do wyniku. Dodano 72 klatki prezentacji końcowego trafienia do powtórki (bez symulowania kolejnych trafień). Testy automatyczne dodano, ale odbiór publicznego multiplayera i telefonów nie jest jeszcze potwierdzony.
 
 ## Menu i animacje
 - Nowe menu z czterema animowanymi kwadratowymi kategoriami.
@@ -30,7 +30,7 @@
 - Odtwarzanie zapisywanych stanów krok po kroku, w tym pozycji, pocisków, pól, statusów i efektów.
 - Zapis zdarzeń oraz ścieżek dźwiękowych i muzycznych.
 - Przewijanie, trwały zapis, import/eksport, kompresja gzip, oznaczanie niepełnych nagrań.
-- Obsługa starszych nagrań i walidacja importowanych danych. Pełna weryfikacja finisherów 5/5 **przed wydaniem**.
+- Obsługa starszych nagrań i walidacja importowanych danych, w tym uszkodzonych wariantów finishera. Testy sprawdzają ponowne odtworzenie wszystkich pięciu wariantów; odbiór w przeglądarkach i na fizycznych urządzeniach **przed wydaniem**.
 
 ## Multiplayer 1v1
 - Połączenie dwóch graczy przez WebRTC DataChannel, z walidacją/kolejnością pakietów i hashem stanu.
@@ -39,9 +39,9 @@
 
 ## Zapis, konto i beta
 - Walidacja i migracja lokalnych zapisów oraz bezpieczny import z kopią i rollbackiem.
-- Oddzielna beta z izolowanym profilem, narzędziami do ewolucji i wyłączonym kontem/chmurą.
+- Oddzielna beta z izolowanym profilem, narzędziami do ewolucji i wyłączonym kontem/chmurą. W GitHub Actions dodano archiwum bety oznaczone hashem commita (dostępne po zielonych testach, nie jest to publikacja na Pages).
 - Funkcje konta/chmury pozostają do odbioru przed stabilną publikacją.
-- Okno changelogu 2.0.1: automatyczne pokazanie najwyżej raz dla danej wersji i profilu przeglądarki, ponowne otwarcie ręcznie w ustawieniach.
+- Okno changelogu 2.0.1: automatyczne pokazanie najwyżej raz dla danej wersji i profilu przeglądarki, ponowne otwarcie ręcznie w ustawieniach. Beta i stabilna gra mają oddzielne znaczniki przeczytania listy.
 
 ## Warunki publikacji
 - Weryfikacja każdego elementu na aktualnym wydawanym commicie i uzupełnienie listy o wszystkie rzeczywiście skończone poprawki.
