@@ -14,7 +14,7 @@ const entries=[
 ['dash','Przebicie Włóczni','Szybka szarża kończy się mocnym odrzutem.'],
 ['dash','Rozbłysk Uderzenia','Energetyczna szarża tworzy falę uderzeniową.'],
 ['chess','Mat w Ruchu','Ruch szachowy z nagłym wyprowadzeniem ataku.'],
-['dice','Sześć Ścieżek','Losowa kostka zostawia strefę o jednym z sześciu efektów.'],
+['dice','Sześć Ścieżek','Rzut kostką daje jeden z sześciu efektów: pocisk, spowolnienie, tarczę, leczenie, ogień lub truciznę.'],
 ['frost','Lodowy Wachlarz','Odłamki lodu spowalniają wroga.'],
 ['beam','Ścienne Lasery','Dotknięcie ściany uruchamia krótki laser energetyczny.'],
 ['tail','Wężowy Ogon','Wydłużający się ogon odpycha i rani rywala.'],
@@ -370,7 +370,12 @@ function cast(o,foe){
     o.hp=Math.min(o.mh,o.hp+Math.min(9,o.baseDmg*.4)*(1+evolutionStage(o)*.15));}
   else dash(o,foe,.15);
   visual(o,o,'tether',25,d.color,.58);break;
- case 'dash':dash(o,foe,o.b.id===108&&lowHp?.6:.35, {shield:o.b.id===114?6:0});break;
+ case 'dash':
+  dash(o,foe,o.b.id===108&&lowHp?.6:.35,{shield:o.b.id===114?6:0});
+  // The light-ball's advertised impact wave must really hit nearby enemies,
+  // not merely recolor the standard dash. Evolutions widen the hit area.
+  if(o.b.id===9)radial(o,foe,.32,{radius:90,knock:.24});
+  break;
  case 'chess':
   o.vx=Math.abs(foe.x-o.x)>Math.abs(foe.y-o.y)?Math.sign(foe.x-o.x)||1:0;
   o.vy=o.vx===0?Math.sign(foe.y-o.y)||1:0;
