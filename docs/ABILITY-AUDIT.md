@@ -49,14 +49,14 @@ Nie przywracać usuniętego obowiązku **pełnego balansu** jako bramki wydania.
 
 | ID | Umiejętność | V2 — dodatkowa mechanika | V3 — dodana mechanika (zachowuje V2) |
 | --- | --- | --- | --- |
-| 16 | Kuźnia Pomocnika | pomocniczy elektryczny pocisk | dodatkowa osłona wokół kulki |
-| 17 | Podział Komórki | dodatkowa regeneracja zdrowia | pole spowolnienia przy przeciwniku |
-| 18 | Impuls Elektryczny | samocelująca elektryczna iskra | elektryczne pole rażące przeciwnika |
-| 19 | Strefa Nacisku | pole spowolnienia przy przeciwniku | zatruty pocisk szukający celu |
-| 20 | Promień Namierzający | pocisk przenikający przez przeszkody | fala uderzeniowa |
-| 21 | Siatka WDC | samocelująca elektryczna iskra | elektryczne pole rażące przeciwnika |
-| 22 | Złote Jabłko | dodatkowa regeneracja zdrowia | pocisk leczniczy po trafieniu |
-| 23 | Armata Ścienna | samocelująca elektryczna iskra | ciężki pocisk z odrzutem |
+| 16 | Kuźnia Pomocnika | pomocnik-kuźnia rozgrzewa się przy odbiciach i przyspiesza strzały | nagromadzone ciepło daje tarczę i pola elektryczne |
+| 17 | Podział Komórki | pączkowanie regeneruje cyklicznie HP i pozostawia szlam | awaryjna mitoza tworzy silniejsze nowe ciało oraz tarczę |
+| 18 | Impuls Elektryczny | przewodnik gromadzi ładunek, który ogłusza przy kontakcie | przeciążenie rozdziela się na pułapkę elektrostatyczną |
+| 19 | Strefa Nacisku | poruszająca się ze Strefą aura regularnie uderza i spowalnia | wir grawitacji przyciąga do aury i wzmacnia impuls |
+| 20 | Promień Namierzający | przewidujący ruch laser przebija przeszkody | opóźniony drugi promień pozostawia własny ślad i uderzenie |
+| 21 | Siatka WDC | środkowy węzeł cyfrowej siatki zyskuje narastający impuls | matryca zmienia wzór i zostawia cztery uzbrajane węzły |
+| 22 | Złote Jabłko | sad cyklicznie zbiera lecznicze owoce i wysyła nowy pocisk | złote jabłka zwiększają zbiory i zapewniają tarczę |
+| 23 | Armata Ścienna | ładunek baterii wzmacnia wieżyczkę przy odbiciach i dodaje pocisk | rykoszetujący pocisk zostawia uzbrajany wybuch |
 | 24 | Infekcja Wirusa | zatruty pocisk szukający celu | toksyczna strefa z obrażeniami |
 | 25 | Kolczasta Ściana | kolczasta pułapka przy przeciwniku | zatruty pocisk szukający celu |
 | 26 | Rykoszet Strzały | dodatkowy odbijający się pocisk | rozproszona salwa wielu pocisków |
@@ -171,3 +171,11 @@ Nie przywracać usuniętego obowiązku **pełnego balansu** jako bramki wydania.
 - Widoczność osobnych ulepszeń V2/V3 przy różnych ustawieniach efektów, w tym zmniejszonych animacjach, i poprawność replayów/multiplayera.
 - Testy na fizycznym Androidzie i iPhonie oraz publiczna synchronizacja 1v1, TURN i konta/chmura.
 
+
+### Indywidualne reworki mechanik, partia ID 16–23
+
+Poprzednie profile tych ośmiu kulek opierały się na przypisaniu gotowych efektów. Zastąpiono je **osobnymi automatami stanów i wyzwalaczami związanymi z pierwotnymi zdolnościami**: rozgrzewanie pomocnika przy ścianie, pączkowanie i wtórna mitoza, przechowywanie ładunku do kontaktu, ruchome pole ciśnienia, drugi promień, przełączanie siatki WDC, okresowe zbiory sadu oraz ładowanie wieżyczki. Efekty są rozliczane podczas autorytatywnej symulacji i zapisywane w stanie powtórki. Podglądy V2/V3 mają charakterystyczne diagramy zamiast wspólnego pierścienia.
+
+Testy: `tests/identity-rework-16-23.test.cjs` sprawdzają osiem mechanik po odbiciu, kolizji, cyklu lub odrodzeniu, a `tests/combat-browser-smoke.cjs` weryfikuje opisy i rysowanie. Naprawiono przy okazji podwójne trafienie dla stref `slow`.
+
+**Pozostałe 106 kulek ID 24–129 mają profile V2/V3, ale nadal bazują na kombinacjach wspólnych efektów.** Nie oznaczać ich jako ukończonych indywidualnych reworków — potrzebują osobnych mechanik powiązanych z każdą kulką.
