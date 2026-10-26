@@ -10,10 +10,18 @@ function peerOptions(config=window.BVBNetworkConfig||{}) {
     if(!item||typeof item!=='object')continue;
     const urls=Array.isArray(item.urls)?item.urls:[item.urls];
     if(!urls.length||urls.length>16||!urls.every(u=>typeof u==='string'&&u.length<=1024&&/^(stun|turn|turns):[^@\s]+$/.test(u)))continue;
-    servers.push({urls, ...(typeof item.username==='string'?{username:item.username}:{}),
-      ...(typeof item.credential==='string'?{credential:item.credential}:{})});
+    servers.push({urls,
+      ...(typeof item.username==='string'&&item.username.length<=256?{username:item.username}:{}),
+      ...(typeof item.credential==='string'&&item.credential.length<=2048?{credential:item.credential}:{})});
   }
-  return {config:{iceServers:servers,iceTransportPolicy:config.relayOnly?'relay':'all'}};
+  // STUN cannot forward media/data when a network demands relay candidates.
+  // Fail visibly before room creation instead of hanging on an impossible
+  // peer connection with relayOnly but no TURN/ TURNS server.
+  if(config.relayOnly===true&&!servers.some(s=>{
+    const urls=Array.isArray(s.urls)?s.urls:[s.urls];
+    return urls.some(u=>typeof u==='string'&&/^turns?:/i.test(u));
+  }))throw new Error('Tryb TURN-only wymaga aktywnego serwera TURN. Sprawdź konfigurację ICE.');
+  return {config:{iceServers:servers,iceTransportPolicy:config.relayOnly===true?'relay':'all'}};
 }
 async function refreshIce(config=window.BVBNetworkConfig||{}) {
   if(!config.credentialsUrl)return peerOptions(config);
