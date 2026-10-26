@@ -54,6 +54,28 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      await page.locator('#trainingBalls .training-ball').tap();
      await page.waitForFunction(()=>G?.ph==='battle'&&G.bl[0].tier===3&&G.bl[1].tier===2);
      const blades=await page.evaluate(()=>{specialAbility(G.bl[0],G.bl[1]);return G.bl[0].axeOrbit.blades;});assert.equal(blades,5,'V3 Topor must actually create five blades');
+     // Portrait -> landscape -> portrait should preserve combat state and
+     // leave game/controls usable on a resized mobile viewport.
+     const portrait=await page.evaluate(()=>({matchId:G.matchId,round:G.rn,mode:G.m}));
+     await page.setViewportSize({width:700,height:390});
+     await page.waitForTimeout(120);
+     const landscape=await page.evaluate(()=>{
+       const canvas=document.getElementById('cv').getBoundingClientRect();
+       const actions=document.getElementById('bvbCombatControls').getBoundingClientRect();
+       return {viewport:innerWidth,scroll:document.documentElement.scrollWidth,
+        canvasWidth:canvas.width,controlsWidth:actions.width,phase:G.ph,
+        matchId:G.matchId,round:G.rn,mode:G.m};
+     });
+     assert.ok(landscape.canvasWidth<=landscape.viewport+2,'landscape canvas exceeds viewport');
+     assert.ok(landscape.scroll<=landscape.viewport+4,'landscape horizontal overflow');
+     assert.ok(landscape.controlsWidth<=landscape.viewport+4,'landscape controls overflow');
+     assert.equal(landscape.matchId,portrait.matchId,'rotation must not restart the match');
+     assert.equal(landscape.round,portrait.round);
+     assert.equal(landscape.mode,portrait.mode);
+     await page.setViewportSize({width,height:760});
+     await page.waitForTimeout(120);
+     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+4),
+       'portrait layout must recover after rotation');
      assert.deepEqual(errors,[]);
      await ctx.close();
    }
