@@ -1431,6 +1431,25 @@ function tick(dt){
   h.age+=dt;h.life-=dt;h.cooldown-=dt;
   if(h.kind==='doom'&&h.age<(h.armAt||0)){const target=G.bl.find(o=>o.uid===h.targetUid&&alive(o));if(target){h.x=target.x;h.y=target.y;}}
   if(h.kind==='train'){h.x+=(h.vx||0)*dt;h.y+=(h.vy||0)*dt;}
+  // Train rails are placed at the positions actually crossed by its wheels.
+  if(h.kind==='train'&&h.v2RailTrain>0&&h.life>0){
+   h.v2RailClock=(h.v2RailClock||0)-dt;
+   if(h.v2RailClock<=0){
+    const conductor=G.bl.find(o=>o.uid===h.owner&&alive(o));
+    if(conductor)zone(conductor,clamp(h.x,14,346),clamp(h.y,14,346),
+      h.v2RailTrain===2?'shock':'slow',15,1.5,.28);
+    h.v2RailClock+=h.v2RailTrain===2?.18:.28;
+   }
+  }
+  if(h.kind==='gas'&&h.v2Drifting>0){
+   h.x=clamp(h.x+(h.vx||0)*dt,16,344);
+   h.y=clamp(h.y+(h.vy||0)*dt,16,344);
+   if(h.v2Drifting===2&&!h.v2Condensed&&h.life<=.2){
+    h.v2Condensed=true;
+    const owner=G.bl.find(o=>o.uid===h.owner&&alive(o));
+    if(owner)zone(owner,h.x,h.y,'poison',30,2.6,.46);
+   }
+  }
   if(h.kind==='train'&&(h.x<-25||h.x>W+25||h.y<-25||h.y>W+25))h.life=0;
   if(h.life<=0)continue;
   const summoner=G.bl.find(o=>o.uid===h.owner&&alive(o));
@@ -1454,6 +1473,50 @@ function tick(dt){
   else if(h.kind==='fire'||h.kind==='sun')strike(owner,foe,3*h.power,{burn:.8});
   else if(h.kind==='mine'||h.kind==='doom'||h.kind==='train')strike(owner,foe,7*h.power,{knock:.28,stun:h.id===39?.3:0});
   else strike(owner,foe,3*h.power,{knock:h.kind==='zone'?.1:0});
+  // Extra effects originate from confirmed hazard hits. V3 produces a
+  // distinct consequence instead of doubling a generic power multiplier.
+  if(h.v2Grave&&!h.v2Activated){
+   h.v2Activated=true;
+   setStatus(owner,foe,'weaken',.9);
+   foe.v2Haunted={owner:owner.uid,next:.36,remaining:h.v2Grave===2?3:2,level:h.v2Grave};
+   if(h.v2Grave===2){
+    const next=zone(owner,clamp(foe.x+38,17,343),clamp(foe.y+14,17,343),
+       'mine',21,3,.3);
+    if(next)next.armAt=.55;
+   }
+  }
+  if(h.v2Shackle&&!h.v2Activated){
+   h.v2Activated=true;
+   foe.v2Shackled={owner:owner.uid,next:.22,remaining:h.v2Shackle===2?3:2,level:h.v2Shackle};
+   setStatus(owner,foe,'stun',h.v2Shackle===2?.33:.2);
+  }
+  if(h.v2Acid){
+   setStatus(owner,foe,'weaken',.75+h.v2Acid*.15);
+   const old=foe.v2Corrosion?.owner===owner.uid?foe.v2Corrosion?.stacks||0:0;
+   foe.v2Corrosion={owner:owner.uid,stacks:Math.min(4,old+1),next:.4,remaining:2.3};
+   if(h.v2Acid===2&&!h.v2Overflow){
+    h.v2Overflow=true;
+    for(const side of [-1,1])zone(owner,clamp(h.x+side*40,16,344),
+     clamp(h.y+side*16,16,344),'poison',20,2.3,.28);
+   }
+  }
+  if(h.v2SlimeDivision&&!h.v2Activated){
+   h.v2Activated=true;
+   for(const side of [-1,1])zone(owner,clamp(h.x+side*26,16,344),
+     clamp(h.y-side*16,16,344),'slime',14,2,.25);
+   visual(owner,foe,'growth',32,abilityData[38].color,.5);
+  }
+  if(h.v2Bomb&&!h.v2Activated){
+   h.v2Activated=true;h.life=0;
+   zone(owner,h.x,h.y,'shock',h.v2Bomb===2?38:28,1.4,.45);
+   if(h.v2Bomb===2){
+    for(const [dx,dy] of [[-34,0],[34,0],[0,34]]){
+     const child=zone(owner,clamp(h.x+dx,16,344),clamp(h.y+dy,16,344),
+      'mine',16,2,.3);
+     if(child)child.armAt=.35;
+    }
+   }
+  }
   if(h.id===40)setStatus(owner,foe,'weaken',.5);
   h.cooldown=h.kind==='mine'||h.kind==='doom'||h.kind==='echo'?99:.62;
  }
