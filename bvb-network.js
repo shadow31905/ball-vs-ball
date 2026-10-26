@@ -70,7 +70,7 @@ function mirror(value) {
   for(const [key,v] of Object.entries(value)){
     if(['__proto__','constructor','prototype'].includes(key))continue;
     if(key==='y'&&value.kind==='rect'&&Number.isFinite(v)&&Number.isFinite(value.h))out[key]=360-v-value.h;
-    else if(['y','y1','y2','py','_lastY','targetY'].includes(key)&&Number.isFinite(v))out[key]=360-v;
+    else if(['y','y1','y2','py','_lastY','targetY','fromY','toY'].includes(key)&&Number.isFinite(v))out[key]=360-v;
     else if(['vy','dy','spin','angle','rotation','angularVelocity'].includes(key)&&Number.isFinite(v))out[key]=-v;
     else if(key==='team'&&[0,1].includes(v))out[key]=1-v;
     else out[key]=mirror(v);
