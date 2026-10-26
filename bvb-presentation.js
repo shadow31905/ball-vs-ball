@@ -19,7 +19,7 @@ function chooseVariant(random=Math.random){
 function finish(g,winner){
  if(!g||!Array.isArray(g.bl)||![0,1].includes(winner)||g.finisher)return;
  const victor=g.bl.find(o=>o.team===winner&&o.b),loser=g.bl.find(o=>o.team!==winner&&o.b);
- if(!victor||!loser||![victor.x,victor.y,loser.x,loser.y].every(Number.isFinite))return;
+ if(!victor||!loser||!(victor.hp>0)||!(loser.hp<=0)||![victor.x,victor.y,loser.x,loser.y].every(Number.isFinite))return;
  // No game RNG and no change to the winner, rewards, HP or ongoing damage.
  const variant=chooseVariant();
  g.finisher={x:loser.x,y:loser.y,fromX:victor.x,fromY:victor.y,
