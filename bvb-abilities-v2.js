@@ -780,7 +780,34 @@ function onContact(g,o,foe,base){
   o.status.shield=Math.min(32,(o.status.shield||0)+1.5);
   visual(o,foe,'shard',23,abilityData[25].color,.4);
  }
- if(o.b.id===44){o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);base+=Math.min(3,[0,1,1,2,3,5,8][o.v2FibHit]*.5);}
+ if(o.b.id===44){
+  o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);
+  const fib=[0,1,1,2,3,5,8][o.v2FibHit];
+  base+=Math.min(3,fib*.5); // Preserve original V1 sequence.
+  if(evolutionStage(o)>0&&o.v2FibActiveUntil>g.rt){
+   const stage=evolutionStage(o);
+   base+=fib*(stage===2?.42:.28);
+   o.v2SequenceHits=(o.v2SequenceHits||0)+1;
+   if(stage===2&&o.v2GoldenSpiral&&o.v2SequenceHits%3===0){
+    radial(o,foe,.22+fib*.018,{radius:80+fib*3,knock:.11});
+    o.status.shield=Math.min(32,(o.status.shield||0)+2);
+    o.v2GoldenPulses=(o.v2GoldenPulses||0)+1;
+   }
+  }
+ }
+ if(o.b.id===45&&evolutionStage(o)>0&&o.v2ArmorUntil>g.rt&&
+   g.rt>=(o.v2ArmorNext||0)){
+  const level=evolutionStage(o);
+  o.v2ArmorNext=g.rt+.35; // A single real contact cannot multi-trigger.
+  strike(o,foe,o.baseDmg*(.12+level*.08),{poison:level===2?.3:0});
+  o.v2ArmorCounters=(o.v2ArmorCounters||0)+1;
+  if(level===2&&o.v2LivingArmor){
+   o.status.shield=Math.min(32,(o.status.shield||0)+2);
+   shoot(o,foe,{count:1,damage:o.baseDmg*.1,
+    spread:.3,speed:170,bounces:1,color:'#e5e7eb'});
+  }
+  visual(o,foe,'shard',27,abilityData[45].color,.55);
+ }
  return base;
 }
 
