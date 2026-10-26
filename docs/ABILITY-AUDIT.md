@@ -65,22 +65,22 @@ Nie przywracać usuniętego obowiązku **pełnego balansu** jako bramki wydania.
 | 29 | Ślad Szronu | podczas ruchu zostawia strefy mrozu w odwiedzanych miejscach | lodowy tor o silniejszym spowolnieniu i krótkim porażeniu |
 | 30 | Żelazny Harpun | utrzymuje kotwicę i wielokrotnie przyciąga przypiętego rywala | mocniejsze szarpnięcie końcowe z ogłuszeniem |
 | 31 | Rój Obrońców | ul przechwytuje wrogie pociski i cyklicznie wysyła obrońców | królowa zapewnia tarczę, więcej przechwyceń i dodatkowy rój |
-| 32 | Alchemiczny Rzut | oczyszczenie z osłabień i tarcza | rozproszona salwa wielu pocisków |
-| 33 | Widmowy Pociąg | fala uderzeniowa | opóźniona mina na arenie |
-| 34 | Czarna Pajęczyna | pole spowolnienia przy przeciwniku | toksyczna strefa z obrażeniami |
-| 35 | Grób Cieni | czasowe osłabienie siły ataku | opóźniona mina na arenie |
-| 36 | Lot Światła | dodatkowa osłona wokół kulki | rozszerzona fala z odrzutem |
-| 37 | Cukierkowa Burza | lodowy pocisk spowalniający | dezorientacja i osłabienie ruchu rywala |
-| 38 | Żywy Szlam | pole spowolnienia przy przeciwniku | dodatkowa regeneracja zdrowia |
-| 39 | Łańcuch Kajdan | krótkie porażenie przeciwnika | opóźniona mina na arenie |
-| 40 | Żrąca Kałuża | czasowe osłabienie siły ataku | toksyczna strefa z obrażeniami |
-| 41 | Świetlne Soczewki | dodatkowy odbijający się pocisk | pocisk przenikający przez przeszkody |
-| 42 | Trująca Mgła | toksyczna strefa z obrażeniami | pole spowolnienia przy przeciwniku |
-| 43 | Trzy Gwiazdy | rozproszona salwa wielu pocisków | dodatkowy odbijający się pocisk |
-| 44 | Ciąg Fibonacciego | rozszerzona fala z odrzutem | dodatkowa osłona wokół kulki |
-| 45 | Naturalny Pancerz | tarcza odwetowa na czas walki | kolczasta pułapka przy przeciwniku |
-| 46 | Opóźniony Wybuch | opóźniona mina na arenie | płomienna fala podpalająca |
-| 47 | Orbita Satelitów | dodatkowa osłona wokół kulki | samocelująca elektryczna iskra |
+| 32 | Alchemiczny Rzut | reagenty tworzą rzeczywisty katalizator zależny od losowego eliksiru | mieszanka reaguje dodatkowym opóźnionym impulsem |
+| 33 | Widmowy Pociąg | jadący pociąg zostawia na arenie uszkadzające tory | widmowy ekspres przejeżdża drugą trasą |
+| 34 | Czarna Pajęczyna | odbicia o przeciwległe ściany napinają dodatkową nić | pajęczyna zamienia się w zatrutą kratownicę |
+| 35 | Grób Cieni | uzbrojony grób nakłada na ofiarę okresowe nawiedzenie | nawiedzenie zostawia dodatkowe groby |
+| 36 | Lot Światła | szarża zostawia uderzający powidok światła | echo powraca trasą lotu i odrzuca rywala |
+| 37 | Cukierkowa Burza | pociski losują smak i odpowiedni efekt statusu | cukierki krystalizują się w dodatkową eksplozję |
+| 38 | Żywy Szlam | ruch kulki tworzy lepkie rozrastające się pąki | pąki dzielą się na odrębne trujące kałuże |
+| 39 | Łańcuch Kajdan | uzbrojona mina zakłada okresowo przyciągające kajdany | łańcuch wraca silniejszym szarpnięciem i ogłuszeniem |
+| 40 | Żrąca Kałuża | kontakt z kwaśną kałużą nakłada narastającą korozję | trafienie powoduje przelanie się kwasu do kolejnej kałuży |
+| 41 | Świetlne Soczewki | odbicie uruchamia dodatkową ukośną wiązkę | dwie wiązki przecinają się nad areną |
+| 42 | Trująca Mgła | trująca chmura przemieszcza się podczas walki | gaz skrapla się w nowym aktywnym obłoku |
+| 43 | Trzy Gwiazdy | gwiazdy krążą i po chwili odpalają salwę | rykoszetujące gwiazdy zostawiają elektryczne ślady |
+| 44 | Ciąg Fibonacciego | kolejne trafienia rozwijają bonus z ciągu Fibonacciego | co trzecie trafienie uwalnia spiralny impuls |
+| 45 | Naturalny Pancerz | kontakt aktywuje kolczasty kontratak | żywy pancerz wysyła odłamki i przyznaje osłonę |
+| 46 | Opóźniony Wybuch | odliczający ładunek wywołuje realny impuls | detonacja rozdziela się na kolejne uzbrojone miny |
+| 47 | Orbita Satelitów | krążące satelity okresowo ostrzeliwują przeciwnika | satelity przechwytują pociski i wzmacniają tarczę |
 | 48 | Błysk Medyka | oczyszczenie z osłabień i tarcza | dodatkowa regeneracja zdrowia |
 | 49 | Promień Prawdy | pocisk przenikający przez przeszkody | krótkie porażenie przeciwnika |
 | 50 | Pęknięcie Szkła | rozproszona salwa wielu pocisków | mroźne pole spowalniające |
@@ -178,10 +178,18 @@ Poprzednie profile tych ośmiu kulek opierały się na przypisaniu gotowych efek
 
 Testy: `tests/identity-rework-16-23.test.cjs` sprawdzają osiem mechanik po odbiciu, kolizji, cyklu lub odrodzeniu, a `tests/combat-browser-smoke.cjs` weryfikuje opisy i rysowanie. Naprawiono przy okazji podwójne trafienie dla stref `slow`.
 
-**Pozostałe 98 kulek ID 32–129 nadal ma profile V2/V3 bazujące na kombinacjach wspólnych efektów.** Nie oznaczać ich jako ukończonych indywidualnych reworków — potrzebują osobnych mechanik powiązanych z każdą kulką.
+**Pozostałe 82 kulki ID 48–129 nadal mają profile V2/V3 bazujące na kombinacjach wspólnych efektów.** Nie oznaczać ich jako ukończonych indywidualnych reworków — potrzebują osobnych mechanik powiązanych z każdą kulką.
 
 ### Indywidualny rework ID 24–31 i wyniki testów
 
 Kolejne osiem kulek otrzymało osobne mechaniki wyzwalane **zakażeniem przy kontakcie, odbiciem od ścian, rozdzieleniem pocisku po rykoszecie, opóźnionym wyładowaniem, kolejnymi falami, rzeczywistym przemieszczaniem się po arenie, utrzymanym hakiem i przechwytywaniem wrogich pocisków**. Każda ma dwa odróżnialne poziomy V2/V3 i osobny podgląd. Testy: `tests/identity-rework-24-31.test.cjs` i dodatkowo obrazy podglądów wszystkich 8 kulek w `tests/combat-browser-smoke.cjs`. W pierwszych testach wykryto trzy błędne asercje chwilowego stanu; poprawiono je i wprowadzono liczniki faktycznych zdarzeń. WebKit ujawnił założenie testu przycisku kamery — też poprawione. Pełny raport: `docs/QA-REPORT-2026-10-26.md`.
 
 **Postęp indywidualnych reworków:** 32 z 130 kulek z własnymi mechanikami, **98 do dalszej przebudowy**. Testy rzeczywistych sieci i telefonów wciąż nie są zakończone.
+
+### Indywidualny rework ID 32–47 — szesnaście kulek
+
+Rozbudowano każdą z szesnastu kulek o **oryginalny emblemat SVG**, osobny szkic jej podstawowej zdolności V1 i unikalne podglądy V2/V3. Nowe mechaniki obejmują m.in. katalizatory alchemiczne, szkodliwe tory, sieć na ścianach, klątwy min, świetlne echa, zróżnicowane cukierki, pączkujący szlam, żywe kajdany, korozję, laserowe soczewki, wędrujący gaz, gwiazdy, serię Fibonacciego, odwet pancerza, wielostopniową bombę i satelity. To rzeczywiste obiekty, statusy, kolizje i opóźnione efekty, nie samo zwiększenie obrażeń.
+
+Testy: `tests/identity-rework-32-47.test.cjs` (16 scenariuszy V2/V3), `tests/identity-v1-32-47.test.cjs` (każda zdolność V1 w stanie silnika), `tests/ball-art-32-47.test.cjs` (unikalny SVG) i ekranowe porównania V1/V2/V3 w Chromium, Firefox, WebKit. Pełny przebieg [40385626598](https://github.com/shadow31905/ball-vs-ball/actions/runs/40385626598) ma wszystkie cztery zadania **PASS** dla commita `49ab497f`. Szczegółowy opis [BALL-REWORK-32-47-QA.md](BALL-REWORK-32-47-QA.md).
+
+**Postęp: 48/130 kulek (36,9%) z indywidualnym reworkiem, pozostało 82 (ID 48–129).** Nadal konieczny fizyczny odbiór telefonu i sieci przed publikacją.
