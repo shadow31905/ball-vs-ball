@@ -5,7 +5,7 @@
 ## Kulki, umiejętności i ewolucje
 - 130 ręcznie zdefiniowanych pasywek i superumiejętności.
 - 130 aktywnych zdolności, z osobnymi zachowaniami i efektami.
-- Zakończono etap kodowania indywidualnych ulepszeń aktywnych umiejętności **V2/V3 dla wszystkich pozostałych 114 kulek (ID 16–129)**. V2 daje nowy efekt w symulacji walki, a V3 zachowuje i wzmacnia V2, dokładając drugi. Pierwsze 16 umiejętności zachowano. Dodano 342 testowe aktywacje, rozróżnialne schematy podglądów V1/V2/V3, statyczne podglądy dla ograniczonych animacji i rzeczywiste opisy nadchodzących ewolucji w kolekcji. Raport i lista wszystkich 114 ulepszeń: `docs/ABILITY-AUDIT.md`. Nadal wymagana jest pełna weryfikacja zachowań w długich walkach.
+- Zaimplementowano nowe profile V2/V3 dla 114 kulek ID 16–129 (342 testowe aktywacje), ale **106 profili nadal bazuje na kombinacjach wspólnych mechanik**. Osiem kulek ID 16–23 przebudowano dodatkowo indywidualnie: kuźnia pomocnika, mitoza, ładunek Elektryka, poruszająca się Strefa, opóźniony Promień, matryca WDC, sad Jabłka i naładowana Armata. V3 rozwija zachowanie V2 oraz dodaje własny efekt. Dodano osobne testy ścian/kontaktu/odrodzenia/efektów cyklicznych, podglądy przypisane ośmiu zdolnościom i poprawiono błąd podwójnego trafienia strefy spowolnienia. Pierwszych 16 kulek nie zmieniano. Raport `docs/ABILITY-AUDIT.md`. Dalsze **106 indywidualnych reworków i pełny audyt długich walk** pozostają otwarte.
 - Warianty ewolucji V1, V2 i V3; dodatkowe pociski, ostrza, pola, statusy, modyfikacje zasięgu/czasu, oczyszczanie i przywołania.
 - Podglądy zdolności oraz opisy w interfejsie; pełna zgodność każdej zdolności z opisem **wymaga audytu**.
 
