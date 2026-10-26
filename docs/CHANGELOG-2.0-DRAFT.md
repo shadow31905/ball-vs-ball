@@ -39,7 +39,8 @@
 
 ## Zapis, konto i beta
 - Walidacja i migracja lokalnych zapisów oraz bezpieczny import z kopią i rollbackiem.
-- Oddzielna beta z izolowanym profilem, narzędziami do ewolucji i wyłączonym kontem/chmurą. W GitHub Actions dodano archiwum bety oznaczone hashem commita (dostępne po zielonych testach, nie jest to publikacja na Pages).
+- Oddzielna beta z izolowanym profilem, narzędziami do ewolucji i wyłączonym kontem/chmurą.
+- **Tylko beta:** nowy panel testowy (administrator lokalnego profilu beta), w którym można ustawić dowolną bezpieczną liczbę monet i cukierków, odblokować wszystkie 130 kulek, nadać V1/V2/V3 jednej lub wszystkim kulkom i otworzyć trening z wybranym wariantem. Panel nie jest ładowany przez stabilne `index.html` i nie ma dostępu do kont/chmury. W GitHub Actions dodano archiwum bety oznaczone hashem commita (dostępne po zielonych testach, nie jest to publikacja na Pages).
 - Funkcje konta/chmury pozostają do odbioru przed stabilną publikacją.
 - Okno changelogu 2.0.1: automatyczne pokazanie najwyżej raz dla danej wersji i profilu przeglądarki, ponowne otwarcie ręcznie w ustawieniach. Beta i stabilna gra mają oddzielne znaczniki przeczytania listy.
 
