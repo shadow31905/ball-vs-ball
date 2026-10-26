@@ -56,6 +56,21 @@ function validState(s) {
   if([s.pb,s.bb].some(b=>b!=null&&!ball(b)))return false;
   if(!Array.isArray(s.bl)||s.bl.length>2||!s.bl.every(o=>ball(o.b)&&[o.x,o.y,o.vx,o.vy,o.hp,o.mh,o.r].every(Number.isFinite)&&[0,1].includes(o.team)&&o.r>0&&o.r<=80&&o.mh>0&&Math.abs(o.x)<=1000&&Math.abs(o.y)<=1000&&Math.abs(o.vx)<=1000&&Math.abs(o.vy)<=1000&&o.status&&typeof o.status==='object'&&!Array.isArray(o.status)))return false;
   if(!Number.isFinite(s.rt)||s.rt<0||s.rt>65)return false;
+  if(s.finisher!=null){
+    const f=s.finisher;
+    // A remote host can choose the scene, but may not send a malformed
+    // cinematic that breaks guest rendering or changes the replay timeline.
+    if(typeof f!=='object'||Array.isArray(f)||
+       !Number.isInteger(f.variant)||f.variant<0||f.variant>4||
+       ![f.x,f.y,f.fromX,f.fromY,f.age,f.life].every(Number.isFinite)||
+       [f.x,f.y,f.fromX,f.fromY].some(v=>v< -360||v>720)||
+       f.life<=0||f.life>3||f.age<0||f.age>f.life+1e-6||
+       !Number.isInteger(f.winnerId)||f.winnerId<0||f.winnerId>=130||
+       typeof f.color!=='string'||!/^#[0-9a-f]{3,8}$/i.test(f.color)||
+       (f.winnerName!==undefined&&(typeof f.winnerName!=='string'||f.winnerName.length>36))||
+       (f.loserColor!==undefined&&(typeof f.loserColor!=='string'||!/^#[0-9a-f]{3,8}$/i.test(f.loserColor))))
+      return false;
+  }
   const caps={pr:96,z:48,fx:200,rings:64,pop:64,obstacles:12,events:100,lightning:16};
   for(const [key,max] of Object.entries(caps))if(s[key]!=null&&(!Array.isArray(s[key])||s[key].length>max))return false;
   const v=s.v2;
