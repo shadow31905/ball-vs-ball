@@ -1,11 +1,12 @@
 # Ball VS Ball 2.0 — status reworku
 
-Gałąź: `rework/combat-3-foundation`, PR #1. Stabilny punkt wejścia na `main` nie jest scalany przed spełnieniem bramki wydania. Beta jest oddzielną paczką w `/beta/`, z osobnym zapisem i wyłączoną chmurą.
+Gałąź: `rework/combat-3-foundation`, PR #1. Stabilny punkt wejścia na `main` nie jest scalany przed spełnieniem bramki wydania. Na prośbę użytkownika **beta przestała być publiczną stroną**: folder `beta/` usunięto z `main` w commicie `75ad553`. Kolejne testy bety odbywają się wyłącznie na tymczasowym serwerze CI z izolowanym zapisem i wyłączoną chmurą; nie wystawiać wersji beta przez GitHub Pages. Repozytorium źródłowe pozostaje publiczne, więc nie stanowi poufnego środowiska dla kodu.
 
 W kodzie zaimplementowano:
 
 - 130 jawnie zaprojektowanych pasywek i superumiejętności; testy wykonują wszystkie receptury i sprawdzają osobno ich unikalność.
 - 130 aktywnych zdolności i rzeczywiste ulepszenia V2/V3: pociski, ostrza, zasięg, statusy, pola, oczyszczanie i pomocnicy. Testy porównują 390 wariantów przy identycznym HP/DMG bazowym.
+- Wykonano nowy etap audytu rzeczywistych zachowań **pierwszych 16 kulek** (0–15): testy `tests/ability-audit-01-08.test.cjs`, `tests/ability-audit-09-16.test.cjs`, raport `docs/ABILITY-AUDIT.md`. Poprawiono rzeczywisty efekt odrzutu kulki 8, falę obrażeń kulki 9 oraz opis losowań kulki 11. Zielony CI obecnej gałęzi wymagany przed uznaniem audytu za zatwierdzony. Pozostałych 114 kulek nie oznaczać jako zaudytowanych.
 - 6 bossów × 3 autorskie fazy, sygnalizowane obszary ataków, działające również w Boss Rush i kampanii.
 - 5 profili AI, uniki pocisków i zagrożeń, kontrola statusów, tarcie, spin, stabilizacja fizyki i hash stanu obejmujący stan zdolności.
 - Odtworzenie każdego kroku walki z bezstratnymi deltami, zdarzeniami, dźwiękami i muzyką; import/eksport, gzip, zapis i odczyt po odświeżeniu. To odtwarzanie zapisanych stanów, nie ponowna symulacja; nagrania mogą zostać oznaczone jako niepełne po wyczerpaniu limitu pamięci. Wygląd i wyjście audio zależą od przeglądarki.
@@ -17,7 +18,7 @@ W kodzie zaimplementowano:
 - Obsługa opcjonalnego TURN i informacja o wybranej trasie; brak aktywnych poświadczeń TURN w repozytorium.
 - Walidacja, migracja i transakcyjny import lokalnego zapisu z kopią oraz wycofaniem błędu. Nie jest to ochrona anty-cheat.
 - Pakowanie niezależnej bety, kontrola zależności i izolacji zapisu. **Wyłącznie w paczce beta** działa testowy panel administratora: ustawienie dowolnej bezpiecznej liczby monet/cukierków, odblokowanie wszystkich 130 kulek oraz wybór rzeczywistej ewolucji V1/V2/V3 dla jednej lub wszystkich kulek, z szybkim przejściem do treningu. Panel korzysta wyłącznie z klucza `bvb_beta_rework_v4`, bez konta/chmury. Główna strona nie importuje pliku `bvb-beta-tools.js`; dodatkowe warunki w module i builderze zapobiegają przypadkowemu włączeniu panelu na stabilnej stronie. Jest to panel testowy lokalnego profilu, bez uprawnień serwerowych.
-- **Najnowsza beta została opublikowana** osobno pod https://shadow31905.github.io/ball-vs-ball/beta/ ze źródła runtime `e75dac5a38983db282320e72336d9ff2ce23cfc4`, commit main `1cca3a2` dotyczy tylko `beta/`. Weryfikacja CI na źródle: https://github.com/shadow31905/ball-vs-ball/actions/runs/40348171228 (Chromium, Firefox, WebKit, testy jednostkowe, testowane warianty K.O. i panel). Pages: https://github.com/shadow31905/ball-vs-ball/actions/runs/40350864030 i test paczki opublikowanej: https://github.com/shadow31905/ball-vs-ball/actions/runs/40350865783 — oba zakończone sukcesem. Wszystkie pozostałe pliki main, w tym stabilny `index.html`, zostały zachowane bez zmian. Nie jest to premiera stabilna.
+- **Beta prywatna w sensie braku publicznego adresu WWW:** historyczne wdrożenie bety `1cca3a2` zostało cofnięte przez usunięcie katalogu z `main` (`75ad553`, Pages 40352277451: sukces). Po przejściowym publicznym wdrożeniu dalsze paczki są budowane tylko na CI runnerach, bez publikacji folderu i bez publikowania artefaktu z wykonywalną paczką. GitHub repo jest publiczne; dla prawdziwego ograniczenia dostępu do kodu potrzebne byłoby osobne repo prywatne. Stabilne pliki gry pozostają nienaruszone.
 
 - Rozbudowano jednorazowo wyświetlany changelog 2.0.1 o pełniejszy wykaz funkcji reworku i dodano testy zachowania po ponownym wejściu; robocza dokumentacja: `docs/CHANGELOG-2.0-DRAFT.md`. Przy finalnej premierze zaktualizować wykaz wyłącznie o potwierdzone zmiany oraz wersję komunikatu.
 
@@ -29,4 +30,4 @@ Balans ma jawną tabelę 130 współczynników, opartą na tysiącach walk. Po z
 
 ## Bramka wydania
 
-Pozostałe warunki opisano w `docs/RELEASE-GATE.md`. Nie oznaczać całego reworku jako ukończonego i nie scalać do stabilnego `main`, jeśli testy najnowszego kodu, fizyczne urządzenia i odbiór sieciowy pozostają niepotwierdzone. Publikacja samej bety nie jest finalną premierą.
+Pozostałe warunki opisano w `docs/RELEASE-GATE.md`. Nie oznaczać całego reworku jako ukończonego i nie scalać do stabilnego `main`, jeśli testy najnowszego kodu, fizyczne urządzenia i odbiór sieciowy pozostają niepotwierdzone. Tymczasowa beta jest testowana w CI, bez publicznego adresu. Publiczny adres /beta/ jest wycofany; końcowa publikacja dotyczy wyłącznie stabilnej gry.
