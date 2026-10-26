@@ -21,7 +21,7 @@
     return m.slice(0,160) || 'Wystąpił błąd połączenia.';
   };
   let db=null,user=null,profileNick='',profileReady=false,cloudSave=null,cloudActive=false;
-  let notice='',guestChoice=false,syncTimer=null,syncBusy=false,syncAfter=false,activeFlush=null,gateView='welcome',authSerial=0;
+  let notice='',guestChoice=false,syncTimer=null,syncBusy=false,syncAfter=false,activeFlush=null,activeFlushOwner=null,activeFlushSession=-1,gateView='welcome',authSerial=0;
   function info(s){notice=s;const p=$('#accountMessage');if(p)p.textContent=s;}
   function refresh(){if($('#pn')?.dataset.panel==='account' && !$('#pn').hidden) renderAccount();}
   function gateMessage(s){const p=$('#gateMessage');if(p)p.textContent=s||'';}
@@ -123,7 +123,16 @@
     if(!cloudActive||!user||!profileReady||!db)return false;
     // A second request must wait for the in-flight save; on logout we cannot
     // sign out before the first database operation has finished.
-    if(syncBusy){syncAfter=true;return activeFlush||false;}
+    if(syncBusy){
+      syncAfter=true;
+      const previous=activeFlush,owner=activeFlushOwner,session=activeFlushSession;
+      const outcome=previous?await previous:false;
+      // Account A's upload cannot stand in for Account B's newly selected
+      // local save, even when both actions were initiated during one request.
+      if((owner!==user?.id||session!==authSerial)&&cloudActive&&user&&profileReady)
+        return flush();
+      return outcome;
+    }
     syncBusy=true;
     const accountId=user.id,session=authSerial;
     const current=()=>authSerial===session&&user?.id===accountId&&cloudActive&&profileReady;
@@ -153,9 +162,9 @@
         if(syncAfter){syncAfter=false;if(current())scheduleSave();}
       }
     })();
-    activeFlush=task;
+    activeFlush=task;activeFlushOwner=accountId;activeFlushSession=session;
     try{return await task;}
-    finally{if(activeFlush===task)activeFlush=null;}
+    finally{if(activeFlush===task){activeFlush=null;activeFlushOwner=null;activeFlushSession=-1;}}
   }
   async function useLocal(){
     if(!user||!profileReady)return;
