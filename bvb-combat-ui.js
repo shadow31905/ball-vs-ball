@@ -3,7 +3,7 @@
    browser rendering. Old 10 Hz v2 recordings remain readable as legacy snapshots. */
 (() => {
 'use strict';
-const MAX_FRAMES=3702, MAX_BYTES=32*1024*1024, MAX_EVENTS=8192, MAX_SOUNDS=8192;
+const MAX_FRAMES=3930, MAX_BYTES=32*1024*1024, MAX_EVENTS=8192, MAX_SOUNDS=8192;
 const unsafe=new Set(['__proto__','prototype','constructor']);
 const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function clone(value,depth=0){
@@ -113,7 +113,7 @@ function captureFinisherTail(rec,g){
  if(!rec||!g?.finisher||!Number.isFinite(g.rt))return 0;
  const f=g.finisher;
  if(!Number.isInteger(f.variant)||f.variant<0||f.variant>4||!Number.isFinite(f.life)||f.life<=0)return 0;
- const count=Math.min(120,Math.floor(Math.min(f.life,Math.max(0,65-g.rt))*60+1e-6));
+ const count=Math.min(180,Math.floor(Math.min(f.life,Math.max(0,65-g.rt))*60+1e-6));
  let added=0;
  for(let frame=1;frame<=count;frame++){
   const age=frame/60,visual={...g,rt:g.rt+age,finisher:{...f,age}};
