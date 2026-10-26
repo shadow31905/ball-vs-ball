@@ -121,3 +121,26 @@ test('guest mirrors coordinates but keeps exactly the host finisher variant',()=
   assert.equal(guest.bl[1].team,0);
  }
 });
+
+test('corrupt imported finishing variants and coordinates are rejected, old style-only recordings still load',()=>{
+ const c=codec();
+ const legacy=match();delete legacy.finisher.variant;
+ const old=new c.Recording();old.capture(legacy);
+ assert.equal(c.validate(JSON.parse(JSON.stringify(old.export()))).frames.length,1);
+ for(const changed of [{variant:5},{variant:-1},{fromY:Infinity},{age:-1},{age:6}]){
+  const g=match(0);
+  Object.assign(g.finisher,changed);
+  const record=new c.Recording();
+  assert.throws(()=>record.capture(g),/animacja końcowego uderzenia/);
+ }
+});
+test('random interval boundaries choose the expected scene',()=>{
+ for(let i=0;i<5;i++){
+  const testValues=[i/5,Math.min(.999999999,(i+1)/5-1e-8)];
+  for(const value of testValues){
+   const g=match();delete g.finisher;
+   presentation(value).finish(g,0);
+   assert.equal(g.finisher.variant,i);
+  }
+ }
+});
