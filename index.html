@@ -620,7 +620,7 @@
         </button>
         <div class="grid-2">
           <button class="b" id="bbBtn" onclick="startMatch(3)">Boss Rush (0)</button>
-          <button class="b" onclick="startMatch(4)">Trening</button>
+          
         </div>
         <div class="grid-2">
           <button class="b" onclick="startMatch(5)">Chaos</button>
@@ -2092,6 +2092,7 @@ function setp(p) {
       ${tg('nd', 'Liczby obrażeń na arenie')}
       ${tg('sk', 'Drgania ekranu przy trafieniu')}
       ${tg('vb', 'Wibracje telefonu')}
+      ${window.BVBMotion?.settingsHtml?.()||''}
       <div class="grid-2" style="margin-top:10px">
         <button class="b ac" onclick="exportSaveModal()">📤 Eksportuj zapis</button>
         <button class="b ac" onclick="importSaveModal()">📥 Importuj zapis</button>
@@ -3033,7 +3034,7 @@ function over() {
   win ? SFX.win() : SFX.lose();
   $('#ov').hidden = false;
   $('#ovb').innerHTML = `
-    <h2>${win ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2>${G.m === 11 ? `<p style="margin:8px 0">Boss: ${esc(BOSSD[G.bossIndex || 0].n)}</p>` : ''}
+    <h2>${win ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2>${window.BVBMotion?.resultBalls?.(G,win)||''}${G.m === 11 ? `<p style="margin:8px 0">Boss: ${esc(BOSSD[G.bossIndex || 0].n)}</p>` : ''}
     <p style="color:var(--mu);margin:10px 0">${G.m === 12 ? 'Mecz towarzyski online' : `+${coinEarned} 🪙 · +${candyEarned} 🍬`}</p>
     <p>${esc(window.BVBModes?.summary?.(G)||'')}</p>
     ${window.BVBReworkUI?.victoryStats?.(G) || ''}
@@ -3135,6 +3136,7 @@ function draw() {
     const im = window.BVBArtEvolution?.imageFor?.(o) || window.BVB2Sheet02?.imageFor?.(o) || ART_IMAGES.get(o.b.id);
     if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
+    window.BVBMotion?.drawActor?.(cx,o,G);
 
     cx.shadowBlur = 0;
     if (o.status.shield > 0) {
@@ -3214,6 +3216,7 @@ requestAnimationFrame(loop);
 <script src="./bvb-abilities-v2.js"></script>
 <script src="./bvb-art-preview-02.js"></script>
 <script src="./bvb-art-evolution.js"></script>
+<script src="./bvb-motion-results.js"></script>
 <script src="./bvb-identities.js"></script>
 <script src="./bvb-network.js"></script>
 <script src="./bvb-balance.js"></script>
@@ -3223,7 +3226,7 @@ requestAnimationFrame(loop);
 <script src="./bvb-preview-v2.js"></script>
 <script src="./bvb-ui-v2.js"></script>
 <script src="./bvb-main-menu-v3.js"></script>
-<script src="./bvb-training.js"></script>
+
 <script src="./bvb-presentation.js"></script>
 <script src="./bvb-changelog-v3.js"></script>
 </body>
