@@ -39,6 +39,68 @@ function play(id){
   if(img?.complete&&img.naturalWidth)ctx.drawImage(img,x-r,y-r,r*2,r*2);
   else circle(x,y,r,B[ball]?.c||'#fff');
  }
+ // Sixteen different V1 skill silhouettes in the collection.
+ // They illustrate the original ability, NOT its locked V2/V3 additions.
+ function drawV1Signature32(id,t,ox,oy,ex,ey,color){
+  ctx.save();ctx.globalAlpha=.48+.30*t;ctx.strokeStyle=color;ctx.lineWidth=2;
+  const x=ox+33+t*120,y=oy,sp=Math.sin(t*Math.PI);
+  if(id===32){
+   for(let j=0;j<3;j++)circle(x+j*14,y+(j%2?11:-11),3+j,color);
+  }else if(id===33){
+   glowingLine(ox+20,oy+21,ex-20,ey+21,2,color,.65);
+   for(let j=0;j<5;j++)glowingLine(ox+25+j*32,oy+15,ox+25+j*32,oy+27,2,color,.7);
+  }else if(id===34){
+   glowingLine(ox+16,oy-22,ex-18,ey+27,2,color,.7);
+   glowingLine(ox+16,oy+22,ex-18,ey-27,2,color,.7);
+   for(let j=0;j<4;j++)circle(ox+40+j*31,y,2,color);
+  }else if(id===35){
+   ctx.beginPath();ctx.arc(ex,ey+9,23,Math.PI,Math.PI*2);ctx.stroke();
+   glowingLine(ex-22,ey+9,ex+22,ey+9,2,color,.8);
+   circle(ex,ey+7,5,color);
+  }else if(id===36){
+   for(let j=0;j<4;j++)glowingLine(ox+23-j*10,oy+8-j*7,
+    ox+30+j*11,oy-15-j*4,2,color,.6);
+  }else if(id===37){
+   for(let j=0;j<5;j++)circle(ox+34+j*30,oy+(j%2?-12:12),4+j%3,
+    ['#f9a8d4','#fde68a','#86efac','#a5f3fc','#c4b5fd'][j]);
+  }else if(id===38){
+   for(let j=0;j<5;j++)circle(ox+22+j*30,oy+16+j%2*7,8-j%3*2,color);
+  }else if(id===39){
+   for(let j=0;j<5;j++){const xx=ox+27+j*31;
+    ctx.beginPath();ctx.ellipse(xx,y,j%2?7:11,j%2?11:7,Math.PI/4,0,Math.PI*2);ctx.stroke();}
+  }else if(id===40){
+   for(let j=0;j<4;j++)circle(ex-28+j*18,ey+19,8+j%2*4,color);
+   circle(ex,ey-15+5*t,3,color);
+  }else if(id===41){
+   glowingLine(ox+21,oy-4,ex-30,13,4,color,.6);
+   glowingLine(ex-30,13,ex+9,ey,3,color,.7);
+   ctx.strokeRect(ex-37,5,13,16);
+  }else if(id===42){
+   for(let j=0;j<5;j++)circle(ex-40+j*18,ey-8+Math.sin(j+t)*14,15,color);
+  }else if(id===43){
+   for(let j=0;j<3;j++){
+    const a=j*2*Math.PI/3+t*2;
+    circle(ox+Math.cos(a)*38,oy+Math.sin(a)*34,6,color);
+   }
+  }else if(id===44){
+   ctx.beginPath();ctx.moveTo(ox+23,oy+30);
+   ctx.bezierCurveTo(ox+52,oy-34,ox+94,oy+32,ox+116,oy-3);ctx.stroke();
+   for(const a of [13,21,34,55])circle(ox+23+a*1.3,oy+18-a*.35,2,color);
+  }else if(id===45){
+   ctx.beginPath();ctx.arc(ox,oy,28+sp*5,0,Math.PI*2);ctx.stroke();
+   for(let j=0;j<7;j++){const a=j*Math.PI*2/7;
+    glowingLine(ox+Math.cos(a)*27,oy+Math.sin(a)*27,
+      ox+Math.cos(a)*38,oy+Math.sin(a)*38,2,color,.8);}
+  }else if(id===46){
+   circle(ex,ey,18,color);glowingLine(ex,ey,ex+12*sp,ey-10,2,'#fff',.8);
+   for(let j=0;j<4;j++)circle(ex-14+j*9,ey-30,1.5,color);
+  }else if(id===47){
+   ctx.beginPath();ctx.ellipse(ox,oy,40,20,Math.PI/5,0,Math.PI*2);ctx.stroke();
+   circle(ox+34*Math.cos(t*4),oy+19*Math.sin(t*4),5,color);
+   circle(ox-34*Math.cos(t*4),oy-19*Math.sin(t*4),5,color);
+  }
+  ctx.restore();
+ }
  function drawEvolvedEffect(action,layer,t,ox,oy,ex,ey){
   // Schematycznie pokazuje faktyczny typ nowego obiektu/statusu, nie udaje
   // identycznego przebiegu trafienia. Warstwa V3 ma osobny motyw.
@@ -380,6 +442,7 @@ function play(id){
      circle(ox+Math.cos(angle)*27,oy+Math.sin(angle)*27,4,color);
     }
   }
+  if(id>=32&&id<=47&&phase>.35)drawV1Signature32(id,t,ox,oy,ex,ey,color);
   if(authored&&evolution>=2&&phase>.48){
    drawEvolvedEffect(authored[0],1,t,ox,oy,ex,ey);
    if(evolution>=3)drawEvolvedEffect(authored[1],2,t,ox,oy,ex,ey);
