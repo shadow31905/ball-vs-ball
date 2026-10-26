@@ -63,7 +63,7 @@ test('11: chess movement uses a cardinal axis, attacks nearby, and evolutions ad
   }return r;
  })()`);
  assert.ok(out.every(x=>x.vx===1&&x.vy===0&&x.damage>0));
- assert.deepEqual(Array.from(out,x=>x.shots),[0,1,2]);
+ assert.deepEqual(Array.from(out,x=>x.shots),[0,2,4]); // shoot() adds the evolution stage to requested projectiles.
 });
 
 test('12: every side of the die performs its described real effect',()=>{
