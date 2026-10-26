@@ -109,9 +109,9 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
        'V1 collection panel must describe the actual V2 ability upgrade');
      assert.ok(previews[1].detail.includes('kowadło piorunowe'),
        'V2 collection panel must describe the actual V3 ability upgrade');
-     // All eight new identity-specific abilities must also LOOK distinct in
-     // V1, V2 and V3, with a deterministic still frame under reduced motion.
-     for(let id=24;id<=31;id++){
+     // Twenty-four identity-specific upgrades (24–47) must also be
+     // visually distinct in V1, V2 and V3 with reduced motion enabled.
+     for(let id=24;id<=47;id++){
        const variants=[];
        for(const tier of [1,2,3]){
          await page.evaluate(([ball,t])=>{S.tr[ball]=t;openBallDetail(ball);},[id,tier]);
