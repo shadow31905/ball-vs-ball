@@ -92,15 +92,14 @@ test('Lightning Crown: V2 builds two wall pylons; V3 adds four pylons and delaye
   specialAbility(o,foe);
   BVB2.onWall(o,'left');
   const pylons=G.v2.hazards.filter(h=>h.kind==='shock').length;
-  const before=G.v2.shots.length;
   timeline(.55);
-  r.push({tier,pylons,shotsAdded:G.v2.shots.length-before,
+  r.push({tier,pylons,boltsFired:o.v2CrownFired||0,
     armed:!!o.v2CrownArmed});
  }return r;
  `);
  assert.ok(results[1].pylons>results[0].pylons);
  assert.ok(results[2].pylons>results[1].pylons);
- assert.ok(results[2].shotsAdded>results[1].shotsAdded,'V3 delayed bolt must really fire');
+ assert.ok(results[2].boltsFired>results[1].boltsFired,'V3 delayed bolt must really fire, even if it already hit the enemy');
 });
 test('Growing Range: real travelling pulse rings hit new ranges; V3 returns pulling inward',()=>{
  const result=play(`
@@ -144,9 +143,9 @@ test('Harpoon: V2 maintains a real reeling anchor; V3 pulls harder and stuns on 
  for(let tier=1;tier<=3;tier++){
   const [o,foe]=personalCase(30,tier,105);
   specialAbility(o,foe);
-  const anchor=o.v2HarpAnchor?{...o.v2HarpAnchor}:null,oldX=foe.vx;
+  const anchor=o.v2HarpAnchor,oldX=foe.vx;
   timeline(1.7);
-  r.push({tier,anchor,pulses:anchor?anchor.pulses:0,
+  r.push({tier,anchor:anchor?{level:anchor.level}:null,pulses:anchor?.pulses||0,
    pulled:oldX-foe.vx,stun:foe.status.stun||0});
  }
  return r;
@@ -168,8 +167,10 @@ test('Guardian Bees: real intercepts and V3 queen colony shoots extra defenders'
      px:o.x+25+n*3,py:o.y,life:1,age:0,team:foe.team,owner:foe.uid,
      id:0,r:3,homing:0,bounces:0,damage:1,color:'#ffffff'});
   }
-  timeline(.25);
-  r.push({tier,hive,remaining:o.v2Hive?.intercepts||0,
+  step(1/60); // Assert interception before normal projectile hits expire.
+  const blocks=o.v2HiveBlocks||0;
+  timeline(.24);
+  r.push({tier,hive,remaining:o.v2Hive?.intercepts||0,blocks,
    enemyShots:G.v2.shots.filter(s=>s.team===foe.team).length,
    allyShots:G.v2.shots.filter(s=>s.team===o.team).length,
    shield:o.status.shield||0});
@@ -178,8 +179,9 @@ test('Guardian Bees: real intercepts and V3 queen colony shoots extra defenders'
  `);
  assert.equal(rows[0].hive,null);
  assert.ok(rows[1].hive?.intercepts===1&&rows[2].hive?.intercepts===2);
- assert.ok(rows[1].enemyShots<rows[0].enemyShots);
- assert.ok(rows[2].enemyShots<rows[1].enemyShots);
+ assert.equal(rows[0].blocks,0);
+ assert.equal(rows[1].blocks,1,'V2 must intercept one real hostile projectile');
+ assert.equal(rows[2].blocks,2,'V3 must intercept two real hostile projectiles');
  assert.ok(rows[2].allyShots>rows[1].allyShots);
  assert.ok(rows[2].shield>rows[1].shield);
 });
