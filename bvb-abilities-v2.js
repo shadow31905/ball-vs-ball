@@ -214,22 +214,22 @@ const authoredUpgrades=Object.freeze({
  29:['frostFootprints','iceTrail'],
  30:['harpoonAnchor','harpoonReel'],
  31:['hiveGuard','queenSwarm'],
- 32:['cleanse','scatter'],
- 33:['shockwave','mineField'],
- 34:['slowField','venomField'],
- 35:['weaken','mineField'],
- 36:['guard','pushwave'],
- 37:['frostShot','lure'],
- 38:['slowField','healing'],
- 39:['stun','mineField'],
- 40:['weaken','venomField'],
- 41:['bounceShot','pierceShot'],
- 42:['venomField','slowField'],
- 43:['scatter','bounceShot'],
- 44:['pushwave','guard'],
- 45:['mirror','thornField'],
- 46:['mineField','burnwave'],
- 47:['guard','sparkShot'],
+ 32:['alchemistCatalyst','volatileMixture'],
+ 33:['ghostRail','phantomExpress'],
+ 34:['widowStrands','venomLattice'],
+ 35:['graveBait','hauntingChain'],
+ 36:['lightAfterimage','prismaticReturn'],
+ 37:['candyFlavors','sugarCrystal'],
+ 38:['slimeBudding','slimeDivision'],
+ 39:['shackleTrap','shackleEcho'],
+ 40:['acidCorrosion','acidOverflow'],
+ 41:['lensPrism','lensCrossfire'],
+ 42:['gasDrift','gasCondensation'],
+ 43:['orbitingStars','cometSplinter'],
+ 44:['fibonacciSequence','goldenSpiral'],
+ 45:['thornRetaliation','livingArmor'],
+ 46:['timerCharge','clusterDetonation'],
+ 47:['satelliteLasers','satelliteIntercept'],
  48:['cleanse','healing'],
  49:['pierceShot','stun'],
  50:['scatter','frostField'],
@@ -346,6 +346,38 @@ const upgradeCaptions=Object.freeze({
  harpoonReel:'ostatnie silne szarpnięcie ogłusza cel',
  hiveGuard:'pszczoły zatrzymują wrogie pociski i kontratakują',
  queenSwarm:'królowa roju wypuszcza dodatkowe roje i tarczę',
+ alchemistCatalyst:'eliksir pozostawia katalizator zależny od wylosowanego składnika',
+ volatileMixture:'składniki mieszają się, tworząc dodatkową reakcję łańcuchową',
+ ghostRail:'pociąg pozostawia po sobie rzeczywiste, uszkadzające tory',
+ phantomExpress:'równoległy pociąg widmo przecina dodatkową trasę',
+ widowStrands:'drugi odcinek pajęczyny napina się na przejściu między ścianami',
+ venomLattice:'powstała kratownica wielokrotnie przenosi zatrucie',
+ graveBait:'cień znaczy minę i usypia czujność rywala',
+ hauntingChain:'trafienie uruchamia kolejne widmowe groby',
+ lightAfterimage:'szarża zostawia świetlnego sobowtóra',
+ prismaticReturn:'pozostawione echo wraca po trasie lotu i odrzuca',
+ candyFlavors:'pociski słodyczy losują smaki z innymi statusami',
+ sugarCrystal:'krystalizujące cukierki wybuchają we wtórny wir',
+ slimeBudding:'poruszający się szlam tworzy rozrastające się pąki',
+ slimeDivision:'pąki pękają na mniejsze toksyczne kałuże',
+ shackleTrap:'mina kajdan zakłada krótkotrwały łańcuch na ofiarę',
+ shackleEcho:'łańcuch wraca i ponownie ogłusza ofiarę',
+ acidCorrosion:'kwaśna kałuża nakłada narastające osłabienie pancerza',
+ acidOverflow:'kałuża rozlewa się dalej po trafieniu',
+ lensPrism:'odbity promień zostawia drugą, ukośną linię soczewki',
+ lensCrossfire:'przecięte soczewki tworzą drugi krzyżujący się laser',
+ gasDrift:'chmura gazu przesuwa się po arenie zamiast stać w miejscu',
+ gasCondensation:'zagęszczenie chmury tworzy nowe toksyczne jądro',
+ orbitingStars:'gwiazdy krążą i zmieniają pozycję przed odpaleniem',
+ cometSplinter:'gwiazdy dzielą się po odbiciu od ściany',
+ fibonacciSequence:'kolejne trafienia ładują rzeczywisty ciąg Fibonacciego',
+ goldenSpiral:'nagromadzone ładunki wyzwalają spiralny impuls',
+ thornRetaliation:'pancerz reaguje na kontakt kolczastym kontratakiem',
+ livingArmor:'wyrastające kolce przyznają osłonę i wystrzeliwują odłamki',
+ timerCharge:'ładunek odlicza przed prawdziwym wybuchem',
+ clusterDetonation:'wybuch dzieli się na dodatkowe zapalniki',
+ satelliteLasers:'satelity okresowo ostrzeliwują rywala po orbicie',
+ satelliteIntercept:'satelity osłaniają kulkę i przechwytują nadlatujące pociski',
  petBolt:'pomocniczy elektryczny pocisk',
  guard:'dodatkowa osłona wokół kulki',
  healing:'dodatkowa regeneracja zdrowia',
@@ -488,11 +520,94 @@ function applySignatureEvolution(o,foe,level){
   visual(o,o,'orbit',36+level*5,color,.7);
  }
 }
+// Batch 32–47: individually authored mechanics. Unlike the fallback
+// profiles, every signature uses identity-specific combat state and triggers.
+function applySignatureEvolution32(o,foe,level){
+ const id=o.b.id,st=roundState(),color=abilityData[id].color;
+ if(id===32){ // Alchemist: three reagents, not a flat extra attack.
+  const roll=Math.floor((window.BVBRework?.random?.()??Math.random())*3);
+  o.v2Catalyst={roll,level,remaining:1.4+level*.35};
+  if(roll===0)zone(o,foe.x,foe.y,'fire',25,2,.35);
+  else if(roll===1)zone(o,foe.x,foe.y,'frost',25,2,.35);
+  else{o.hp=Math.min(o.mh,o.hp+3*level);zone(o,o.x,o.y,'slime',19,2,.25);}
+  if(level===2)o.v2Volatile={next:.44,roll,remaining:2};
+  visual(o,foe,'dice',36,color,.65);
+ }else if(id===33){ // Ghost Train: moving trains leave dangerous rail sleepers.
+  o.v2Rail={remaining:2.5+level*.5,next:.17,level};
+  if(level===2)o.v2Express={next:.4,remaining:2,level};
+  visual(o,o,'train',42,color,.65);
+ }else if(id===34){ // Black spider: only real opposite-wall bounces make strands.
+  o.v2WidowUntil=G.rt+4+level*.7;
+  o.v2WidowLattice=level===2;
+  visual(o,o,'web',40,color,.65);
+ }else if(id===35){ // Haunted grave: each armed grave has its own afterlife.
+  const h=zone(o,foe.x,foe.y,'mine',25,4.4,.55);
+  if(h){h.v2Grave=level;h.armAt=.5;}
+  visual(o,foe,'shadow',40,color,.7);
+ }else if(id===36){ // Light flight: afterimage preserves real starting point.
+  const origin=o.v2LightOrigin||{x:o.x,y:o.y};
+  o.v2LightEcho={x:origin.x,y:origin.y,level,next:.2,remaining:1.6+level*.4};
+  if(level===2)o.v2PrismaticReturn={next:.48,remaining:1,from:{x:origin.x,y:origin.y}};
+  visual(o,origin,'blink',40,color,.7);
+ }else if(id===37){ // Candies: flavor-specific effects in real projectiles.
+  const flavors=['frost','sour','spark'];
+  const flavor=flavors[Math.floor((window.BVBRework?.random?.()??Math.random())*flavors.length)];
+  o.v2CandyFlavor=flavor;
+  shoot(o,foe,{count:1,damage:o.baseDmg*.18,slow:flavor==='frost'?.75:0,
+   poison:flavor==='sour'?.65:0,stun:flavor==='spark'?.13:0,
+   homing:.35,spread:.42,color:flavor==='sour'?'#bef264':flavor==='frost'?'#a5f3fc':'#fde047'});
+  if(level===2)o.v2SugarCrystal={next:.45,remaining:2,flavor};
+  visual(o,foe,'shard',35,color,.65);
+ }else if(id===38){ // Live slime: organic buds grow only as owner moves.
+  o.v2SlimeBud={remaining:3+level*.5,next:.13,lastX:o.x,lastY:o.y,level};
+  if(level===2)o.status.shield=Math.min(32,(o.status.shield||0)+3);
+  visual(o,o,'growth',40,color,.75);
+ }else if(id===39){ // Chains: an armed mine actually ties the victim on hit.
+  const h=zone(o,foe.x,foe.y,'mine',23,4.2,.44);
+  if(h){h.v2Shackle=level;h.armAt=.48;}
+  visual(o,foe,'tether',38,color,.65);
+ }else if(id===40){ // Acid: original puddle, with a tracked corrosion process.
+  const h=zone(o,foe.x,foe.y,'poison',31,3.4,.38);
+  if(h)h.v2Acid=level;
+  visual(o,foe,'zone',37,color,.65);
+ }else if(id===41){ // Wall lens must be produced on a real wall, not cast.
+  o.v2LensUntil=G.rt+3.5+level*.5;
+  o.v2LensCrossfire=level===2;
+  visual(o,o,'beam',38,color,.65);
+ }else if(id===42){ // Gas: the cloud drifts and eventually condenses.
+  const h=zone(o,foe.x,foe.y,'gas',37,3.5,.38);
+  if(h){h.v2Drifting=level;h.vx=level===2?42:27;h.vy=level===2?-19:-12;h.v2Condensed=false;}
+  visual(o,foe,'zone',43,color,.75);
+ }else if(id===43){ // Stars: orbital charge followed by a triad.
+  o.v2Stars={next:.3,remaining:level===2?3:2,level};
+  visual(o,o,'orbit',39,color,.75);
+ }else if(id===44){ // Fibonacci: contact gains numbers from the sequence.
+  o.v2FibActiveUntil=G.rt+4+level*.5;
+  o.v2GoldenSpiral=level===2;
+  o.v2FibHit=0;
+  visual(o,o,'clock',40,color,.72);
+ }else if(id===45){ // Reactive thorn armor: a genuine collision counter.
+  o.v2ArmorUntil=G.rt+3.5+level*.5;
+  o.v2ArmorNext=0;
+  o.v2LivingArmor=level===2;
+  if(level===2)o.status.shield=Math.min(32,(o.status.shield||0)+5);
+  visual(o,o,'shield',40,color,.65);
+ }else if(id===46){ // Delayed bomb: track and split the actual blast.
+  const h=zone(o,foe.x,foe.y,'mine',29,4.6,.68);
+  if(h){h.v2Bomb=level;h.armAt=level===2?.6:.95;}
+  visual(o,foe,'clock',42,color,.7);
+ }else if(id===47){ // Satellites: orbit mechanics, firing and intercepting.
+  o.v2Satellites={next:.18,remaining:2.3+level*.45,level,intercepts:level===2?2:0};
+  if(level===2)o.status.shield=Math.min(32,(o.status.shield||0)+2);
+  visual(o,o,'orbit',42,color,.75);
+ }
+}
 function applyAuthoredUpgrade(o,foe){
  const level=evolutionStage(o),profile=authoredUpgrades[o?.b?.id];
  if(level===0||!profile||!foe||!alive(foe)||netRole==='guest')return;
  const id=o.b.id,boost=level===2?1.28:1,unique=1+(id%5)*.04;
  if(id>=16&&id<=31){applySignatureEvolution(o,foe,level);return;}
+ if(id>=32&&id<=47){applySignatureEvolution32(o,foe,level);return;}
  const accent=id>=99?'#d8b4fe':o.b.c;
  function action(kind){
   const color=kind.includes('frost')?'#a5f3fc':kind.includes('venom')?'#bef264':kind.includes('fire')||kind==='burnwave'||kind==='scatterFire'?'#fb923c':accent;
