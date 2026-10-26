@@ -21,6 +21,7 @@ function sync(){
  document.body?.classList?.toggle('bvb-effects-off',!enabled('inventory'));
  document.body?.classList?.toggle('bvb-menu-motion-off',!enabled('menu'));
  document.body?.classList?.toggle('bvb-result-motion-off',!enabled('results'));
+ for(const name of ['low','medium','high','ultra'])document.body?.classList?.toggle('bvb-quality-'+name,o.artQuality===name);
  document.body?.style?.setProperty('--bvb-intensity',String(o.artIntensity/100));
 }
 function change(type,value){
