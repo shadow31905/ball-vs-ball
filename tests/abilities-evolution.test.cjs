@@ -31,14 +31,13 @@ test('all 390 active ability/evolution variants execute finite mechanics; V2/V3 
  const game=createGame(),result=game.run('('+abilityAudit.toString()+')()');
  assert.equal(result.variants,390);assert.deepEqual(Array.from(result.failed),[],'Evolution must change observable ability mechanics rather than only stats');
 });
-test('training searches all 130 by normalized name and rarity, with no ownership or evolution mutation',()=>{
+test('removed training does not alter ownership or catalogue size',()=>{
  const g=createGame(),before=g.run('JSON.stringify({own:S.own,tr:S.tr,upHp:S.upHp,upDmg:S.upDmg})');
- g.run("startMatch(4);G.trainingTier=3;G.trainingOpponentTier=2;G.trainingOpponentId=1;BVBTraining.choose(129)");
- assert.equal(g.run('G.bl[0].b.id'),129);assert.equal(g.run('G.bl[0].tier'),3);assert.equal(g.run('G.bl[1].tier'),2);
+ g.run('startMatch(4)');
+ assert.equal(g.run('G'),null);
+ assert.equal(g.run('typeof BVBTraining'),'undefined');
+ assert.equal(g.run('B.length'),130);
  assert.equal(g.run('JSON.stringify({own:S.own,tr:S.tr,upHp:S.upHp,upDmg:S.upDmg})'),before);
- assert.equal(g.run("BVBTraining.catalog('topor')[0].id"),1);assert.equal(g.run('BVBTraining.catalog().length'),130);
- assert.equal(g.run('BVBTraining.catalog().every((b,i,a)=>!i||b.r>=a[i-1].r)'),true);
- for(let r=0;r<5;r++)assert.equal(g.run('BVBTraining.catalog("",'+r+').every(b=>b.r==='+r+')'),true);
 });
 test('mines arm after a readable warning; normal shots hit obstacles and shadow shots pass through',()=>{
  const game=createGame();
@@ -51,7 +50,7 @@ test('dice has six actual outcomes and finisher never changes combat outcome',()
  const g=createGame();
  const r=g.run("(()=>{const rolls=new Set();for(let seed=1;seed<=100;seed++){G=freshGame(4,[B[11]],[B[0]]);G.ph='battle';G.th=1;G.bl=[actor(B[11],80,180,0,0,0,1,0,0),actor(B[0],220,180,0,1,1,1,0,0)];BVBRework.setSeed(G,seed);specialAbility(G.bl[0],G.bl[1]);rolls.add(G.bl[0].v2LastRoll);}return rolls.size})()");
  assert.equal(r,6);
- g.run("startMatch(4);BVBTraining.choose(0);G.bl.find(o=>o.team===1).hp=0;var hpBefore=G.bl.map(o=>o.hp);var heartsBefore=JSON.stringify(G.h);BVBPresentation.finish(G,0)");
+ g.run("startMatch(0);G.my=[B[0]];G.bt=[B[1]];nextRound();pick(0);G.bl.find(o=>o.team===1).hp=0;var hpBefore=G.bl.map(o=>o.hp);var heartsBefore=JSON.stringify(G.h);BVBPresentation.finish(G,0)");
  assert.equal(g.run('G.finisher.winnerId'),0);assert.equal(g.run('JSON.stringify(G.bl.map(o=>o.hp))'),g.run('JSON.stringify(hpBefore)'));assert.equal(g.run('JSON.stringify(G.h)'),g.run('heartsBefore'));
  g.run('for(let i=0;i<20;i++)BVBPresentation.tick(G,.12)');assert.ok(Math.abs(g.run('G.finisher.age')-1.8)<1e-9);
 });
