@@ -93,13 +93,8 @@ test('Tournament requires defeating three opponents and restores hearts between 
  assert.equal(g.run("S.tw"),1);assert.equal(g.run("G.modeRewards.coins"),g.run("DIFF_REW[diff]+150"));
  assert.equal(g.run("G.modeStats.rounds"),9);
 });
-test('Training supports repeated practice rounds without losing hearts or earning progression',()=>{
- const g=game();launch(g,4);
- const coins=g.run("S.coins");
- for(let i=0;i<3;i++){winRound(g);assert.equal(g.run("JSON.stringify(G.h)"),'[3,1]');next(g);}
- g.run("over()");
- assert.equal(g.run("G.modeRewards.coins"),0);assert.equal(g.run("G.modeRewards.candies"),0);
- assert.equal(g.run("S.coins"),coins);assert.equal(g.run("Object.keys(S.mastery||{}).length"),0);
+test('removed training mode cannot be launched',()=>{
+ const g=game();g.run("startMatch(4)");assert.equal(g.run("G"),null);
 });
 test('Chaos chooses reproducible changing modifiers and applies physical size/speed/damage',()=>{
  const a=game(),b=game(),modifiers=[];
@@ -145,7 +140,7 @@ test('all six real bosses expose all three authored phases before detonation',()
 test('same seed, roster, arena and inputs reproduce full simulation hashes and HP despite presentation randomness',()=>{
  function record(){
   const g=game();
-  g.run("startMatch(4);G.m=0;G.my=[B[11]];G.bt=[B[53]];G.matchId='deterministic';G.th=1;G.rn=0;nextRound();pick(0)");
+  g.run("startMatch(0);G.m=0;G.my=[B[11]];G.bt=[B[53]];G.matchId='deterministic';G.th=1;G.rn=0;nextRound();pick(0)");
   const hashes=[g.run("BVBRework.stateHash(G)")];
   for(let i=0;i<8;i++){g.run("for(let j=0;j<180&&G.ph==='battle';j++)step(1/60)");hashes.push(g.run("BVBRework.stateHash(G)"));}
   return {hashes,hp:g.run("G.bl.map(o=>o.hp).join(',')"),rng:g.run("G.rngCalls")};
@@ -157,7 +152,7 @@ test('seeded simulation repeats web, revival, status and high-tier matchups acro
  for(const [id,foe,arena] of [[6,34,0],[17,52,3],[99,129,4],[44,72,5],[110,116,2],[1,4,1]]){
   function run(){
    const g=game();
-   g.run("startMatch(4);diff=4;G.m=0;G.my=[B["+id+"]];G.bt=[B["+foe+"]];G.matchId='edge-"+id+"';G.th="+arena+";G.rn=0;nextRound();pick(0)");
+   g.run("startMatch(0);diff=4;G.m=0;G.my=[B["+id+"]];G.bt=[B["+foe+"]];G.matchId='edge-"+id+"';G.th="+arena+";G.rn=0;nextRound();pick(0)");
    const checkpoints=[];
    for(let i=0;i<12;i++){
     g.run("for(let j=0;j<300&&G.ph==='battle';j++)step(1/60)");
