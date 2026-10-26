@@ -7,7 +7,7 @@ const vm=require('node:vm');
 
 const source=fs.readFileSync(path.join(__dirname,'..','bvb-changelog-v3.js'),'utf8');
 
-function loadReleaseNotes(storage){
+function loadReleaseNotes(storage,pathname='/'){
  const byId=new Map(),events=new Map();
  const document={
   activeElement:null,
@@ -33,6 +33,7 @@ function loadReleaseNotes(storage){
  const actions=document.createElement('section');
  const gate=document.createElement('div');gate.id='accountGate';gate.hidden=true;
  const window={
+  location:{pathname},
   addEventListener(name,fn){events.set(name,fn);},
   dispatchEvent(event){events.get(event.type)?.(event);}
  };
@@ -81,4 +82,17 @@ test('full rework changelog has several categories and an accessible dialog',()=
  assert.match(full,/V1\/V2\/V3/);
  assert.match(full,/TURN/);
  assert.match(full,/powtór/);
+});
+
+test('beta and stable profiles do not consume each others one-time changelog',()=>{
+ const storage=new Map();
+ const beta=loadReleaseNotes(storage,'/ball-vs-ball/beta/');
+ beta.enter();
+ assert.equal(beta.modal.hidden,false);
+ assert.equal(storage.get('bvb-release-notes-seen-beta-2.0.1'),'1');
+ assert.equal(storage.has('bvb-release-notes-seen-2.0.1'),false);
+ const stable=loadReleaseNotes(storage,'/ball-vs-ball/');
+ stable.enter();
+ assert.equal(stable.modal.hidden,false);
+ assert.equal(storage.get('bvb-release-notes-seen-2.0.1'),'1');
 });
