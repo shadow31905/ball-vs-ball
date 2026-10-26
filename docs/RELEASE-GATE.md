@@ -6,7 +6,7 @@
 - [ ] Dwie rzeczywiste sieci Wi-Fi/LTE: publiczna sygnalizacja, dołączenie, gotowość, runda, rozłączenie i powrót. Skonfigurowany TURN potwierdzony trasą relay w trybie relayOnly.
 - [ ] Zielony CI najnowszego commita: 130 zdolności aktywnych, 342 rzeczywiste aktywacje indywidualnych V2/V3 dla kulek 16–129 z wyrównanym HP/DMG, opis i wizualizacja kolejnych ewolucji, 130 pasywek/superów, 18 faz bossów, tryby, trening, replay i multiplayer. Później ręczny audyt prawdziwych trafień, limitów, cooldownów, stackowania i wygasania statusów w rzeczywistych walkach. **Nie** wymaga osobnej pełnej akceptacji balansu, dodatkowej rozbudowy AI ani fizyki.
 - [ ] Weryfikacja konta/chmury w stabilnym środowisku przed włączeniem nowej wersji. Beta ma chmurę wyłączoną.
-- [ ] Sprawdzenie pięciu finisherów: równe szanse, jeden wybór na ostatnie trafienie, zgodność powtórki i obu klientów multiplayer, brak ingerencji w walkę, reduced motion.
+- [ ] Pięć **pełnych cutscenek K.O.**: równe 20% przedziały wyboru, pięć różnych trzyetapowych przebiegów, dokładnie jeden wybór po prawdziwym decydującym trafieniu, 1,8 s na ekranie, do 108 klatek powtórki, zgodność wariantu hosta/gościa przy mirroringu, brak wpływu na HP/obrażenia/losowość walki, statyczna karta przy ograniczonych animacjach. Zielone testy jednostkowe i prawdziwy Canvas w Chromium/Firefox/WebKit, potem odbiór na dwóch fizycznych urządzeniach; zob. `docs/FINISHER-CINEMATICS.md`.
 - [ ] Changelog końcowego wydania: pełny i prawdziwy wykaz dodatków/poprawek, automatyczne pokazanie tylko raz na wersję, możliwość ponownego otwarcia ręcznie.
 - [ ] Opublikowanie stabilnej wersji dopiero po spełnieniu powyższych punktów i sprawdzenie działającej strony po wdrożeniu.
 
