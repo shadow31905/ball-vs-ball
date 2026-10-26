@@ -11,6 +11,7 @@ function loadReleaseNotes(storage){
  const byId=new Map(),events=new Map();
  const document={
   activeElement:null,
+  addEventListener(name,fn){events.set('document:'+name,fn);},
   getElementById(id){return byId.get(id)||null;},
   createElement(tag){
    const el={tag,children:[],hidden:false,textContent:'',style:{},listeners:new Map(),
