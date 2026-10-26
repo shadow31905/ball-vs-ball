@@ -2631,6 +2631,7 @@ function nextRound() {
   const roundSeed=Array.from(String(G.matchId)+':'+G.rn).reduce((n,c)=>Math.imul(n^c.charCodeAt(0),16777619),2166136261)>>>0;
   window.BVBRework?.setSeed?.(G,roundSeed);
   G.bl = []; G.pr = []; G.z = []; G.fx = []; G.rings = []; G.pop = [];
+  G.finisher = null; // Each round may trigger its own unique K.O.; never retain the prior scene.
   G.v2 = null; // Round-based hazards and Spider webs expire only at round boundary.
   window.BVBGameplay?.newRound?.(G);
   window.BVBModes?.newRound?.(G);
