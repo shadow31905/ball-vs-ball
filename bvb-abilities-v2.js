@@ -1085,6 +1085,7 @@ function tick(dt){
     if(projectile.life>0&&projectile.team!==o.team&&
       Math.hypot(projectile.x-o.x,projectile.y-o.y)<o.r+52){
      projectile.life=0;hive.intercepts--;
+     o.v2HiveBlocks=(o.v2HiveBlocks||0)+1;
      visual(o,o,'shield',26,abilityData[31].color,.5);
     }
    }
@@ -1103,8 +1104,11 @@ function tick(dt){
    const crown=o.v2CrownDelayed;crown.next-=dt;
    if(crown.next<=0){
     const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
-    if(foe)shoot(o,foe,{count:1,damage:o.baseDmg*.22,
+    if(foe){
+     shoot(o,foe,{count:1,damage:o.baseDmg*.22,
        homing:.65,stun:.27,speed:170,color:'#fde047'});
+     o.v2CrownFired=(o.v2CrownFired||0)+1;
+    }
     crown.remaining--;crown.next+=.6;
     if(crown.remaining<=0)o.v2CrownDelayed=null;
    }
