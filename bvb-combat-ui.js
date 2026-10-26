@@ -67,6 +67,17 @@ function validateState(s){
      !Number.isFinite(a.r)||a.r<=0||a.r>100||!Number.isFinite(a.hp)||!Number.isFinite(a.mh)||a.mh<=0)
    throw new Error('Nieprawidłowa kulka.');
  }
+ if(s.finisher!=null){
+  const f=s.finisher;
+  // Older v3 recordings only had style (0–2), before the five variants.
+  if(typeof f!=='object'||Array.isArray(f)||
+     (f.variant!==undefined&&(!Number.isInteger(f.variant)||f.variant<0||f.variant>=5))||
+     ![f.x,f.y,f.fromX,f.fromY,f.age,f.life].every(Number.isFinite)||
+     f.age<0||f.life<=0||f.life>5||f.age>f.life+1e-6||
+     !Number.isInteger(f.winnerId)||f.winnerId<0||f.winnerId>=130||
+     typeof f.color!=='string'||f.color.length>32)
+   throw new Error('Uszkodzona animacja końcowego uderzenia.');
+ }
  return s;
 }
 class Recording{
