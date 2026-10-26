@@ -1440,6 +1440,15 @@ function setupNetConnection(conn) {
       const hostBall = hostState.pb;
       G = window.BVBNetwork.guestState(hostState);
       G.pa = guestAimAngle;
+      // The host chooses the scene once. The guest only plays its one-time
+      // audio cue; it never rerolls or changes the authoritative finishing state.
+      if(hostState.ph==='end'&&hostState.finisher){
+        const key=hostState.matchId+':'+hostState.rn;
+        if(guestFinisherSoundKey!==key){
+          guestFinisherSoundKey=key;
+          SFX.boom?.();
+        }
+      }
       show('game');
       if (hostState.ph === 'draft' || (hostState.ph === 'aim' && guestBallId == null)) {
         G.ph = 'draft';
@@ -1531,6 +1540,7 @@ function disconnectNet(updateStatus = true) {
   const oldConn=activeConn,oldPeer=peer;
   activeConn=null;peer=null;netRole=null;
   guestRound=-1;guestMatchId=null;guestBallId=null;guestAimSent=false;guestOnlineDeck=null;
+  guestFinisherSoundKey='';
   remoteBallId=null;remoteAimAngle=null;hostAimAngle=null;
   try{oldConn?.close();}catch(_){}
   try{if(oldPeer&&!oldPeer.destroyed)oldPeer.destroy();}catch(_){}
@@ -1539,6 +1549,7 @@ function disconnectNet(updateStatus = true) {
 
 let pendingBossIndex = 0, netRole = null, remoteBallId = null, remoteAimAngle = null, hostAimAngle = null, netSyncAt = 0, guestBallId = null, guestRound = -1, guestMatchId = null, guestAimSent = false, guestAimAngle = -Math.PI / 2, guestOnlineDeck = null;
 let reconnectSeq = 0, reconnectTries = 0, reconnectRoom = '', netSequence = 0, netGeneration=0, acceptedGuest='';
+let guestFinisherSoundKey = '';
 
 const ARENA_ACHIEVEMENTS = [
   { id:'arenas', name:'🏆 Wędrowiec Aren', description:'Wygraj mecz na każdej z 6 aren.', coin:180, title:'Wędrowiec Aren', aura:'#fbbf24' },
