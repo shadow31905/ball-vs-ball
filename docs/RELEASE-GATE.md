@@ -1,7 +1,7 @@
 # Warunki stabilnego wydania
 
 - [ ] Zielone testy jednostkowe i wszystkie joby Chromium/Firefox/WebKit dla **aktualnego, finalnie wydawanego commita**. Historyczne testy źródła 76e1e48 były zielone; nowe zmiany wymagają ponownego przejścia CI.
-- [ ] Testy bety zbudowanej z **finalnego źródła**: zapis po odświeżeniu, V1/V2/V3, wszystkie 5 finisherów, wyszukiwarka, izolacja profilu. Panel testowy **tylko beta**: edycja monet/cukierków, wszystkie kulki, ewolucje, dotyk 320–430 px, trwałość zapisu i brak dostępu z głównej gry. Historyczna beta 76e1e48 była sprawdzona, ale nie zawiera najnowszych zmian.
+- [ ] Testy **wewnętrznej, tymczasowej bety** z finalnego źródła uruchamianej lokalnie w CI, BEZ publikacji pod `/beta/` oraz BEZ udostępniania gotowego archiwum. Sprawdzenia: zapis po odświeżeniu, V1/V2/V3, pięć finisherów, wyszukiwarka, izolacja profilu, panel testowy (monety/cukierki, wszystkie kulki, ewolucje), dotyk 320–430 px. Stabilne `index.html` nie może importować panelu. Publiczne `/beta/` usunięto z `main` i nie wolno go przywracać bez wyraźnej decyzji użytkownika.
 - [ ] Odbiór na fizycznym iPhonie/Safari oraz Androidzie/Chrome: dotyk, orientacja, 320–430 px, dłuższa walka, temperatury i płynność.
 - [ ] Dwie rzeczywiste sieci Wi-Fi/LTE: publiczna sygnalizacja, dołączenie, gotowość, runda, rozłączenie i powrót. Skonfigurowany TURN potwierdzony trasą relay w trybie relayOnly.
 - [ ] Testy regresji mechanik i ewolucji po ostatnich zmianach, zgodności bossów, trybów, treningu, replayów oraz multiplayera. Dotyczy poprawności działania i braku regresji, **nie** wymaga osobnej pełnej akceptacji balansu wszystkich 130 kulek (ten cel użytkownik wyłączył z zakresu).
@@ -12,4 +12,4 @@
 
 Testy automatyczne i emulacja nie są potwierdzeniem testów fizycznego iPhone’a/Androida ani usługi TURN. Nie odhaczaj punktu bez dowodu. Monitor w tej rozmowie ma powiadomić dopiero po potwierdzonym ukończeniu i publikacji; samo wdrożenie bety nie wystarcza.
 
-Historyczne dowody dla źródła 76e1e48 (nie potwierdzają najnowszej wersji): CI 40221214742 (wszystkie joby zielone), wdrożenie Pages 40222153448, izolowany build.json i publiczny interfejs bety. Testy fizycznych urządzeń, WAN/TURN i końcowa akceptacja balansu pozostają nieodhaczone.
+Historyczne dowody dla źródła 76e1e48 (nie potwierdzają najnowszej wersji): CI 40221214742 (wszystkie joby zielone), wdrożenie Pages 40222153448. Późniejszy publiczny katalog bety usunięto z Pages w commicie 75ad553 (wdrożenie 40352277451 — zielone). Repozytorium jest publiczne, więc historia wcześniejszych wydań może być nadal dostępna; do całkowitej poufności kodu konieczne jest prywatne repo. Testy fizycznych urządzeń, WAN/TURN i chmury pozostają nieodhaczone.
