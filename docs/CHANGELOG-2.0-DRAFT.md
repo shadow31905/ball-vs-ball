@@ -5,9 +5,14 @@
 ## Kulki, umiejętności i ewolucje
 - 130 ręcznie zdefiniowanych pasywek i superumiejętności.
 - 130 aktywnych zdolności, z osobnymi zachowaniami i efektami.
-- Zaimplementowano nowe profile V2/V3 dla 114 kulek ID 16–129 (342 testowe aktywacje), ale **106 profili nadal bazuje na kombinacjach wspólnych mechanik**. Osiem kulek ID 16–23 przebudowano dodatkowo indywidualnie: kuźnia pomocnika, mitoza, ładunek Elektryka, poruszająca się Strefa, opóźniony Promień, matryca WDC, sad Jabłka i naładowana Armata. V3 rozwija zachowanie V2 oraz dodaje własny efekt. Dodano osobne testy ścian/kontaktu/odrodzenia/efektów cyklicznych, podglądy przypisane ośmiu zdolnościom i poprawiono błąd podwójnego trafienia strefy spowolnienia. Pierwszych 16 kulek nie zmieniano. Raport `docs/ABILITY-AUDIT.md`. Dodatkowo wykonano osiem indywidualnych reworków **24–31**: inkubacja wirusa, kolczaste ściany, rozdzielanie rykoszetu, wyładowania po odbiciach, powracający pierścień, lodowy tor, harpun i obronny rój. Testy zdarzeń i różnic V1/V2/V3. Pozostają **98 indywidualnych reworków 32–129** oraz pełny audyt długich walk; raport `docs/QA-REPORT-2026-10-26.md`.
+- Zaimplementowano nowe profile V2/V3 dla 114 kulek ID 16–129 (342 testowe aktywacje), ale **82 profile 48–129 nadal bazują na kombinacjach wspólnych mechanik**. Osiem kulek ID 16–23 przebudowano dodatkowo indywidualnie: kuźnia pomocnika, mitoza, ładunek Elektryka, poruszająca się Strefa, opóźniony Promień, matryca WDC, sad Jabłka i naładowana Armata. V3 rozwija zachowanie V2 oraz dodaje własny efekt. Dodano osobne testy ścian/kontaktu/odrodzenia/efektów cyklicznych, podglądy przypisane ośmiu zdolnościom i poprawiono błąd podwójnego trafienia strefy spowolnienia. Pierwszych 16 kulek nie zmieniano. Raport `docs/ABILITY-AUDIT.md`. Dodatkowo wykonano osiem indywidualnych reworków **24–31**: inkubacja wirusa, kolczaste ściany, rozdzielanie rykoszetu, wyładowania po odbiciach, powracający pierścień, lodowy tor, harpun i obronny rój. Testy zdarzeń i różnic V1/V2/V3. Pozostają **82 indywidualne reworki 48–129** oraz pełny audyt długich walk; raport `docs/QA-REPORT-2026-10-26.md`.
 - Warianty ewolucji V1, V2 i V3; dodatkowe pociski, ostrza, pola, statusy, modyfikacje zasięgu/czasu, oczyszczanie i przywołania.
 - Podglądy zdolności oraz opisy w interfejsie; pełna zgodność każdej zdolności z opisem **wymaga audytu**.
+
+### Partia 16 kulek ID 32–47
+- Nowe, unikatowo narysowane emblematy i V1 ilustracje umiejętności każdej z 16 kulek; zachowano rozpoznawalne cechy wcześniejszej grafiki.
+- Indywidualnie zaprogramowane dodatkowe mechaniki V2 i V3: reakcje alchemii, tor pociągu, sieć, nawiedzona mina, powracający błysk, różne cukierki, dzielący się szlam, kajdany, korozja, pryzmatyczny laser, wędrująca mgła, gwiazdy, spirala Fibonacciego, kolczasty odwet, rozdzielona bomba i satelity.
+- `tests/identity-v1-32-47.test.cjs`, `tests/identity-rework-32-47.test.cjs`, `tests/ball-art-32-47.test.cjs` oraz porównanie wyglądu ewolucji w prawdziwych silnikach przeglądarek. Zielony przebieg `40385626598` (`49ab497f`). Dalsze 82 kulek do ręcznego opracowania; pełne testy mobilne/WAN nadal do wykonania.
 
 ## Bossowie i walka
 - Sześciu bossów z trzema fazami każdy (18 faz).
@@ -50,7 +55,7 @@
 - `relayOnly` wymaga rzeczywistej konfiguracji serwera TURN i pokazuje błąd przy jej braku; testy obejmują krótkotrwałe ICE, TLS i diagnostykę wybranej trasy.
 - Naprawiono możliwy konflikt zapisu w chmurze przy wylogowaniu i zmianie użytkownika. Zmiana konta nie może dopisać statystyk poprzedniego gracza do nowego profilu. Testy wykonywane na lokalnym symulatorze API — prawdziwa chmura nadal do sprawdzenia.
 - Rozszerzono emulację urządzeń mobilnych o zmianę orientacji ekranu podczas aktywnej walki bez utraty postępu.
-- Po pozytywnych testach bossów/sieci/zapisu/emulacji **wznowiono rework kulek 24–31**. Pozostałych 98 kulek nadal wymaga indywidualnych mechanik.
+- Po pozytywnych testach bossów/sieci/zapisu/emulacji **wznowiono rework kulek 24–31**. Po kolejnej partii 32–47 pozostałe 82 kulki 48–129 nadal wymagają indywidualnych mechanik.
 
 ## Warunki publikacji
 - Weryfikacja każdego elementu na aktualnym wydawanym commicie i uzupełnienie listy o wszystkie rzeczywiście skończone poprawki.
