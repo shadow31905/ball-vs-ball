@@ -32,17 +32,6 @@ jobs:
         run: |
           for file in bvb-*.js; do node --check "$file"; done
           node --test tests/*.test.cjs
-      - name: Run reproducible balance sample
-        env:
-          BVB_BALANCE_GAMES: '2600'
-          BVB_BALANCE_SEED: '90000'
-          BVB_BALANCE_OUT: balance-ci.json
-        run: node tests/balance.cjs
-      - uses: actions/upload-artifact@v4
-        with:
-          name: balance-sample
-          path: balance-ci.json
-
   browser:
     runs-on: ubuntu-latest
     timeout-minutes: 15
