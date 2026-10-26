@@ -68,6 +68,8 @@ jobs:
           node tests/combat-browser-smoke.cjs
           BVB_BETA_OUTPUT=beta BVB_SOURCE_REVISION=${{ github.sha }} node scripts/build-beta.cjs
           BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/combat-browser-smoke.cjs
+          if [ "$BVB_BROWSER" != firefox ]; then node tests/combat-mobile-smoke.cjs; fi
+          if [ "$BVB_BROWSER" = chromium ]; then node tests/combat-network-browser.cjs; fi
       - name: Upload tested beta bundle
         if: matrix.browser == 'chromium'
         uses: actions/upload-artifact@v4
@@ -76,5 +78,3 @@ jobs:
           path: beta/
           if-no-files-found: error
           retention-days: 14
-          if [ "$BVB_BROWSER" != firefox ]; then node tests/combat-mobile-smoke.cjs; fi
-          if [ "$BVB_BROWSER" = chromium ]; then node tests/combat-network-browser.cjs; fi
