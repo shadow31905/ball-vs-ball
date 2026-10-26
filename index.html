@@ -2612,11 +2612,12 @@ function freshGame(mode, my, bt) {
 }
 
 function startMatch(mode = 0) {
+  if (Number(mode)===4)return; // Training mode removed by design.
   if (netRole === 'guest' && activeConn) { netStatus('Host rozpoczyna mecz. Poczekaj na synchronizację.'); return; }
   $('#ov').hidden = true;
   refreshPeriods();
   const own = B.filter(b => S.own.includes(b.id));
-  const myThree = mode === 4 ? B : (own.length >= 3 ? sh(own).slice(0, 3) : [B[0], B[1], B[2]]);
+  const myThree = own.length >= 3 ? sh(own).slice(0, 3) : [B[0], B[1], B[2]];
   if (mode === 12 && (!activeConn?.open || netRole !== 'host' || !guestOnlineDeck)) {
     netStatus('Poczekaj na połączenie i kolekcję znajomego.'); return;
   }
@@ -2657,7 +2658,6 @@ function nextRound() {
 
 function renderDraft() {
   if (!G) return;
-  if(window.BVBTraining?.render?.(G))return;
   $('#msg').textContent = G.m===13 ? 'Kampania '+G.campaignLevel+'/50: wybierz kulkę ze swojej drużyny, wyceluj i wystrzel!' : 'Wybierz jedną z 3 wylosowanych kulek, wyceluj procą i wystrzel:';
   $('#cards').innerHTML = G.my.map((b, i) => {
     const st = G.m === 12 ? getBallStats(b.id, 1, 0, 0) : getBallStats(b.id);
