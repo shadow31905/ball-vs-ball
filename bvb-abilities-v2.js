@@ -643,6 +643,23 @@ function onContact(g,o,foe,base){
    o.v2ArcContactUsed=true;
   }
  }
+ if(o.b.id===24&&evolutionStage(o)>0&&o.v2VirusActiveUntil>g.rt&&
+    g.rt>=(o.v2VirusNextContact||0)){
+  const stage=evolutionStage(o);
+  const infection=foe.v2Viral||{};
+  const stacks=Math.min(3,(infection.owner===o.uid?infection.stacks||0:0)+1);
+  foe.v2Viral={owner:o.uid,stacks,clock:.46,remaining:stage===2?4:3,
+   mutation:stage===2,bloomed:false};
+  o.v2VirusNextContact=g.rt+.55;
+  setStatus(o,foe,'poison',.9+stacks*.2);
+  visual(o,foe,'growth',22+stacks*4,abilityData[24].color,.55);
+ }
+ if(o.b.id===25&&evolutionStage(o)===2&&o.v2BriarGuard&&o.v2BriarUntil>g.rt){
+  const dx=foe.x-o.x,dy=foe.y-o.y,d=Math.hypot(dx,dy)||1;
+  foe.vx=(foe.vx||0)+dx/d*.2;foe.vy=(foe.vy||0)+dy/d*.2;
+  o.status.shield=Math.min(32,(o.status.shield||0)+1.5);
+  visual(o,foe,'shard',23,abilityData[25].color,.4);
+ }
  if(o.b.id===44){o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);base+=Math.min(3,[0,1,1,2,3,5,8][o.v2FibHit]*.5);}
  return base;
 }
@@ -694,7 +711,7 @@ function shoot(o,foe,opts={}){
    owner:o.uid,team:o.team,id:o.b.id,damage:(opts.damage||o.baseDmg*.45)*(1+stage*.08)*Math.min(1,(opts.count||1)/count),ghost:!!opts.ghost,
    r:opts.r||4,life:opts.life||2.2,age:0,homing:(opts.homing||0)+stage*.18,bounces:(opts.bounces||0)+(abilityFor(o).kind==='arrow'?stage:0),
    healOnHit:(opts.healOnHit||0)*Math.min(1,(opts.count||1)/count),slow:opts.slow||0,poison:opts.poison||0,burn:opts.burn||0,stun:opts.stun||0,
-   knock:opts.knock||0,color:opts.color||abilityData[o.b.id].color});
+   knock:opts.knock||0,ricochetSplit:opts.ricochetSplit||0,color:opts.color||abilityData[o.b.id].color});
  }
  if(st.shots.length>80)st.shots.splice(0,st.shots.length-80);
  visual(o,o,'charge',17,abilityData[o.b.id].color,.34);
@@ -775,6 +792,26 @@ function onWall(o,side){
    turret.power=Math.min(2.8,turret.power+.12);
    turret.nextShot=Math.min(turret.nextShot||0,.5);
   }
+ }
+ if(o.b.id===25&&evolutionStage(o)>0&&o.v2BriarUntil>G.rt){
+  // The thorns physically attach to the wall struck, not the enemy location.
+  const vertical=side==='left'||side==='right',stage=evolutionStage(o);
+  const offsets=stage===2?[-42,-21,21,42]:[-22,22];
+  for(const shift of offsets){
+   const x=vertical?o.x:clamp(o.x+shift,18,342);
+   const y=vertical?clamp(o.y+shift,18,342):o.y;
+   zone(o,x,y,'thorn',15+stage*2,6,.36+stage*.06);
+  }
+  if(stage===2)o.status.shield=Math.min(32,(o.status.shield||0)+2);
+ }
+ if(o.b.id===27&&evolutionStage(o)>0&&o.v2CrownUntil>G.rt){
+  const vertical=side==='left'||side==='right',stage=evolutionStage(o);
+  for(const shift of (stage===2?[-44,-22,22,44]:[-28,28])){
+   const x=vertical?o.x:clamp(o.x+shift,18,342);
+   const y=vertical?clamp(o.y+shift,18,342):o.y;
+   zone(o,x,y,'shock',19+stage*2,2.4,.35+stage*.04);
+  }
+  if(stage===2)o.v2CrownDelayed={next:.42,remaining:1};
  }
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
 }
@@ -1056,6 +1093,18 @@ function tick(dt){
     if(hitX)s.vx*=-1;
     if(hitY)s.vy*=-1;
     s.bounces--; // A corner counts as one bounce, not two.
+    if(s.id===26&&s.ricochetSplit>0){
+     const archer=G.bl.find(o=>o.uid===s.owner&&alive(o));
+     const target=G.bl.find(o=>o.team!==s.team&&alive(o));
+     if(archer&&target){
+      s.ricochetSplit=0; // Child projectiles cannot recursively split.
+      shoot({...archer,x:s.x,y:s.y},target,{
+       count:1,damage:archer.baseDmg*.16,bounces:1,spread:.36,speed:155,
+       color:'#fef08a'
+      });
+      visual(archer,{x:s.x,y:s.y},'shard',34,abilityData[26].color,.52);
+     }
+    }
     s.x=clamp(s.x,7,353);s.y=clamp(s.y,7,353);
    }else s.life=0;
   }
@@ -1087,7 +1136,8 @@ function tick(dt){
   if(!foe||h.cooldown>0)continue;
   const owner=G.bl.find(o=>o.uid===h.owner)||null;
   if(!owner)continue;
-  if(h.kind==='slow')strike(owner,foe,1.6*h.power,{slow:.75});
+  if(h.kind==='iceRail')strike(owner,foe,2.7*h.power,{slow:1,stun:.12});
+  else if(h.kind==='slow')strike(owner,foe,1.6*h.power,{slow:.75});
   else if(h.kind==='thorn')strike(owner,foe,2*h.power,{poison:.6});
   else if(h.kind==='shock')strike(owner,foe,3*h.power,{stun:.19});
   else if(h.kind==='frost')strike(owner,foe,2*h.power,{slow:.9});
