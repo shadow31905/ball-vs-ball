@@ -198,14 +198,14 @@ getBallStats=function(id,...args){
  * real combat, not just in the preview. All effects are host authoritative.
  */
 const authoredUpgrades=Object.freeze({
- 16:['petBolt','guard'],
- 17:['healing','slowField'],
- 18:['sparkShot','shockField'],
- 19:['slowField','venomShot'],
- 20:['pierceShot','shockwave'],
- 21:['sparkShot','shockField'],
- 22:['healing','healingShot'],
- 23:['sparkShot','heavyShot'],
+ 16:['forgeDrone','forgeAnvil'],
+ 17:['cellBud','mitosisBloom'],
+ 18:['conductorArc','overloadCircuit'],
+ 19:['pressureAura','gravityVortex'],
+ 20:['predictiveRay','reflectionEcho'],
+ 21:['matrixCenter','matrixRewire'],
+ 22:['orchardHarvest','goldenOrchard'],
+ 23:['turretBattery','ricochetShell'],
  24:['venomShot','venomField'],
  25:['thornField','venomShot'],
  26:['bounceShot','scatter'],
@@ -314,6 +314,22 @@ const authoredUpgrades=Object.freeze({
  129:['frostField','scatter'],
 });
 const upgradeCaptions=Object.freeze({
+ forgeDrone:'pomocnik-kuźnia: każde odbicie go rozgrzewa i przyspiesza jego strzały',
+ forgeAnvil:'kowadło piorunowe: nagromadzone ciepło zamienia się w tarczę i pole uderzenia',
+ cellBud:'pączkowanie: rosnące komórki regenerują i tworzą lepkie ślady',
+ mitosisBloom:'awaryjna mitoza pozostawia dodatkowy obszar ochronny i wzmacnia nowe ciało',
+ conductorArc:'przewodnik: zmagazynowany ładunek poraża następnym kontaktem',
+ overloadCircuit:'obwód przeciążenia: łuk rozdziela się na pułapkę elektrostatyczną',
+ pressureAura:'przemieszczająca się strefa ciśnienia rani bliski cel',
+ gravityVortex:'wir ciśnienia przyciąga cel do ruchomego pola i uderza silniejszym pulsem',
+ predictiveRay:'przewidujący ruch pocisk laserowy przenika przeszkody',
+ reflectionEcho:'opóźniony promień odbity od krawędzi areny',
+ matrixCenter:'środkowy węzeł WDC pulsuje mocniej od pozostałych pól',
+ matrixRewire:'siatka przełącza się i zostawia cztery uzbrajane węzły',
+ orchardHarvest:'drzewko jabłoni cyklicznie leczy właściciela i wysyła owoc',
+ goldenOrchard:'złote jabłka zapewniają również tarczę i podwójny zbiór',
+ turretBattery:'armatnia bateria ładuje wieżyczkę i wystrzeliwuje pocisk',
+ ricochetShell:'pocisk rykoszetuje, zostawiając opóźnioną eksplozję',
  petBolt:'pomocniczy elektryczny pocisk',
  guard:'dodatkowa osłona wokół kulki',
  healing:'dodatkowa regeneracja zdrowia',
@@ -353,10 +369,80 @@ function authoredUpgradeDescription(id,stage){
  const extra=stage===2?' oraz '+upgradeCaptions[actions[1]]:'';
  return 'V'+(stage+1)+': '+upgradeCaptions[actions[0]]+extra+'; mocniejsze efekty aktywnej zdolności.';
 }
+// First individual-rework batch (16–23): the mechanics here are tied to each
+// identity's own V1 skill and its triggers, not selected from shared actions.
+// Gameplay events, hazards and movement are stored in the authoritative state.
+function applySignatureEvolution(o,foe,level){
+ const id=o.b.id,color=abilityData[id].color,st=roundState();
+ if(id===16){ // Forge: the existing wall-forged pet gets a heat engine.
+  o.v2ForgeHeat=Math.min(6,(o.v2ForgeHeat||0)+1);
+  o.v2PetPower=Math.min(3,(o.v2PetPower||1)+.25);
+  zone(o,o.x,o.y,'pet',26,6,.85+o.v2ForgeHeat*.12);
+  if(level===2){
+   o.status.shield=Math.min(32,(o.status.shield||0)+2*o.v2ForgeHeat);
+   zone(o,foe.x,foe.y,'shock',27,1.9,.40);
+  }
+  visual(o,o,'orbit',32+level*5,color,.7);
+ }else if(id===17){ // Cell: budding makes sustained recovery, mitosis evolves.
+  o.v2CellBud={clock:.65,remaining:2+level*2,heal:1.7*level};
+  zone(o,o.x,o.y,'slime',25,2.3,.34);
+  if(level===2){
+   o.status.shield=Math.min(32,(o.status.shield||0)+4);
+   o.v2MitosisBloom=true;
+  }
+  visual(o,o,'growth',37+level*5,color,.75);
+ }else if(id===18){ // Electrician: arc is stored until the next real impact.
+  o.v2ArcUntil=G.rt+2.6+level*.4;
+  o.v2ArcContactUsed=false;
+  shoot(o,foe,{count:1,damage:o.baseDmg*.13,stun:.14*level,homing:.75,color:'#fde047'});
+  if(level===2)zone(o,foe.x,foe.y,'shock',29,2.2,.42);
+  visual(o,foe,'beam',34+level*5,'#fde047',.6);
+ }else if(id===19){ // Pressure Zone: mobile aura; V3 generates gravity.
+  o.v2Pressure={remaining:2.2+level*.65,next:.1,radius:48+level*13,
+   damage:.13+level*.04,pull:level===2?.19:0};
+  zone(o,o.x,o.y,'zone',27,2.5,.28);
+  visual(o,o,'ring',o.v2Pressure.radius,color,.75);
+ }else if(id===20){ // Foresight ray: predictive piercing shot; delayed echo.
+  shoot(o,foe,{damage:o.baseDmg*.22,ghost:true,homing:.15,speed:265,
+   slow:.25+level*.1,color:'#60a5fa'});
+  if(level===2){
+   o.v2BeamEcho={clock:.47,remaining:1,damage:.44,targetX:foe.x,targetY:foe.y};
+   visual(o,foe,'beam',48,color,.8);
+  }
+ }else if(id===21){ // WDC: numbered 3x3 board central amplifier.
+  o.v2MatrixCombo=Math.min(4,(o.v2MatrixCombo||0)+1);
+  zone(o,foe.x,foe.y,'grid',20,2.5,.13+o.v2MatrixCombo*.035);
+  if(level===2){
+   for(const [dx,dy] of [[-40,0],[40,0],[0,-40],[0,40]])
+    zone(o,Math.max(18,Math.min(342,foe.x+dx)),Math.max(18,Math.min(342,foe.y+dy)),
+     'mine',13,2.8,.22);
+  }
+  visual(o,foe,'clock',41,color,.66);
+ }else if(id===22){ // Apple: orchard actually regenerates and grows produce.
+  o.v2Orchard={clock:.65,remaining:2+level*2,level};
+  shoot(o,foe,{damage:o.baseDmg*.12,healOnHit:2.7*level,speed:135,homing:.25,color:'#f59e0b'});
+  if(level===2)o.status.shield=Math.min(32,(o.status.shield||0)+4);
+  visual(o,o,'heal',38,color,.75);
+ }else if(id===23){ // Cannon: recharge its wall turret, shell marks the impact.
+  o.v2TurretCharge=Math.min(5,(o.v2TurretCharge||0)+1);
+  zone(o,o.x,o.y,'turret',27,5.2,.95);
+  shoot(o,foe,{count:1,damage:o.baseDmg*.18,speed:128,bounces:1+level,
+   knock:.16,color:'#fbbf24'});
+  if(level===2){
+   const d=Math.hypot(foe.x-o.x,foe.y-o.y)||1;
+   const lead=Math.min(.42,d/150);
+   const x=Math.max(20,Math.min(340,foe.x+foe.vx*80*lead));
+   const y=Math.max(20,Math.min(340,foe.y+foe.vy*80*lead));
+   zone(o,x,y,'mine',27,3.6,.6);
+   visual(o,{x,y},'impact',44,color,.75);
+  }
+ }
+}
 function applyAuthoredUpgrade(o,foe){
  const level=evolutionStage(o),profile=authoredUpgrades[o?.b?.id];
  if(level===0||!profile||!foe||!alive(foe)||netRole==='guest')return;
  const id=o.b.id,boost=level===2?1.28:1,unique=1+(id%5)*.04;
+ if(id>=16&&id<=23){applySignatureEvolution(o,foe,level);return;}
  const accent=id>=99?'#d8b4fe':o.b.c;
  function action(kind){
   const color=kind.includes('frost')?'#a5f3fc':kind.includes('venom')?'#bef264':kind.includes('fire')||kind==='burnwave'||kind==='scatterFire'?'#fb923c':accent;
@@ -500,6 +586,13 @@ function onContact(g,o,foe,base){
   if(speed>1.35){foe.vx*=1.35/speed;foe.vy*=1.35/speed;}
   o.skillImpact=0; // One thrust per activation; no repeated bonus on the next hit.
  }
+ if(o.b.id===18&&evolutionStage(o)>0&&o.v2ArcUntil>g.rt){
+  setStatus(o,foe,'stun',.14+evolutionStage(o)*.075);
+  if(evolutionStage(o)===2&&!o.v2ArcContactUsed){
+   zone(o,foe.x,foe.y,'shock',30,1.55,.48);
+   o.v2ArcContactUsed=true;
+  }
+ }
  if(o.b.id===44){o.v2FibHit=Math.min(6,(o.v2FibHit||0)+1);base+=Math.min(3,[0,1,1,2,3,5,8][o.v2FibHit]*.5);}
  return base;
 }
@@ -614,6 +707,25 @@ function onWall(o,side){
  }
  if(d.kind==='grid'&&o.b.id===27)zone(o,o.x,o.y,'shock',30,2,.55);
  if(d.kind==='frost'&&o.b.id===29)zone(o,o.x,o.y,'frost',19,3,.38);
+ if(o.b.id===16&&evolutionStage(o)>0){
+  o.v2ForgeHeat=Math.min(6,(o.v2ForgeHeat||0)+1);
+  const forge=st.hazards.find(h=>h.owner===o.uid&&h.kind==='pet'&&h.life>0);
+  if(forge){
+   forge.power=Math.min(2.8,forge.power+.11);
+   forge.nextShot=Math.min(forge.nextShot||0,.45);
+  }
+  if(evolutionStage(o)===2){
+   o.status.shield=Math.min(32,(o.status.shield||0)+1.5);
+   zone(o,o.x,o.y,'shock',19,1.2,.24);
+  }
+ }
+ if(o.b.id===23&&evolutionStage(o)>0){
+  const turret=st.hazards.find(h=>h.owner===o.uid&&h.kind==='turret'&&h.life>0);
+  if(turret){
+   turret.power=Math.min(2.8,turret.power+.12);
+   turret.nextShot=Math.min(turret.nextShot||0,.5);
+  }
+ }
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
 }
 function cooldown(o){
@@ -780,6 +892,13 @@ applyDamage=function(target,damage){
   target.v2MitosisUsed=true;target.hp=Math.max(1,Math.round(target.mh*.24));
   target.r=Math.max(10,target.r*.68);
   target.status.shield=(target.status.shield||0)+5;
+  if(evolutionStage(target)>0){
+   const level=evolutionStage(target);
+   target.hp=Math.max(target.hp,Math.round(target.mh*(level===2?.39:.3)));
+   target.v2CellBud={clock:.35,remaining:level===2?5:3,heal:level===2?3:2};
+   zone(target,target.x,target.y,'slime',level===2?43:30,2.6+level,.48);
+   if(level===2&&target.v2MitosisBloom)target.status.shield=Math.min(32,(target.status.shield||0)+9);
+  }
   visual(target,target,'growth',32,'#5eead4',.95);
  }
 };
@@ -796,6 +915,58 @@ function tick(dt){
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
   if(o.skillImpact>0)o.skillImpact=Math.max(0,o.skillImpact-dt);
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
+  // Identity-specific evolution lifecycles: actual periodic attacks, healing
+  // and pulling, rather than one-off reused actions or cosmetic rings.
+  if(o.b.id===17&&o.v2CellBud){
+   const bud=o.v2CellBud;bud.clock-=dt;
+   if(bud.clock<=0){
+    o.hp=Math.min(o.mh,o.hp+bud.heal);
+    visual(o,o,'heal',21,'#5eead4',.36);
+    bud.remaining--;bud.clock+=.75;
+    if(bud.remaining<=0)o.v2CellBud=null;
+   }
+  }
+  if(o.b.id===19&&o.v2Pressure){
+   const aura=o.v2Pressure;aura.remaining-=dt;aura.next-=dt;
+   if(aura.remaining<=0)o.v2Pressure=null;
+   else if(aura.next<=0){
+    const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(foe){
+     const dx=o.x-foe.x,dy=o.y-foe.y,dist=Math.hypot(dx,dy)||1;
+     if(dist<aura.radius+foe.r){
+      strike(o,foe,o.baseDmg*aura.damage,{slow:.22});
+      if(aura.pull>0){
+       foe.vx=(foe.vx||0)+dx/dist*aura.pull;
+       foe.vy=(foe.vy||0)+dy/dist*aura.pull;
+      }
+     }
+    }
+    visual(o,o,'ring',aura.radius,abilityData[19].color,.35);
+    aura.next+=.4;
+   }
+  }
+  if(o.b.id===20&&o.v2BeamEcho){
+   const beam=o.v2BeamEcho;beam.clock-=dt;
+   if(beam.clock<=0){
+    const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(foe){
+     const py=foe.y,px=foe.x;
+     st.beams.push({x:o.x,y:o.y,x2:px,y2:py,color:'#60a5fa',life:.36,max:.36,id:20});
+     strike(o,foe,o.baseDmg*beam.damage,{slow:.3});
+    }
+    beam.remaining--;beam.clock+=.6;if(beam.remaining<=0)o.v2BeamEcho=null;
+   }
+  }
+  if(o.b.id===22&&o.v2Orchard){
+   const orchard=o.v2Orchard;orchard.clock-=dt;
+   if(orchard.clock<=0){
+    o.hp=Math.min(o.mh,o.hp+1.8*orchard.level);
+    if(orchard.level===2)o.status.shield=Math.min(32,(o.status.shield||0)+.7);
+    visual(o,o,'heal',21,'#fbbf24',.44);
+    orchard.remaining--;orchard.clock+=.9;
+    if(orchard.remaining<=0)o.v2Orchard=null;
+   }
+  }
   const echo=o.v2Echo;if(echo){echo.clock-=dt;if(echo.clock<=0){const foe=G.bl.find(t=>t.team!==o.team&&alive(t));if(foe)radial(o,foe,echo.power,{radius:echo.radius});echo.remaining--;echo.clock+=.5;if(echo.remaining<=0)o.v2Echo=null;}}
   const tail=o.v2Tail;
   if(tail){tail.life-=dt;tail.nextHit=Math.max(0,tail.nextHit-dt);if(tail.life<=0)o.v2Tail=null;else {const foe=G.bl.find(t=>t.team!==o.team&&alive(t)),points=(o.trail||[]).slice(-tail.length);if(foe&&tail.nextHit<=0&&points.some(p=>Math.hypot(foe.x-p.x,foe.y-p.y)<foe.r+8)){strike(o,foe,o.baseDmg*.16,{poison:.4,knock:.08});tail.nextHit=.6;}}}
