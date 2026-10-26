@@ -23,7 +23,7 @@ function actors(){
 }
 function match(variant=0){
  return {m:0,th:0,rt:14,ph:'end',bl:actors(),finisher:{
-  x:230,y:245,fromX:110,fromY:120,color:'#ffcc33',winnerId:1,variant,style:variant,age:0,life:1.2
+  x:230,y:245,fromX:110,fromY:120,color:'#ffcc33',winnerId:1,variant,style:variant,age:0,life:1.8
  }};
 }
 function presentation(randomValue){
@@ -75,21 +75,21 @@ test('draw and invalid endings must not create a finisher',()=>{
  f.finish(g,0);
  assert.equal(g.finisher,undefined);
 });
-test('recording extends the terminal K.O. by 72 visual frames, without mutating real battle state',()=>{
+test('recording extends the terminal K.O. by 108 visual frames, without mutating real battle state',()=>{
  const c=codec();
  for(let variant=0;variant<5;variant++){
   const g=match(variant),original=JSON.stringify(g),r=new c.Recording({kind:'unit'});
   assert.equal(r.capture(g),true);
-  assert.equal(c.captureFinisherTail(r,g),72);
+  assert.equal(c.captureFinisherTail(r,g),108);
   assert.equal(JSON.stringify(g),original,'visual replay extension must not change the game');
   const stored=JSON.parse(JSON.stringify(r.export()));
-  assert.equal(c.validate(stored).frames.length,73);
+  assert.equal(c.validate(stored).frames.length,109);
   const first=c.stateAt(stored,0),last=c.stateAt(stored,stored.frames.length-1);
   assert.equal(first.finisher.variant,variant);
   assert.equal(last.finisher.variant,variant);
   assert.equal(first.finisher.age,0);
-  assert.ok(Math.abs(last.finisher.age-1.2)<1e-9);
-  assert.ok(Math.abs(last.rt-(g.rt+1.2))<1e-9);
+  assert.ok(Math.abs(last.finisher.age-1.8)<1e-9);
+  assert.ok(Math.abs(last.rt-(g.rt+1.8))<1e-9);
  }
 });
 test('finish tails are absent for ties and capped at the replay time limit',()=>{
