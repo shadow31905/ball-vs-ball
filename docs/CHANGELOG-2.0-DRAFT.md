@@ -5,6 +5,7 @@
 ## Kulki, umiejętności i ewolucje
 - 130 ręcznie zdefiniowanych pasywek i superumiejętności.
 - 130 aktywnych zdolności, z osobnymi zachowaniami i efektami.
+- Wprowadzono testy realnych efektów pierwszych **16 z 130 kulek** (obrażenia, trafienie, leczenie, statusy, ewolucje, wygasanie): `docs/ABILITY-AUDIT.md`. Uzupełniono działanie szarży i fali (ID 8–9) oraz opis kostki (ID 11). Pozostałe kulki i szersze interakcje nadal wymagają audytu.
 - Warianty ewolucji V1, V2 i V3; dodatkowe pociski, ostrza, pola, statusy, modyfikacje zasięgu/czasu, oczyszczanie i przywołania.
 - Podglądy zdolności oraz opisy w interfejsie; pełna zgodność każdej zdolności z opisem **wymaga audytu**.
 
@@ -40,7 +41,7 @@
 ## Zapis, konto i beta
 - Walidacja i migracja lokalnych zapisów oraz bezpieczny import z kopią i rollbackiem.
 - Oddzielna beta z izolowanym profilem, narzędziami do ewolucji i wyłączonym kontem/chmurą.
-- **Tylko beta:** nowy panel testowy (administrator lokalnego profilu beta), w którym można ustawić dowolną bezpieczną liczbę monet i cukierków, odblokować wszystkie 130 kulek, nadać V1/V2/V3 jednej lub wszystkim kulkom i otworzyć trening z wybranym wariantem. Panel nie jest ładowany przez stabilne `index.html` i nie ma dostępu do kont/chmury. W GitHub Actions dodano archiwum bety oznaczone hashem commita (dostępne po zielonych testach, nie jest to publikacja na Pages).
+- **Tylko testowa beta:** panel lokalnych ustawień testowych pozwala nadać monety i cukierki, odblokować 130 kulek, nadać V1/V2/V3 jednej lub wszystkim kulkom oraz otworzyć trening. Nie jest ładowany w stabilnej grze i nie korzysta z kont/chmury. Po zmianie decyzji właściciela **publiczna beta została wycofana z GitHub Pages**; kolejne testy wykonuje tymczasowa paczka tylko na serwerze CI, bez publikowania gotowych artefaktów.
 - Funkcje konta/chmury pozostają do odbioru przed stabilną publikacją.
 - Okno changelogu 2.0.1: automatyczne pokazanie najwyżej raz dla danej wersji i profilu przeglądarki, ponowne otwarcie ręcznie w ustawieniach. Beta i stabilna gra mają oddzielne znaczniki przeczytania listy.
 
