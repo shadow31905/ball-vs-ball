@@ -10,13 +10,14 @@ W kodzie zaimplementowano:
 - 5 profili AI, uniki pocisków i zagrożeń, kontrola statusów, tarcie, spin, stabilizacja fizyki i hash stanu obejmujący stan zdolności.
 - Odtworzenie każdego kroku walki z bezstratnymi deltami, zdarzeniami, dźwiękami i muzyką; import/eksport, gzip, zapis i odczyt po odświeżeniu. To odtwarzanie zapisanych stanów, nie ponowna symulacja; nagrania mogą zostać oznaczone jako niepełne po wyczerpaniu limitu pamięci. Wygląd i wyjście audio zależą od przeglądarki.
 - Animowane kwadratowe kategorie, przyciski i przejścia, finisher, rysowanie zwycięskiej kulki oraz respektowanie ograniczania animacji.
-- Dodano pięć równoprawdopodobnych wariantów graficznego finishera i zapamiętanie numeru wariantu w stanie rundy (c319624); wymaga jeszcze testów zapisu/odtwarzania w powtórkach i synchronizacji publicznego 1v1. Nie oznaczać jako ukończonego całego wymagania cutscenek.
+- Pięć animacji K.O. (każda 20%, wybór w tle). Dodano odtwarzanie 72 prezentacyjnych klatek po zakończeniu rundy, utrwalony wariant w powtórce i odbicie współrzędnych u gościa, jednorazowy dźwięk oraz reset sceny przed kolejną rundą. Testy jednostkowe `tests/finisher-replay.test.cjs` i test dwóch lokalnych klientów `tests/combat-network-browser.cjs` obejmują sceny, replay, perspektywę i dźwięk; pełny wynik aktualnego CI i publiczny odbiór sieciowy **pozostają do potwierdzenia**.
 - Trening wszystkich 130 kulek: wyszukiwarka bez rozróżniania polskich znaków, sortowanie według rzadkości, wybór obu ewolucji i rywala. Bez zmiany postępu konta.
 - Przywrócona progresja Survival, Infinity, Boss Rush, Turnieju, Chaosu i Halloween; testy przechodzą wszystkie 50 poziomów kampanii. W testach progresji zwycięstwa są wymuszane wzmocnieniem gracza, więc nie stanowią certyfikatu balansu kampanii.
 - Multiplayer z walidacją, kolejnością i hashem pakietów, pełną zmianą perspektywy, zatrzymaniem hosta przy zerwaniu kanału i ponownym połączeniem. Test dwóch klientów używa rzeczywistych WebRTC DataChannel; publiczna sygnalizacja PeerJS i TURN/WAN wymagają odrębnego odbioru.
 - Obsługa opcjonalnego TURN i informacja o wybranej trasie; brak aktywnych poświadczeń TURN w repozytorium.
 - Walidacja, migracja i transakcyjny import lokalnego zapisu z kopią oraz wycofaniem błędu. Nie jest to ochrona anty-cheat.
 - Pakowanie niezależnej bety, kontrola zależności i izolacji zapisu. Pasek bety pozwala testować wszystkie ewolucje.
+- Testowany w Chromium pakiet beta jest załączany jako artefakt GitHub Actions (gdy job zakończy się pomyślnie), z numerem źródłowego commita w `build.json`. Samo dołączenie artefaktu **nie oznacza publicznego wdrożenia**.
 
 - Rozbudowano jednorazowo wyświetlany changelog 2.0.1 o pełniejszy wykaz funkcji reworku i dodano testy zachowania po ponownym wejściu; robocza dokumentacja: `docs/CHANGELOG-2.0-DRAFT.md`. Przy finalnej premierze zaktualizować wykaz wyłącznie o potwierdzone zmiany oraz wersję komunikatu.
 
