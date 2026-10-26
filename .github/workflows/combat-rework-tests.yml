@@ -61,7 +61,7 @@ jobs:
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps ${{ matrix.browser }}
-      - name: Run full-page browser and mobile tests
+      - name: Run stable-page and temporary internal beta browser tests
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bvb-server.log 2>&1 &
           sleep 2
@@ -73,11 +73,3 @@ jobs:
             BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/combat-mobile-smoke.cjs
           fi
           if [ "$BVB_BROWSER" = chromium ]; then node tests/combat-network-browser.cjs; fi
-      - name: Upload tested beta bundle
-        if: matrix.browser == 'chromium'
-        uses: actions/upload-artifact@v4
-        with:
-          name: ball-vs-ball-beta
-          path: beta/
-          if-no-files-found: error
-          retention-days: 14
