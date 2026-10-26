@@ -20,6 +20,7 @@ function sync(){
  const o=prefs();
  document.body?.classList?.toggle('bvb-effects-off',!enabled('inventory'));
  document.body?.classList?.toggle('bvb-menu-motion-off',!enabled('menu'));
+ document.body?.classList?.toggle('bvb-result-motion-off',!enabled('results'));
  document.body?.style?.setProperty('--bvb-intensity',String(o.artIntensity/100));
 }
 function change(type,value){
@@ -122,7 +123,7 @@ function drawActor(ctx,o,g){
  ctx.restore();
 }
 function resultBalls(g,won){
- if(!enabled('results')||!g||!Array.isArray(g.my))return '';
+ if(!g||!Array.isArray(g.my))return '';
  const deck=g.my.filter(b=>b&&Number.isInteger(b.id)&&B[b.id]).slice(0,3);
  if(!deck.length)return '';
  const label=won?'Zadowolone kulki':'Smutne kulki';
@@ -147,7 +148,7 @@ style.textContent=[
 '.bvb-result-ball small{display:block;font-weight:750;font-size:11px;margin-top:5px;overflow-wrap:anywhere}',
 '@keyframes bvbWin{from{transform:translateY(1px) rotate(-4deg)}to{transform:translateY(-9px) rotate(5deg)}}',
 '@keyframes bvbLoss{from{transform:translateY(4px) rotate(-2deg)}to{transform:translateY(8px) rotate(2deg)}}',
-'body.bvb-effects-off .bvb-result-ball{animation:none}',
+'body.bvb-effects-off .bvb-result-ball,body.bvb-result-motion-off .bvb-result-ball{animation:none!important}',
 '@media(prefers-reduced-motion:reduce){.bvb-result-ball{animation:none!important}}',
 'body.bvb-menu-motion-off #menu .bvb3-tile:before,body.bvb-menu-motion-off #menu .bvb3-ghost{animation:none!important}'
 ].join('\n');
