@@ -1843,6 +1843,36 @@ function drawOverlay(){
 }
 const oldDraw=draw;
 draw=function(){oldDraw();drawOverlay();};
+// Per-identity visual rework (32–47). New small enamel emblems are unique
+// silhouettes rather than a generic colored ring; each also retains the
+// original foreground design, keeping the collection recognizable.
+const signatureBadges32=Object.freeze({
+ 32:'<path d="M-5-8H5M-3-8V-3L-8 7Q-9 9-6 10H6Q9 9 8 7L3-3V-8" fill="none" stroke="white" stroke-width="1.8"/><path d="M-6 4Q0 1 6 4L7 8H-7Z" fill="#a3e635"/><circle cx="-2" cy="1" r="1.2" fill="#fff"/>',
+ 33:'<path d="M-9 3H9L6-5H-6Z" fill="#9ca3af" stroke="white"/><rect x="-6" y="-8" width="5" height="5" rx="1" fill="#e9d5ff"/><circle cx="-5" cy="7" r="2" fill="#e9d5ff"/><circle cx="5" cy="7" r="2" fill="#e9d5ff"/><path d="M-9 10H10" stroke="white" stroke-width="1.4"/>',
+ 34:'<path d="M-9-9L9 9M9-9L-9 9M0-11V11M-11 0H11M-7-5Q0 0 7-5M-7 5Q0 0 7 5" fill="none" stroke="#e9d5ff" stroke-width="1.25"/><circle r="2.5" fill="white"/>',
+ 35:'<path d="M-7 9V-3A7 7 0 0 1 7-3V9Z" fill="#94a3b8" stroke="white" stroke-width="1.5"/><path d="M0-5V5M-4-1H4" stroke="#27233f" stroke-width="2"/><path d="M-10 10H10" stroke="#e9d5ff" stroke-width="1.8"/>',
+ 36:'<path d="M-2-3Q-10-12-11-3Q-11 3-2 6M2-3Q10-12 11-3Q11 3 2 6" fill="#fde68a" stroke="white" stroke-width="1.3"/><path d="M0-10L-3 1H2L-1 10L6-3H1Z" fill="white"/>',
+ 37:'<path d="M-5-7L-10-10L-9 0L-11 9L-4 6M5-7L10-10L9 0L11 9L4 6" fill="#f472b6" stroke="white" stroke-width="1.2"/><rect x="-6" y="-6" width="12" height="12" rx="4" fill="#fbcfe8" stroke="white" stroke-width="1.5"/><path d="M-4 2Q0-5 4 2" fill="none" stroke="#be185d" stroke-width="1.7"/>',
+ 38:'<path d="M-10 0Q-13-7-6-9Q0-14 5-8Q13-9 11-1Q15 7 7 10Q0 13-6 9Q-13 9-10 0Z" fill="#86efac" stroke="white" stroke-width="1.4"/><circle cx="-4" cy="-2" r="2" fill="#166534"/><circle cx="5" cy="3" r="2.5" fill="#166534"/>',
+ 39:'<g fill="none" stroke="#e2e8f0" stroke-width="2.3"><ellipse cx="-5" cy="-5" rx="4" ry="6" transform="rotate(44 -5 -5)"/><ellipse cx="4" cy="4" rx="4" ry="6" transform="rotate(44 4 4)"/><path d="M-3-2L3 2"/></g>',
+ 40:'<path d="M0-11Q-3-5-7 0A8 8 0 1 0 7 0Q3-5 0-11Z" fill="#bef264" stroke="white" stroke-width="1.6"/><circle cx="-3" cy="4" r="2" fill="#365314"/><circle cx="4" cy="0" r="1.2" fill="white"/>',
+ 41:'<path d="M0-10L9-2L0 10L-9-2Z" fill="#a5f3fc" stroke="white" stroke-width="1.4"/><path d="M0-10L0 10M-9-2L9-2M-3-7L5 5" fill="none" stroke="#0369a1" stroke-width="1.3"/>',
+ 42:'<g fill="#c4b5fd" stroke="white" stroke-width=".8"><circle cx="-6" cy="2" r="4.5"/><circle cx="-1" cy="-5" r="5.5"/><circle cx="6" cy="1" r="5"/><circle cx="0" cy="5" r="5"/></g><circle cx="4" cy="-4" r="1.3" fill="#7c3aed"/>',
+ 43:'<path d="M0-11L2-4L9-4L4 1L6 9L0 5L-6 9L-4 1L-9-4L-2-4Z" fill="#fde047" stroke="white" stroke-width="1.2"/><circle cx="-9" cy="9" r="1.6" fill="white"/><circle cx="9" cy="-9" r="1.6" fill="white"/>',
+ 44:'<path d="M-9 7Q-10-8 3-8Q11-7 10 2Q9 10 2 9Q-5 9-5 3Q-5-2 0-2Q5-1 4 3" fill="none" stroke="#fde68a" stroke-width="2.3"/><circle cx="4" cy="3" r="1.7" fill="white"/>',
+ 45:'<path d="M0-11L4-4L10-6L7 1L11 7L3 6L0 11L-3 6L-11 7L-7 1L-10-6L-4-4Z" fill="#d1d5db" stroke="white" stroke-width="1.4"/><path d="M-5 2L0-4L5 2" fill="none" stroke="#475569" stroke-width="1.5"/>',
+ 46:'<circle cx="-1" cy="2" r="8" fill="#94a3b8" stroke="white" stroke-width="1.5"/><path d="M2-6L5-10L8-7M-1-3V2L3 5" fill="none" stroke="#fde68a" stroke-width="1.7"/><circle cx="9" cy="-10" r="2" fill="#fbbf24"/>',
+ 47:'<circle r="3.5" fill="#e0f2fe" stroke="white" stroke-width="1"/><ellipse rx="11" ry="5.5" transform="rotate(-34)" fill="none" stroke="#7dd3fc" stroke-width="1.6"/><ellipse rx="11" ry="5.5" transform="rotate(35)" fill="none" stroke="#f8fafc" stroke-width="1.5"/><circle cx="8" cy="-7" r="2.4" fill="#facc15"/>'
+});
+if(Object.keys(signatureBadges32).length!==16)throw new Error('16 unique graphics required for bespoke balls 32–47');
+function signatureBadge32(id){
+ const glyph=signatureBadges32[id];
+ if(!glyph)return '';
+ const tone=abilityData[id].color;
+ return '<g data-signature-id="'+id+'" class="bvb-signature-badge" transform="translate(46 45)">'+
+  '<circle r="13.3" fill="#080d24" stroke="'+tone+'" stroke-width="2.4"/>'+
+  glyph+'</g>';
+}
 function enhanceArt(id){
  const old=oldArt(id),data=abilityData[id];if(!old)return old;
  const col=B[id].c,accent=data.color,grad='g'+id;
@@ -1865,7 +1895,7 @@ function enhanceArt(id){
  // All 130 existing unique SVG foreground designs are retained, while the common
  // square backing is replaced with a lighted sphere and character accents.
  const square=/<rect x="1" y="1" width="62" height="62" rx="18"[^>]*\/>/;
- return old.replace(square,background).replace('</svg>',shine+extra+'</svg>');
+ return old.replace(square,background).replace('</svg>',shine+extra+signatureBadge32(id)+'</svg>');
 }
 art=function(id){if(!ART.has('v2'+id))ART.set('v2'+id,enhanceArt(id));return ART.get('v2'+id);};
 ART_IMAGES.clear();preloadArt();
