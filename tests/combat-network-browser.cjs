@@ -201,6 +201,7 @@ function perspectiveEvidence(){
   // A real RTC state packet must carry one host-selected K.O. scene to the
   // guest, preserving its variant while mirroring both point coordinates.
   const hostFinish=await host.evaluate(()=>{
+   G.bl.find(o=>o.team===1).hp=0; // The cinematic requires an actual final KO.
    roundEnd(0);
    return {variant:G.finisher?.variant,x:G.finisher?.x,y:G.finisher?.y,
     fromY:G.finisher?.fromY};
