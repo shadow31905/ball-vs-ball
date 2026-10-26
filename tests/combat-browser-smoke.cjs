@@ -57,6 +57,20 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    assert.ok(cinematicProof.signatures.every(s=>new Set(s).size===3),
      'each cinematic must have three genuinely different animation frames');
    assert.equal(cinematicProof.reducedSame,true,'reduced motion cutscene must remain static');
+   // Reference-sheet 02 portraits must decode as real SVG images in browsers.
+   await page.waitForFunction(()=>window.BVB2Sheet02?.ids?.length===6 &&
+    window.BVB2Sheet02.ids.every(id=>[1,2,3].every(t=>
+     window.BVB2Sheet02.imageForTier(id,t)?.naturalWidth>0)),null,{timeout:10000});
+   const sheetArt=await page.evaluate(()=>window.BVB2Sheet02.ids.map(id=>({
+    id,svgs:[1,2,3].map(t=>art(id,t)),
+    imageWidths:[1,2,3].map(t=>window.BVB2Sheet02.imageForTier(id,t).naturalWidth)
+   })));
+   assert.equal(sheetArt.length,6);
+   for(const ball of sheetArt){
+    assert.ok(ball.imageWidths.every(n=>n>0),'SVG must load in browser: '+ball.id);
+    assert.equal(new Set(ball.svgs).size,3,'V1/V2/V3 portraits differ: '+ball.id);
+    assert.ok(ball.svgs.every((svg,i)=>svg.includes('data-preview-tier="'+(i+1)+'"')));
+   }
    if(new URL(base).pathname.split('/').includes('beta')){
      await page.waitForSelector('#bvbBetaPanelOpen');
      await page.click('#bvbBetaPanelOpen');
