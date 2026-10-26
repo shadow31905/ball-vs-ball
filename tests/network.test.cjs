@@ -83,3 +83,30 @@ test('nested drawing geometry rejects negative radii and invalid coordinates bef
   const s=state();mutate(s);assert.equal(n.validState(s),false);
  }
 });
+
+test('the guest accepts exactly five safe host-selected KO scenes and rejects malformed cutscenes',()=>{
+ const n=api();
+ const make=variant=>({...state(),ph:'end',finisher:{
+  variant,style:variant,x:245,y:190,fromX:100,fromY:155,age:.4,life:1.8,
+  color:'#ffcc44',loserColor:'#4477ff',winnerId:1,winnerName:'Topór'
+ }});
+ for(let i=0;i<5;i++){
+  const host=make(i);
+  assert.equal(n.validState(host),true);
+  const guest=n.guestState(host);
+  assert.equal(guest.finisher.variant,i);
+  assert.equal(guest.finisher.fromY,205);
+  assert.equal(guest.finisher.y,170);
+  assert.equal(guest.finisher.age,.4);
+ }
+ for(const modify of [
+  f=>{f.variant=5;},f=>{f.variant=-1;},f=>{f.variant=1.5;},
+  f=>{f.age=2.5;},f=>{f.life=0;},f=>{f.life=10000;},
+  f=>{f.fromY=Infinity;},f=>{f.x=100000;},
+  f=>{f.winnerId=190;},f=>{f.winnerName='X'.repeat(7000);},
+  f=>{f.color='#ee"onload="x';}
+ ]){
+  const packet=make(2);modify(packet.finisher);
+  assert.equal(n.validState(packet),false);
+ }
+});
