@@ -39,3 +39,11 @@ test('lazy images remain cached per stage, unaffected balls use no random mutati
  assert.ok(data.src.startsWith('data:image/svg+xml'));
  assert.equal(data.outOfRange,null);
 });
+test('collection detail shows all three stages for any of the 130 balls',()=>{
+ const g=createGame();
+ for(const id of [0,8,32,47,48,79,129]){
+  const html=g.run('BVBArtEvolution.galleryHtml('+id+')');
+  assert.equal((html.match(/class="bvb-evo-preview"/g)||[]).length,3);
+  for(let stage=1;stage<=3;stage++)assert.ok(html.includes('data-stage="'+stage+'"'));
+ }
+});
