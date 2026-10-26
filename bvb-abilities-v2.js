@@ -534,6 +534,11 @@ function applySignatureEvolution32(o,foe,level){
   visual(o,foe,'dice',36,color,.65);
  }else if(id===33){ // Ghost Train: moving trains leave dangerous rail sleepers.
   o.v2Rail={remaining:2.5+level*.5,next:.17,level};
+  for(const h of st.hazards){
+   if(h.kind==='train'&&h.owner===o.uid&&h.life>0){
+    h.v2RailTrain=level;h.v2RailClock=.14;
+   }
+  }
   if(level===2)o.v2Express={next:.4,remaining:2,level};
   visual(o,o,'train',42,color,.65);
  }else if(id===34){ // Black spider: only real opposite-wall bounces make strands.
@@ -866,6 +871,52 @@ function webPoint(o,side){
  }
  o.v2WallAnchor=p;
 }
+// Bespoke bounce consequences must use the actual collided wall and live
+// hazards. They cannot be simulated by a preview or a generic on-cast action.
+function signatureWall32(o,side,st){
+ const id=o.b.id,stage=evolutionStage(o);
+ if(!stage)return;
+ if(id===33&&o.v2Rail){
+  const train=st.hazards.findLast(h=>h.kind==='train'&&h.owner===o.uid&&h.life>0);
+  if(train){train.v2RailTrain=stage;train.v2RailClock=.16;}
+  if(stage===2){
+   const express=zone(o,o.x,o.y,'train',21,2.25,.42);
+   if(express){
+    express.vx=side==='top'||side==='bottom'?175:0;
+    express.vy=side==='left'||side==='right'?175:0;
+    express.v2RailTrain=stage;express.v2RailClock=.2;
+   }
+  }
+ }else if(id===34&&o.v2WidowUntil>G.rt){
+  const old=o.v2WidowLast;
+  if(old&&old.side!==side){
+   const shift=20;
+   const path=(dir)=>{
+    const a={x:clamp(old.x+dir*shift,12,348),y:clamp(old.y-dir*shift,12,348)};
+    const b={x:clamp(o.x-dir*shift,12,348),y:clamp(o.y+dir*shift,12,348)};
+    st.webs.push({a,b,team:o.team,id:34,owner:o.uid,stage,
+     inside:{},color:'#a78bfa'});
+   };
+   path(1);if(stage===2)path(-1);
+   if(st.webs.length>16)st.webs.splice(0,st.webs.length-16);
+  }
+  o.v2WidowLast={x:o.x,y:o.y,side};
+ }else if(id===41&&o.v2LensUntil>G.rt){
+  const draw=(a,b,width)=>{
+   st.wallBeams.push({a,b,owner:o.uid,team:o.team,color:abilityData[41].color,
+    life:2.1+stage*.25,width,inside:{}});
+  };
+  const end={x:clamp(W-o.x,10,350),y:clamp(W-o.y,10,350)};
+  draw({x:o.x,y:o.y},end,3+stage);
+  if(stage===2){
+   draw({x:o.x,y:clamp(W-o.y,10,350)},
+    {x:clamp(W-o.x,10,350),y:o.y},4);
+   // Focused crossing pulse: a third beam would otherwise add many hits.
+   o.v2LensFocus={next:.35,remaining:1};
+  }
+  if(st.wallBeams.length>12)st.wallBeams.splice(0,st.wallBeams.length-12);
+ }
+}
 function onWall(o,side){
  const d=abilityFor(o);if(!d)return;
  const st=roundState();if(!st)return;
@@ -931,6 +982,7 @@ function onWall(o,side){
   if(stage===2)o.v2CrownDelayed={next:.42,remaining:1};
  }
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
+ signatureWall32(o,side,st);
 }
 function cooldown(o){
  const d=abilityFor(o);const rate=Math.max(.55,Math.min(1.5,o.abilityRate||1));
