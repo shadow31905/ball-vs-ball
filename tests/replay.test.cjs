@@ -41,7 +41,7 @@ test('sound score preserves SFX, standard music and filtered music synthesis par
 });
 test('recording rejects backward time and reports exhausted frame budget',()=>{
  const c=codec(),r=new c.Recording();r.capture(game(1));assert.throws(()=>r.capture(game(0)),/cofnął/);
- const full=new c.Recording();for(let i=0;i<c.limits.MAX_FRAMES+2;i++)full.capture(game(i/60));
+ const full=new c.Recording();for(let i=0;i<c.limits.MAX_FRAMES+2;i++)full.capture(game(i/62));
  assert.equal(full.frames.length,c.limits.MAX_FRAMES);assert.equal(full.meta.complete,false);
 });
 test('malformed imports, prototype paths, invalid actors and audio are rejected',()=>{
