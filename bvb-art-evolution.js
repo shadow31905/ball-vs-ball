@@ -136,6 +136,29 @@ css.textContent=[
  'body.bvb-effects-off .orb,body.bvb-effects-off .orb *{animation:none!important}'
 ].join('\n');
 document.head.appendChild(css);
-window.BVBArtEvolution={count:B.length,tiers:3,signatures:Object.freeze(sig),svgFor,imageForTier,imageFor,colors:palette};
+function galleryHtml(id){
+ id=Number(id);if(!Number.isInteger(id)||id<0||id>=B.length)return '';
+ return '<section class="bvb-evo-gallery" aria-label="Wygląd trzech ewolucji">'+
+  '<h3 style="margin:8px 0">🎨 Wygląd V1 / V2 / V3</h3>'+
+  '<div class="bvb-evo-triptych">'+[1,2,3].map(t=>
+   '<div class="bvb-evo-preview" data-stage="'+t+'"><strong>V'+t+'</strong>'+
+   '<span class="orb" style="--s:76px;--oc:'+B[id].c+'">'+svgFor(id,t)+'</span></div>'
+  ).join('')+'</div></section>';
+}
+const detailBeforeArt=openBallDetail;
+openBallDetail=function(id){
+ detailBeforeArt(id);
+ const host=document.querySelector('#ovb');
+ if(!host||!B[id])return;
+ const preview=document.createElement('section');
+ preview.innerHTML=galleryHtml(id);
+ host.appendChild(preview);
+};
+css.textContent+='\n.bvb-evo-triptych{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:10px 0 14px}'+
+ '\n.bvb-evo-preview{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:#121c37;border:1px solid #566aab;border-radius:12px;padding:9px 2px}'+
+ '\n.bvb-evo-preview strong{color:#f8fafc}'+
+ '\n.bvb-evo-preview .orb{--s:70px!important;max-width:100%}'+
+ '\n.bvb-evo-preview[data-stage="3"]{border-color:#f7cf6b;box-shadow:0 0 12px #fbbf2450}';
+window.BVBArtEvolution={count:B.length,tiers:3,signatures:Object.freeze(sig),svgFor,imageForTier,imageFor,colors:palette,galleryHtml};
 ART_IMAGES.clear();preloadArt();
 })();
