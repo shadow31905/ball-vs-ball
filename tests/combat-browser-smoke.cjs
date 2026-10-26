@@ -112,8 +112,16 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.evaluate(()=>{document.getElementById('accountGate').hidden=true;startMatch(0);pick(0);});
    await page.waitForFunction(()=>G?.ph==='battle');
    await page.click('#bvbSaved');
+   // Decompression runs asynchronously, especially in WebKit. A click event
+   // resolves before the imported recording is validated and rendered.
+   await page.waitForFunction(()=>{
+     const dialog=document.getElementById('bvbReplayOverlay');
+     const btn=document.getElementById('bvbSaved');
+     return dialog?.hidden===false || btn?.title?.startsWith('Nie można wczytać');
+   },null,{timeout:12000});
    assert.equal(await page.locator('#bvbReplayOverlay').isVisible(),true,
-     'saved replay should still open after a reload');
+     'saved replay should still open after a reload: '+
+     await page.locator('#bvbSaved').getAttribute('title'));
    await page.click('#bvbReplayClose');
    await page.evaluate(()=>{startBossFight(0);pick(0);});
    await page.waitForFunction(()=>G?.ph==='battle'&&G?.bl?.[1]?.b?.isBoss===true);
