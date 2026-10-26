@@ -110,7 +110,7 @@ body.append(optOut);
 modal.append(body);document.body.append(modal);
 // Increase RELEASE_VERSION with each future release to show its notes once again.
 const RELEASE_VERSION='2.0.1';
-const SEEN_KEY='bvb-release-notes-seen-'+RELEASE_VERSION;
+const SEEN_KEY='bvb-release-notes-seen-'+(window.location?.pathname?.includes('/beta/')?'beta-':'')+RELEASE_VERSION;
 const OPTOUT_KEY='bvb-release-notes-optout';
 let lastFocused=null,entryTimer=null,seenThisSession=false,optOutThisSession=false;
 function autoDisabled(){
