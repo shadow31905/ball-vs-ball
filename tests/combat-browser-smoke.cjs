@@ -71,6 +71,14 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
     assert.equal(new Set(ball.svgs).size,3,'V1/V2/V3 portraits differ: '+ball.id);
     assert.ok(ball.svgs.every((svg,i)=>svg.includes('data-preview-tier="'+(i+1)+'"')));
    }
+   // Check authored art actually decodes, including evolved early and late balls.
+   const evolvedSamples=[0,1,2,3,4,5,6,7,8,9,10,11,12,16,24,32,39,47,48,63,98,129];
+   await page.waitForFunction(ids=>ids.every(id=>[1,2,3].every(t=>
+    window.BVBArtEvolution.imageForTier(id,t)?.naturalWidth>0)),evolvedSamples,{timeout:20000});
+   const artDiagnostics=await page.evaluate(ids=>ids.map(id=>[1,2,3].map(t=>
+    window.BVBArtEvolution.imageForTier(id,t).naturalWidth)),evolvedSamples);
+   assert.ok(artDiagnostics.every(stages=>stages.every(width=>width>0)),
+    'every selected evolution must decode as an image');
    if(new URL(base).pathname.split('/').includes('beta')){
      await page.waitForSelector('#bvbBetaPanelOpen');
      await page.click('#bvbBetaPanelOpen');
