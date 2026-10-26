@@ -24,6 +24,8 @@ function play(id){
  if(!canvas||!B[id])return;
  const ctx=canvas.getContext('2d');if(!ctx)return;
  const evolution=getBallStats(id).tier,skill=window.BVB2.abilities[id],type=skill.kind,color=colors[type]||skill.color||'#c4b5fd';
+ const authored=window.BVB2.authoredUpgrades?.[id]||null;
+ const reduceMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||false;
  const token=++ticket,start=performance.now(),W=320,H=150;
  function circle(x,y,r,c){
   ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
@@ -37,11 +39,45 @@ function play(id){
   if(img?.complete&&img.naturalWidth)ctx.drawImage(img,x-r,y-r,r*2,r*2);
   else circle(x,y,r,B[ball]?.c||'#fff');
  }
+ function drawEvolvedEffect(action,layer,t,ox,oy,ex,ey){
+  // Schematycznie pokazuje faktyczny typ nowego obiektu/statusu, nie udaje
+  // identycznego przebiegu trafienia. Warstwa V3 ma osobny motyw.
+  const accent=layer===2?'#facc15':'#7dd3fc',scale=layer===2?1.2:1;
+  ctx.save();
+  ctx.globalAlpha=.42+.48*t;
+  if(/Shot|Bolt|scatter|pierce|bounce|ghost/.test(action)){
+   const count=layer===2?3:2;
+   for(let n=0;n<count;n++){
+    const y=ey+(n-(count-1)/2)*24;
+    const x=ox+35+t*(ex-ox-57);
+    glowingLine(x-24,y,x,y,2.5,accent,.7);
+    circle(x,y,3.6*scale,accent);
+   }
+  }else if(/Field|wave|echo/.test(action)){
+   const x=/pushwave|burnwave|shockwave|echo/.test(action)?ox:ex;
+   const radius=(14+26*t)*(layer===2?1.22:1);
+   ctx.strokeStyle=accent;ctx.lineWidth=layer===2?4:2;
+   ctx.beginPath();ctx.arc(x,oy,radius,0,Math.PI*2);ctx.stroke();
+   if(layer===2){ctx.beginPath();ctx.arc(x,oy,radius*.65,0,Math.PI*2);ctx.stroke();}
+  }else if(/guard|mirror|cleanse|healing/.test(action)){
+   ctx.strokeStyle=accent;ctx.lineWidth=2.5;
+   ctx.beginPath();ctx.arc(ox,oy,(24+11*t)*scale,0,Math.PI*2);ctx.stroke();
+   if(layer===2){ctx.beginPath();ctx.arc(ox,oy,(32+10*t)*scale,0,Math.PI*2);ctx.stroke();}
+  }else if(/pull|stun|weaken|lure|drain/.test(action)){
+   glowingLine(ox+15,oy,ex-15,ey,layer===2?5:3,accent,.55);
+   circle(ex-15,ey,layer===2?6:4,accent);
+  }else{
+   // A fallback remains visible for any new upgrade type.
+   ctx.strokeStyle=accent;ctx.lineWidth=3;
+   ctx.beginPath();ctx.arc(ex,ey,18+20*t,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.restore();
+ }
  function frame(now){
   // Stop the preview when the menu, collection window or its parent view is hidden.
   // Otherwise requestAnimationFrame would keep rendering during the actual fight on phones.
   if(token!==ticket||canvas!==document.getElementById('bvb-skill-preview-canvas')||canvas.closest?.('[hidden]'))return;
-  const phase=((now-start)/1000)%2.9,t=Math.min(1,Math.max(0,(phase-.35)/1.2));
+  const phase=reduceMotion?1.45:((now-start)/1000)%2.9,t=Math.min(1,Math.max(0,(phase-.35)/1.2));
   ctx.clearRect(0,0,W,H);
   const grad=ctx.createLinearGradient(0,0,W,H);grad.addColorStop(0,'#0b1433');grad.addColorStop(1,'#1c1647');
   ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
@@ -91,6 +127,10 @@ function play(id){
      circle(ox+Math.cos(angle)*27,oy+Math.sin(angle)*27,4,color);
     }
   }
+  if(authored&&evolution>=2&&phase>.48){
+   drawEvolvedEffect(authored[0],1,t,ox,oy,ex,ey);
+   if(evolution>=3)drawEvolvedEffect(authored[1],2,t,ox,oy,ex,ey);
+  }
   sprite(1,ex,ey,16);
   sprite(id,ox,oy,18);
   if(phase>1.2 && phase<2.15 && !defensive.has(type)){
@@ -98,7 +138,7 @@ function play(id){
    ctx.lineWidth=2;ctx.beginPath();ctx.arc(ex,ey,20+(phase-1.2)*15,0,7);ctx.stroke();
   }
   ctx.restore();
-  if(phase<2.9)requestAnimationFrame(frame);
+  if(!reduceMotion&&phase<2.9)requestAnimationFrame(frame);
  }
  requestAnimationFrame(frame);
 }
