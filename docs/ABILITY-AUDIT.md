@@ -182,7 +182,7 @@ Testy: `tests/identity-rework-16-23.test.cjs` sprawdzają osiem mechanik po odbi
 
 ### Indywidualny rework ID 24–31 i wyniki testów
 
-Kolejne osiem kulek otrzymało osobne mechaniki wyzwalane **zakażeniem przy kontakcie, odbiciem od ścian, rozdzieleniem pocisku po rykoszecie, opóźnionym wyładowaniem, kolejnymi falami, rzeczywistym przemieszczaniem się po arenie, utrzymanym hakiem i przechwytywaniem wrogich pocisków**. Każda ma dwa odróżnialne poziomy V2/V3 i osobny podgląd. Testy: `tests/identity-rework-24-31.test.cjs` i dodatkowo obrazy podglądów wszystkich 8 kulek w `tests/combat-browser-smoke.cjs`. W pierwszych testach wykryto trzy błędne asercje chwilowego stanu; poprawiono je i wprowadzono liczniki faktycznych zdarzeń. WebKit ujawnił założenie testu przycisku kamery — też poprawione. Pełny raport: `docs/QA-REPORT-2026-10-26.md`.
+Kolejne osiem kulek otrzymało osobne mechaniki wyzwalane **zakażeniem przy kontakcie, odbiciem od ścian, rozdzieleniem pocisku po rykoszecie, opóźnionym wyładowaniem, kolejnymi falami, rzeczywistym przemieszczaniem się po arenie, utrzymanym hakiem i przechwytywaniem wrogich pocisków**. Każda ma dwa odróżnialne poziomy V2/V3 i osobny podgląd. Testy: `tests/identity-rework-24-31.test.cjs` i dodatkowo obrazy podglądów wszystkich 8 kulek w `tests/combat-browser-smoke.cjs`. W pierwszych testach wykryto trzy błędne asercje chwilowego stanu; poprawiono je i wprowadzono liczniki faktycznych zdarzeń. WebKit ujawnił założenie testu przycisku kamery — też poprawione.
 
 **Postęp indywidualnych reworków:** 32 z 130 kulek z własnymi mechanikami, **98 do dalszej przebudowy**. Testy rzeczywistych sieci i telefonów wciąż nie są zakończone.
 
@@ -190,6 +190,6 @@ Kolejne osiem kulek otrzymało osobne mechaniki wyzwalane **zakażeniem przy kon
 
 Rozbudowano każdą z szesnastu kulek o **oryginalny emblemat SVG**, osobny szkic jej podstawowej zdolności V1 i unikalne podglądy V2/V3. Nowe mechaniki obejmują m.in. katalizatory alchemiczne, szkodliwe tory, sieć na ścianach, klątwy min, świetlne echa, zróżnicowane cukierki, pączkujący szlam, żywe kajdany, korozję, laserowe soczewki, wędrujący gaz, gwiazdy, serię Fibonacciego, odwet pancerza, wielostopniową bombę i satelity. To rzeczywiste obiekty, statusy, kolizje i opóźnione efekty, nie samo zwiększenie obrażeń.
 
-Testy: `tests/identity-rework-32-47.test.cjs` (16 scenariuszy V2/V3), `tests/identity-v1-32-47.test.cjs` (każda zdolność V1 w stanie silnika), `tests/ball-art-32-47.test.cjs` (unikalny SVG) i ekranowe porównania V1/V2/V3 w Chromium, Firefox, WebKit. Pełny przebieg [40385626598](https://github.com/shadow31905/ball-vs-ball/actions/runs/40385626598) ma wszystkie cztery zadania **PASS** dla commita `49ab497f`. Szczegółowy opis [BALL-REWORK-32-47-QA.md](BALL-REWORK-32-47-QA.md).
+Testy: `tests/identity-rework-32-47.test.cjs` (16 scenariuszy V2/V3), `tests/identity-v1-32-47.test.cjs` (każda zdolność V1 w stanie silnika), `tests/ball-art-32-47.test.cjs` (unikalny SVG) i ekranowe porównania V1/V2/V3 w Chromium, Firefox, WebKit. Pełny przebieg [40385626598](https://github.com/shadow31905/ball-vs-ball/actions/runs/40385626598) ma wszystkie cztery zadania **PASS** dla commita `49ab497f`.
 
 **Postęp: 48/130 kulek (36,9%) z indywidualnym reworkiem, pozostało 82 (ID 48–129).** Nadal konieczny fizyczny odbiór telefonu i sieci przed publikacją.
