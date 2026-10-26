@@ -3010,7 +3010,7 @@ function roundEnd(winner) {
     if (!G || G.ph !== 'end') return;
     if (G.h[0] > 0 && G.h[1] > 0) return nextRound();
     over();
-  }, 1100);
+  }, G.finisher ? 1350 : 1100); // Let the 1.2s finishing scene finish before the result screen.
 }
 
 function over() {
