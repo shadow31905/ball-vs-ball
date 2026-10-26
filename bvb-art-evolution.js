@@ -70,12 +70,13 @@ function star(x,y,k,outer,inner,col){
  return '<polygon points="'+pts+'" fill="'+col+'"/>';
 }
 function core(id){
- if(id<48)return stroke(glyphs[id]||'', '#f9ffff',id%4===1?4:2.6);
+ if(id<32)return stroke(glyphs[id]||'', '#f9ffff',id%4===1?4:2.6);
  // Original SVG art is preserved inside each orb, retaining the existing
  // unique iconography of balls 48–129.
  const src=previous(id,1);
  const m=src.match(/<svg[^>]*>([\s\S]*)<\/svg>/i);
- return '<g transform="translate(21 21) scale(.85)">'+(m?m[1]:'')+'</g>';
+ return '<g transform="translate(21 21) scale(.85)">'+(m?m[1]:'')+'</g>'+
+   (id<48?stroke(glyphs[id]||'', '#f9ffff',2.2):'');
 }
 function svgFor(id,tier){
  id=Number(id);if(!Number.isInteger(id)||id<0||id>=B.length)return '';
