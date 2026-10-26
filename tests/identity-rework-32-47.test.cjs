@@ -226,16 +226,19 @@ test('Three Stars: V2 orbiting volley really fires after charging; V3 ricochets 
   const [o,f]=fixture(43,tier,125);
   specialAbility(o,f);
   const prepared=o.v2Stars?{...o.v2Stars}:null;
+  // Keep the victim away from the newly launched star during inspection.
+  f.x=312;f.y=287;
   advance(.35);
+  const fired=o.v2StarShots||0;
   const stars=G.v2.shots.filter(h=>h.id===43&&h.bounces>0);
   const trail=stars.find(s=>s.starTrail);
   if(trail){trail.x=351;trail.y=90;trail.vx=350;trail.vy=0;}
   if(trail)step(1/60);
-  rows.push({tier,prepared,stars:stars.length,
+  rows.push({tier,prepared,fired,stars:stars.length,
    marked:o.v2StarTrails||0,shock:G.v2.hazards.filter(h=>h.kind==='shock').length});
  }return rows;`);
  assert.equal(r[0].prepared,null);
- assert.ok(r[1].prepared&&r[1].stars>0);
+ assert.ok(r[1].prepared&&r[1].fired>0&&r[1].stars>0);
  assert.ok(r[2].prepared.remaining>r[1].prepared.remaining);
  assert.ok(r[2].marked>0&&r[2].shock>r[1].shock);
 });
