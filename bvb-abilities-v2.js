@@ -375,7 +375,7 @@ function applyAuthoredUpgrade(o,foe){
    return;
   }
   if(['shockField','slowField','venomField','thornField','mineField','frostField','fireField'].includes(kind)){
-   const name={shockField:'shock',slowField:'slime',venomField:'poison',thornField:'thorn',mineField:'mine',frostField:'frost',fireField:'fire'}[kind];
+   const name={shockField:'shock',slowField:'slow',venomField:'poison',thornField:'thorn',mineField:'mine',frostField:'frost',fireField:'fire'}[kind];
    const center=kind==='thornField'?o:foe;
    // Existing collision and status systems do the actual work; effects expire
    // through the usual hazard lifecycle and are stored in replay snapshots.
@@ -866,6 +866,7 @@ function tick(dt){
   if(!foe||h.cooldown>0)continue;
   const owner=G.bl.find(o=>o.uid===h.owner)||null;
   if(!owner)continue;
+  if(h.kind==='slow')strike(owner,foe,1.6*h.power,{slow:.75});
   if(h.kind==='thorn')strike(owner,foe,2*h.power,{poison:.6});
   else if(h.kind==='shock')strike(owner,foe,3*h.power,{stun:.19});
   else if(h.kind==='frost')strike(owner,foe,2*h.power,{slow:.9});
