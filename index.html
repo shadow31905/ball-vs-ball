@@ -3132,7 +3132,7 @@ function draw() {
     cx.lineWidth = 3;
     cx.beginPath(); cx.arc(o.x, o.y, o.r + 3, 0, 6.283); cx.stroke();
 
-    const im = ART_IMAGES.get(o.b.id);
+    const im = window.BVB2Sheet02?.imageFor?.(o) || ART_IMAGES.get(o.b.id);
     if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
 
@@ -3212,6 +3212,7 @@ requestAnimationFrame(loop);
 <script src="./bvb-gameplay.js"></script>
 <script src="./bvb-campaign.js"></script>
 <script src="./bvb-abilities-v2.js"></script>
+<script src="./bvb-art-preview-02.js"></script>
 <script src="./bvb-identities.js"></script>
 <script src="./bvb-network.js"></script>
 <script src="./bvb-balance.js"></script>
