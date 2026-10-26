@@ -12,6 +12,10 @@ on:
       - '.github/workflows/combat-rework-tests.yml'
       - 'scripts/**'
 
+concurrency:
+  group: combat-rework-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
