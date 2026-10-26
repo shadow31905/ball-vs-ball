@@ -224,6 +224,16 @@ function captureStep(g){
  // frames are already newer than the live battle clock; do not append a
  // backwards-timestamp frame or incorrectly mark the recording as damaged.
  if(recordingEnded){
+  // Capture any last effect added after endRound only when its clock is still
+  // at the tip. A cinematic tail is future-dated; never append a backwards
+  // timestamp behind it or lose the valid post-K.O. replay.
+  try{
+   const lastTime=recording.frames[recording.frames.length-1]?.t??-1;
+   if(g.rt>=lastTime)recording.capture(g);
+  }catch(error){
+   recording.meta.complete=false;
+   recording.meta.captureError=String(error.message).slice(0,200);
+  }
   lastData=recording.export();lastReplay=lastData.frames;decodeCache=null;
   recording=null;recordingEnded=false;return;
  }
