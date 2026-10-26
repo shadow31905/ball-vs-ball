@@ -109,6 +109,20 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
        'V1 collection panel must describe the actual V2 ability upgrade');
      assert.ok(previews[1].detail.includes('kowadło piorunowe'),
        'V2 collection panel must describe the actual V3 ability upgrade');
+     // All eight new identity-specific abilities must also LOOK distinct in
+     // V1, V2 and V3, with a deterministic still frame under reduced motion.
+     for(let id=24;id<=31;id++){
+       const variants=[];
+       for(const tier of [1,2,3]){
+         await page.evaluate(([ball,t])=>{S.tr[ball]=t;openBallDetail(ball);},[id,tier]);
+         await page.waitForTimeout(80);
+         variants.push((await page.locator('#bvb-skill-preview-canvas')
+           .screenshot({animations:'disabled'})).toString('base64'));
+       }
+       assert.equal(new Set(variants).size,3,
+         'three evolution previews must be visually different for ball '+id);
+       await page.evaluate(ball=>{S.tr[ball]=1;},id);
+     }
      await page.evaluate(()=>{S.tr[16]=3;save();menu();});
      await page.emulateMedia({reducedMotion:'no-preference'});
    }else{
