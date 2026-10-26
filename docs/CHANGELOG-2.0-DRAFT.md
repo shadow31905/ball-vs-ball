@@ -45,6 +45,13 @@
 - Funkcje konta/chmury pozostają do odbioru przed stabilną publikacją.
 - Okno changelogu 2.0.1: automatyczne pokazanie najwyżej raz dla danej wersji i profilu przeglądarki, ponowne otwarcie ręcznie w ustawieniach. Beta i stabilna gra mają oddzielne znaczniki przeczytania listy.
 
+## Poprawki trybów, bossów, sieci i zapisu (etap bez zmian kulek)
+- Dodano weryfikację wszystkich 18 ostrzeżeń bossów i fizycznych trafień w ich zaznaczonych obszarach.
+- `relayOnly` wymaga rzeczywistej konfiguracji serwera TURN i pokazuje błąd przy jej braku; testy obejmują krótkotrwałe ICE, TLS i diagnostykę wybranej trasy.
+- Naprawiono możliwy konflikt zapisu w chmurze przy wylogowaniu i zmianie użytkownika. Zmiana konta nie może dopisać statystyk poprzedniego gracza do nowego profilu. Testy wykonywane na lokalnym symulatorze API — prawdziwa chmura nadal do sprawdzenia.
+- Rozszerzono emulację urządzeń mobilnych o zmianę orientacji ekranu podczas aktywnej walki bez utraty postępu.
+- Na życzenie właściciela **odłożono** dalszy indywidualny rework 106 kulek. Pozostają do realizacji osobno.
+
 ## Warunki publikacji
 - Weryfikacja każdego elementu na aktualnym wydawanym commicie i uzupełnienie listy o wszystkie rzeczywiście skończone poprawki.
 - Powtórki, finisher 5/5 i multiplayer: testy regresyjne.
