@@ -1002,6 +1002,113 @@ function tick(dt){
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
   if(o.skillImpact>0)o.skillImpact=Math.max(0,o.skillImpact-dt);
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
+  // Second bespoke batch (24–31): simulate their OWN collision or movement
+  // mechanics, not generic on-cast bonus shots.
+  if(o.v2Viral){
+   const virus=o.v2Viral;virus.clock-=dt;
+   if(virus.clock<=0){
+    const carrier=G.bl.find(a=>a.uid===virus.owner&&alive(a));
+    if(carrier){
+     strike(carrier,o,carrier.baseDmg*(.09+.035*virus.stacks),{poison:.42});
+     if(virus.mutation&&!virus.bloomed){
+      zone(carrier,o.x,o.y,'poison',30+virus.stacks*4,2.6,.38+.09*virus.stacks);
+      virus.bloomed=true;
+     }
+    }
+    virus.remaining--;virus.clock+=.57;
+    if(virus.remaining<=0)o.v2Viral=null;
+   }
+  }
+  if(o.v2Ripples){
+   const ripple=o.v2Ripples;ripple.next-=dt;
+   if(ripple.next<=0){
+    const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
+    const last=ripple.level===2&&ripple.remaining===1;
+    const radius=last?120:76+ripple.index*31;
+    if(foe){
+     radial(o,foe,.14+ripple.index*.05,{radius,slow:.18});
+     if(last&&Math.hypot(foe.x-o.x,foe.y-o.y)<radius+10){
+      const dx=o.x-foe.x,dy=o.y-foe.y,d=Math.hypot(dx,dy)||1;
+      foe.vx=(foe.vx||0)+dx/d*.4;
+      foe.vy=(foe.vy||0)+dy/d*.4;
+     }
+    }
+    visual(o,o,'ring',radius,abilityData[28].color,.55);
+    ripple.index++;ripple.remaining--;ripple.next+=.35;
+    if(ripple.remaining<=0)o.v2Ripples=null;
+   }
+  }
+  if(o.v2FrostSteps){
+   const frost=o.v2FrostSteps;frost.remaining-=dt;frost.next-=dt;
+   if(frost.remaining<=0)o.v2FrostSteps=null;
+   else if(frost.next<=0){
+    const travelled=Math.hypot(o.x-frost.lastX,o.y-frost.lastY);
+    if(travelled>=8){
+     zone(o,o.x,o.y,'frost',18+frost.level*2,2.3,.29);
+     if(frost.level===2){
+      zone(o,(o.x+frost.lastX)/2,(o.y+frost.lastY)/2,
+       'iceRail',19,2.8,.40);
+     }
+     frost.lastX=o.x;frost.lastY=o.y;
+     visual(o,o,'tail',26,abilityData[29].color,.5);
+    }
+    frost.next+=frost.level===2?.3:.5;
+   }
+  }
+  if(o.v2HarpAnchor){
+   const chain=o.v2HarpAnchor;chain.remaining-=dt;chain.next-=dt;
+   const foe=G.bl.find(t=>t.uid===chain.uid&&alive(t));
+   if(!foe||chain.remaining<=0)o.v2HarpAnchor=null;
+   else if(chain.next<=0){
+    const dx=o.x-foe.x,dy=o.y-foe.y,dist=Math.hypot(dx,dy)||1;
+    if(dist<270){
+     const tension=(chain.level===2?.35:.23);
+     foe.vx=(foe.vx||0)+dx/dist*tension;
+     foe.vy=(foe.vy||0)+dy/dist*tension;
+     setStatus(o,foe,'slow',chain.level===2?.6:.45);
+     chain.pulses++;
+     const last=chain.level===2&&chain.remaining<.42;
+     if(last){
+      strike(o,foe,o.baseDmg*.28,{stun:.24});
+      o.v2HarpAnchor=null;
+     }
+     st.beams.push({x:o.x,y:o.y,x2:foe.x,y2:foe.y,
+      color:abilityData[30].color,life:.3,max:.3,id:30});
+    }
+    if(o.v2HarpAnchor)chain.next+=.24;
+   }
+  }
+  if(o.v2Hive){
+   const hive=o.v2Hive;hive.remaining-=dt;hive.next-=dt;
+   for(const projectile of st.shots){
+    if(hive.intercepts<=0)break;
+    if(projectile.life>0&&projectile.team!==o.team&&
+      Math.hypot(projectile.x-o.x,projectile.y-o.y)<o.r+52){
+     projectile.life=0;hive.intercepts--;
+     visual(o,o,'shield',26,abilityData[31].color,.5);
+    }
+   }
+   if(hive.remaining<=0)o.v2Hive=null;
+   else if(hive.next<=0){
+    const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(foe){
+     shoot(o,foe,{count:hive.level===2?2:1,
+      damage:o.baseDmg*.095,homing:1.55,speed:132,
+      poison:.36+(.2*hive.level),life:2.3,color:'#eab308'});
+    }
+    hive.next+=hive.level===2?.53:.72;
+   }
+  }
+  if(o.v2CrownDelayed){
+   const crown=o.v2CrownDelayed;crown.next-=dt;
+   if(crown.next<=0){
+    const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(foe)shoot(o,foe,{count:1,damage:o.baseDmg*.22,
+       homing:.65,stun:.27,speed:170,color:'#fde047'});
+    crown.remaining--;crown.next+=.6;
+    if(crown.remaining<=0)o.v2CrownDelayed=null;
+   }
+  }
   // Identity-specific evolution lifecycles: actual periodic attacks, healing
   // and pulling, rather than one-off reused actions or cosmetic rings.
   if(o.b.id===17&&o.v2CellBud){
