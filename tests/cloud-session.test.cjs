@@ -89,3 +89,22 @@ test('logout waits for an in-progress write before ending the local session',asy
  assert.equal(f.api.saving,false);
  assert.equal(f.profileWrites.length,2);
 });
+
+test('first upload for switched account waits and cannot be replaced by old in-flight upload',async()=>{
+ const f=setup();await f.ready();await f.api.useLocal();
+ const release=f.blockNext(),oldUpload=f.api.flush();
+ await tick();
+ f.changeAccount('playerB');
+ for(let n=0;n<5&&f.api.saving;n++)await tick();
+ assert.equal(f.api.isOnline,true);
+ assert.equal(f.api.saving,false);
+ const newUpload=f.api.useLocal();
+ await tick();
+ assert.equal(f.rows.length,2,'do not start account B upload while account A request is in flight');
+ release();
+ await Promise.all([oldUpload,newUpload]);
+ assert.equal(f.rows.length,3,'new account should upload after old request completes');
+ assert.deepEqual(f.rows.map(x=>x.user_id),['playerA','playerA','playerB']);
+ assert.deepEqual(f.profileWrites.map(x=>x.id),['playerA','playerB']);
+ assert.equal(f.api.saving,true);
+});
