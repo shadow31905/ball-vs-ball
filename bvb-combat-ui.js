@@ -224,6 +224,17 @@ function recordMusic(g,params){
 }
 function endRound(g,winner){
  captureStep(g);
+ // The battle clock stops on K.O. Record a short presentation-only tail so
+ // seeking, exporting and reopening a replay reproduces the SAME chosen scene,
+ // without simulating extra attacks or mutating the authoritative game state.
+ if(recording&&g.finisher&&Number.isInteger(g.finisher.variant)&&g.finisher.variant>=0&&g.finisher.variant<5){
+  const duration=Math.min(1.2,Math.max(0,Number(g.finisher.life)||0),Math.max(0,65-g.rt));
+  for(let frame=1;frame<=Math.floor(duration*60+1e-6);frame++){
+   const age=frame/60;
+   const visual={...g,rt:g.rt+age,finisher:{...g.finisher,age}};
+   if(!recording.capture(visual))break;
+  }
+ }
  lastData=recording?.export()||lastData;lastReplay=lastData?.frames||[];recordingEnded=!!recording;decodeCache=null;
  const winnerActor=g.bl.find(o=>o.team===winner);
  g.reworkRoundStats={duration:g.rt,winner,
