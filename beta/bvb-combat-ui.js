@@ -67,6 +67,17 @@ function validateState(s){
      !Number.isFinite(a.r)||a.r<=0||a.r>100||!Number.isFinite(a.hp)||!Number.isFinite(a.mh)||a.mh<=0)
    throw new Error('Nieprawidłowa kulka.');
  }
+ if(s.finisher!=null){
+  const f=s.finisher;
+  // Older v3 recordings only had style (0–2), before the five variants.
+  if(typeof f!=='object'||Array.isArray(f)||
+     (f.variant!==undefined&&(!Number.isInteger(f.variant)||f.variant<0||f.variant>=5))||
+     ![f.x,f.y,f.fromX,f.fromY,f.age,f.life].every(Number.isFinite)||
+     f.age<0||f.life<=0||f.life>5||f.age>f.life+1e-6||
+     !Number.isInteger(f.winnerId)||f.winnerId<0||f.winnerId>=130||
+     typeof f.color!=='string'||f.color.length>32)
+   throw new Error('Uszkodzona animacja końcowego uderzenia.');
+ }
  return s;
 }
 class Recording{
@@ -95,6 +106,21 @@ class Recording{
   this.sounds.push({t,kind:'spooky',...clone(params),m:true});
  }
  export(){return {version:3,tickRate:60,kind:'state-deltas',meta:clone(this.meta),frames:this.frames,events:this.events,sounds:this.sounds};}
+}
+// Extends the visual replay timeline after the authoritative battle clock stops.
+// All extra frames are presentation snapshots; game G, damage and RNG stay intact.
+function captureFinisherTail(rec,g){
+ if(!rec||!g?.finisher||!Number.isFinite(g.rt))return 0;
+ const f=g.finisher;
+ if(!Number.isInteger(f.variant)||f.variant<0||f.variant>4||!Number.isFinite(f.life)||f.life<=0)return 0;
+ const count=Math.min(120,Math.floor(Math.min(f.life,Math.max(0,65-g.rt))*60+1e-6));
+ let added=0;
+ for(let frame=1;frame<=count;frame++){
+  const age=frame/60,visual={...g,rt:g.rt+age,finisher:{...f,age}};
+  if(!rec.capture(visual))break;
+  added++;
+ }
+ return added;
 }
 function validate(data){
  if(!data||data.version!==3||data.kind!=='state-deltas'||data.tickRate!==60||!Array.isArray(data.frames)||
@@ -133,7 +159,7 @@ function stateAt(data,index){
  for(let i=k+1;i<=index;i++)state=data.frames[i].key?clone(data.frames[i].key):applyDelta(state,data.frames[i].delta);
  return state;
 }
-window.BVBReplayCodec={Recording,visualState,difference,applyDelta,stateAt,validate,escapeHTML,limits:{MAX_FRAMES,MAX_BYTES,MAX_EVENTS,MAX_SOUNDS}};
+window.BVBReplayCodec={Recording,captureFinisherTail,visualState,difference,applyDelta,stateAt,validate,escapeHTML,limits:{MAX_FRAMES,MAX_BYTES,MAX_EVENTS,MAX_SOUNDS}};
 })();
 /* BVB Combat Rework — spectator HUD, camera, playback and round statistics.
    Replays store every authoritative simulation step; no gameplay is re-simulated. */
@@ -194,14 +220,31 @@ let recording=null,lastData=null,replayingSound=false,decodeCache=null,opener=nu
 const codec=window.BVBReplayCodec;
 function captureStep(g){
  if(!recording||g.m===12)return;
+ // The live loop still calls captureStep once after roundEnd. Finisher replay
+ // frames are already newer than the live battle clock; do not append a
+ // backwards-timestamp frame or incorrectly mark the recording as damaged.
+ if(recordingEnded){
+  // Capture any last effect added after endRound only when its clock is still
+  // at the tip. A cinematic tail is future-dated; never append a backwards
+  // timestamp behind it or lose the valid post-K.O. replay.
+  try{
+   const lastTime=recording.frames[recording.frames.length-1]?.t??-1;
+   if(g.rt>=lastTime)recording.capture(g);
+  }catch(error){
+   recording.meta.complete=false;
+   recording.meta.captureError=String(error.message).slice(0,200);
+  }
+  lastData=recording.export();lastReplay=lastData.frames;decodeCache=null;
+  recording=null;recordingEnded=false;return;
+ }
  try{recording.capture(g);}
  catch(error){
   recording.meta.complete=false;recording.meta.captureError=String(error.message).slice(0,200);
   lastData=recording.export();lastReplay=lastData.frames;recording=null;recordingEnded=false;
   return;
  }
- if(recordingEnded){lastData=recording.export();lastReplay=lastData.frames;decodeCache=null;recording=null;recordingEnded=false;}
 }
+
 function startRound(g){
  if(!g)return;
  matchKey=String(g.matchId)+':'+String(g.rn);
@@ -224,6 +267,7 @@ function recordMusic(g,params){
 }
 function endRound(g,winner){
  captureStep(g);
+ codec.captureFinisherTail(recording,g);
  lastData=recording?.export()||lastData;lastReplay=lastData?.frames||[];recordingEnded=!!recording;decodeCache=null;
  const winnerActor=g.bl.find(o=>o.team===winner);
  g.reworkRoundStats={duration:g.rt,winner,
