@@ -44,12 +44,12 @@ Pozostałe warunki opisano w `docs/RELEASE-GATE.md`. Nie oznaczać całego rewor
 
 ### Wyniki nowego etapu 24–31
 
-Nowe testy: `tests/identity-rework-24-31.test.cjs`, podglądy V1/V2/V3 w `tests/combat-browser-smoke.cjs`. Pierwsze CI 40373884286: 147 PASS, 3 FAIL — testy nie mierzyły prawidłowo opóźnionego pioruna, liczby szarpnięć i przechwyceń. Dodano liczniki rzeczywistych zdarzeń i poprawiono asercje. CI 40374323163: `combat`, Chromium, Firefox PASS; WebKit wykrył nadmierne założenie o początkowym trybie kamery — test naprawiono. Najnowsza kontrola przeglądarek wymaga zielonego wyniku CI dla bieżącego commita. Raport: `docs/QA-REPORT-2026-10-26.md`.
+Nowe testy: `tests/identity-rework-24-31.test.cjs`, podglądy V1/V2/V3 w `tests/combat-browser-smoke.cjs`. Pierwsze CI 40373884286: 147 PASS, 3 FAIL — testy nie mierzyły prawidłowo opóźnionego pioruna, liczby szarpnięć i przechwyceń. Dodano liczniki rzeczywistych zdarzeń i poprawiono asercje. CI 40374323163: `combat`, Chromium, Firefox PASS; WebKit wykrył nadmierne założenie o początkowym trybie kamery — test naprawiono. Najnowsza kontrola przeglądarek wymaga zielonego wyniku CI dla bieżącego commita.
 
 ### Indywidualny rework ID 32–47 — 16 kolejnych kulek (PASS)
 
 W gałęzi `rework/combat-3-foundation` dodano dla każdej z kulek 32–47 **indywidualny motyw SVG i animację podglądu V1**, a do V2 i V3 osobne efekty związane z jej pierwotną tożsamością: katalizator, tory pociągu, sieci, nawiedzenie, świetlne echo, smak cukierków, podział szlamu, kajdany, kwas, soczewki, dryf gazu, gwiazdy, Fibonacci, kolce pancerza, bomby i satelity. Nowe funkcje działają w symulacji walki, a V3 rozwija V2 dodatkowym mechanizmem.
 
-Testy `tests/identity-v1-32-47.test.cjs`, `tests/identity-rework-32-47.test.cjs` oraz `tests/ball-art-32-47.test.cjs` obejmują wszystkie 16 kulek. Porównania podglądów V1/V2/V3 wykonywane są w przeglądarkach. **Pełne CI PASS:** [40385626598](https://github.com/shadow31905/ball-vs-ball/actions/runs/40385626598), commit `49ab497f`: combat, Chromium, Firefox, WebKit. Pełny raport: `docs/BALL-REWORK-32-47-QA.md`.
+Testy `tests/identity-v1-32-47.test.cjs`, `tests/identity-rework-32-47.test.cjs` oraz `tests/ball-art-32-47.test.cjs` obejmują wszystkie 16 kulek. Porównania podglądów V1/V2/V3 wykonywane są w przeglądarkach. **Pełne CI PASS:** [40385626598](https://github.com/shadow31905/ball-vs-ball/actions/runs/40385626598), commit `49ab497f`: combat, Chromium, Firefox, WebKit.
 
 **Aktualnie 48/130 kulek (36,9%) ma rework indywidualny; 82 pozostałe (ID 48–129) wymagają go dalej.** Testy fizycznych urządzeń, dwóch sieci/TURN i rzeczywistych kont chmury pozostają otwarte. Stabilne `main` nie jest scalane ani publiczna beta wznawiana.
