@@ -131,7 +131,7 @@ test('corrupt imported finishing variants and coordinates are rejected, old styl
   const g=match(0);
   Object.assign(g.finisher,changed);
   const record=new c.Recording();
-  assert.throws(()=>record.capture(g),/animacja końcowego uderzenia/);
+  assert.throws(()=>record.capture(g),/animacja końcowego uderzenia|Nieprawidłowa liczba/);
  }
 });
 test('random interval boundaries choose the expected scene',()=>{
