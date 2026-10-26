@@ -54,11 +54,10 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
        await page.evaluate(t=>{S.tr[16]=t;openBallDetail(16);},tier);
        await page.waitForSelector('#bvb-skill-preview-canvas');
        await page.waitForTimeout(120);
-       previews.push(await page.evaluate(()=>{
-         const canvas=document.getElementById('bvb-skill-preview-canvas');
-         return {image:canvas.toDataURL('image/png'),
-           detail:document.getElementById('ovb').textContent};
-       }));
+       previews.push({
+         image:(await page.locator('#bvb-skill-preview-canvas').screenshot({animations:'disabled'})).toString('base64'),
+         detail:await page.locator('#ovb').textContent()
+       });
      }
      assert.equal(new Set(previews.map(p=>p.image)).size,3,
        'the same ball must visibly change between V1, V2 and V3 in reduced-motion previews');
