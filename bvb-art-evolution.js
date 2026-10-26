@@ -133,7 +133,14 @@ css.textContent=[
  '@keyframes bvbSpin{to{transform:rotate(360deg)}}',
  '@keyframes bvbFloat{to{transform:translateY(-4px) rotate(3deg)}}',
  '@media(prefers-reduced-motion:reduce){.orb,.orb svg[data-bvb-art-v2] *{animation:none!important}}',
- 'body.bvb-effects-off .orb,body.bvb-effects-off .orb *{animation:none!important}'
+ 'body.bvb-effects-off .orb,body.bvb-effects-off .orb *{animation:none!important}',
+ 'body.bvb-quality-low .orb,body.bvb-quality-low .orb *{animation:none!important}',
+ 'body.bvb-quality-low .bvb-evo-halo,body.bvb-quality-low .bvb-evo-crown,body.bvb-quality-low .bvb-evo-final{display:none}',
+ 'body.bvb-quality-medium .bvb-evo-crown,body.bvb-quality-medium .bvb-evo-final{opacity:.35}',
+ 'body .bvb-evo-halo,body .bvb-evo-crown,body .bvb-evo-final{opacity:var(--bvb-intensity,1)}',
+ '.orb svg[data-preview-sheet] > circle{animation:bvbHeart 3.5s ease-in-out infinite alternate;transform-origin:48px 48px}',
+ '.orb svg[data-bvb-art-v2][data-evolution="2"],.orb svg[data-bvb-art-v2][data-evolution="3"]{animation:bvbArrival .75s cubic-bezier(.16,1,.2,1) both}',
+ '@keyframes bvbArrival{from{opacity:.35;transform:scale(.64) rotate(-18deg)}to{opacity:1;transform:scale(1) rotate(0)}}'
 ].join('\n');
 document.head.appendChild(css);
 function galleryHtml(id){
