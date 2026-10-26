@@ -13,6 +13,50 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
    await page.waitForFunction(()=>typeof window.startMatch==='function'&&!!window.BVBReworkUI&&!!window.BVBRework,{timeout:30000});
    await page.evaluate(()=>{if(document.getElementById('accountGate'))document.getElementById('accountGate').hidden=true;});
+   // Inspect the *actual canvas pixels* in each browser. Every one of the
+   // five full-arena cinematic storyboards must be different and animate
+   // between buildup, impact and aftermath, not simply show a recolored ring.
+   const cinematicProof=await page.evaluate(()=>{
+     const canvas=document.createElement('canvas');canvas.width=canvas.height=360;
+     const ctx=canvas.getContext('2d');
+     const hash=()=>{
+       const image=ctx.getImageData(0,0,360,360).data;
+       let n=2166136261;
+       for(let i=0;i<image.length;i+=32){n^=image[i];n=Math.imul(n,16777619);n^=image[i+1];n=Math.imul(n,16777619);}
+       return n>>>0;
+     };
+     const signatures=[];
+     for(let variant=0;variant<5;variant++){
+       const frames=[];
+       for(const age of [.2,.75,1.4]){
+         ctx.clearRect(0,0,360,360);
+         window.BVBPresentation.renderCutscene(ctx,{
+           variant,style:variant,x:230,y:225,fromX:100,fromY:115,
+           color:'#ffca44',winnerName:'Testowy zwycięzca',winnerId:1,age,life:1.8
+         });
+         frames.push(hash());
+       }
+       signatures.push(frames);
+     }
+     ctx.clearRect(0,0,360,360);
+     window.BVBPresentation.renderCutscene(ctx,{
+       variant:4,x:230,y:225,fromX:100,fromY:115,
+       color:'#ffca44',winnerName:'Test',winnerId:1,age:.25,life:1.8
+     },true);
+     const reducedA=hash();
+     ctx.clearRect(0,0,360,360);
+     window.BVBPresentation.renderCutscene(ctx,{
+       variant:4,x:230,y:225,fromX:100,fromY:115,
+       color:'#ffca44',winnerName:'Test',winnerId:1,age:1.45,life:1.8
+     },true);
+     return {signatures,reducedSame:reducedA===hash(),scenes:window.BVBPresentation.scenes.map(s=>s.title)};
+   });
+   assert.equal(cinematicProof.scenes.length,5);
+   assert.equal(new Set(cinematicProof.signatures.map(s=>s.join(':'))).size,5,
+     'all 5 cinematic films must have distinct pixel compositions');
+   assert.ok(cinematicProof.signatures.every(s=>new Set(s).size===3),
+     'each cinematic must have three genuinely different animation frames');
+   assert.equal(cinematicProof.reducedSame,true,'reduced motion cutscene must remain static');
    if(new URL(base).pathname.split('/').includes('beta')){
      await page.waitForSelector('#bvbBetaPanelOpen');
      await page.click('#bvbBetaPanelOpen');
@@ -89,7 +133,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.click('#bvbCamera');
    assert.equal(await page.evaluate(()=>BVBReworkUI.camera()),'dynamic','camera switch must work');
    console.log('Before forced end:',await page.evaluate(()=>({phase:G.ph,seconds:G.rt,hp:G.bl.map(o=>o.hp),stats:!!G.reworkRoundStats,errors:[]})));
-   console.log('After forced end:',await page.evaluate(()=>{const before=G;const phase=G.ph;const handler=typeof BVBReworkUI.endRound;roundEnd(0);return {same:G===before,phaseBefore:phase,phaseAfter:G.ph,handler,stats:G.reworkRoundStats||null,func:roundEnd.toString().slice(0,350)};}));
+   console.log('After forced end:',await page.evaluate(()=>{const before=G;const phase=G.ph;const handler=typeof BVBReworkUI.endRound;G.bl.find(o=>o.team===1).hp=0;roundEnd(0);return {same:G===before,phaseBefore:phase,phaseAfter:G.ph,handler,stats:G.reworkRoundStats||null,finisher:G.finisher?.variant,func:roundEnd.toString().slice(0,350)};}));
    await page.waitForTimeout(250);
    assert.equal(await page.evaluate(()=>!!G.reworkRoundStats),true,'round stats must be present');
    await page.evaluate(()=>over());
