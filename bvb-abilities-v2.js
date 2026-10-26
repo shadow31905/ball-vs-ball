@@ -230,7 +230,7 @@ const authoredUpgrades=Object.freeze({
  45:['thornRetaliation','livingArmor'],
  46:['timerCharge','clusterDetonation'],
  47:['satelliteLasers','satelliteIntercept'],
- 48:['cleanse','healing'],
+ 48:['triageStation','emergencyProtocol'],
  49:['pierceShot','stun'],
  50:['scatter','frostField'],
  51:['ghostShot','guard'],
@@ -378,6 +378,8 @@ const upgradeCaptions=Object.freeze({
  clusterDetonation:'wybuch dzieli się na dodatkowe zapalniki',
  satelliteLasers:'satelity okresowo ostrzeliwują rywala po orbicie',
  satelliteIntercept:'satelity osłaniają kulkę i przechwytują nadlatujące pociski',
+ triageStation:'stacja pierwszej pomocy leczy Medyka w oznaczonym obszarze',
+ emergencyProtocol:'defibrylator ratuje Medyka przy krytycznym HP',
  petBolt:'pomocniczy elektryczny pocisk',
  guard:'dodatkowa osłona wokół kulki',
  healing:'dodatkowa regeneracja zdrowia',
@@ -414,6 +416,9 @@ if(Object.keys(authoredUpgrades).length!==114)throw Error('114 authored V2/V3 pr
 function authoredUpgradeDescription(id,stage){
  const actions=authoredUpgrades[id];
  if(!actions||stage<1)return null;
+ if(id===48)return stage===1
+  ?'V2: stacja pierwszej pomocy — 3 dawki leczenia w oznaczonym obszarze przez 3,5 s.'
+  :'V3: stacja pierwszej pomocy — 4 dawki i większy obszar oraz jednorazowy defibrylator przy krytycznym HP.';
  const extra=stage===2?' oraz '+upgradeCaptions[actions[1]]:'';
  return 'V'+(stage+1)+': '+upgradeCaptions[actions[0]]+extra+'; mocniejsze efekty aktywnej zdolności.';
 }
@@ -607,12 +612,21 @@ function applySignatureEvolution32(o,foe,level){
   visual(o,o,'orbit',42,color,.75);
  }
 }
+// Medyk (48): stationary healing platform with bounded, serialized actor state.
+function applyMedicUpgrade(o,level){
+ o.v2MedicStation={x:o.x,y:o.y,life:3.5,next:.35,
+  radius:level===2?82:67,charges:level===2?4:3,
+  level,emergencyUsed:false};
+ o.status.shield=Math.min(32,(o.status.shield||0)+(level===2?4:2));
+ visual(o,o,'heal',43,'#86efac',.7);
+}
 function applyAuthoredUpgrade(o,foe){
  const level=evolutionStage(o),profile=authoredUpgrades[o?.b?.id];
  if(level===0||!profile||!foe||!alive(foe)||netRole==='guest')return;
  const id=o.b.id,boost=level===2?1.28:1,unique=1+(id%5)*.04;
  if(id>=16&&id<=31){applySignatureEvolution(o,foe,level);return;}
  if(id>=32&&id<=47){applySignatureEvolution32(o,foe,level);return;}
+ if(id===48){applyMedicUpgrade(o,level);return;}
  const accent=id>=99?'#d8b4fe':o.b.c;
  function action(kind){
   const color=kind.includes('frost')?'#a5f3fc':kind.includes('venom')?'#bef264':kind.includes('fire')||kind==='burnwave'||kind==='scatterFire'?'#fb923c':accent;
@@ -1378,6 +1392,30 @@ function tick(dt){
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
   afflictedTick32(o,dt);
   if(o.b.id>=32&&o.b.id<=47)signatureTick32(o,dt,st);
+  if(o.b.id===48&&o.v2MedicStation){
+   const station=o.v2MedicStation;
+   station.life-=dt;station.next-=dt;
+   if(station.life<=0)o.v2MedicStation=null;
+   else{
+    const distance=Math.hypot(o.x-station.x,o.y-station.y);
+    if(station.level===2&&!station.emergencyUsed&&distance<=station.radius*1.5&&o.hp<=o.mh*.40){
+     station.emergencyUsed=true;
+     o.hp=Math.min(o.mh,o.hp+9);
+     o.status.shield=Math.min(32,(o.status.shield||0)+8);
+     for(const key of ['poison','burn','stun','weaken'])o.status[key]=0;
+     visual(o,o,'heal',60,'#fef08a',.65);
+    }
+    if(station.next<=0){
+     if(station.charges>0&&distance<=station.radius&&o.hp<o.mh){
+      o.hp=Math.min(o.mh,o.hp+2.4);
+      o.status.burn=0;
+      station.charges--;
+      visual(o,{x:station.x,y:station.y},'heal',26,'#6ee7b7',.45);
+     }
+     station.next+=.7;
+    }
+   }
+  }
   // Second bespoke batch (24–31): simulate their OWN collision or movement
   // mechanics, not generic on-cast bonus shots.
   if(o.v2Viral){
@@ -1760,6 +1798,21 @@ function drawOverlay(){
  const detailed=(Number(S?.o?.fxLevel??3)>0);
  cx.save();
  // Draw gameplay tails and active blades even with visual effects disabled.
+ // Fixed triage station stays visible even with reduced FX.
+ for(const o of G.bl||[]){
+  const kit=o.v2MedicStation;
+  if(!kit||!alive(o)||kit.life<=0)continue;
+  cx.save();cx.globalAlpha=.22;cx.fillStyle='#34d399';
+  cx.beginPath();cx.arc(kit.x,kit.y,kit.radius,0,Math.PI*2);cx.fill();
+  cx.globalAlpha=.8;cx.strokeStyle=kit.level===2?'#fef08a':'#6ee7b7';
+  cx.lineWidth=kit.level===2?3:2;
+  cx.beginPath();cx.arc(kit.x,kit.y,kit.radius,0,Math.PI*2);cx.stroke();
+  cx.fillStyle='#f8fafc';cx.fillRect(kit.x-3,kit.y-12,6,24);cx.fillRect(kit.x-12,kit.y-3,24,6);
+  if(kit.level===2&&!kit.emergencyUsed){
+   cx.strokeStyle='#fef08a';cx.beginPath();cx.arc(kit.x,kit.y,17,0,Math.PI*2);cx.stroke();
+  }
+  cx.restore();
+ }
  for(const o of G.bl||[]){if(!o.v2Tail||!alive(o))continue;const points=(o.trail||[]).slice(-o.v2Tail.length);cx.strokeStyle=o.b.c;cx.lineWidth=6;cx.globalAlpha=.65;cx.beginPath();for(let i=0;i<points.length;i++){const p=points[i];i?cx.lineTo(p.x,p.y):cx.moveTo(p.x,p.y);}cx.lineTo(o.x,o.y);cx.stroke();cx.globalAlpha=1;}
  for(const o of G.bl||[]){
   if(!alive(o)||!o.axeOrbit)continue;
@@ -1865,8 +1918,11 @@ const signatureBadges32=Object.freeze({
  47:'<circle r="3.5" fill="#e0f2fe" stroke="white" stroke-width="1"/><ellipse rx="11" ry="5.5" transform="rotate(-34)" fill="none" stroke="#7dd3fc" stroke-width="1.6"/><ellipse rx="11" ry="5.5" transform="rotate(35)" fill="none" stroke="#f8fafc" stroke-width="1.5"/><circle cx="8" cy="-7" r="2.4" fill="#facc15"/>'
 });
 if(Object.keys(signatureBadges32).length!==16)throw new Error('16 unique graphics required for bespoke balls 32–47');
+const signatureBadges48=Object.freeze({
+ 48:'<rect x="-7" y="-3" width="14" height="6" rx="1" fill="#f8fafc"/><rect x="-3" y="-9" width="6" height="18" rx="1" fill="#f8fafc"/><path d="M-9 5Q0 15 9 5" stroke="#6ee7b7" stroke-width="1.8" fill="none"/><circle cx="-8" cy="-8" r="2" fill="#fef08a"/>'
+});
 function signatureBadge32(id){
- const glyph=signatureBadges32[id];
+ const glyph=signatureBadges32[id]||signatureBadges48[id];
  if(!glyph)return '';
  const tone=abilityData[id].color;
  return '<g data-signature-id="'+id+'" class="bvb-signature-badge" transform="translate(46 45)">'+
