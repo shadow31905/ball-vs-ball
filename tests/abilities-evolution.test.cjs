@@ -51,9 +51,9 @@ test('dice has six actual outcomes and finisher never changes combat outcome',()
  const g=createGame();
  const r=g.run("(()=>{const rolls=new Set();for(let seed=1;seed<=100;seed++){G=freshGame(4,[B[11]],[B[0]]);G.ph='battle';G.th=1;G.bl=[actor(B[11],80,180,0,0,0,1,0,0),actor(B[0],220,180,0,1,1,1,0,0)];BVBRework.setSeed(G,seed);specialAbility(G.bl[0],G.bl[1]);rolls.add(G.bl[0].v2LastRoll);}return rolls.size})()");
  assert.equal(r,6);
- g.run("startMatch(4);BVBTraining.choose(0);var hpBefore=G.bl.map(o=>o.hp);var heartsBefore=JSON.stringify(G.h);BVBPresentation.finish(G,0)");
+ g.run("startMatch(4);BVBTraining.choose(0);G.bl.find(o=>o.team===1).hp=0;var hpBefore=G.bl.map(o=>o.hp);var heartsBefore=JSON.stringify(G.h);BVBPresentation.finish(G,0)");
  assert.equal(g.run('G.finisher.winnerId'),0);assert.equal(g.run('JSON.stringify(G.bl.map(o=>o.hp))'),g.run('JSON.stringify(hpBefore)'));assert.equal(g.run('JSON.stringify(G.h)'),g.run('heartsBefore'));
- g.run('BVBPresentation.tick(G,2)');assert.equal(g.run('G.finisher.age'),1.2);
+ g.run('for(let i=0;i<20;i++)BVBPresentation.tick(G,.12)');assert.ok(Math.abs(g.run('G.finisher.age')-1.8)<1e-9);
 });
 
 test('poison contact and double sparks match their active descriptions',()=>{const g=createGame();g.run("G=freshGame(4,[B[24]],[B[0]]);G.ph='battle';G.rt=0;G.th=1;G.bl=[actor(B[24],80,180,0,0,0,1,0,0),actor(B[0],220,180,0,1,1,1,0,0)];specialAbility(...G.bl);BVB2.onContact(G,...G.bl,10)");assert.ok(g.run('G.bl[1].status.poison')>0);g.run("G.v2=null;G.bl[0].b={...B[83]};specialAbility(...G.bl)");assert.equal(g.run('G.v2.shots.length'),2);});
