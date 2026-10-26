@@ -1193,6 +1193,48 @@ function closestToSegment(px,py,ax,ay,bx,by){
 // Periodic parts of the sixteen identity-specific evolutions. Each branch
 // is an effect of a distinct ability: rolls, trains, graves, light, candy,
 // slime, chains, acid, lenses, stars or orbiting defensive satellites.
+function afflictedTick32(o,dt){
+ if(o.v2Haunted){
+  const curse=o.v2Haunted;curse.next-=dt;
+  if(curse.next<=0){
+   const source=G.bl.find(t=>t.uid===curse.owner&&alive(t));
+   if(source){
+    strike(source,o,source.baseDmg*(curse.level===2?.16:.10),{slow:.22});
+    if(curse.level===2)setStatus(source,o,'weaken',.35);
+   }
+   curse.remaining--;curse.next+=.5;
+   if(curse.remaining<=0)o.v2Haunted=null;
+  }
+ }
+ if(o.v2Shackled){
+  const chain=o.v2Shackled;chain.next-=dt;
+  if(chain.next<=0){
+   const source=G.bl.find(t=>t.uid===chain.owner&&alive(t));
+   if(source){
+    const dx=source.x-o.x,dy=source.y-o.y,d=Math.hypot(dx,dy)||1;
+    const power=chain.level===2?.27:.17;
+    o.vx=(o.vx||0)+dx/d*power;o.vy=(o.vy||0)+dy/d*power;
+    setStatus(source,o,'slow',chain.level===2?.65:.42);
+    if(chain.level===2&&chain.remaining===1)
+     setStatus(source,o,'stun',.2);
+   }
+   chain.remaining--;chain.next+=.37;
+   if(chain.remaining<=0)o.v2Shackled=null;
+  }
+ }
+ if(o.v2Corrosion){
+  const acid=o.v2Corrosion;acid.remaining-=dt;acid.next-=dt;
+  if(acid.remaining<=0)o.v2Corrosion=null;
+  else if(acid.next<=0){
+   const source=G.bl.find(t=>t.uid===acid.owner&&alive(t));
+   if(source){
+    strike(source,o,source.baseDmg*(.04+.02*acid.stacks),{poison:.35});
+    setStatus(source,o,'weaken',.4);
+   }
+   acid.next+=.6;
+  }
+ }
+}
 function signatureTick32(o,dt,st){
  const id=o.b.id;
  if(id===32&&o.v2Volatile){
@@ -1219,17 +1261,6 @@ function signatureTick32(o,dt,st){
    }
    x.remaining--;x.next+=.7;
    if(x.remaining<=0)o.v2Express=null;
-  }
- }else if(id===35&&o.v2Haunted){
-  const curse=o.v2Haunted;curse.next-=dt;
-  if(curse.next<=0){
-   const source=G.bl.find(t=>t.uid===curse.owner&&alive(t));
-   if(source){
-    strike(source,o,source.baseDmg*(curse.level===2?.16:.10),{slow:.22});
-    if(curse.level===2)setStatus(source,o,'weaken',.35);
-   }
-   curse.remaining--;curse.next+=.5;
-   if(curse.remaining<=0)o.v2Haunted=null;
   }
  }else if(id===36){
   const after=o.v2LightEcho;
@@ -1280,32 +1311,6 @@ function signatureTick32(o,dt,st){
     if(bud.level===2)o.hp=Math.min(o.mh,o.hp+.65);
    }
    bud.next+=bud.level===2?.28:.48;
-  }
- }else if(id===39&&o.v2Shackled){
-  const chain=o.v2Shackled;chain.next-=dt;
-  if(chain.next<=0){
-   const source=G.bl.find(t=>t.uid===chain.owner&&alive(t));
-   if(source){
-    const dx=source.x-o.x,dy=source.y-o.y,d=Math.hypot(dx,dy)||1;
-    const power=chain.level===2?.27:.17;
-    o.vx=(o.vx||0)+dx/d*power;o.vy=(o.vy||0)+dy/d*power;
-    setStatus(source,o,'slow',chain.level===2?.65:.42);
-    if(chain.level===2&&chain.remaining===1)
-     setStatus(source,o,'stun',.2);
-   }
-   chain.remaining--;chain.next+=.37;
-   if(chain.remaining<=0)o.v2Shackled=null;
-  }
- }else if(id===40&&o.v2Corrosion){
-  const acid=o.v2Corrosion;acid.remaining-=dt;acid.next-=dt;
-  if(acid.remaining<=0)o.v2Corrosion=null;
-  else if(acid.next<=0){
-   const source=G.bl.find(t=>t.uid===acid.owner&&alive(t));
-   if(source){
-    strike(source,o,source.baseDmg*(.04+.02*acid.stacks),{poison:.35});
-    setStatus(source,o,'weaken',.4);
-   }
-   acid.next+=.6;
   }
  }else if(id===41&&o.v2LensFocus){
   const focus=o.v2LensFocus;focus.next-=dt;
@@ -1369,10 +1374,8 @@ function tick(dt){
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
   if(o.skillImpact>0)o.skillImpact=Math.max(0,o.skillImpact-dt);
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
+  afflictedTick32(o,dt);
   if(o.b.id>=32&&o.b.id<=47)signatureTick32(o,dt,st);
-  // Target-bound curses may remain after their summoner casts, so evaluate
-  // their owner-free lifecycle even when the afflicted ball is a different ID.
-  if(o.b.id<32||o.b.id>47)signatureTick32(o,dt,st);
   // Second bespoke batch (24–31): simulate their OWN collision or movement
   // mechanics, not generic on-cast bonus shots.
   if(o.v2Viral){
