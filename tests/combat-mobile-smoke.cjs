@@ -13,7 +13,21 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      page.on('pageerror',err=>errors.push(String(err)));
      await page.goto(base,{waitUntil:'domcontentloaded'});
      await page.waitForFunction(()=>!!window.BVBRework&&!!window.BVBReworkUI);
-     await page.evaluate(()=>{document.getElementById('accountGate').hidden=true;startMatch(0);pick(0);});
+     await page.evaluate(()=>{document.getElementById('accountGate').hidden=true;});
+     if(new URL(base).pathname.split('/').includes('beta')){
+       await page.waitForSelector('#bvbBetaPanelOpen');
+       await page.locator('#bvbBetaPanelOpen').tap();
+       assert.equal(await page.locator('#bvbBetaDialog').isVisible(),true);
+       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+4),
+         'beta admin modal overflows at '+width+'px');
+       await page.selectOption('#bvbBetaTier','3');
+       await page.locator('#bvbBetaApplyTier').tap();
+       assert.equal(await page.evaluate(()=>S.tr[0]),3);
+       await page.locator('#bvbBetaClose').tap();
+     }else{
+       assert.equal(await page.locator('#bvbBetaPanelOpen').count(),0);
+     }
+     await page.evaluate(()=>{startMatch(0);pick(0);});
      await page.waitForFunction(()=>G?.ph==='battle');
      await page.waitForTimeout(200);
      const info=await page.evaluate(()=>{
