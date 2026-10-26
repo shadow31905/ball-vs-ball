@@ -1333,6 +1333,7 @@ function signatureTick32(o,dt,st){
     shoot(origin,foe,{count:1,damage:o.baseDmg*.14,
       spread:.35,homing:.2,speed:185,bounces:2,starTrail:stars.level===2,
       color:'#fbbf24'});
+    o.v2StarShots=(o.v2StarShots||0)+1;
    }
    stars.remaining--;stars.next+=stars.level===2?.39:.55;
    if(stars.remaining<=0)o.v2Stars=null;
