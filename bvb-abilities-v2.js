@@ -203,7 +203,7 @@ const authoredUpgrades=Object.freeze({
  18:['sparkShot','shockField'],
  19:['slowField','venomShot'],
  20:['pierceShot','shockwave'],
- 21:['shockShot','shockField'],
+ 21:['sparkShot','shockField'],
  22:['healing','healingShot'],
  23:['sparkShot','heavyShot'],
  24:['venomShot','venomField'],
