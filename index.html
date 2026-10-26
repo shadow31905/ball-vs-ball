@@ -1476,7 +1476,7 @@ function setupNetConnection(conn) {
       if (G.finished) {
         const guestWon = G.h[0] > 0;
         $('#ov').hidden = false;
-        $('#ovb').innerHTML = `<h2>${guestWon ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2><p style="margin:10px 0;color:var(--mu)">Wynik meczu online</p><button class="b graj" onclick="$('#ov').hidden=true;menu()">Menu główne</button>`;
+        $('#ovb').innerHTML = `<h2>${guestWon ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2>${window.BVBMotion?.resultBalls?.(G,guestWon)||''}<p style="margin:10px 0;color:var(--mu)">Wynik meczu online</p><button class="b graj" onclick="$('#ov').hidden=true;menu()">Menu główne</button>`;
       }
     }
     if (data.type === 'tactic' && netRole === 'host') window.BVBGameplay?.applyRemoteTactic?.(data);
