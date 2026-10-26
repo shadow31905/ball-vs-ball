@@ -20,15 +20,20 @@ function next(g){
 test('every finite offline mode completes actual full matches and awards only once',()=>{
  for(const mode of [0,2,5,8,9,11]){
   const g=game();launch(g,mode);
-  let rounds=0;
-  while(g.run("G.h[0]>0&&G.h[1]>0")&&rounds++<8){
+  let rounds=0,decisive=0;
+  // Mutual knock-outs can be drawn rounds: only a decisive round spends a heart.
+  // Still require the real simulation to finish the match; do not force wins.
+  while(g.run("G.h[0]>0&&G.h[1]>0")&&rounds++<20){
+   const before=g.run("JSON.stringify(G.h)");
    g.run("for(let i=0;i<7200&&G.ph==='battle';i++)step(1/60)");
    assert.equal(g.run("G.ph"),'end','mode '+mode+' stalled');
    assert.ok(g.run("G.rt<=60.02"),'round timeout mode '+mode);
    assert.ok(g.run("G.bl.every(o=>[o.x,o.y,o.hp,o.vx,o.vy].every(Number.isFinite))"));
+   if(g.run("JSON.stringify(G.h)")!==before)decisive++;
    if(g.run("G.h[0]>0&&G.h[1]>0"))next(g);
   }
-  assert.ok(rounds<=5,'best of five mode '+mode);
+  assert.ok(!g.run("G.h[0]>0&&G.h[1]>0"),'match did not reach a real winner: mode '+mode);
+  assert.ok(decisive<=5,'best of five decisive rounds mode '+mode);
   g.run("over()");assert.equal(g.run("G.finished"),true);
   const balances=g.run("JSON.stringify({coins:S.coins,candies:S.candies,xp:S.xp})");
   g.run("over()");assert.equal(g.run("JSON.stringify({coins:S.coins,candies:S.candies,xp:S.xp})"),balances);
