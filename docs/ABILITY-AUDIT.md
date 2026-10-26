@@ -57,14 +57,14 @@ Nie przywracać usuniętego obowiązku **pełnego balansu** jako bramki wydania.
 | 21 | Siatka WDC | środkowy węzeł cyfrowej siatki zyskuje narastający impuls | matryca zmienia wzór i zostawia cztery uzbrajane węzły |
 | 22 | Złote Jabłko | sad cyklicznie zbiera lecznicze owoce i wysyła nowy pocisk | złote jabłka zwiększają zbiory i zapewniają tarczę |
 | 23 | Armata Ścienna | ładunek baterii wzmacnia wieżyczkę przy odbiciach i dodaje pocisk | rykoszetujący pocisk zostawia uzbrajany wybuch |
-| 24 | Infekcja Wirusa | zatruty pocisk szukający celu | toksyczna strefa z obrażeniami |
-| 25 | Kolczasta Ściana | kolczasta pułapka przy przeciwniku | zatruty pocisk szukający celu |
-| 26 | Rykoszet Strzały | dodatkowy odbijający się pocisk | rozproszona salwa wielu pocisków |
-| 27 | Korona Błyskawic | elektryczne pole rażące przeciwnika | samocelująca elektryczna iskra |
-| 28 | Rosnący Zasięg | rozszerzona fala z odrzutem | opóźnione kolejne impulsy |
-| 29 | Ślad Szronu | mroźne pole spowalniające | lodowy pocisk spowalniający |
-| 30 | Żelazny Harpun | silniejsze przyciągnięcie przeciwnika | krótkie porażenie przeciwnika |
-| 31 | Rój Obrońców | toksyczna strefa z obrażeniami | zatruty pocisk szukający celu |
+| 24 | Infekcja Wirusa | kontakt przenosi wirusa, który po inkubacji zadaje okresowe obrażenia | mutacja rozwija toksyczną chmurę w miejscu zakażonego przeciwnika |
+| 25 | Kolczasta Ściana | po odbiciu tworzy dodatkowe kolce wzdłuż faktycznie trafionej ściany | dłuższa kolczasta warownia, tarcza i kontaktowy odrzut |
+| 26 | Rykoszet Strzały | leci dalej dzięki większej liczbie rzeczywistych rykoszetów | przy pierwszym odbiciu dzieli się na kolejne pociski |
+| 27 | Korona Błyskawic | trafiona ściana otrzymuje dwa dodatkowe piorunowe węzły | cztery węzły i opóźniony wystrzał błyskawicy |
+| 28 | Rosnący Zasięg | rosnące pierścienie oddzielnie trafiają coraz dalsze cele | powracająca fala ściąga cel do centrum |
+| 29 | Ślad Szronu | podczas ruchu zostawia strefy mrozu w odwiedzanych miejscach | lodowy tor o silniejszym spowolnieniu i krótkim porażeniu |
+| 30 | Żelazny Harpun | utrzymuje kotwicę i wielokrotnie przyciąga przypiętego rywala | mocniejsze szarpnięcie końcowe z ogłuszeniem |
+| 31 | Rój Obrońców | ul przechwytuje wrogie pociski i cyklicznie wysyła obrońców | królowa zapewnia tarczę, więcej przechwyceń i dodatkowy rój |
 | 32 | Alchemiczny Rzut | oczyszczenie z osłabień i tarcza | rozproszona salwa wielu pocisków |
 | 33 | Widmowy Pociąg | fala uderzeniowa | opóźniona mina na arenie |
 | 34 | Czarna Pajęczyna | pole spowolnienia przy przeciwniku | toksyczna strefa z obrażeniami |
@@ -178,4 +178,10 @@ Poprzednie profile tych ośmiu kulek opierały się na przypisaniu gotowych efek
 
 Testy: `tests/identity-rework-16-23.test.cjs` sprawdzają osiem mechanik po odbiciu, kolizji, cyklu lub odrodzeniu, a `tests/combat-browser-smoke.cjs` weryfikuje opisy i rysowanie. Naprawiono przy okazji podwójne trafienie dla stref `slow`.
 
-**Pozostałe 106 kulek ID 24–129 mają profile V2/V3, ale nadal bazują na kombinacjach wspólnych efektów.** Nie oznaczać ich jako ukończonych indywidualnych reworków — potrzebują osobnych mechanik powiązanych z każdą kulką.
+**Pozostałe 98 kulek ID 32–129 nadal ma profile V2/V3 bazujące na kombinacjach wspólnych efektów.** Nie oznaczać ich jako ukończonych indywidualnych reworków — potrzebują osobnych mechanik powiązanych z każdą kulką.
+
+### Indywidualny rework ID 24–31 i wyniki testów
+
+Kolejne osiem kulek otrzymało osobne mechaniki wyzwalane **zakażeniem przy kontakcie, odbiciem od ścian, rozdzieleniem pocisku po rykoszecie, opóźnionym wyładowaniem, kolejnymi falami, rzeczywistym przemieszczaniem się po arenie, utrzymanym hakiem i przechwytywaniem wrogich pocisków**. Każda ma dwa odróżnialne poziomy V2/V3 i osobny podgląd. Testy: `tests/identity-rework-24-31.test.cjs` i dodatkowo obrazy podglądów wszystkich 8 kulek w `tests/combat-browser-smoke.cjs`. W pierwszych testach wykryto trzy błędne asercje chwilowego stanu; poprawiono je i wprowadzono liczniki faktycznych zdarzeń. WebKit ujawnił założenie testu przycisku kamery — też poprawione. Pełny raport: `docs/QA-REPORT-2026-10-26.md`.
+
+**Postęp indywidualnych reworków:** 32 z 130 kulek z własnymi mechanikami, **98 do dalszej przebudowy**. Testy rzeczywistych sieci i telefonów wciąż nie są zakończone.
