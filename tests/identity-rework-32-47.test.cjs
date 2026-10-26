@@ -158,3 +158,157 @@ test('Shackle Chains: V2 binding mine attaches repeated pulls; V3 has stronger r
  assert.equal(rows[2].level,2);
  assert.ok(rows[1].slow>0&&rows[2].slow>0);
 });
+
+test('Acid Puddle: real contact adds timed corrosion; V3 expands the puddle after a victim is hit',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(40,tier);
+  specialAbility(o,f);
+  const puddle=G.v2.hazards.find(h=>h.v2Acid>0);
+  step(1/60);
+  const corrosion=f.v2Corrosion?{...f.v2Corrosion}:null;
+  const puddles=G.v2.hazards.filter(h=>h.kind==='poison').length;
+  advance(.48);
+  rows.push({tier,mark:puddle?.v2Acid||0,corrosion,puddles,
+   ticked:corrosion?f.v2Corrosion?.next<corrosion.next:true,
+   weaken:f.status.weaken||0});
+ }return rows;`);
+ assert.equal(r[0].mark,0);
+ assert.equal(r[1].mark,1);
+ assert.equal(r[2].mark,2);
+ assert.ok(r[1].corrosion?.stacks>0);
+ assert.ok(r[2].puddles>r[1].puddles);
+});
+test('Lens Beam: V2 reflects to a second actual wall beam; V3 creates crossing lasers',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(41,tier);
+  specialAbility(o,f);
+  BVB2.onWall(o,'left');
+  rows.push({tier,beams:G.v2.wallBeams.length,
+   crossing:!!o.v2LensCrossfire,focus:!!o.v2LensFocus,
+   endpoints:G.v2.wallBeams.map(b=>[b.a.x,b.a.y,b.b.x,b.b.y])});
+ }return rows;`);
+ assert.ok(r[1].beams>r[0].beams);
+ assert.ok(r[2].beams>r[1].beams);
+ assert.ok(r[2].crossing&&r[2].focus);
+ assert.ok(new Set(r[2].endpoints.map(e=>e.join(','))).size>1);
+});
+test('Poison Fog: V2 original cloud drifts; V3 cloud condenses into another active toxic area',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(42,tier,115);
+  specialAbility(o,f);
+  const drift=G.v2.hazards.find(h=>h.v2Drifting);
+  const x0=drift?.x||0;
+  advance(.28);
+  const moved=drift?drift.x-x0:0;
+  if(drift)drift.life=.14;
+  step(1/60);
+  rows.push({tier,drift:drift?.v2Drifting||0,moved,
+   condensed:drift?.v2Condensed||false,
+   poison:G.v2.hazards.filter(h=>h.kind==='poison').length});
+ }return rows;`);
+ assert.equal(r[0].drift,0);
+ assert.ok(r[1].moved>1);
+ assert.ok(r[2].moved>r[1].moved);
+ assert.equal(r[1].condensed,false);
+ assert.equal(r[2].condensed,true);
+ assert.ok(r[2].poison>r[1].poison);
+});
+test('Three Stars: V2 orbiting volley really fires after charging; V3 ricochets leave live electric marks',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(43,tier,125);
+  specialAbility(o,f);
+  const prepared=o.v2Stars?{...o.v2Stars}:null;
+  advance(.35);
+  const stars=G.v2.shots.filter(h=>h.id===43&&h.bounces>0);
+  const trail=stars.find(s=>s.starTrail);
+  if(trail){trail.x=351;trail.y=90;trail.vx=350;trail.vy=0;}
+  if(trail)step(1/60);
+  rows.push({tier,prepared,stars:stars.length,
+   marked:o.v2StarTrails||0,shock:G.v2.hazards.filter(h=>h.kind==='shock').length});
+ }return rows;`);
+ assert.equal(r[0].prepared,null);
+ assert.ok(r[1].prepared&&r[1].stars>0);
+ assert.ok(r[2].prepared.remaining>r[1].prepared.remaining);
+ assert.ok(r[2].marked>0&&r[2].shock>r[1].shock);
+});
+test('Fibonacci: V2 adds mathematically rising contact damage, V3 gets a new spiral every third contact',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(44,tier,74);
+  specialAbility(o,f);
+  const damage=[];
+  for(let i=0;i<3;i++)damage.push(BVB2.onContact(G,o,f,10));
+  rows.push({tier,damage,spirals:o.v2GoldenPulses||0,
+   hits:o.v2SequenceHits||0,shield:o.status.shield||0});
+ }return rows;`);
+ assert.ok(r[1].damage[2]>r[0].damage[2]);
+ assert.ok(r[1].damage[2]>r[1].damage[0]);
+ assert.equal(r[1].spirals,0);
+ assert.ok(r[2].spirals>0&&r[2].shield>r[1].shield);
+});
+test('Natural Armor: V2 contact thorns counterattack, V3 fires retaliatory crystal shards and gains shield',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(45,tier,58);specialAbility(o,f);
+  const oldHp=f.hp,oldShield=o.status.shield||0,oldShots=G.v2.shots.length;
+  BVB2.onContact(G,o,f,10);
+  rows.push({tier,counters:o.v2ArmorCounters||0,
+   counterDmg:oldHp-f.hp,shotDelta:G.v2.shots.length-oldShots,
+   shield:oldShield,postShield:o.status.shield||0});
+ }return rows;`);
+ assert.equal(r[0].counters,0);
+ assert.ok(r[1].counters>0&&r[1].counterDmg>0);
+ assert.ok(r[2].shotDelta>r[1].shotDelta);
+ assert.ok(r[2].postShield>r[1].postShield);
+});
+test('Time Bomb: V2 has its own armed fuse and secondary shock; V3 detonates into three active charges',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(46,tier);specialAbility(o,f);
+  const bomb=G.v2.hazards.find(h=>h.v2Bomb);
+  const fuse=bomb?.armAt||0;
+  if(bomb)bomb.age=bomb.armAt+.1;
+  step(1/60);
+  rows.push({tier,fuse,bomb:!!bomb,spent:!!bomb?.v2Activated,
+    children:G.v2.hazards.filter(h=>h.kind==='mine').length,
+    shock:G.v2.hazards.filter(h=>h.kind==='shock').length});
+ }return rows;`);
+ assert.equal(r[0].bomb,false);
+ assert.ok(r[1].bomb&&r[2].bomb);
+ assert.ok(r[1].spent&&r[2].spent);
+ assert.ok(r[2].fuse<r[1].fuse);
+ assert.ok(r[2].children>r[1].children);
+ assert.ok(r[1].shock>0);
+});
+test('Satellites: V2 fires actual orbiting laser beams; V3 actively intercepts two enemy projectiles',()=>{
+ const r=play(`
+ const rows=[];
+ for(let tier=1;tier<=3;tier++){
+  const [o,f]=fixture(47,tier,130);specialAbility(o,f);
+  const orbit=o.v2Satellites?{...o.v2Satellites}:null;
+  for(let j=0;j<2;j++)G.v2.shots.push({x:o.x+20+j,y:o.y,px:o.x+20+j,py:o.y,
+   vx:0,vy:0,owner:f.uid,team:f.team,id:0,damage:0,life:1,age:0,
+   r:3,homing:0,bounces:0,color:'#ffffff'});
+  step(1/60);
+  const blocks=o.v2SatelliteBlocks||0;
+  advance(.24);
+  rows.push({tier,orbit,blocks,beams:o.v2SatelliteBeams||0,
+   shield:o.status.shield||0});
+ }return rows;`);
+ assert.equal(r[0].orbit,null);
+ assert.ok(r[1].orbit&&r[1].beams>0);
+ assert.equal(r[1].blocks,0);
+ assert.equal(r[2].blocks,2);
+ assert.ok(r[2].shield>r[1].shield);
+});
