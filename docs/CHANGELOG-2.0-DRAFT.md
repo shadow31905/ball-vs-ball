@@ -13,7 +13,7 @@
 - Sześciu bossów z trzema fazami każdy (18 faz).
 - Ostrzeżenia obszarowe przed atakami bossów.
 - Prezentacja zwycięskiej kulki i efekty rozstrzygającego uderzenia.
-- **Pięć wizualnych wariantów finishera** z niewidocznym wyborem 20% każdy. Wybrany wariant zapisuje się w stanie gry. Poprawiono położenie efektu z perspektywy gościa, jednorazowy dźwięk K.O., czyszczenie sceny w kolejnej rundzie i czas przejścia do wyniku. Dodano 72 klatki prezentacji końcowego trafienia do powtórki (bez symulowania kolejnych trafień). Testy automatyczne dodano, ale odbiór publicznego multiplayera i telefonów nie jest jeszcze potwierdzony.
+- **Pięć specjalnych cutscenek ostatniego uderzenia**, każda trwająca 1,8 s i wybierana losowo z równym prawdopodobieństwem 20%: **Fala Tytana** (rozchodzące się fale), **Supernowa** (gwiezdny wybuch), **Pęknięcie Czasu** (wir portali), **Ostrza Światła** (skrzyżowane smugi) i **Kryształowy Finał** (pryzmat i odłamki). Pełny ekran areny K.O., trzy etapy animacji, pokazanie zwycięskiej kulki; efekt występuje tylko po faktycznym rozstrzygającym K.O., nie przy remisie ani zwykłym końcu rundy. Wariant nie wpływa na walkę, synchronizuje się w multiplayerze i jest zapisany w **108 klatkach** powtórki. Dla osób ograniczających animacje dostępna jest karta statyczna. Dodatkowe testy równego losowania i rzeczywistych pikseli pięciu scen. Publiczny multiplayer WAN i telefony wymagają jeszcze odbioru; szczegóły: `docs/FINISHER-CINEMATICS.md`.
 
 ## Menu i animacje
 - Nowe menu z czterema animowanymi kwadratowymi kategoriami.
