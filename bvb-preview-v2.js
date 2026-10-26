@@ -45,7 +45,75 @@ function play(id){
   const accent=layer===2?'#facc15':'#7dd3fc',scale=layer===2?1.2:1;
   ctx.save();
   ctx.globalAlpha=.42+.48*t;
-  if(/Shot|Bolt|scatter|pierce|bounce|ghost/.test(action)){
+  // The signature evolutions get distinctive diagrams rather than the shared
+  // default ring: V2 and V3 depict different pieces of the actual mechanic.
+  if(action==='forgeDrone'||action==='forgeAnvil'){
+   const cx=action==='forgeDrone'?ox+35:ex-20,cy=oy-27;
+   const count=action==='forgeDrone'?6:8,r=action==='forgeDrone'?11:20;
+   ctx.strokeStyle=accent;ctx.lineWidth=3;
+   ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+   for(let i=0;i<count;i++){
+    const a=2*Math.PI*i/count+t;
+    glowingLine(cx+Math.cos(a)*r,cy+Math.sin(a)*r,
+     cx+Math.cos(a)*(r+7),cy+Math.sin(a)*(r+7),2,accent,.8);
+   }
+   if(action==='forgeAnvil')glowingLine(cx-15,cy+25,cx+15,cy+25,6,accent);
+  }else if(action==='cellBud'||action==='mitosisBloom'){
+   for(let i=0;i<(action==='cellBud'?3:6);i++){
+    const a=i*2*Math.PI/(action==='cellBud'?3:6)+t;
+    ctx.strokeStyle=accent;ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(ox+Math.cos(a)*(25+9*t),
+     oy+Math.sin(a)*(25+9*t),action==='cellBud'?7:10,0,Math.PI*2);ctx.stroke();
+   }
+  }else if(action==='conductorArc'||action==='overloadCircuit'){
+   const n=action==='conductorArc'?5:9;
+   for(let i=0;i<n;i++){
+    const x=ox+22+i*21,y=oy+(i%2?-13:13);
+    if(i)glowingLine(x-21,oy+((i-1)%2?-13:13),x,y,
+      action==='conductorArc'?3:5,accent,.85);
+   }
+   if(action==='overloadCircuit')circle(ex,ey,8,accent);
+  }else if(action==='pressureAura'||action==='gravityVortex'){
+   ctx.strokeStyle=accent;ctx.lineWidth=action==='pressureAura'?3:5;
+   for(let i=0;i<(action==='pressureAura'?2:4);i++){
+    const rad=25+i*13+t*6;
+    ctx.beginPath();ctx.arc(ox,oy,rad,0,Math.PI*2);ctx.stroke();
+   }
+   if(action==='gravityVortex')glowingLine(ex-35,ey,ox+45,oy,4,accent,.7);
+  }else if(action==='predictiveRay'||action==='reflectionEcho'){
+   glowingLine(ox+17,oy,ex-10,ey,action==='predictiveRay'?3:5,accent,.75);
+   if(action==='reflectionEcho'){
+    glowingLine(ex-10,ey,ex-33,13,3,accent,.8);
+    glowingLine(ex-33,13,ox+28,oy-14,3,accent,.7);
+   }
+  }else if(action==='matrixCenter'||action==='matrixRewire'){
+   for(let i=0;i<3;i++)for(let j=0;j<3;j++){
+    ctx.strokeStyle=(action==='matrixCenter'&&i===1&&j===1)||action==='matrixRewire'?accent:'#64748b';
+    ctx.lineWidth=action==='matrixRewire'?2:1;
+    ctx.strokeRect(ex-31+i*20,ey-31+j*20,17,17);
+    if(action==='matrixRewire'&&(i===1||j===1))circle(ex-22+i*20,ey-22+j*20,2.5,accent);
+   }
+  }else if(action==='orchardHarvest'||action==='goldenOrchard'){
+   const apples=action==='orchardHarvest'?3:5;
+   for(let i=0;i<apples;i++){
+    const x=ox+20+(i%3)*24,y=oy+25-Math.floor(i/3)*42;
+    circle(x,y,6,accent);glowingLine(x,y-7,x+2,y-12,1.5,accent);
+   }
+   if(action==='goldenOrchard'){
+    ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.beginPath();ctx.arc(ox,oy,41,0,Math.PI*2);ctx.stroke();
+   }
+  }else if(action==='turretBattery'||action==='ricochetShell'){
+   ctx.strokeStyle=accent;ctx.lineWidth=3;
+   ctx.strokeRect(ox+16,oy-23,23,23);
+   glowingLine(ox+31,oy-18,ox+50,oy-18,5,accent);
+   if(action==='ricochetShell'){
+    glowingLine(ox+45,oy-18,ex-28,9,2,accent,.8);
+    glowingLine(ex-28,9,ex,ey,3,accent,.8);
+    ctx.beginPath();ctx.arc(ex,ey,26*t+12,0,Math.PI*2);ctx.stroke();
+   }else{
+    circle(ox+61+t*125,oy-18,6,accent);
+   }
+  }else if(/Shot|Bolt|scatter|pierce|bounce|ghost/.test(action)){
    const count=layer===2?3:2;
    for(let n=0;n<count;n++){
     const y=ey+(n-(count-1)/2)*24;
