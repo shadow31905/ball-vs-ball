@@ -209,14 +209,21 @@ let recording=null,lastData=null,replayingSound=false,decodeCache=null,opener=nu
 const codec=window.BVBReplayCodec;
 function captureStep(g){
  if(!recording||g.m===12)return;
+ // The live loop still calls captureStep once after roundEnd. Finisher replay
+ // frames are already newer than the live battle clock; do not append a
+ // backwards-timestamp frame or incorrectly mark the recording as damaged.
+ if(recordingEnded){
+  lastData=recording.export();lastReplay=lastData.frames;decodeCache=null;
+  recording=null;recordingEnded=false;return;
+ }
  try{recording.capture(g);}
  catch(error){
   recording.meta.complete=false;recording.meta.captureError=String(error.message).slice(0,200);
   lastData=recording.export();lastReplay=lastData.frames;recording=null;recordingEnded=false;
   return;
  }
- if(recordingEnded){lastData=recording.export();lastReplay=lastData.frames;decodeCache=null;recording=null;recordingEnded=false;}
 }
+
 function startRound(g){
  if(!g)return;
  matchKey=String(g.matchId)+':'+String(g.rn);
