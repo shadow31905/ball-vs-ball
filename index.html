@@ -1833,7 +1833,7 @@ function openBallDetail(id) {
       ${st.tier < 3 ? `
         <hr style="border:0;border-top:1px solid #3b2d6e;margin:8px 0">
         <b style="color:#fb923c">🔮 Podgląd kolejnej ewolucji (V${st.tier + 1}):</b>
-        <p style="margin-top:3px;color:var(--mu)">${st.tier === 1 ? b.d + ' [Ewolucja V2]' : b.d + ' [Ewolucja V3 MAX]'}</p>
+        <p style="margin-top:3px;color:var(--mu)">${esc(nextTierSt.activeDesc)}</p>
         <small style="color:#fde047;display:block;margin-top:4px">
           Statystyki na V${st.tier + 1}: ❤️ ${ st.hp } → <b>${ nextTierSt.hp } HP</b> · ⚔️ ${ st.dmg } → <b>${ nextTierSt.dmg } DMG</b>
         </small>
