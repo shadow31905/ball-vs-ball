@@ -1,7 +1,7 @@
 # Warunki stabilnego wydania
 
 - [ ] Zielone testy jednostkowe i wszystkie joby Chromium/Firefox/WebKit dla **aktualnego, finalnie wydawanego commita**. Historyczne testy źródła 76e1e48 były zielone; nowe zmiany wymagają ponownego przejścia CI.
-- [ ] Testy bety zbudowanej z **finalnego źródła**: zapis po odświeżeniu, V1/V2/V3, wszystkie 5 finisherów, wyszukiwarka, izolacja profilu. Historyczna beta 76e1e48 była sprawdzona, ale nie zawiera najnowszych zmian.
+- [ ] Testy bety zbudowanej z **finalnego źródła**: zapis po odświeżeniu, V1/V2/V3, wszystkie 5 finisherów, wyszukiwarka, izolacja profilu. Panel testowy **tylko beta**: edycja monet/cukierków, wszystkie kulki, ewolucje, dotyk 320–430 px, trwałość zapisu i brak dostępu z głównej gry. Historyczna beta 76e1e48 była sprawdzona, ale nie zawiera najnowszych zmian.
 - [ ] Odbiór na fizycznym iPhonie/Safari oraz Androidzie/Chrome: dotyk, orientacja, 320–430 px, dłuższa walka, temperatury i płynność.
 - [ ] Dwie rzeczywiste sieci Wi-Fi/LTE: publiczna sygnalizacja, dołączenie, gotowość, runda, rozłączenie i powrót. Skonfigurowany TURN potwierdzony trasą relay w trybie relayOnly.
 - [ ] Testy regresji mechanik i ewolucji po ostatnich zmianach, zgodności bossów, trybów, treningu, replayów oraz multiplayera. Dotyczy poprawności działania i braku regresji, **nie** wymaga osobnej pełnej akceptacji balansu wszystkich 130 kulek (ten cel użytkownik wyłączył z zakresu).
