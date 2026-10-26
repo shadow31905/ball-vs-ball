@@ -149,7 +149,7 @@ style.textContent=[
 '.bvb-result-ball small{display:block;font-weight:750;font-size:11px;margin-top:5px;overflow-wrap:anywhere}',
 '@keyframes bvbWin{from{transform:translateY(1px) rotate(-4deg)}to{transform:translateY(-9px) rotate(5deg)}}',
 '@keyframes bvbLoss{from{transform:translateY(4px) rotate(-2deg)}to{transform:translateY(8px) rotate(2deg)}}',
-'body.bvb-effects-off .bvb-result-ball,body.bvb-result-motion-off .bvb-result-ball{animation:none!important}',
+'body.bvb-result-motion-off .bvb-result-ball{animation:none!important}',
 '@media(prefers-reduced-motion:reduce){.bvb-result-ball{animation:none!important}}',
 'body.bvb-menu-motion-off #menu .bvb3-tile:before,body.bvb-menu-motion-off #menu .bvb3-ghost{animation:none!important}'
 ].join('\n');
