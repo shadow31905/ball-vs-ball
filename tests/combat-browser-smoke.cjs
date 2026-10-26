@@ -46,6 +46,28 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      assert.equal(await page.evaluate(()=>S.coins),123456789,'negative money must be rejected');
      await page.click('#bvbBetaClose');
      assert.equal(await page.locator('#bvbBetaDialog').isVisible(),false);
+     // Reduced-motion previews must still show distinct, STATIC V1/V2/V3
+     // mechanics for the same ball, while the collection explains next-stage effects.
+     await page.emulateMedia({reducedMotion:'reduce'});
+     const previews=[];
+     for(const tier of [1,2,3]){
+       await page.evaluate(t=>{S.tr[16]=t;openBallDetail(16);},tier);
+       await page.waitForSelector('#bvb-skill-preview-canvas');
+       await page.waitForTimeout(120);
+       previews.push(await page.evaluate(()=>{
+         const canvas=document.getElementById('bvb-skill-preview-canvas');
+         return {image:canvas.toDataURL('image/png'),
+           detail:document.getElementById('ovb').textContent};
+       }));
+     }
+     assert.equal(new Set(previews.map(p=>p.image)).size,3,
+       'the same ball must visibly change between V1, V2 and V3 in reduced-motion previews');
+     assert.ok(previews[0].detail.includes('pomocniczy elektryczny pocisk'),
+       'V1 collection panel must describe the actual V2 ability upgrade');
+     assert.ok(previews[1].detail.includes('dodatkowa osłona wokół kulki'),
+       'V2 collection panel must describe the actual V3 ability upgrade');
+     await page.evaluate(()=>{S.tr[16]=3;save();menu();});
+     await page.emulateMedia({reducedMotion:'no-preference'});
    }else{
      assert.equal(await page.locator('#bvbBetaPanelOpen').count(),0,'stable page must not include admin panel');
      assert.equal(await page.evaluate(()=>typeof window.BVBBetaAdmin),'undefined');
