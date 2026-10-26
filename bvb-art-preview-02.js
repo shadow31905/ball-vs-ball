@@ -67,7 +67,7 @@ function portrait(id,stage){
 }
 function token(id,side){
  // Reuse the same V2/V3 motifs placed next to the central sphere in preview 02.
- const x=side===2?84:12,y=48,c=specs[id].color;
+ const x=side===2?12:84,y=48,c=specs[id].color;
  let mark='';
  if(id===6){
   mark=side===2?path('M-8 7L0 -7L8 7Z','#f4faff',1.7)+path('M0 -4L0 3M-4 4L4 4','#dce9ff',1):
