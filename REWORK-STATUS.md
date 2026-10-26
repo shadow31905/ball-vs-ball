@@ -2,9 +2,9 @@
 
 Gałąź: `rework/combat-3-foundation`, PR #1. Stabilny punkt wejścia na `main` nie jest scalany przed spełnieniem bramki wydania. Na prośbę użytkownika **beta przestała być publiczną stroną**: folder `beta/` usunięto z `main` w commicie `75ad553`. Kolejne testy bety odbywają się wyłącznie na tymczasowym serwerze CI z izolowanym zapisem i wyłączoną chmurą; nie wystawiać wersji beta przez GitHub Pages. Repozytorium źródłowe pozostaje publiczne, więc nie stanowi poufnego środowiska dla kodu.
 
-## Aktualny priorytet — poza reworkiem kulek
+## Testy pięciu pozostałych obszarów — powrót do kulek
 
-Na wyraźne życzenie właściciela odłożono indywidualny rework pozostałych 106 kulek na późniejszy etap. W bieżącej sesji **nie zmieniano zdolności ani ewolucji kulek**. Wykonano:
+Testy automatyczne **bossów, TURN, zapisów, trybów i mobilności** zakończyły się sukcesem na commicie `648f14f3` (CI 40371640623: `combat`, Chromium, Firefox, WebKit). To **nie** zastępuje prawdziwego TURN/WAN, fizycznych telefonów ani produkcyjnego Supabase. Zgodnie z warunkiem właściciela wznowiono następnie indywidualne reworki kulek. Wcześniejszy etap obejmował:
 
 - **Bossowie:** testy `tests/boss-hitboxes.test.cjs` sprawdzają wszystkie 18 nazwanych ostrzeżeń, geometrię oraz faktyczne trafienia po zapowiedzianym czasie. Nie jest to jeszcze odbiór na urządzeniach fizycznych.
 - **Sieć / TURN:** tryb `relayOnly` odmawia uruchomienia bez serwera TURN, odrzuca zbyt długie dane uwierzytelniania i wspiera krótkotrwałe dane ICE pobrane po HTTPS. `tests/turn-relay.test.cjs` sprawdza serwer relay, błędy konfiguracji, wybrane kandydaty oraz brak transmisji ciasteczek na obce domeny. Nadal **brakuje potwierdzonego działającego publicznego serwera TURN** i odbioru na różnych sieciach.
@@ -16,7 +16,7 @@ W kodzie zaimplementowano:
 
 - 130 jawnie zaprojektowanych pasywek i superumiejętności; testy wykonują wszystkie receptury i sprawdzają osobno ich unikalność.
 - 130 aktywnych zdolności i rzeczywiste ulepszenia V2/V3: pociski, ostrza, zasięg, statusy, pola, oczyszczanie i pomocnicy. Testy porównują 390 wariantów przy identycznym HP/DMG bazowym.
-- Pierwsze **16 kulek (0–15)** zachowuje poprzednie indywidualne poprawki. W najnowszej partii **8 kulek 16–23** otrzymało własne, przypisane tożsamościom mechaniki V2/V3 z wyzwalaczami ściany, kontaktu, pączkowania, aury, echa promienia, matrycy, sadu i wieżyczki. Ich działanie oraz charakterystyczne podglądy sprawdza `tests/identity-rework-16-23.test.cjs` wraz z testami przeglądarek. Dla pozostałych **106 kulek 24–129** działają profile V2/V3 ze wspólnych efektów, lecz **to nie jest jeszcze pełny indywidualny rework**. Test `tests/authored-evolutions.test.cjs` obejmuje 342 aktywacje; raport: `docs/ABILITY-AUDIT.md`. Nadal trzeba projektować unikalne zachowania 106 kulek i potwierdzić interakcje pasywek, superów, kolizji i statusów.
+- Pierwsze **16 kulek (0–15)** zachowuje poprzednie indywidualne poprawki. W najnowszej partii **8 kulek 16–23** otrzymało własne, przypisane tożsamościom mechaniki V2/V3 z wyzwalaczami ściany, kontaktu, pączkowania, aury, echa promienia, matrycy, sadu i wieżyczki. Ich działanie oraz charakterystyczne podglądy sprawdza `tests/identity-rework-16-23.test.cjs` wraz z testami przeglądarek. Osiem kolejnych kulek **24–31** dostało unikalne wyzwalacze zakażenia, kolców na ścianie, rykoszetu, błyskawic, narastającej fali, śladów lodu, kotwicy harpuna i pszczół. Wszystkie posiadają odrębny efekt V2/V3 i podgląd. Tym samym **32 kulek (0–31)** ma indywidualny rework; **98 kulek 32–129** nadal korzysta z kombinacji wspólnych efektów, więc nie wolno ich oznaczać jako ukończonych. Test `tests/authored-evolutions.test.cjs` obejmuje 342 aktywacje; raport: `docs/ABILITY-AUDIT.md`. Nadal trzeba projektować unikalne zachowania 106 kulek i potwierdzić interakcje pasywek, superów, kolizji i statusów.
 - 6 bossów × 3 autorskie fazy, sygnalizowane obszary ataków, działające również w Boss Rush i kampanii.
 - 5 profili AI, uniki pocisków i zagrożeń, kontrola statusów, tarcie, spin, stabilizacja fizyki i hash stanu obejmujący stan zdolności.
 - Odtworzenie każdego kroku walki z bezstratnymi deltami, zdarzeniami, dźwiękami i muzyką; import/eksport, gzip, zapis i odczyt po odświeżeniu. To odtwarzanie zapisanych stanów, nie ponowna symulacja; nagrania mogą zostać oznaczone jako niepełne po wyczerpaniu limitu pamięci. Wygląd i wyjście audio zależą od przeglądarki.
@@ -41,3 +41,7 @@ Balans ma jawną tabelę 130 współczynników, opartą na tysiącach walk. Po z
 ## Bramka wydania
 
 Pozostałe warunki opisano w `docs/RELEASE-GATE.md`. Nie oznaczać całego reworku jako ukończonego i nie scalać do stabilnego `main`, jeśli testy najnowszego kodu, fizyczne urządzenia i odbiór sieciowy pozostają niepotwierdzone. Tymczasowa beta jest testowana w CI, bez publicznego adresu. Publiczny adres /beta/ jest wycofany; końcowa publikacja dotyczy wyłącznie stabilnej gry.
+
+### Wyniki nowego etapu 24–31
+
+Nowe testy: `tests/identity-rework-24-31.test.cjs`, podglądy V1/V2/V3 w `tests/combat-browser-smoke.cjs`. Pierwsze CI 40373884286: 147 PASS, 3 FAIL — testy nie mierzyły prawidłowo opóźnionego pioruna, liczby szarpnięć i przechwyceń. Dodano liczniki rzeczywistych zdarzeń i poprawiono asercje. CI 40374323163: `combat`, Chromium, Firefox PASS; WebKit wykrył nadmierne założenie o początkowym trybie kamery — test naprawiono. Najnowsza kontrola przeglądarek wymaga zielonego wyniku CI dla bieżącego commita. Raport: `docs/QA-REPORT-2026-10-26.md`.
