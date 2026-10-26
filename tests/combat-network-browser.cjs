@@ -198,6 +198,22 @@ function perspectiveEvidence(){
   assert.deepEqual(await host.evaluate(()=>({matchId:G.matchId,round:G.rn})),identity,'reconnect resumes the existing round');
   await guest.waitForFunction('('+perspectiveEvidence.toString()+')().ok',null,{timeout:10000});
   assert.deepEqual(await guest.evaluate(()=>({matchId:G.matchId,round:G.rn})),identity);
+  // A real RTC state packet must carry one host-selected K.O. scene to the
+  // guest, preserving its variant while mirroring both point coordinates.
+  const hostFinish=await host.evaluate(()=>{
+   roundEnd(0);
+   return {variant:G.finisher?.variant,x:G.finisher?.x,y:G.finisher?.y,
+    fromY:G.finisher?.fromY};
+  });
+  assert.ok(Number.isInteger(hostFinish.variant)&&hostFinish.variant>=0&&hostFinish.variant<5);
+  await guest.waitForFunction(()=>G?.ph==='end'&&Number.isInteger(G.finisher?.variant),null,{timeout:10000});
+  const guestFinish=await guest.evaluate(()=>({variant:G.finisher.variant,x:G.finisher.x,
+   y:G.finisher.y,fromY:G.finisher.fromY,phase:G.ph,soundKey:guestFinisherSoundKey}));
+  assert.equal(guestFinish.variant,hostFinish.variant,'both RTC clients must see the same scene');
+  assert.equal(guestFinish.x,hostFinish.x);
+  assert.equal(guestFinish.y,360-hostFinish.y);
+  assert.equal(guestFinish.fromY,360-hostFinish.fromY);
+  assert.ok(guestFinish.soundKey.endsWith(':'+identity.round),'guest plays the K.O. sound only once per round');
   const adapterErrors=await Promise.all(pages.map(p=>p.evaluate(()=>window.__bvbRTC.audit.errors)));
   assert.deepEqual(adapterErrors,[[],[]]);assert.deepEqual(errors,[],'no uncaught browser exceptions');
   process.stdout.write('PASS two-client native WebRTC: deck, guest-first readiness, automatic start, HP/position/projectile perspective, disconnect pause and reconnection.\\n');
