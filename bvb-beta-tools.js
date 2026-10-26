@@ -65,14 +65,20 @@ for(const b of B){
 }
 let previousFocus=null;
 const status=message=>{byId('bvbBetaStatus').textContent=message;};
-function sync(){
- byId('bvbBetaCoins').value=String(S.coins);
- byId('bvbBetaCandies').value=String(S.candies);
+function syncTier(){
  const selected=target.value;
- byId('bvbBetaTier').value=selected==='all'?'1':String(S.tr?.[selected]||1);
+ let tier=S.tr?.[selected]||1;
+ if(selected==='all'){
+  // Preserve the selected all-balls evolution across panel reopen/reload.
+  tier=[3,2].find(t=>B.every(b=>(S.tr?.[b.id]||1)===t))||1;
+ }
+ byId('bvbBetaTier').value=String(tier);
 }
 function open(){
- previousFocus=document.activeElement;sync();status('');dialog.hidden=false;
+ previousFocus=document.activeElement;
+ byId('bvbBetaCoins').value=String(S.coins);
+ byId('bvbBetaCandies').value=String(S.candies);
+ syncTier();status('');dialog.hidden=false;
  byId('bvbBetaClose').focus();
 }
 function close(){
@@ -120,7 +126,7 @@ function startTraining(){
   window.BVBTraining?.render?.(G);
  }
 }
-target.addEventListener('change',sync);
+target.addEventListener('change',syncTier);
 byId('bvbBetaPanelOpen').addEventListener('click',open);
 byId('bvbBetaClose').addEventListener('click',close);
 dialog.addEventListener('click',e=>{if(e.target===dialog)close();});
