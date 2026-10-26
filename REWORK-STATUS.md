@@ -2,6 +2,16 @@
 
 Gałąź: `rework/combat-3-foundation`, PR #1. Stabilny punkt wejścia na `main` nie jest scalany przed spełnieniem bramki wydania. Na prośbę użytkownika **beta przestała być publiczną stroną**: folder `beta/` usunięto z `main` w commicie `75ad553`. Kolejne testy bety odbywają się wyłącznie na tymczasowym serwerze CI z izolowanym zapisem i wyłączoną chmurą; nie wystawiać wersji beta przez GitHub Pages. Repozytorium źródłowe pozostaje publiczne, więc nie stanowi poufnego środowiska dla kodu.
 
+## Aktualny priorytet — poza reworkiem kulek
+
+Na wyraźne życzenie właściciela odłożono indywidualny rework pozostałych 106 kulek na późniejszy etap. W bieżącej sesji **nie zmieniano zdolności ani ewolucji kulek**. Wykonano:
+
+- **Bossowie:** testy `tests/boss-hitboxes.test.cjs` sprawdzają wszystkie 18 nazwanych ostrzeżeń, geometrię oraz faktyczne trafienia po zapowiedzianym czasie. Nie jest to jeszcze odbiór na urządzeniach fizycznych.
+- **Sieć / TURN:** tryb `relayOnly` odmawia uruchomienia bez serwera TURN, odrzuca zbyt długie dane uwierzytelniania i wspiera krótkotrwałe dane ICE pobrane po HTTPS. `tests/turn-relay.test.cjs` sprawdza serwer relay, błędy konfiguracji, wybrane kandydaty oraz brak transmisji ciasteczek na obce domeny. Nadal **brakuje potwierdzonego działającego publicznego serwera TURN** i odbioru na różnych sieciach.
+- **Konto / chmura:** `bvb-accounts.js` nie przełącza wysyłanych statystyk na inny profil w trakcie operacji asynchronicznej, a wylogowanie czeka na aktywny zapis; wylogowanie na danym urządzeniu nie kończy sesji na innych. `tests/cloud-session.test.cjs` używa symulatora API, **nie jest testem prawdziwej bazy Supabase**.
+- **Mobilność:** `tests/combat-mobile-smoke.cjs` sprawdza portret → krajobraz → portret podczas treningu i utrzymanie identyfikatora rundy, elementów sterowania oraz braku poziomego przewijania. To tylko emulacja, nie rzeczywisty Android ani iPhone.
+- Zachowano tymczasową betę **tylko w CI** i nietkniętą stabilną stronę.
+
 W kodzie zaimplementowano:
 
 - 130 jawnie zaprojektowanych pasywek i superumiejętności; testy wykonują wszystkie receptury i sprawdzają osobno ich unikalność.
