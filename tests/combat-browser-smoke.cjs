@@ -105,9 +105,9 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      }
      assert.equal(new Set(previews.map(p=>p.image)).size,3,
        'the same ball must visibly change between V1, V2 and V3 in reduced-motion previews');
-     assert.ok(previews[0].detail.includes('pomocniczy elektryczny pocisk'),
+     assert.ok(previews[0].detail.includes('pomocnik-kuźnia'),
        'V1 collection panel must describe the actual V2 ability upgrade');
-     assert.ok(previews[1].detail.includes('dodatkowa osłona wokół kulki'),
+     assert.ok(previews[1].detail.includes('kowadło piorunowe'),
        'V2 collection panel must describe the actual V3 ability upgrade');
      await page.evaluate(()=>{S.tr[16]=3;save();menu();});
      await page.emulateMedia({reducedMotion:'no-preference'});
