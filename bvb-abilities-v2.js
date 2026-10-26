@@ -206,14 +206,14 @@ const authoredUpgrades=Object.freeze({
  21:['matrixCenter','matrixRewire'],
  22:['orchardHarvest','goldenOrchard'],
  23:['turretBattery','ricochetShell'],
- 24:['venomShot','venomField'],
- 25:['thornField','venomShot'],
- 26:['bounceShot','scatter'],
- 27:['shockField','sparkShot'],
- 28:['pushwave','echo'],
- 29:['frostField','frostShot'],
- 30:['pull','stun'],
- 31:['venomField','venomShot'],
+ 24:['virusIncubation','virusMutation'],
+ 25:['briarWall','briarCitadel'],
+ 26:['longRicochet','ricochetSplit'],
+ 27:['crownPylons','crownStorm'],
+ 28:['growingRipples','returningWave'],
+ 29:['frostFootprints','iceTrail'],
+ 30:['harpoonAnchor','harpoonReel'],
+ 31:['hiveGuard','queenSwarm'],
  32:['cleanse','scatter'],
  33:['shockwave','mineField'],
  34:['slowField','venomField'],
@@ -330,6 +330,22 @@ const upgradeCaptions=Object.freeze({
  goldenOrchard:'złote jabłka zapewniają również tarczę i podwójny zbiór',
  turretBattery:'armatnia bateria ładuje wieżyczkę i wystrzeliwuje pocisk',
  ricochetShell:'pocisk rykoszetuje, zostawiając opóźnioną eksplozję',
+ virusIncubation:'zakażenie przez kontakt i odroczony puls infekcji',
+ virusMutation:'wirus mutuje w chmurę trucizny u ofiary',
+ briarWall:'odbicie tworzy kolczasty szereg wzdłuż ściany',
+ briarCitadel:'ściana cierni staje się większa i odpycha atakujących',
+ longRicochet:'strzała odbija się dłużej od granic areny',
+ ricochetSplit:'strzała rozdziela się na rykoszecie na mniejsze pociski',
+ crownPylons:'odbicie rozstawia dwa ładunki korony błyskawic',
+ crownStorm:'rozgałęziony ładunek wraca opóźnionym piorunem',
+ growingRipples:'fala rozchodzi się w coraz większych pierścieniach',
+ returningWave:'ostatni pierścień wraca, ściągając przeciwnika',
+ frostFootprints:'kulka zostawia mroźne kroki podczas ruchu',
+ iceTrail:'mroźne kroki łączą się w twardszy lodowy tor',
+ harpoonAnchor:'harpun utrzymuje hak i ponawia przyciąganie',
+ harpoonReel:'ostatnie silne szarpnięcie ogłusza cel',
+ hiveGuard:'pszczoły zatrzymują wrogie pociski i kontratakują',
+ queenSwarm:'królowa roju wypuszcza dodatkowe roje i tarczę',
  petBolt:'pomocniczy elektryczny pocisk',
  guard:'dodatkowa osłona wokół kulki',
  healing:'dodatkowa regeneracja zdrowia',
@@ -436,13 +452,47 @@ function applySignatureEvolution(o,foe,level){
    zone(o,x,y,'mine',27,3.6,.6);
    visual(o,{x,y},'impact',44,color,.75);
   }
+ }else if(id===24){
+  o.v2VirusActiveUntil=G.rt+3+level*.6;
+  o.v2VirusNextContact=0;
+  o.v2VirusMutating=level===2;
+  visual(o,o,'growth',38+level*5,color,.75);
+ }else if(id===25){
+  o.v2BriarUntil=G.rt+3.4+level*.5;
+  o.v2BriarGuard=level===2;
+  visual(o,o,'shard',35+level*5,color,.72);
+ }else if(id===26){
+  shoot(o,foe,{damage:o.baseDmg*.22,speed:190,life:3.5,
+   bounces:3+level*2,ricochetSplit:level===2?1:0,color:'#fef08a'});
+  visual(o,foe,'slash',43+level*5,color,.72);
+ }else if(id===27){
+  o.v2CrownUntil=G.rt+3+level*.7;
+  o.v2CrownArmed=level===2;
+  visual(o,o,'orbit',34+level*5,color,.72);
+ }else if(id===28){
+  o.v2Ripples={next:.22,remaining:level===2?4:3,index:0,level};
+  visual(o,o,'ring',34+level*7,color,.7);
+ }else if(id===29){
+  o.v2FrostSteps={next:.1,remaining:3+level*.7,
+   lastX:o.x,lastY:o.y,level};
+  visual(o,o,'tail',35+level*6,color,.7);
+ }else if(id===30){
+  if(Math.hypot(foe.x-o.x,foe.y-o.y)<245){
+   o.v2HarpAnchor={uid:foe.uid,remaining:1.3+level*.3,next:.2,level,pulses:0};
+   visual(o,foe,'tether',37+level*5,color,.72);
+  }
+ }else if(id===31){
+  o.v2Hive={remaining:2.6+level*.6,next:.18,
+   intercepts:level===2?2:1,level};
+  if(level===2)o.status.shield=Math.min(32,(o.status.shield||0)+3);
+  visual(o,o,'orbit',36+level*5,color,.7);
  }
 }
 function applyAuthoredUpgrade(o,foe){
  const level=evolutionStage(o),profile=authoredUpgrades[o?.b?.id];
  if(level===0||!profile||!foe||!alive(foe)||netRole==='guest')return;
  const id=o.b.id,boost=level===2?1.28:1,unique=1+(id%5)*.04;
- if(id>=16&&id<=23){applySignatureEvolution(o,foe,level);return;}
+ if(id>=16&&id<=31){applySignatureEvolution(o,foe,level);return;}
  const accent=id>=99?'#d8b4fe':o.b.c;
  function action(kind){
   const color=kind.includes('frost')?'#a5f3fc':kind.includes('venom')?'#bef264':kind.includes('fire')||kind==='burnwave'||kind==='scatterFire'?'#fb923c':accent;
