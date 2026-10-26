@@ -145,10 +145,24 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.selectOption('#bvbSpeed','2');
    assert.equal(await page.evaluate(()=>BVBReworkUI.rate()),2,'speed must work');
    const priorCamera=await page.evaluate(()=>BVBReworkUI.camera());
+   await page.evaluate(()=>{
+     window.__cameraClickCount=0;
+     document.getElementById('bvbCamera').addEventListener('click',()=>window.__cameraClickCount++);
+   });
    await page.click('#bvbCamera');
-   await page.waitForFunction(before=>BVBReworkUI.camera()!==before,priorCamera,{timeout:5000});
-   const currentCamera=await page.evaluate(()=>BVBReworkUI.camera());
-   assert.equal(currentCamera,priorCamera==='static'?'dynamic':'static',
+   await page.waitForTimeout(70);
+   const cameraDiagnostic=await page.evaluate(()=>({
+     reported:BVBReworkUI.camera(),
+     label:document.getElementById('bvbCamera').textContent,
+     clicks:window.__cameraClickCount,
+     overlayHidden:document.getElementById('bvbReplayOverlay')?.hidden,
+     live:G?.ph,mode:G?.m,
+     stored:JSON.parse(localStorage.getItem('bvb-rework-view-v1')||'{}').camera
+   }));
+   console.log('Camera browser click:',browserName,priorCamera,cameraDiagnostic);
+   assert.equal(cameraDiagnostic.clicks,1,
+     'camera button must receive exactly one real pointer click');
+   assert.equal(cameraDiagnostic.reported,priorCamera==='static'?'dynamic':'static',
      'camera switch must toggle the actual previous setting');
    console.log('Before forced end:',await page.evaluate(()=>({phase:G.ph,seconds:G.rt,hp:G.bl.map(o=>o.hp),stats:!!G.reworkRoundStats,errors:[]})));
    console.log('After forced end:',await page.evaluate(()=>{const before=G;const phase=G.ph;const handler=typeof BVBReworkUI.endRound;G.bl.find(o=>o.team===1).hp=0;roundEnd(0);return {same:G===before,phaseBefore:phase,phaseAfter:G.ph,handler,stats:G.reworkRoundStats||null,finisher:G.finisher?.variant,func:roundEnd.toString().slice(0,350)};}));
