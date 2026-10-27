@@ -4,7 +4,7 @@
  */
 (()=>{
 'use strict';
-const motifs=Object.freeze([["Eliksir","alchemy","#2bdec5","#ecffe0","#145b66"],["Konduktor","ghosttrain","#6998ff","#e9ffff","#182d77"],["Czarny Pająk","blackspider","#7c32ad","#ff8ed5","#1a092b"],["Grób","grave","#8596c2","#d2dcf5","#253050"],["Skrzydło Światła","lightwing","#ffce58","#fffddb","#966d1b"],["Pudełko Cukierków","candybox","#fa679a","#fff0b9","#6e1750"],["Szlam","slime","#47e8a7","#ceff85","#114e58"],["Kajdany","shackles","#a5b5db","#f0f7ff","#344467"],["Kwas","acid","#94f431","#efff7d","#2a771a"],["Promień Świetlny","lightbeam","#61eafc","#f0ffff","#136ba7"],["Trujący Gaz","poisongas","#87e23c","#f1ff93","#365d17"],["Shuriken","shuriken","#8ca8fb","#e9f7ff","#343d74"],["Fibonacci","fibonacci","#e4bc5d","#fff3c2","#7a5430"],["Kaktus","cactus","#5fc44f","#dbff84","#276333"],["Bomba","bomb","#ff8538","#ffe4a1","#7b291b"],["Orbita","orbit","#8d96fc","#faf6ff","#293e86"]].map((m,i)=>Object.freeze({id:32+i,ref:33+i,name:m[0],key:m[1],base:m[2],light:m[3],dark:m[4]})));
+const motifs=Object.freeze([["Eliksir","alchemy","#b748fa","#fff0ff","#43115f"],["Konduktor","ghosttrain","#ffbe39","#fff6bb","#69400f"],["Czarny Pająk","blackspider","#7c32ad","#ff8ed5","#1a092b"],["Grób","grave","#8596c2","#d2dcf5","#253050"],["Skrzydło Światła","lightwing","#ffce58","#fffddb","#966d1b"],["Pudełko Cukierków","candybox","#fa679a","#fff0b9","#6e1750"],["Szlam","slime","#47e8a7","#ceff85","#114e58"],["Kajdany","shackles","#a5b5db","#f0f7ff","#344467"],["Kwas","acid","#94f431","#efff7d","#2a771a"],["Promień Świetlny","lightbeam","#61eafc","#f0ffff","#136ba7"],["Trujący Gaz","poisongas","#87e23c","#f1ff93","#365d17"],["Shuriken","shuriken","#8ca8fb","#e9f7ff","#343d74"],["Fibonacci","fibonacci","#e4bc5d","#fff3c2","#7a5430"],["Kaktus","cactus","#5fc44f","#dbff84","#276333"],["Bomba","bomb","#ff8538","#ffe4a1","#7b291b"],["Orbita","orbit","#8d96fc","#faf6ff","#293e86"]].map((m,i)=>Object.freeze({id:32+i,ref:33+i,name:m[0],key:m[1],base:m[2],light:m[3],dark:m[4]})));
 const f=n=>(+n).toFixed(2),TAU=Math.PI*2;
 const line=(d,s='#ffffff',w=2,fill='none',extra='')=>'<path d="'+d+'" stroke="'+s+'" stroke-width="'+w+'" fill="'+fill+'" stroke-linejoin="round" stroke-linecap="round" '+extra+'/>';
 const circle=(x,y,r,c,extra='')=>'<circle cx="'+f(x)+'" cy="'+f(y)+'" r="'+f(r)+'" fill="'+c+'" '+extra+'/>';
@@ -166,10 +166,9 @@ function outside(index,t,m){
 function skillMotion(i,t,key){
  const types=['alchemy','train','spider','grave','wing','candy','slime','chains','acid',
               'ray','gas','shuriken','fibonacci','cactus','bomb','satellites'];
- const degrees=[-6,2,10,-3,15,-4,0,-8,6,-7,12,180,22,-4,9,360];
- const angle=degrees[i]*(1+(t-1)*.3),duration=(3.05-(t-1)*.16+(i%4)*.15).toFixed(2);
+ const duration=(3.05-(t-1)*.21+(i%4)*.15).toFixed(2);
  const kf='sk33Skill'+key.replace(/[^a-zA-Z0-9]/g,'');
- const transformA=(i===1||i===7?'translate(-3px,1px) rotate(':-1); // motion identity names below
+ // Each silhouette has its own active silhouette trajectory.
  const transforms=[
   ['rotate(-4deg) scale(.97)','rotate(6deg) scale(1.08)'],
   ['translate(-3px,0px)','translate(4px,-2px)'],
@@ -189,18 +188,24 @@ function skillMotion(i,t,key){
   ['rotate(-10deg)','rotate(35deg)']
  ];
  const tr=transforms[i];
- const css='@keyframes '+kf+'{0%,100%{transform:'+tr[0]+'}50%{transform:'+tr[1]+'}}';
- return {name:types[i],css:'.sk33-identity{transform-origin:64px 65px;animation:'+kf+' '+duration+'s ease-in-out infinite}'+css};
+ const css='@keyframes '+kf+'{0%,100%{transform:'+tr[0]+' scale('+(1+(t-1)*.015).toFixed(3)+')}50%{transform:'+tr[1]+' scale('+(1+(t-1)*.045).toFixed(3)+')}}';
+ return {name:types[i],css:'svg[data-animation-key="'+key+'"] .sk33-identity{transform-origin:64px 65px;animation:'+kf+' '+duration+'s ease-in-out infinite}'+css};
 }
 function portrait(id,tier,style='detailed'){
  id=Number(id);if(!Number.isInteger(id)||id<32||id>47)return '';
  const t=Math.min(3,Math.max(1,Math.round(Number(tier)||1))),i=id-32,m=motifs[i],classic=style==='classic';
- const move=skillMotion(i,t,'sk33-'+id+'-'+t);
- const key='sk33-'+id+'-'+t,g='grad-'+key,gl='glow-'+key,wide='data-reference-panel="'+m.ref+'"';
- let art='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" data-bvb-art-v2="1" data-ball-id="'+id+'" data-evolution="'+t+'" '+wide+' data-concept="'+m.key+'" data-visual-style="'+(classic?'classic':'detailed')+'" data-ability-animation="'+move.name+'" aria-label="'+m.name+' V'+t+'">';
+ const key='sk33-'+id+'-'+t+'-'+(classic?'c':'d'),move=skillMotion(i,t,key);
+ const g='grad-'+key,gl='glow-'+key,wide='data-reference-panel="'+m.ref+'"';
+ let art='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" data-bvb-art-v2="1" data-ball-id="'+id+'" data-evolution="'+t+'" '+wide+' data-concept="'+m.key+'" data-animation-key="'+key+'" data-visual-style="'+(classic?'classic':'detailed')+'" data-ability-animation="'+move.name+'" aria-label="'+m.name+' V'+t+'">';
  art+='<defs><radialGradient id="'+g+'" cx="28%" cy="22%" r="81%"><stop stop-color="'+m.light+'"/><stop offset=".3" stop-color="'+m.base+'"/><stop offset=".76" stop-color="'+m.base+'"/><stop offset="1" stop-color="'+m.dark+'"/></radialGradient><filter id="'+gl+'" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="'+(2.5+t)+'"/></filter></defs>';
- art+='<style>.sk33-aura{transform-origin:64px 64px;animation:sk33Rotate '+(5+(i%5)*.67)+'s linear infinite}.sk33-core{transform-origin:64px 64px;animation:sk33Pulse '+(2.15+(i%7)*.14)+'s ease-in-out infinite alternate} .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+'@keyframes sk33Rotate{to{transform:rotate(360deg)}}@keyframes sk33Pulse{to{transform:scale(1.05)}}@keyframes sk33Blink{0%,38%,62%,100%{transform:translateX(0)}44%,55%{transform:translateX(2px)}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}</style>';
- art+='<g class="sk33-aura">'+outside(i,t,m)+'</g>';
+ const scope='svg[data-animation-key="'+key+'"]';
+ art+='<style>'+scope+' .sk33-aura{transform-origin:64px 65px;animation:sk33Rotate '+(6+(i%5)*.67)+'s linear infinite}'+
+  scope+' .sk33-core{transform-origin:64px 65px;animation:sk33Pulse '+(2.15+(i%7)*.14)+'s ease-in-out infinite alternate}'+
+  scope+' .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+
+  '@keyframes sk33Rotate{to{transform:rotate(360deg)}}@keyframes sk33Pulse{to{transform:scale(1.05)}}'+
+  '@keyframes sk33Blink{0%,38%,62%,100%{transform:translateX(0)}44%,55%{transform:translateX(2px)}}'+
+  '@media(prefers-reduced-motion:reduce){'+scope+' *{animation:none!important}}</style>';
+ art+='<g class="sk33-aura">'+ellipse(64,65,40+t*2,22+t,'none',m.light,1.6,i*17)+ellipse(64,65,45+t*2,27+t,'none',m.base,1.8,90-i*11)+'</g>';
  art+=circle(64,65,36,m.base,'opacity=".22" filter="url(#'+gl+')"');
  art+='<g class="sk33-core">';
  const core=classic?'#222b3c':'url(#'+g+')';
