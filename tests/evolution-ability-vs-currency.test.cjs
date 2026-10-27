@@ -15,7 +15,7 @@ test('all 130 identities keep HP and base damage independent from evolution stag
 });
 test('purchased currency upgrades increase HP and damage separately at every stage',()=>{
  const game=createGame();
- const rows=game.run('Array.from({length:130},(_,id)=>[1,2,3].map(t=>({none:getBallStats(id,t,0,0),health:getBallStats(id,t,4,0),damage:getBallStats(id,t,0,4)})))');
+ const rows=game.run('Array.from({length:130},(_,id)=>[1,2,3].map(t=>({none:getBallStats(id,t,0,0),health:getBallStats(id,t,0,4),damage:getBallStats(id,t,4,0)})))');
  for(let id=0;id<130;id++)for(let stage=0;stage<3;stage++){
   const {none,health,damage}=rows[id][stage];
   assert.ok(health.hp>none.hp,'HP purchase ineffective for '+id);
