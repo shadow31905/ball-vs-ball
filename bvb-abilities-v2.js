@@ -1144,7 +1144,10 @@ function cast(o,foe){
  case 'beam':{
   const lead=.19,target={x:foe.x+foe.vx*22*lead,y:foe.y+foe.vy*22*lead};
   roundState().beams.push({x:o.x,y:o.y,x2:target.x,y2:target.y,color:d.color,life:.35+evolutionStage(o)*.1,max:.35+evolutionStage(o)*.1,id:o.b.id});
-  strike(o,foe,o.baseDmg*.43*scale,{slow:evolutionStage(o)*.15,stun:o.b.id===20?.12:0});visual(o,o,'beam',23,d.color,.55);break;
+  strike(o,foe,o.baseDmg*.43*scale,{slow:evolutionStage(o)*.15,stun:o.b.id===20?.12:0});
+  if(o.b.id===20)o.v1ForesightMark={next:.28,remaining:1,
+   x:clamp(target.x,12,348),y:clamp(target.y,12,348)};
+  visual(o,o,'beam',23,d.color,.55);break;
  }
  case 'tail':case 'growth':{
   o.skillScale=Math.min(1.23,(o.skillScale||1)+.025+evolutionStage(o)*.01);
@@ -1152,6 +1155,9 @@ function cast(o,foe){
   else {o.v2BaseRadius??=o.r;o.r=Math.min(o.v2BaseRadius*1.23,o.v2BaseRadius*o.skillScale);}
   o.hp=Math.min(o.mh,o.hp+3.3*scale);
   zone(o,o.x,o.y,kind==='tail'?'tail':'slime',24,3,.29);
+  if(o.b.id===17){
+   o.v1CellDivision={next:.28,remaining:1+evolutionStage(o),originX:o.x,originY:o.y};
+  }
   visual(o,o,'growth',28,d.color,.7);break;
  }
  case 'tether':
@@ -1485,6 +1491,29 @@ function tick(dt){
      visual(o,o,'shield',32,abilityData[47].color,.4);
      if(o.v1OrbitShield.remaining<=0){o.v1OrbitShield=null;break;}
     }
+   }
+  }
+  if(o.b.id===17&&o.v1CellDivision){
+   const cells=o.v1CellDivision;cells.next-=dt;
+   if(cells.next<=0){
+    const offset=cells.remaining%2===0?-23:23;
+    zone(o,clamp(cells.originX+offset,16,344),
+      clamp(cells.originY-offset,16,344),'slime',13,2.1,.25);
+    o.v1CellSplits=(o.v1CellSplits||0)+1;
+    cells.remaining--;cells.next+=.56;
+    if(cells.remaining<=0)o.v1CellDivision=null;
+   }
+  }
+  if(o.b.id===20&&o.v1ForesightMark){
+   const mark=o.v1ForesightMark;mark.next-=dt;
+   if(mark.next<=0){
+    st.beams.push({x:o.x,y:o.y,x2:mark.x,y2:mark.y,
+      id:20,color:abilityData[20].color,life:.26,max:.26});
+    const f=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(f&&Math.hypot(mark.x-f.x,mark.y-f.y)<f.r+19)
+     strike(o,f,o.baseDmg*.09,{slow:.18});
+    o.v1ForesightMarks=(o.v1ForesightMarks||0)+1;
+    o.v1ForesightMark=null;
    }
   }
   if(o.b.id===29&&o.v1FrostWake){
