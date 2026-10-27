@@ -42,7 +42,7 @@ test('removed training does not alter ownership or catalogue size',()=>{
 test('mines arm after a readable warning; normal shots hit obstacles and shadow shots pass through',()=>{
  const game=createGame();
  const mine=game.run("G=freshGame(4,[B[46]],[B[0]]);G.ph='battle';G.rt=0;G.th=1;BVBRework.setSeed(G,9876);G.obstacles=[];G.bl=[actor(B[46],80,180,0,0,0,1,0,0),actor(B[0],220,180,0,1,1,1,0,0)];for(const o of G.bl){o.vx=o.vy=0;o.abilityCd=999;o.hp=o.mh=1000;}specialAbility(G.bl[0],G.bl[1]);var hp=G.bl[1].hp;for(let i=0;i<20;i++)step(1/60);({same:G.bl[1].hp===hp,arm:G.v2.hazards[0]?.armAt})");
- assert.equal(mine.same,true);assert.equal(mine.arm,.75);
+ assert.equal(mine.same,true);assert.equal(mine.arm,1.25); // Bomb's readable fuse differs from a regular mine.
  const shots=game.run("(()=>{const out=[];for(const id of [26,90]){G=freshGame(4,[B[id]],[B[0]]);G.ph='battle';G.rt=0;G.th=1;BVBRework.setSeed(G,9876);G.obstacles=[{x:170,y:180,r:20,kind:'neon',moving:false}];G.bl=[actor(B[id],80,180,0,0,0,1,0,0),actor(B[0],280,180,0,1,1,1,0,0)];for(const o of G.bl){o.vx=o.vy=0;o.abilityCd=999;o.hp=o.mh=1000;}specialAbility(G.bl[0],G.bl[1]);for(let i=0;i<44;i++)step(1/60);out.push({id,hp:G.bl[1].hp,shots:G.v2.shots.length});}return out})()");
  assert.equal(shots[0].hp,1000);assert.ok(shots[1].hp<1000,'ghost projectile should reach its target through the obstacle');
 });
