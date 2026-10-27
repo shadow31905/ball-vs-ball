@@ -72,7 +72,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
     assert.ok(ball.svgs.every((svg,i)=>svg.includes('data-preview-tier="'+(i+1)+'"')));
    }
    // Check authored art actually decodes, including evolved early and late balls.
-   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,...Array.from({length:16},(_,i)=>i+32),...Array.from({length:16},(_,i)=>i+48),98,129];
+   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,...Array.from({length:16},(_,i)=>i+32),...Array.from({length:16},(_,i)=>i+48),...Array.from({length:16},(_,i)=>i+64),98,129];
    await page.waitForFunction(ids=>ids.every(id=>[1,2,3].every(t=>
     window.BVBArtEvolution.imageForTier(id,t)?.naturalWidth>0)),evolvedSamples,{timeout:20000});
    const artDiagnostics=await page.evaluate(ids=>ids.map(id=>[1,2,3].map(t=>
@@ -97,6 +97,19 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    assert.ok(sketch49.every((row,i)=>row.every((s,t)=>
      s.includes('data-reference-panel="'+(49+i)+'"')&&
      s.includes('data-evolution="'+(t+1)+'"'))));
+   // All 16 REAL ball names/identities 65–80 must be used for the new art.
+   const thirdSet=await page.evaluate(()=>Array.from({length:16},(_,i)=>{
+     const id=i+64;
+     return {name:B[id].n,pictures:[1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)),
+      upgrades:[2,3].map(t=>window.BVB2.evolutionDescription(id,t))};
+   }));
+   const thirdKeys=thirdSet.map(v=>v.pictures[0].match(/data-visual-identity="([^"]+)"/)?.[1]);
+   assert.equal(new Set(thirdKeys).size,16,'16 real characters keep distinct visual identities');
+   assert.equal(new Set(thirdSet.flatMap(v=>v.pictures)).size,48,'48 unique evolution costumes');
+   assert.ok(thirdSet.every((v,i)=>v.pictures.every((pic,t)=>
+     pic.includes('data-ball-id="'+(i+64)+'"')&&pic.includes('data-evolution="'+(t+1)+'"'))));
+   assert.equal(new Set(thirdSet.map(v=>v.upgrades[0])).size,16,'V2 authored skills');
+   assert.equal(new Set(thirdSet.map(v=>v.upgrades[1])).size,16,'V3 authored skills');
    const elementTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
     [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)
       .match(/data-element="([^"]+)"/)?.[1]||'')));
