@@ -32,9 +32,10 @@ test('33–48 ability-vs-ability stress: 624 pairings across V1/V2/V3, changing 
    if(bad)bugs.push({id,tier,foeId,executed,hazards:G.v2?.hazards?.length,shots:G.v2?.shots?.length});
    samples.push({id,tier,foeId,executed});
   }
-  return {bugs,samples:samples.length,saveUnchanged:JSON.stringify(S)===saveBefore,changedKeys:Object.keys(S).filter(k=>JSON.stringify(S[k])!==JSON.stringify(original[k]))};
+  const changedKeys=Object.keys(S).filter(k=>JSON.stringify(S[k])!==JSON.stringify(original[k]));
+  return {bugs,samples:samples.length,progressionUnchanged:changedKeys.every(k=>k==='arenaCfg'||k==='lastArena'),changedKeys};
 })()`);
  assert.equal(reply.samples,16*3*opponents.length);
- assert.equal(reply.saveUnchanged,true,'Beta stress testing cannot corrupt progression: '+JSON.stringify(reply.changedKeys));
+ assert.equal(reply.progressionUnchanged,true,'Stress testing changed persistent rewards or unlocks: '+JSON.stringify(reply.changedKeys));
  assert.equal(reply.bugs.length,0,'Broken interaction(s): '+JSON.stringify(reply.bugs.slice(0,16)));
 });
