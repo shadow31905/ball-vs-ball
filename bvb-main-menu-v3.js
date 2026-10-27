@@ -160,7 +160,7 @@ function chooseBall(id){
  }
  const ability=document.createElement('p');ability.className='bvb3-power';
  const label=document.createElement('b');label.textContent=(skill?.title||'✨ Umiejętność')+': ';
- ability.append(label,document.createTextNode(skill?.desc||s.activeDesc||b.d||'Specjalna umiejętność.'));
+ ability.append(label,document.createTextNode(s.activeDesc||skill?.desc||b.d||'Specjalna umiejętność.'));
  const simulation=document.createElement('canvas');
  simulation.id='bvb-skill-preview-canvas';simulation.width=320;simulation.height=150;
  simulation.setAttribute('aria-label','Animowany schemat umiejętności wybranej kulki');
@@ -169,7 +169,8 @@ function chooseBall(id){
  replay.addEventListener('click',()=>window.BVB2Preview?.play?.(id));
  const simulationCaption=document.createElement('p');simulationCaption.className='bvb3-desc';
  simulationCaption.textContent='Schemat umiejętności — przebieg prawdziwego ataku zależy od sytuacji na arenie.';
- preview.replaceChildren(header,stats,ability,simulation,replay,simulationCaption);
+ const identity=window.BVB2?.identityPanel?.(id);
+ preview.replaceChildren(header,stats,ability,...(identity?[identity]:[]),simulation,replay,simulationCaption);
  ready.disabled=level===null;
  requestAnimationFrame(()=>{if(ballId===id&&document.getElementById('bvb-skill-preview-canvas')===simulation)
    window.BVB2Preview?.play?.(id);});

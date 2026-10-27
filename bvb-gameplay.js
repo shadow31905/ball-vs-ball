@@ -69,19 +69,19 @@
   function newMatch(g) {
     if (!g || g.m === 12 || g.m === 4 || netRole === 'guest') return;
     const keys=Object.keys(MISSIONS);
-    g.mission={key:keys[Math.floor(Math.random()*keys.length)],complete:false,progress:[]};
+    g.mission={key:keys[Math.floor((window.BVBRework?.random?.() ?? Math.random())*keys.length)],complete:false,progress:[]};
   }
   function nextRule(g) {
     if (!g || netRole === 'guest') return;
     const keys = Object.keys(RULES).filter(k=>k!==g.lastModifier);
-    const pick = keys[Math.floor(Math.random()*keys.length)];
+    const pick = keys[Math.floor((window.BVBRework?.random?.() ?? Math.random())*keys.length)];
     g.lastModifier = g.modifier = pick;
-    g.tactics = {0:'balanced',1:Math.random()<.24?'balanced':(['strike','guard','rush'][Math.floor(Math.random()*3)])};
+    g.tactics = {0:'balanced',1:(window.BVBRework?.random?.() ?? Math.random())<.24?'balanced':(['strike','guard','rush'][Math.floor((window.BVBRework?.random?.() ?? Math.random())*3)])};
     // Easy bots do not randomly gain Guard (+20% HP) or Rush (+26% speed).
     // Medium bots may occasionally use a mild tactic, but never Rush.
     if(g.m===0&&typeof diff==='number'){
       if(diff===0)g.tactics[1]='balanced';
-      else if(diff===1)g.tactics[1]=Math.random()<.18?(['strike','guard'][Math.floor(Math.random()*2)]):'balanced';
+      else if(diff===1)g.tactics[1]=(window.BVBRework?.random?.() ?? Math.random())<.18?(['strike','guard'][Math.floor((window.BVBRework?.random?.() ?? Math.random())*2)]):'balanced';
     }
     if(g.m===12)g.tactics[1] = 'balanced'; // Guest chooses their own stance.
     g.roundStartedAt = 0;
@@ -169,7 +169,7 @@
       '<p class="bvb-hint">Taktyka ustawia też rodzaj COMBO. Zasada rundy działa jednakowo na obie kulki.</p>';
   }
 
-  draw = function() { oldDraw(); displayPanel(); };
+  draw = function() { oldDraw(); if(!window.BVBReplayRendering)displayPanel(); };
   function updateMission(winner, participant) {
     if(winner!==0 || !participant || !G?.mission || G.mission.complete || G.m===12 || G.m===4)return;
     const mission=G.mission, task=MISSIONS[mission.key];
@@ -193,7 +193,7 @@
     if(!G || G.ph!=='battle')return;
     const participant=G.bl?.find(o=>o.team===0);
     updateMission(winner,participant);
-    if(participant && G.m!==12 && !participant.b?.isBoss){
+    if(participant && G.m!==12 && G.m!==4 && !participant.b?.isBoss){
       S.mastery ||= {};
       const id=participant.b.id;
       const old=rank(id), data=S.mastery[id] || {fights:0,wins:0};

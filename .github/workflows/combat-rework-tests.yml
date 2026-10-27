@@ -1,0 +1,64 @@
+name: Combat rework regression tests
+
+on:
+  push:
+    branches:
+      - rework/combat-3-foundation
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'bvb-*.js'
+      - 'tests/**'
+      - '.github/workflows/combat-rework-tests.yml'
+      - 'scripts/**'
+
+concurrency:
+  group: combat-rework-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  combat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify scripts and full simulation regressions
+        run: |
+          for file in bvb-*.js; do node --check "$file"; done
+          node --test tests/*.test.cjs
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    env:
+      BVB_BROWSER: ${{ matrix.browser }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser engine
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run stable-page and temporary internal beta browser tests
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bvb-server.log 2>&1 &
+          sleep 2
+          node tests/combat-browser-smoke.cjs
+          BVB_BETA_OUTPUT=beta BVB_SOURCE_REVISION=${{ github.sha }} node scripts/build-beta.cjs
+          BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/combat-browser-smoke.cjs
+          if [ "$BVB_BROWSER" != firefox ]; then
+            node tests/combat-mobile-smoke.cjs
+            BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/combat-mobile-smoke.cjs
+          fi
+          if [ "$BVB_BROWSER" = chromium ]; then node tests/combat-network-browser.cjs; fi

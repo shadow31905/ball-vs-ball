@@ -105,7 +105,7 @@
     o.comboCooldown = 5.5;
     o.comboHits = 0;
     // Tactical choice controls the finisher; Balanced keeps the surprise.
-    const choice = o.tactic === 'strike' ? 0 : o.tactic === 'rush' ? 1 : o.tactic === 'guard' ? 2 : Math.floor(Math.random()*3);
+    const choice = o.tactic === 'strike' ? 0 : o.tactic === 'rush' ? 1 : o.tactic === 'guard' ? 2 : Math.floor(battleRandom()*3);
     const col = o.b.c || '#e879f9';
     o.attackGlow = .75;
     addPop(o.x,o.y-36,'COMBO!','#fde047',1.3);
@@ -138,7 +138,7 @@
   }
   applyDamage = function(target, damage) {
     if (!target || !Number.isFinite(damage) || damage <= 0) return;
-    const direct = damage >= 9, crit = direct && Math.random()<.11;
+    const direct = damage >= 9, crit = direct && battleRandom()<.11;
     const amount = damage*(crit?1.5:1);
     const before = target.hp, oldShield = target.status.shield || 0;
     oldApply(target,amount);
@@ -224,9 +224,12 @@
   };
   roundEnd = function(winner) {
     if (!G || G.ph !== 'battle') return;
+    window.BVBPresentation?.finish?.(G,winner);
     G.ph = 'end';
+    window.BVBReworkUI?.endRound?.(G,winner);
     if(winner>=0) G.h[1-winner]--;
     G.lastRoundWinner = winner;
+    window.BVBModes?.onRoundEnd?.(G,winner);
     const loser = G.bl?.find(o=>o.team!==winner);
     const victor = G.bl?.find(o=>o.team===winner);
     const kind = effectType(victor?.b);
@@ -319,7 +322,7 @@
   draw = function() {
     if (!G) return;
     const oldPos = [];
-    if(netRole === 'guest' && G.ph === 'battle'){
+    if(!window.BVBReplayRendering&&netRole === 'guest' && G.ph === 'battle'){
       const key=G.matchId+':'+G.rn;
       if(visualRound!==key){visualRound=key;smooth.clear();}
       for(const o of G.bl||[]){
