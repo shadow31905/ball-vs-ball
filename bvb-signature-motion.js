@@ -75,6 +75,7 @@ function draw(ctx,o,g){
  old(ctx,o,g);
  if(!o?.b||!window.BVBMotion.enabled('fight')||!window.BVBMotion.enabled('interior'))return;
  const id=o.b.id,fn=painters[id];
+ if(id>=0&&id<16){window.BVBElementalArt?.paintCombat?.(ctx,o,g);return;}
  if(typeof fn!=='function'||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches)return;
  const p=window.BVBMotion.prefs(),q=p.artQuality;
  if(q==='low'||p.artIntensity===0)return;
