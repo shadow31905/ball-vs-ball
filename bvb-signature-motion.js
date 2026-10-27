@@ -78,6 +78,7 @@ function draw(ctx,o,g){
  if(id>=0&&id<16){window.BVBElementalArt?.paintCombat?.(ctx,o,g);return;}
  if(id>=16&&id<32){window.BVBSketch17to32?.renderCombat?.(ctx,o,g);return;}
  if(id>=32&&id<48){window.BVBSketch33to48?.renderCombat?.(ctx,o,g);return;}
+ if(id>=48&&id<64){window.BVBSketch49to64?.paintCombat?.(ctx,o,g);return;}
  if(typeof fn!=='function'||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches)return;
  const p=window.BVBMotion.prefs(),q=p.artQuality;
  if(q==='low'||p.artIntensity===0)return;
