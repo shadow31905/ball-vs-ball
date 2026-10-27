@@ -146,7 +146,7 @@ const style=document.createElement('style');
 style.textContent=[
 '.bvb-result-deck{display:flex;justify-content:space-evenly;gap:7px;margin:16px 0;padding:12px 5px;border-radius:17px;background:#131b39;border:1px solid #485b9f}',
 '.bvb-result-ball{min-width:0;flex:1;text-align:center;animation:bvbWin var(--tempo) ease-in-out var(--delay) infinite alternate}',
-'.bvb-result-deck.lost .bvb-result-ball{animation-name:bvbLoss;filter:saturate(.62)}',
+'.bvb-result-deck.lost .bvb-result-ball{filter:saturate(.62)}',
 '.bvb-result-portrait{position:relative;display:inline-flex;align-items:center;justify-content:center}',
 '.bvb-result-ball .orb{--s:64px!important}',
 '.bvb-result-face{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:22px;font-weight:900;color:#effaff;text-shadow:0 1px 4px #000}',
