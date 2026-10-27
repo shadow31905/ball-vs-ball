@@ -54,7 +54,8 @@ test('V1 skills for all sixteen 32–47 still create meaningful real game effect
  assert.ok(byId.get(42).hazardKinds.includes('gas'));
  assert.ok(byId.get(43).shotCount>0);
  assert.ok(byId.get(44).charge>0);
- assert.ok(byId.get(45).shield>0&&byId.get(45).reflect>0);
+ assert.ok(byId.get(45).shotCount>0,'Cactus must create bouncing plant shots');
+ assert.equal(byId.get(45).reflect,0,'Cactus does not borrow the reflect-shield skill');
  assert.ok(byId.get(46).hazardKinds.includes('mine'));
  assert.ok(byId.get(47).axes);
 });
