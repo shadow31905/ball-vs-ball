@@ -13,6 +13,7 @@ const palette=['#39dfff','#ff8560','#91fb67','#bd98ff','#b8edff','#ffc36d',
  '#7ad6ff','#ffdc78','#e7ff95','#e9c5f8','#af89ec','#c7c6e9',
  '#fff2a1','#fbb2e4','#baff73','#ccadff','#b7ff66','#eaffff',
  '#acff85','#e8ecff','#ffee8e','#9dfc80','#ff7c6c','#99deff'];
+palette.splice(0,16,...window.BVBElementalArt.themes.map(t=>t.base));
 const sig=[
  'rush','axe','poison-spines','steal','blade','rifle','web','fangs','spear','burst','chess','dice',
  'icicle','laser','snake','hook','forge','cell','shock','compression','future','matrix','apple','cannon',
@@ -98,7 +99,7 @@ function angryFace(id,tier){
 function svgFor(id,tier){
  id=Number(id);if(!Number.isInteger(id)||id<0||id>=B.length)return '';
  tier=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
- if(id>=6&&id<=11)return previous(id,tier);
+ if(id<16)return window.BVBElementalArt.svgFor(id,tier);
  const key=id*4+tier;if(svgCache.has(key))return svgCache.get(key);
  const col=palette[id]||B[id].c||'#94a3b8',grad='evo'+id+'_'+tier,blur='blur'+id+'_'+tier;
  const count=5+(id%8),offset=id*.347;
@@ -124,7 +125,6 @@ art=function(id,tier){return svgFor(id,tier==null?getBallStats(id).tier:tier);};
 function imageForTier(id,tier){
  if(!Number.isInteger(id)||id<0||id>=B.length)return null;
  const stage=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
- if(id>=6&&id<=11)return window.BVB2Sheet02?.imageForTier?.(id,stage)||null;
  const key=id*4+stage;
  if(!imageCache.has(key)){
   const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgFor(id,stage));imageCache.set(key,img);
