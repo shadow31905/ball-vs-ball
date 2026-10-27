@@ -151,7 +151,7 @@ function symbol(tag,t){
 }
 function eyes(tag,t){
  const brow='#0b1733';
- if(tag===0&&t===3)return '';
+ // V3 must retain clearly visible eyes, even with the maximum aura.
  if(tag===5&&t===3)return '<g class="sketch-eyes">'+p('M44 71L60 65M68 65L84 71',brow,5)+p('M44 72L55 82M84 72L73 82','#ffffff',3)+'</g>';
  let out='<g class="sketch-eyes">';
  for(const side of [-1,1]){
