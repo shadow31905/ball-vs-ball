@@ -87,6 +87,16 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
     '16 new evolution skills must have different descriptions');
    assert.ok(liveAbilityDescriptions.every(x=>x[0].startsWith('V2:')&&
      x[1].startsWith('V3:')&&x[0]!==x[1]));
+   const sketch49=await page.evaluate(()=>Array.from({length:16},(_,i)=>{
+     const id=48+i;
+     return [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t));
+   }));
+   assert.equal(new Set(sketch49.flat()).size,48,'48 separate SVG costumes must decode');
+   assert.equal(new Set(sketch49.map(row=>row[0].match(/data-sketch49="([^"]+)"/)?.[1])).size,
+     16,'16 visual identities from sketch 49-64 must stay separate');
+   assert.ok(sketch49.every((row,i)=>row.every((s,t)=>
+     s.includes('data-reference-panel="'+(49+i)+'"')&&
+     s.includes('data-evolution="'+(t+1)+'"'))));
    const elementTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
     [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)
       .match(/data-element="([^"]+)"/)?.[1]||'')));
