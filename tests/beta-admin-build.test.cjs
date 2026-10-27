@@ -32,6 +32,10 @@ test('beta-only admin panel is injected into isolated bundle, never stable HTML'
   assert.ok(admin.includes('bvbBetaUnlockAll'));
   assert.ok(admin.includes('bvbBetaApplyTier'));
   assert.ok(info.files['bvb-beta-tools.js']&&info.files['index.html']);
+  const textures=Object.keys(info.files).filter(n=>n.endsWith('.webp'));
+  assert.equal(textures.length,48,'beta must contain all evolution textures');
+  for(const name of textures)assert.deepEqual(fs.readFileSync(path.join(dir,name)),fs.readFileSync(path.join(root,name)));
+
   assert.equal(fs.readFileSync(path.join(root,'index.html'),'utf8'),original,
    'the packager must never modify stable index');
  }finally{fs.rmSync(dir,{recursive:true,force:true});}

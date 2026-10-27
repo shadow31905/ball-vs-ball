@@ -13,7 +13,7 @@ const palette=['#39dfff','#ff8560','#91fb67','#bd98ff','#b8edff','#ffc36d',
  '#7ad6ff','#ffdc78','#e7ff95','#e9c5f8','#af89ec','#c7c6e9',
  '#fff2a1','#fbb2e4','#baff73','#ccadff','#b7ff66','#eaffff',
  '#acff85','#e8ecff','#ffee8e','#9dfc80','#ff7c6c','#99deff'];
-palette.splice(0,16,...window.BVBElementalArt.themes.map(t=>t.base));
+palette.splice(0,16,...(window.BVBApprovedArt?.colors||window.BVBElementalArt.themes.map(t=>t.base)));
 palette.splice(16,16,...window.BVBSketch17to32.concepts.map(t=>t.main));
 palette.splice(32,16,...window.BVBSketch33to48.concepts.map(t=>t.base));
 palette.splice(48,16,...window.BVBSketch49to64.concepts.map(t=>t.main));
@@ -103,6 +103,7 @@ function angryFace(id,tier){
 function svgFor(id,tier){
  id=Number(id);if(!Number.isInteger(id)||id<0||id>=B.length)return '';
  tier=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
+ if(window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.svgFor(id,tier);
  if(id<16)return window.BVBElementalArt.svgFor(id,tier);
  if(id>=16&&id<32)return window.BVBSketch17to32.svgFor(id,tier);
  if(id>=32&&id<48)return window.BVBSketch33to48.svgFor(id,tier);
@@ -131,6 +132,7 @@ function svgFor(id,tier){
 }
 art=function(id,tier){return svgFor(id,tier==null?getBallStats(id).tier:tier);};
 function imageForTier(id,tier){
+ if(window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.imageForTier(id,tier);
  if(!Number.isInteger(id)||id<0||id>=B.length)return null;
  const stage=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
  const key=id*4+stage;

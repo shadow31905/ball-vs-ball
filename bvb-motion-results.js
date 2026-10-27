@@ -19,6 +19,8 @@ function enabled(flag){const o=prefs();return o['art_'+flag]!==0;}
 function sync(){
  const o=prefs();
  document.body?.classList?.toggle('bvb-effects-off',!enabled('inventory'));
+ document.body?.classList?.toggle('bvb-intensity-zero',o.artIntensity===0);
+ document.body?.classList?.toggle('bvb-interior-motion-off',!enabled('interior'));
  document.body?.classList?.toggle('bvb-menu-motion-off',!enabled('menu'));
  document.body?.classList?.toggle('bvb-result-motion-off',!enabled('results'));
  for(const name of ['low','medium','high','ultra'])document.body?.classList?.toggle('bvb-quality-'+name,o.artQuality===name);
@@ -53,6 +55,7 @@ const rgba=(hex,alpha)=>{
  return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+alpha+')';
 };
 function drawActor(ctx,o,g){
+ if(window.BVBApprovedArt?.has(o?.b?.id))return;
  if(!enabled('fight')||!o||!Number.isFinite(o.x)||!Number.isFinite(o.y)||!o.b)return;
  const options=prefs(),quality=options.artQuality,stage=clamp(o.tier||1,1,3),id=o.b.id||0;
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;

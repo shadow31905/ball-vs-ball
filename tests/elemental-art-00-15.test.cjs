@@ -1,47 +1,27 @@
 'use strict';
-const test=require('node:test'),assert=require('node:assert/strict');
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {createGame}=require('./game-harness.cjs');
-const motifs=['fire','ice','lightning','earth','wind','darkness','light','water','plant','metal','sand','magma','crystal','poison','time','space'];
-test('first sixteen portraits match the sixteen different elemental motifs in the sketch',()=>{
+test('first sixteen retain real names and have 48 independent approved texture files',()=>{
  const g=createGame();
- const sprites=g.run('Array.from({length:16},(_,id)=>[1,2,3].map(t=>BVBArtEvolution.svgFor(id,t)))');
- assert.equal(sprites.length,16);
- const all=new Set();
- for(let id=0;id<16;id++){
-  assert.equal(sprites[id].length,3);
-  const tierLengths=[];
-  for(let t=1;t<=3;t++){
-   const svg=sprites[id][t-1];
-   assert.ok(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg"'),id+' V'+t);
-   assert.ok(svg.includes('data-element="'+motifs[id]+'"'));
-   assert.ok(svg.includes('data-evolution="'+t+'"'));
-   assert.ok(svg.includes('class="element-aura"'),id+' missing element aura');
-   assert.ok(svg.includes('class="element-pulse"'));
-   assert.ok(svg.includes('class="element-eyes"'));
-   assert.ok(svg.includes('@keyframes bvbAuraSpin'));
-   assert.ok(svg.includes('@keyframes bvbEyes'));
-   assert.ok(svg.endsWith('</svg>'));
-   assert.ok(!/<script|<foreignObject|\son[a-z]+=/i.test(svg));
-   assert.ok(!all.has(svg),'shared look '+id+' V'+t);
-   all.add(svg);tierLengths.push(svg.length);
-  }
-  assert.ok(tierLengths[0]<tierLengths[2],id+' V3 must have distinct additional geometry');
+ const state=g.run('({names:B.slice(0,16).map(b=>b.n),expected:BVBApprovedArt.names,frames:BVBApprovedArt.frames,all:B.length})');
+ assert.equal(state.all,130);assert.deepEqual(Array.from(state.names),Array.from(state.expected));
+ assert.equal(state.frames.length,48);assert.equal(new Set(state.frames.map(f=>f.source)).size,48);
+ let bytes=0;
+ for(const frame of state.frames){
+  const file=path.join(__dirname,'..',frame.source),data=fs.readFileSync(file);bytes+=data.length;
+  assert.equal(data.toString('ascii',0,4),'RIFF');assert.equal(data.toString('ascii',8,12),'WEBP');
+  assert.ok(frame.id>=0&&frame.id<16);assert.ok(frame.tier>=1&&frame.tier<=3);
  }
- assert.equal(all.size,48);
+ assert.ok(bytes<2500000,'all 48 textures must stay below 2.5 MB');
 });
-test('all three elemental appearances are active in game and collection UI',()=>{
+test('collection and combat select identical ball and evolution assets without changing saves',()=>{
  const g=createGame();
- const state=g.run('({art:Array.from({length:16},(_,i)=>art(i,2)===BVBArtEvolution.svgFor(i,2)),gallery:BVBArtEvolution.galleryHtml(15),elements:BVBElementalArt.keys,palette:BVBArtEvolution.colors.slice(0,16),oldArt:BVBArtEvolution.svgFor(16,1)})');
- assert.ok(state.art.every(Boolean));
- assert.equal(state.elements.length,16);
- assert.equal(new Set(state.elements).size,16);
- assert.equal(new Set(state.palette).size,16);
- assert.ok(state.gallery.includes('data-stage="1"')&&state.gallery.includes('data-stage="3"'));
- assert.ok(state.oldArt.includes('data-bvb-art-v2'));
+ const state=g.run('(()=>{const before=JSON.stringify(S),rows=[];for(let id=0;id<16;id++)for(let tier=1;tier<=3;tier++){const expected=BVBApprovedArt.frame(id,tier).source;rows.push({expected,html:art(id,tier),image:BVBArtEvolution.imageForTier(id,tier).src,cached:BVBArtEvolution.imageForTier(id,tier)===BVBApprovedArt.imageForTier(id,tier)});}return {rows,intact:before===JSON.stringify(S),unaffected:BVBArtEvolution.svgFor(16,1),invalid:BVBApprovedArt.imageForTier(130,1)};})()');
+ for(const row of state.rows){assert.ok(row.html.includes(row.expected));assert.equal(row.image,row.expected);assert.ok(row.cached);}
+ assert.ok(state.intact);assert.ok(!state.unaffected.includes('data-approved-art'));assert.equal(state.invalid,null);
 });
-test('unique elemental combat effects do not mutate the battle simulation',()=>{
+test('old elemental face and aura painters cannot overpaint any approved character',()=>{
  const g=createGame();
- const state=g.run('(()=>{const before=JSON.stringify(S),ctx=cx;for(let id=0;id<16;id++)for(let tier=1;tier<=3;tier++)BVBElementalArt.paintCombat(ctx,{b:B[id],x:180,y:180,r:18,tier},{rt:4.3});return {simUnchanged:before===JSON.stringify(S),renderers:typeof BVBElementalArt.paintCombat};})()');
- assert.equal(state.simUnchanged,true);
- assert.equal(state.renderers,'function');
+ const state=g.run('(()=>{let old=0;BVBElementalArt.paintCombat=()=>{old++;};const before=JSON.stringify(S);for(let id=0;id<16;id++)for(let tier=1;tier<=3;tier++)BVBMotion.drawActor(cx,{b:B[id],x:180,y:180,r:18,tier},{rt:5});return {old,intact:before===JSON.stringify(S)};})()');
+ assert.equal(state.old,0);assert.ok(state.intact);
 });
