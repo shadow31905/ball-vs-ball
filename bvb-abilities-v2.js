@@ -178,7 +178,8 @@ for(let i=0;i<B.length;i++){
 }
 getBallStats=function(id,...args){
  const st=oldStats(id,...args);const d=abilityData[id]||abilityData[0];
- // Base damage and HP are purchased with currency, not granted by evolution.
+ // Base HP and damage come from currency upgrades, not evolution.
+ st.hp=Math.round(d.baseHp*(1+.08*st.hpLv));
  st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv));
  st.cd=d.kind==='web'?0:+Math.max(2.25,d.cooldown*(st.tier===3?.78:st.tier===2?.90:1)).toFixed(2);
  st.activeDesc=d.title+': '+d.desc+' · '+evolutionDescription(id,st.tier);
