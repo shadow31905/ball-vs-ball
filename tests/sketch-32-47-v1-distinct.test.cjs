@@ -8,11 +8,12 @@ test('Potion V1 has three actual reagent zones rather than a generic shield',()=
  assert.ok(r.every(x=>['fire','frost','poison'].includes(x.element)));
  assert.ok(r.every(x=>x.zones.length===1&&x.zones[0]===x.element));
 });
-test('Cactus V1 makes ricocheting plant shots',()=>{
- const r=play('const [o,f]=prepared(45,1);specialAbility(o,f);return {launches:o.v1CactusLaunches,shots:G.v2.shots.filter(s=>s.id===45).map(s=>({bounces:s.bounces,poison:s.poison}))};');
+test('Cactus V1 roots collidable seedlings instead of copying a projectile volley',()=>{
+ const r=play('const [o,f]=prepared(45,1);specialAbility(o,f);return {launches:o.v1CactusLaunches,shots:G.v2.shots.filter(s=>s.id===45).length,seeds:G.v2.hazards.filter(h=>h.v1CactusSeed).map(h=>({kind:h.kind,armAt:h.armAt}))};');
  assert.equal(r.launches,1);
- assert.ok(r.shots.length>=2);
- assert.ok(r.shots.every(s=>s.bounces>=3&&s.poison>0));
+ assert.equal(r.shots,0);
+ assert.equal(r.seeds.length,3);
+ assert.ok(r.seeds.every(h=>h.kind==='thorn'&&h.armAt>0));
 });
 test('Black Spider has venom nests instead of ordinary web bridges',()=>{
  const r=play('const [o,f]=prepared(34,1);BVB2.onWall(o,"left");return {webs:G.v2.webs.length,nests:G.v2.hazards.filter(h=>h.v1WidowNest).length};');
