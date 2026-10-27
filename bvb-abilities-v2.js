@@ -178,8 +178,8 @@ for(let i=0;i<B.length;i++){
 }
 getBallStats=function(id,...args){
  const st=oldStats(id,...args);const d=abilityData[id]||abilityData[0];
- const tierMult=st.tier===3?1.32:st.tier===2?1.15:1;
- st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv)*tierMult);
+ // Base damage and HP are purchased with currency, not granted by evolution.
+ st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv));
  st.cd=d.kind==='web'?0:+Math.max(2.25,d.cooldown*(st.tier===3?.78:st.tier===2?.90:1)).toFixed(2);
  st.activeDesc=d.title+': '+d.desc+' · '+evolutionDescription(id,st.tier);
  st.evolutionDesc=evolutionDescription(id,st.tier);
@@ -953,7 +953,13 @@ function onWall(o,side){
  const st=roundState();if(!st)return;
  if(o.v2LastSide===side&&(G.rt-(o.v2LastWallAt||0))<.12)return;
  o.v2LastSide=side;o.v2LastWallAt=G.rt||0;
- if(d.kind==='web')webPoint(o,side);
+ if(d.kind==='web'){
+  if(o.b.id===34){ // Black Spider has venom nests instead of white Spider's cords.
+   const h=zone(o,o.x,o.y,'poison',17,3,.24);
+   if(h)h.v1WidowNest=true;
+   o.v1WidowNests=(o.v1WidowNests||0)+1;
+  }else webPoint(o,side);
+ }
  if(d.kind==='pet')o.v2PetPower=Math.min(1.5,(o.v2PetPower||1)+.1);
  if(d.kind==='thorn')zone(o,o.x,o.y,'thorn',15,16,.65);
  if(d.kind==='beam'&&(o.b.id===13||o.b.id===41)){
@@ -1044,6 +1050,9 @@ function distinctFirstFortyEightV1(o,foe){
   // A haunting grave remembers its victim instead of just being a timed bomb.
   const h=st.hazards[st.hazards.length-1];
   if(h.id===35&&h.kind==='mine'&&level===0)h.v1HauntedGrave=true;
+ }else if(id===39&&st.hazards.length){
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===39&&h.kind==='mine'&&level===0)h.v1ShackleTrap=true;
  }else if(id===40&&st.hazards.length){
   // Acid erodes armor on real puddle contact; virus is carried by touch.
   const h=st.hazards[st.hazards.length-1];
@@ -1093,9 +1102,17 @@ function cast(o,foe){
   o.axeOrbit={life:2.35+evolutionStage(o)*.35,angle:0,radius:o.r+20+evolutionStage(o)*6+(o.b.id===1&&lowHp?9:0),blades:Math.min(6,3+evolutionStage(o)+(o.b.id===4?Math.floor(o.skillSpin/2):0)),nextHit:Object.create(null),color:d.color};
   visual(o,o,'orbit',34,d.color,.45);break;
  case 'thorn': visual(o,o,'charge',24,d.color,.5);break; // only walls create spikes
- case 'volley': shoot(o,foe,{count:o.b.id===5?5:o.b.id===43?3:o.b.id===3?2:3,
+ case 'volley':
+  if(o.b.id===37){ // Candy uses a sticky bouncing cone rather than a copied volley.
+   shoot(o,foe,{count:3,damage:o.baseDmg*.25,spread:.5,slow:.32,
+    speed:142,bounces:1,r:5,color:'#f9a8d4'});
+   const h=zone(o,foe.x,foe.y,'slow',17,1.9,.26);
+   if(h)h.v1CandyGlaze=true;
+   o.v1CandyGlazes=(o.v1CandyGlazes||0)+1;
+  }else shoot(o,foe,{count:o.b.id===5?5:o.b.id===43?3:o.b.id===3?2:3,
    damage:o.baseDmg*(o.b.id===5?.2:.36)*scale,homing:.2,spread:.22,
-   speed:lowHp&&o.b.id===3?195:168,slow:o.b.id===37?.4:0});break;
+   speed:lowHp&&o.b.id===3?195:168});
+  break;
  case 'drain':
   if(delta<128+evolutionStage(o)*22){strike(o,foe,Math.min(8,foe.hp*.06)*scale,{slow:.25});
     o.hp=Math.min(o.mh,o.hp+Math.min(9,o.baseDmg*.4)*(1+evolutionStage(o)*.15));}
@@ -1126,6 +1143,13 @@ function cast(o,foe){
  }
  case 'potion': {
   const roll=Math.floor((window.BVBRework?.random?.() ?? Math.random())*3);
+  if(o.b.id===32){ // Potion: three actual randomly selected chemical zones.
+   const reagent=['fire','frost','poison'][roll];
+   const h=zone(o,foe.x,foe.y,reagent,29,2.6,.37);
+   if(h)h.v1Elixir=reagent;
+   o.v1LastReagent=reagent;
+   visual(o,foe,'dice',28,d.color,.55);
+  }else
   if(o.b.id===95){if(roll===0)zone(o,foe.x,foe.y,'fire',30,2.4,.4);else if(roll===1)shoot(o,foe,{damage:o.baseDmg*.35,slow:.85});else o.status.shield=Math.min(32,(o.status.shield||0)+9+evolutionStage(o)*2);}
   else if(o.b.id===127){if(roll===0)zone(o,foe.x,foe.y,'poison',30,2.8,.38);else if(roll===1)shoot(o,foe,{damage:o.baseDmg*.35,slow:.85});else o.hp=Math.min(o.mh,o.hp+6+evolutionStage(o));}
   else if(roll===0)shoot(o,foe,{damage:o.baseDmg*.45,slow:.65,color:d.color});
@@ -1155,6 +1179,7 @@ function cast(o,foe){
   else {o.v2BaseRadius??=o.r;o.r=Math.min(o.v2BaseRadius*1.23,o.v2BaseRadius*o.skillScale);}
   o.hp=Math.min(o.mh,o.hp+3.3*scale);
   zone(o,o.x,o.y,kind==='tail'?'tail':'slime',24,3,.29);
+  if(o.b.id===38)o.v1StickyMass={remaining:2.4,next:.24,lastX:o.x,lastY:o.y};
   if(o.b.id===17){
    o.v1CellDivision={next:.28,remaining:1+evolutionStage(o),originX:o.x,originY:o.y};
   }
@@ -1183,6 +1208,9 @@ function cast(o,foe){
    zone(o,o.x,o.y,'zone',31,3.1,.38);
    o.v1PressureImpulse={next:.3,remaining:2.2};
    visual(o,o,'ring',39,d.color,.53);
+  }else if(o.b.id===42){ // Gas moves, acid remains as a puddle.
+   const h=zone(o,foe.x,foe.y,'gas',33,3,.37);
+   if(h){h.v1Gas=true;h.v2Drifting=1;h.vx=9;h.vy=-5;}
   }else zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);
   break;
  case 'grid':
@@ -1207,6 +1235,12 @@ function cast(o,foe){
    poison:o.b.id===31?.8:0,speed:118,life:3.1,color:d.color});break;
  case 'mine':{const stage=evolutionStage(o),lead=.75*110*(foe.actualPace||1.38);for(let i=0;i<=stage;i++)zone(o,clamp(foe.x+foe.vx*lead+(i-stage/2)*26,20,340),clamp(foe.y+foe.vy*lead,20,340),'mine',24,5,.72/(1+stage*.3));break;}
  case 'reflect':case 'shield':
+  if(o.b.id===45){ // Cactus throws real bouncing cactus projectiles.
+   shoot(o,foe,{count:2,damage:o.baseDmg*.29,bounces:3,
+    spread:.4,speed:137,r:5,life:3.4,poison:.28,color:'#9adb61'});
+   o.v1CactusLaunches=(o.v1CactusLaunches||0)+1;
+   break;
+  }
   if(o.b.id===96){o.status.stun=0;o.status.slow=0;o.status.weaken=0;}
   o.status.shield=Math.min(32,(o.status.shield||0)+(kind==='shield'?13:8)*scale);
   o.skillReflect=kind==='reflect'?1.7+evolutionStage(o)*.4:0;
@@ -1514,6 +1548,18 @@ function tick(dt){
      strike(o,f,o.baseDmg*.09,{slow:.18});
     o.v1ForesightMarks=(o.v1ForesightMarks||0)+1;
     o.v1ForesightMark=null;
+   }
+  }
+  if(o.b.id===38&&o.v1StickyMass){
+   const mass=o.v1StickyMass;mass.next-=dt;mass.remaining-=dt;
+   if(mass.remaining<=0)o.v1StickyMass=null;
+   else if(mass.next<=0){
+    if(Math.hypot(o.x-mass.lastX,o.y-mass.lastY)>9){
+     const h=zone(o,o.x,o.y,'slime',15,2,.3);
+     if(h)h.v1StickyTrail=true;
+     mass.lastX=o.x;mass.lastY=o.y;
+    }
+    mass.next+=.42;
    }
   }
   if(o.b.id===29&&o.v1FrostWake){
@@ -1827,6 +1873,7 @@ function tick(dt){
    const dx=foe.x-h.x,dy=foe.y-h.y,d=Math.hypot(dx,dy)||1;
    foe.vx=(foe.vx||0)+dx/d*.22;foe.vy=(foe.vy||0)+dy/d*.22;
   }
+  if(h.v1ShackleTrap){setStatus(owner,foe,'stun',.38);h.v1ShackleTrap=false;}
   if(h.v1HauntedGrave){
    setStatus(owner,foe,'weaken',.75);
    foe.v2Haunted={owner:owner.uid,next:.4,remaining:2,level:1};
