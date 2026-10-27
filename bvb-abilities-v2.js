@@ -1030,6 +1030,10 @@ function distinctFirstFortyEightV1(o,foe){
   const dx=foe.x-o.x,dy=foe.y-o.y,d=Math.hypot(dx,dy)||1;
   foe.vx=(foe.vx||0)-dy/d*.12;foe.vy=(foe.vy||0)+dx/d*.12;
   o.v1HookOrbit=(o.v1HookOrbit||0)+1;
+ }else if(id===36&&level===0){
+  // V1 wings leave a delayed, damaging arc along the actual flight path.
+  const from=o.v2LightOrigin||{x:o.x,y:o.y};
+  o.v1LightAfterimage={x:from.x,y:from.y,next:(G.rt||0)+.34};
  }else if(id===35&&st.hazards.length){
   // A haunting grave remembers its victim instead of just being a timed bomb.
   const h=st.hazards[st.hazards.length-1];
@@ -1428,6 +1432,17 @@ function tick(dt){
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
   afflictedTick32(o,dt);
   if(o.b.id<16)window.BVBFirstSixteen?.tick?.(G,o,dt,first16Api);
+  if(o.b.id===36&&evolutionStage(o)===0&&o.v1LightAfterimage&&
+    G.rt>=o.v1LightAfterimage.next){
+   const origin=o.v1LightAfterimage;
+   const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
+   st.beams.push({x:origin.x,y:origin.y,x2:o.x,y2:o.y,
+    color:abilityData[36].color,life:.35,max:.35,id:36});
+   if(foe&&closestToSegment(foe.x,foe.y,origin.x,origin.y,o.x,o.y)<foe.r+13)
+    strike(o,foe,o.baseDmg*.16,{slow:.2});
+   o.v1LightAfterimage=null;
+   visual(o,origin,'blink',30,abilityData[36].color,.42);
+  }
   if(o.b.id===47&&evolutionStage(o)===0&&o.v1OrbitShield?.expires>G.rt){
    for(const p of st.shots){
     if(p.life<=0||p.team===o.team)continue;
