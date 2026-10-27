@@ -15,7 +15,7 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   const proof=await page.evaluate(async()=>{
    const getStats=()=>JSON.stringify({coins:S.coins,candies:S.candies,own:S.own,upHp:S.upHp,upDmg:S.upDmg,tiers:S.ev,abilityKinds:BVB2.abilities.map(s=>s?.kind)});
    const before=getStats();
-   const sampleIds=[0,16,31,129];
+   const sampleIds=[0,16,31,32,129];
    const pixels=async()=>{
     const cv=document.createElement('canvas');cv.width=cv.height=96;
     const ctx=cv.getContext('2d',{willReadFrequently:true}),result=[];
@@ -34,10 +34,10 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
    const variants=[];
    for(let id=16;id<32;id++)for(let tier=1;tier<=3;tier++){
     const svg=BVBArtEvolution.svgFor(id,tier);
-    variants.push({id,tier,classic:svg.includes('data-visual-style="classic"'),hasEyes:svg.includes('bvb-classic-face'),hasGear:svg.includes('bvb-classic-equipment')});
+    variants.push({id,tier,classic:svg.includes('data-visual-style="classic"'),hasEyes:svg.includes('sketch-eyes'),hasGear:svg.includes('sketch-symbol')});
    }
    const imageChecks=[];
-   for(const id of [0,16,31,129]){
+   for(const id of [0,16,31,32,129]){
     const a=BVBArtEvolution.imageForTier(id,3);
     await a.decode();imageChecks.push({id,stage3:a.naturalWidth>0});
    }
@@ -45,7 +45,7 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
    const classicPixels=await pixels();
    BVBMotion.change('ballStyle','detailed');
    const detailSelect=document.querySelector('#bvbBallVisualStyle')?.value;
-   const changed=[0,16,31,129].map(id=>({id,different:!BVBArtEvolution.svgFor(id,3).includes('data-visual-style="classic"')}));
+   const changed=[0,16,31,32,129].map(id=>({id,different:!BVBArtEvolution.svgFor(id,3).includes('data-visual-style="classic"')}));
    const afterDetail=getStats();
    BVBMotion.change('ballStyle','classic');
    return {variants,imageChecks,changed,classicSelect,detailSelect,pixelChanges:detailedPixels.map((hash,i)=>hash!==classicPixels[i]),statsStable:before===afterClassic&&before===afterDetail,stored:S.o.ballVisualStyle};
@@ -53,7 +53,7 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.equal(proof.variants.length,48);
   assert.ok(proof.variants.every(v=>v.classic&&v.hasEyes&&v.hasGear),JSON.stringify(proof.variants.filter(v=>!v.classic||!v.hasEyes||!v.hasGear)));
   assert.ok(proof.imageChecks.every(x=>x.stage3),'All checked styles must decode as images');
-  assert.ok(proof.pixelChanges.every(Boolean),'Switch must change real rendered pixel data, not just text or CSS');
+  assert.deepEqual(proof.pixelChanges,[true,true,true,false,false],'Only completed reworks may change visible pixels');
   assert.equal(proof.classicSelect,'classic');
   assert.equal(proof.detailSelect,'detailed');
   assert.ok(proof.changed.every(x=>x.different));
@@ -69,6 +69,6 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   const persisted=await page.evaluate(()=>({style:BVBArtEvolution.currentStyle(),value:S.o.ballVisualStyle,portrait:BVBArtEvolution.svgFor(16,2).includes('data-visual-style="classic"')}));
   assert.deepEqual(persisted,{style:'classic',value:'classic',portrait:true});
   assert.deepEqual(errors,[]);
-  console.log('PASS beta switch:',browserName,'48 classic portraits 17–32, detailed roundtrip, preserved game stats, persistent preference.');
+  console.log('PASS beta switch:',browserName,'48 classic portraits 17–32, pixel isolation for unfinished 33–130, saved preference, stable stats.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
