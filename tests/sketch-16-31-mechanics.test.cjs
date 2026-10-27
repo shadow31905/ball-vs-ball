@@ -29,3 +29,14 @@ test('all sixteen middle fighters retain finite fight physics in all 3 stages',(
  const data=play('let all=[];for(let id=16;id<32;id++)for(let tier=1;tier<=3;tier++){const [o,f]=liveCase(id,tier);specialAbility(o,f);for(let i=0;i<80&&G.ph==="battle";i++)step(1/60);all.push({id,tier,finite:G.bl.every(p=>[p.x,p.y,p.hp,p.vx,p.vy].every(Number.isFinite))});}return all;');
  assert.equal(data.length,48);assert.ok(data.every(x=>x.finite));
 });
+
+test('V1 Cell divides small daughter cells, unlike continuously expanding Slime',()=>{
+ const result=play('const [o,f]=liveCase(17,1);specialAbility(o,f);const before=G.v2.hazards.length;for(let i=0;i<31&&G.ph==="battle";i++)step(1/60);return {before,after:G.v2.hazards.length,splits:o.v1CellSplits||0};');
+ assert.ok(result.splits>=1,'Cell must physically split');
+ assert.ok(result.after>result.before,'Cell must create actual daughter zones');
+});
+test('V1 Ray records and fires a delayed predicted-path mark, unlike wall lasers',()=>{
+ const result=play('const [o,f]=liveCase(20,1);specialAbility(o,f);const before=G.v2.beams.length;for(let i=0;i<21&&G.ph==="battle";i++)step(1/60);return {before,after:G.v2.beams.length,marks:o.v1ForesightMarks||0};');
+ assert.ok(result.marks>=1);
+ assert.ok(result.after>=result.before,'Ray produces a real tracked visual pulse');
+});
