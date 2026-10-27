@@ -798,6 +798,19 @@ function onContact(g,o,foe,base){
    }
   }
  }
+ if(o.b.id===45&&g.rt>=(o.v1CactusBloomNext||0)){
+  // Direct contact disperses a radial ring of seed pods; evolutions add their own counters.
+  o.v1CactusBloomNext=g.rt+3.1;
+  for(let j=0;j<6;j++){
+   const a=j*Math.PI/3+g.rt*.07;
+   const hx=clamp(o.x+Math.cos(a)*45,16,344),
+    hy=clamp(o.y+Math.sin(a)*45,16,344);
+   const seed=zone(o,hx,hy,'thorn',9.5,3.8,.32);
+   if(seed){seed.v1CactusSeed=true;seed.armAt=.4;}
+  }
+  o.v1CactusBlooms=(o.v1CactusBlooms||0)+1;
+  visual(o,o,'growth',43,'#a7e968',.7);
+ }
  if(o.b.id===45&&evolutionStage(o)>0&&o.v2ArmorUntil>g.rt&&
    g.rt>=(o.v2ArmorNext||0)){
   const level=evolutionStage(o);
@@ -1237,10 +1250,16 @@ function cast(o,foe){
    poison:o.b.id===31?.8:0,speed:118,life:3.1,color:d.color});break;
  case 'mine':{const stage=evolutionStage(o),lead=.75*110*(foe.actualPace||1.38);for(let i=0;i<=stage;i++)zone(o,clamp(foe.x+foe.vx*lead+(i-stage/2)*26,20,340),clamp(foe.y+foe.vy*lead,20,340),'mine',24,5,.72/(1+stage*.3));break;}
  case 'reflect':case 'shield':
-  if(o.b.id===45){ // Cactus throws real bouncing cactus projectiles.
-   shoot(o,foe,{count:2,damage:o.baseDmg*.29,bounces:3,
-    spread:.4,speed:137,r:5,life:3.4,poison:.28,color:'#9adb61'});
+  if(o.b.id===45){ // Living cactus: seeds root into collidable thorn sprouts.
+   const angle=Math.atan2(foe.y-o.y,foe.x-o.x);
+   for(let j=-1;j<=1;j++){
+    const a=angle+j*.7,x=clamp(foe.x+Math.cos(a)*31,17,343),
+     y=clamp(foe.y+Math.sin(a)*31,17,343);
+    const seed=zone(o,x,y,'thorn',11,4,.36);
+    if(seed){seed.v1CactusSeed=true;seed.armAt=.36;}
+   }
    o.v1CactusLaunches=(o.v1CactusLaunches||0)+1;
+   visual(o,foe,'growth',36,'#9adb61',.65);
    break;
   }
   if(o.b.id===96){o.status.stun=0;o.status.slow=0;o.status.weaken=0;}
