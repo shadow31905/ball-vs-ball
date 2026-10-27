@@ -17,6 +17,7 @@ function chooseVariant(random=Math.random){
  return Number.isFinite(value)?Math.min(4,Math.max(0,Math.floor(clamp(value,0,.999999999999)*5))):0;
 }
 function finish(g,winner){
+ if(window.BVBMotion?.enabled?.('cutscenes')===false)return;
  if(!g||!Array.isArray(g.bl)||![0,1].includes(winner)||g.finisher)return;
  const victor=g.bl.find(o=>o.team===winner&&o.b),loser=g.bl.find(o=>o.team!==winner&&o.b);
  if(!victor||!loser||!(victor.hp>0)||!(loser.hp<=0)||![victor.x,victor.y,loser.x,loser.y].every(Number.isFinite))return;

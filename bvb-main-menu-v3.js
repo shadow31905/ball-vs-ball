@@ -52,7 +52,6 @@ const bot=move(screens.modes.list,'startMatch(0)','🤖 Walka z botem','Wybierz 
 const boss=move(screens.modes.list,'bossMenu()','👹 Walka z bossem','Wybierz bossa, trudność i kulkę.');
 if(bot)bot.setAttribute('onclick',"window.BVBMenu.prepare('bot')");
 if(boss)boss.setAttribute('onclick',"window.BVBMenu.prepare('boss')");
-move(screens.modes.list,'startMatch(4)','🎯 Trening','Ćwicz umiejętności swoich kulek.');
 move(screens.modes.list,'window.BVBCampaign?.open?.()','🗺️ Kampania','50 poziomów i bossowie.');
 screens.modes.list.append(custom('••• Więcej trybów','Survival, Boss Rush, Chaos, Turniej i PvP.',()=>open('extra'),'bvb3-wide'));
 for(const action of ['startMatch(1)','startMatch(7)','startMatch(3)','startMatch(5)','startMatch(6)'])move(screens.extra.list,action);
@@ -88,7 +87,7 @@ move(screens.settings.list,"panel('set')",'⚙️ Ustawienia','Dostosuj pozosta�
 move(screens.settings.list,'toggleSfx()','🔊 Efekty','Włącz lub wyłącz dźwięki.');
 move(screens.settings.list,'toggleMusic()','🎵 Muzyka','Włącz lub wyłącz muzykę.');
 const tileConfig=[
- ['modes','⚔️','TRYBY WALKI','Bot, bossowie, trening i kampania.',['👹 Boss','🤖 Bot','🎯 Trening','🗺️ Kampania'],'💥'],
+ ['modes','⚔️','TRYBY WALKI','Bot, bossowie i kampania.',['👹 Boss','🤖 Bot','🗺️ Kampania'],'💥'],
  ['balls','🔮','KULKI I SKLEP','Odkrywaj kulki i sprawdzaj ich moce.',['🔮 Kolekcja','📦 Skrzynki','🛒 Sklep'],'🔮'],
  ['rewards','🎁','NAGRODY I WYDARZENIA','Zbieraj nagrody i wykonuj questy.',['✅ Questy','🏆 Osiągnięcia','🎃 Eventy'],'🎁'],
  ['account','⚙️','KONTO I USTAWIENIA','Profil, znajomi, ranking i ustawienia.',['👤 Profil','👥 Znajomi','🏟️ Areny'],'⚙️']

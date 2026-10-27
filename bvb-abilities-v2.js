@@ -178,8 +178,9 @@ for(let i=0;i<B.length;i++){
 }
 getBallStats=function(id,...args){
  const st=oldStats(id,...args);const d=abilityData[id]||abilityData[0];
- const tierMult=st.tier===3?1.32:st.tier===2?1.15:1;
- st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv)*tierMult);
+ // Base HP and damage come from currency upgrades, not evolution.
+ st.hp=Math.round(d.baseHp*(1+.08*st.hpLv));
+ st.dmg=Math.round(d.baseDamage*(1+.08*st.dmgLv));
  st.cd=d.kind==='web'?0:+Math.max(2.25,d.cooldown*(st.tier===3?.78:st.tier===2?.90:1)).toFixed(2);
  st.activeDesc=d.title+': '+d.desc+' · '+evolutionDescription(id,st.tier);
  st.evolutionDesc=evolutionDescription(id,st.tier);
@@ -713,8 +714,14 @@ const evolutionStage=o=>Math.max(0,Math.min(2,(o?.tier||1)-1));
 function evolutionDescription(id,tier=1){
  const kind=abilityData[id]?.kind,stage=Math.max(0,Math.min(2,tier-1));
  if(!stage)return 'V1: podstawowa wersja zdolności.';
+ const newer=window.BVBThirdSixteen?.description?.(id,tier);
+ if(newer)return newer;
+ const next=window.BVBNextSixteen?.description?.(id,tier);
+ if(next)return next;
  const bespoke=authoredUpgradeDescription(id,stage);
  if(bespoke)return bespoke;
+ const early=window.BVBFirstSixteen?.description?.(id,stage);
+ if(early)return early;
  const labels={
  orbit:'więcej ostrzy, większa orbita i dłuższa aktywacja',
  web:'sieć dodatkowo spowalnia'+(stage===2?' i zatruwa':''),
@@ -795,6 +802,19 @@ function onContact(g,o,foe,base){
    }
   }
  }
+ if(o.b.id===45&&g.rt>=(o.v1CactusBloomNext||0)){
+  // Direct contact disperses a radial ring of seed pods; evolutions add their own counters.
+  o.v1CactusBloomNext=g.rt+3.1;
+  for(let j=0;j<6;j++){
+   const a=j*Math.PI/3+g.rt*.07;
+   const hx=clamp(o.x+Math.cos(a)*45,16,344),
+    hy=clamp(o.y+Math.sin(a)*45,16,344);
+   const seed=zone(o,hx,hy,'thorn',9.5,3.8,.32);
+   if(seed){seed.v1CactusSeed=true;seed.armAt=.4;}
+  }
+  o.v1CactusBlooms=(o.v1CactusBlooms||0)+1;
+  visual(o,o,'growth',43,'#a7e968',.7);
+ }
  if(o.b.id===45&&evolutionStage(o)>0&&o.v2ArmorUntil>g.rt&&
    g.rt>=(o.v2ArmorNext||0)){
   const level=evolutionStage(o);
@@ -808,6 +828,9 @@ function onContact(g,o,foe,base){
   }
   visual(o,foe,'shard',27,abilityData[45].color,.55);
  }
+ if(o.b.id<16)base=window.BVBFirstSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
+ if(o.b.id>=48&&o.b.id<=63)base=window.BVBNextSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
+ if(o.b.id>=64&&o.b.id<=79)base=window.BVBThirdSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
  return base;
 }
 
@@ -950,7 +973,14 @@ function onWall(o,side){
  const st=roundState();if(!st)return;
  if(o.v2LastSide===side&&(G.rt-(o.v2LastWallAt||0))<.12)return;
  o.v2LastSide=side;o.v2LastWallAt=G.rt||0;
- if(d.kind==='web')webPoint(o,side);
+ if(d.kind==='web'){
+  if(o.b.id===34){ // Black Spider has venom nests instead of white Spider's cords.
+   const h=zone(o,o.x,o.y,'poison',17,3,.24);
+   if(h)h.v1WidowNest=true;
+   o.v1WidowNests=(o.v1WidowNests||0)+1;
+   webPoint(o,side); // Preserve Black Spider's recognizable wall-web identity.
+  }else webPoint(o,side);
+ }
  if(d.kind==='pet')o.v2PetPower=Math.min(1.5,(o.v2PetPower||1)+.1);
  if(d.kind==='thorn')zone(o,o.x,o.y,'thorn',15,16,.65);
  if(d.kind==='beam'&&(o.b.id===13||o.b.id===41)){
@@ -969,6 +999,12 @@ function onWall(o,side){
   train.vy=side==='top'?160:side==='bottom'?-160:0;
  }
  if(d.kind==='grid'&&o.b.id===27)zone(o,o.x,o.y,'shock',30,2,.55);
+ if(o.b.id===27&&o.v1CrownCircuit?.until>G.rt){
+  const offset=side==='left'||side==='right'?{x:0,y:25}:{x:25,y:0};
+  zone(o,clamp(o.x+offset.x,15,345),clamp(o.y+offset.y,15,345),
+   'shock',19+o.v1CrownCircuit.stored*2,2,.35);
+  o.v1CrownPylons=(o.v1CrownPylons||0)+1;
+ }
  if(d.kind==='frost'&&o.b.id===29)zone(o,o.x,o.y,'frost',19,3,.38);
  if(o.b.id===16&&evolutionStage(o)>0){
   o.v2ForgeHeat=Math.min(6,(o.v2ForgeHeat||0)+1);
@@ -1011,11 +1047,65 @@ function onWall(o,side){
  }
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
  signatureWall32(o,side,st);
+ if(o.b.id<16)window.BVBFirstSixteen?.onWall?.(G,o,side,first16Api);
+ if(o.b.id>=48&&o.b.id<=63)window.BVBNextSixteen?.onWall?.(G,o,side,first16Api);
+ if(o.b.id>=64&&o.b.id<=79)window.BVBThirdSixteen?.onWall?.(G,o,side,first16Api);
+ if(o.b.id===25)for(const h of st.hazards)if(h.id===25&&h.owner===o.uid&&h.kind==='thorn'&&h.age===0)h.v1GiantPiston=true;
 }
 function cooldown(o){
  const d=abilityFor(o);const rate=Math.max(.55,Math.min(1.5,o.abilityRate||1));
  return Math.max(2.25,(d?.cooldown||4)*rate*(o.tier===3?.78:o.tier===2?.90:1));
 }
+
+function distinctFirstFortyEightV1(o,foe){
+ const id=o.b.id,st=roundState();if(!st)return;
+ const level=evolutionStage(o);
+ if(id===15){
+  // Hook sweeps the victim tangentially; Harpoon (30) reels on a straight axis.
+  const dx=foe.x-o.x,dy=foe.y-o.y,d=Math.hypot(dx,dy)||1;
+  foe.vx=(foe.vx||0)-dy/d*.12;foe.vy=(foe.vy||0)+dx/d*.12;
+  o.v1HookOrbit=(o.v1HookOrbit||0)+1;
+ }else if(id===36&&level===0){
+  // V1 wings leave a delayed, damaging arc along the actual flight path.
+  const from=o.v2LightOrigin||{x:o.x,y:o.y};
+  o.v1LightAfterimage={x:from.x,y:from.y,next:(G.rt||0)+.34};
+ }else if(id===35&&st.hazards.length){
+  // A haunting grave remembers its victim instead of just being a timed bomb.
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===35&&h.kind==='mine'&&level===0)h.v1HauntedGrave=true;
+ }else if(id===39&&st.hazards.length){
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===39&&h.kind==='mine'&&level===0)h.v1ShackleTrap=true;
+ }else if(id===40&&st.hazards.length){
+  // Acid erodes armor on real puddle contact; virus is carried by touch.
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===40&&h.kind==='poison'&&level===0)h.v1CorrosivePuddle=true;
+ }else if(id===41){
+  // Photons travel along a reflected diagonal instead of Laser's wall scan.
+  st.wallBeams.push({a:{x:0,y:clamp(o.y-45,15,345)},
+   b:{x:W,y:clamp(foe.y+45,15,345)},owner:o.uid,team:o.team,
+   color:abilityData[41].color,life:1.1+level*.15,width:1.8+level*.4,inside:{}});
+  if(st.wallBeams.length>12)st.wallBeams.splice(0,st.wallBeams.length-12);
+  o.v1PrismReflections=(o.v1PrismReflections||0)+1;
+ }else if(id===43){
+  // Shuriken returns on walls; rifle and thief projectiles do not share its path.
+  for(const shot of st.shots.filter(p=>p.id===43&&p.owner===o.uid&&p.age===0)){
+   shot.bounces=Math.max(2,shot.bounces);shot.starTrail=false; // V3 alone leaves electric ricochet marks.
+   shot.homing=.04;shot.ricochetSplit=Math.max(shot.ricochetSplit||0,level===2?1:0);
+  }
+ }else if(id===46&&st.hazards.length){
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===46&&h.kind==='mine'&&level===0){
+   h.armAt=1.25;h.v1TimedBomb=true;h.color='#fb923c';
+  }
+ }else if(id===47&&o.axeOrbit&&level===0){
+  // V1 Orbita protects its owner; Topór and Ostrze are primarily offensive.
+  o.v1OrbitShield={remaining:1,expires:(G.rt||0)+2.3};
+  o.status.shield=Math.min(32,(o.status.shield||0)+2);
+ }
+}
+
+const first16Api={shoot,zone,radial,dash,strike,setStatus,visual,roundState,evolutionStage,alive};
 function cast(o,foe){
  if(!o||!foe||!alive(foe)||!G)return;
  const d=abilityFor(o),kind=d.kind;
@@ -1026,6 +1116,14 @@ function cast(o,foe){
  G.pop ||= [];
  if(G.pop.length<24)G.pop.push({x:o.x,y:Math.max(22,o.y-o.r-24),age:0,life:1.1,
   text:d.title.length>21?d.title.slice(0,20)+'…':d.title,c:d.color});
+ if(o.b.id>=48&&o.b.id<=63&&window.BVBNextSixteen?.onCast){
+  window.BVBNextSixteen.onCast(G,o,foe,first16Api);
+  return;
+ }
+ if(o.b.id>=64&&o.b.id<=79&&window.BVBThirdSixteen?.onCast){
+  window.BVBThirdSixteen.onCast(G,o,foe,first16Api);
+  return;
+ }
  switch(kind){
  case 'web': visual(o,o,'web',27,d.color,.5);break; // webs form only on actual wall impacts
  case 'charge': o.skillCharge=Math.min(5,(o.skillCharge||0)+1+evolutionStage(o));dash(o,foe,.22);break;
@@ -1035,9 +1133,17 @@ function cast(o,foe){
   o.axeOrbit={life:2.35+evolutionStage(o)*.35,angle:0,radius:o.r+20+evolutionStage(o)*6+(o.b.id===1&&lowHp?9:0),blades:Math.min(6,3+evolutionStage(o)+(o.b.id===4?Math.floor(o.skillSpin/2):0)),nextHit:Object.create(null),color:d.color};
   visual(o,o,'orbit',34,d.color,.45);break;
  case 'thorn': visual(o,o,'charge',24,d.color,.5);break; // only walls create spikes
- case 'volley': shoot(o,foe,{count:o.b.id===5?5:o.b.id===43?3:o.b.id===3?2:3,
+ case 'volley':
+  if(o.b.id===37){ // Candy uses a sticky bouncing cone rather than a copied volley.
+   shoot(o,foe,{count:3,damage:o.baseDmg*.25,spread:.5,slow:.32,
+    speed:142,bounces:1,r:5,color:'#f9a8d4'});
+   const h=zone(o,foe.x,foe.y,'slow',17,1.9,.26);
+   if(h)h.v1CandyGlaze=true;
+   o.v1CandyGlazes=(o.v1CandyGlazes||0)+1;
+  }else shoot(o,foe,{count:o.b.id===5?5:o.b.id===43?3:o.b.id===3?2:3,
    damage:o.baseDmg*(o.b.id===5?.2:.36)*scale,homing:.2,spread:.22,
-   speed:lowHp&&o.b.id===3?195:168,slow:o.b.id===37?.4:0});break;
+   speed:lowHp&&o.b.id===3?195:168});
+  break;
  case 'drain':
   if(delta<128+evolutionStage(o)*22){strike(o,foe,Math.min(8,foe.hp*.06)*scale,{slow:.25});
     o.hp=Math.min(o.mh,o.hp+Math.min(9,o.baseDmg*.4)*(1+evolutionStage(o)*.15));}
@@ -1068,6 +1174,13 @@ function cast(o,foe){
  }
  case 'potion': {
   const roll=Math.floor((window.BVBRework?.random?.() ?? Math.random())*3);
+  if(o.b.id===32){ // Potion: three actual randomly selected chemical zones.
+   const reagent=['fire','frost','poison'][roll];
+   const h=zone(o,foe.x,foe.y,reagent,29,2.6,.37);
+   if(h)h.v1Elixir=reagent;
+   o.v1LastReagent=reagent;
+   visual(o,foe,'dice',28,d.color,.55);
+  }else
   if(o.b.id===95){if(roll===0)zone(o,foe.x,foe.y,'fire',30,2.4,.4);else if(roll===1)shoot(o,foe,{damage:o.baseDmg*.35,slow:.85});else o.status.shield=Math.min(32,(o.status.shield||0)+9+evolutionStage(o)*2);}
   else if(o.b.id===127){if(roll===0)zone(o,foe.x,foe.y,'poison',30,2.8,.38);else if(roll===1)shoot(o,foe,{damage:o.baseDmg*.35,slow:.85});else o.hp=Math.min(o.mh,o.hp+6+evolutionStage(o));}
   else if(roll===0)shoot(o,foe,{damage:o.baseDmg*.45,slow:.65,color:d.color});
@@ -1076,11 +1189,20 @@ function cast(o,foe){
   break;
  }
  case 'frost':
-  shoot(o,foe,{count:o.b.id===12?3:2,damage:o.baseDmg*.24,slow:1.05,spread:.26,color:'#a5f3fc'});break;
+  if(o.b.id===29){
+   // Frost leaves a cold wake; the earlier ice identity releases shards.
+   o.v1FrostWake={lastX:o.x,lastY:o.y,next:.3,remaining:2.3};
+   zone(o,o.x,o.y,'frost',16,2.2,.32);
+   visual(o,o,'tail',31,'#b2faff',.5);
+  }else shoot(o,foe,{count:3,damage:o.baseDmg*.24,slow:1.05,spread:.26,color:'#a5f3fc'});
+  break;
  case 'beam':{
   const lead=.19,target={x:foe.x+foe.vx*22*lead,y:foe.y+foe.vy*22*lead};
   roundState().beams.push({x:o.x,y:o.y,x2:target.x,y2:target.y,color:d.color,life:.35+evolutionStage(o)*.1,max:.35+evolutionStage(o)*.1,id:o.b.id});
-  strike(o,foe,o.baseDmg*.43*scale,{slow:evolutionStage(o)*.15,stun:o.b.id===20?.12:0});visual(o,o,'beam',23,d.color,.55);break;
+  strike(o,foe,o.baseDmg*.43*scale,{slow:evolutionStage(o)*.15,stun:o.b.id===20?.12:0});
+  if(o.b.id===20)o.v1ForesightMark={next:.28,remaining:1,
+   x:clamp(target.x,12,348),y:clamp(target.y,12,348)};
+  visual(o,o,'beam',23,d.color,.55);break;
  }
  case 'tail':case 'growth':{
   o.skillScale=Math.min(1.23,(o.skillScale||1)+.025+evolutionStage(o)*.01);
@@ -1088,6 +1210,10 @@ function cast(o,foe){
   else {o.v2BaseRadius??=o.r;o.r=Math.min(o.v2BaseRadius*1.23,o.v2BaseRadius*o.skillScale);}
   o.hp=Math.min(o.mh,o.hp+3.3*scale);
   zone(o,o.x,o.y,kind==='tail'?'tail':'slime',24,3,.29);
+  if(o.b.id===38)o.v1StickyMass={remaining:2.4,next:.24,lastX:o.x,lastY:o.y};
+  if(o.b.id===17){
+   o.v1CellDivision={next:.28,remaining:1+evolutionStage(o),originX:o.x,originY:o.y};
+  }
   visual(o,o,'growth',28,d.color,.7);break;
  }
  case 'tether':
@@ -1101,9 +1227,33 @@ function cast(o,foe){
  case 'shock':case 'storm':
   shoot(o,foe,{count:kind==='storm'?3:o.b.id===83?2:1,damage:o.baseDmg*.32,stun:.22,homing:.45,color:'#fde047',spread:.23,randomAim:kind==='storm'});o.v2ShockUntil=G.rt+1.5+evolutionStage(o)*.2;break;
  case 'zone':case 'gas':case 'poison':
-  zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);if(kind==='poison')o.v2InfectUntil=G.rt+3;break;
+  if(o.b.id===24){
+   // V1 is contact-only; V2 incubates at the target, V3 spreads the strain.
+   const stage=evolutionStage(o);
+   o.v1VirusCarrier={until:G.rt+3.5,next:0};
+   o.v2InfectUntil=G.rt+3.5;
+   if(stage>0)zone(o,foe.x,foe.y,'poison',17+stage*7,2.1+stage*.5,.23+stage*.1);
+   if(stage===2)zone(o,clamp(foe.x+28,15,345),clamp(foe.y-28,15,345),'poison',19,2.2,.27);
+   visual(o,o,'growth',32,d.color,.55);
+  }else if(o.b.id===19){
+   zone(o,o.x,o.y,'zone',31,3.1,.38);
+   o.v1PressureImpulse={next:.3,remaining:2.2};
+   visual(o,o,'ring',39,d.color,.53);
+  }else if(o.b.id===42){ // Gas moves, acid remains as a puddle.
+   const h=zone(o,foe.x,foe.y,'gas',33,3,.37);
+   if(h){h.v1Gas=true;h.vx=9;h.vy=-5;}
+  }else zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);
+  break;
  case 'grid':
-  for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)zone(o,clamp(foe.x+x*31,12,348),clamp(foe.y+y*31,12,348),'grid',16,2.8,.06+(x+1)*.02+(y+1)*.01);break;
+  if(o.b.id===27){ // Crown stores charges at the walls; WDC uses a numbered 3x3 board.
+   o.v1CrownCircuit={until:G.rt+3.3,stored:Math.min(3,(o.v1CrownStored||0)+1)};
+   o.v1CrownStored=o.v1CrownCircuit.stored;
+   zone(o,o.x,o.y,'shock',24,2.1,.30);
+   visual(o,o,'orbit',35,d.color,.55);
+  }else for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)
+   zone(o,clamp(foe.x+x*31,12,348),clamp(foe.y+y*31,12,348),
+    'grid',16,2.8,.06+(x+1)*.02+(y+1)*.01);
+  break;
  case 'healshot':
   shoot(o,foe,{damage:o.baseDmg*.38,healOnHit:7*scale,speed:170,homing:.3,color:'#fbbf24'});break;
  case 'arrow':
@@ -1116,6 +1266,18 @@ function cast(o,foe){
    poison:o.b.id===31?.8:0,speed:118,life:3.1,color:d.color});break;
  case 'mine':{const stage=evolutionStage(o),lead=.75*110*(foe.actualPace||1.38);for(let i=0;i<=stage;i++)zone(o,clamp(foe.x+foe.vx*lead+(i-stage/2)*26,20,340),clamp(foe.y+foe.vy*lead,20,340),'mine',24,5,.72/(1+stage*.3));break;}
  case 'reflect':case 'shield':
+  if(o.b.id===45){ // Living cactus: seeds root into collidable thorn sprouts.
+   const angle=Math.atan2(foe.y-o.y,foe.x-o.x);
+   for(let j=-1;j<=1;j++){
+    const a=angle+j*.7,x=clamp(foe.x+Math.cos(a)*31,17,343),
+     y=clamp(foe.y+Math.sin(a)*31,17,343);
+    const seed=zone(o,x,y,'thorn',11,4,.36);
+    if(seed){seed.v1CactusSeed=true;seed.armAt=.36;}
+   }
+   o.v1CactusLaunches=(o.v1CactusLaunches||0)+1;
+   visual(o,foe,'growth',36,'#9adb61',.65);
+   break;
+  }
   if(o.b.id===96){o.status.stun=0;o.status.slow=0;o.status.weaken=0;}
   o.status.shield=Math.min(32,(o.status.shield||0)+(kind==='shield'?13:8)*scale);
   o.skillReflect=kind==='reflect'?1.7+evolutionStage(o)*.4:0;
@@ -1164,6 +1326,8 @@ function cast(o,foe){
  case 'pumpkin':radial(o,foe,.47,{radius:115,knock:.18});break;
  default:shoot(o,foe,{damage:o.baseDmg*.5,homing:.15});
  }
+ if(o.b.id<16)window.BVBFirstSixteen?.onCast?.(G,o,foe,first16Api);
+ if(o.b.id<48)distinctFirstFortyEightV1(o,foe);
  applyAuthoredUpgrade(o,foe);
  if(typeof snd==='function'&&o.b.id%5===0)snd(420+(o.b.id*19)%650,.11,'triangle',.018,180);
 }
@@ -1371,12 +1535,93 @@ function tick(dt){
  if(!G||G.ph!=='battle'||netRole==='guest')return;
  const st=roundState();if(!st)return;
  st.tick+=dt;
+ window.BVBNextSixteen?.tick?.(G,dt,first16Api);
+ window.BVBThirdSixteen?.tick?.(G,dt,first16Api);
  for(const o of G.bl||[]){
   if(!alive(o))continue;
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
   if(o.skillImpact>0)o.skillImpact=Math.max(0,o.skillImpact-dt);
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
   afflictedTick32(o,dt);
+  if(o.b.id<16)window.BVBFirstSixteen?.tick?.(G,o,dt,first16Api);
+  if(o.b.id===36&&evolutionStage(o)===0&&o.v1LightAfterimage&&
+    G.rt>=o.v1LightAfterimage.next){
+   const origin=o.v1LightAfterimage;
+   const foe=G.bl.find(t=>t.team!==o.team&&alive(t));
+   st.beams.push({x:origin.x,y:origin.y,x2:o.x,y2:o.y,
+    color:abilityData[36].color,life:.35,max:.35,id:36});
+   if(foe&&closestToSegment(foe.x,foe.y,origin.x,origin.y,o.x,o.y)<foe.r+13)
+    strike(o,foe,o.baseDmg*.16,{slow:.2});
+   o.v1LightAfterimage=null;
+   visual(o,origin,'blink',30,abilityData[36].color,.42);
+  }
+  if(o.b.id===47&&evolutionStage(o)===0&&o.v1OrbitShield?.expires>G.rt){
+   for(const p of st.shots){
+    if(p.life<=0||p.team===o.team)continue;
+    if(Math.hypot(p.x-o.x,p.y-o.y)<=o.r+32){
+     p.life=0;o.v1OrbitShield.remaining--;
+     o.v1SatelliteBlocks=(o.v1SatelliteBlocks||0)+1;
+     visual(o,o,'shield',32,abilityData[47].color,.4);
+     if(o.v1OrbitShield.remaining<=0){o.v1OrbitShield=null;break;}
+    }
+   }
+  }
+  if(o.b.id===17&&o.v1CellDivision){
+   const cells=o.v1CellDivision;cells.next-=dt;
+   if(cells.next<=0){
+    const offset=cells.remaining%2===0?-23:23;
+    zone(o,clamp(cells.originX+offset,16,344),
+      clamp(cells.originY-offset,16,344),'slime',13,2.1,.25);
+    o.v1CellSplits=(o.v1CellSplits||0)+1;
+    cells.remaining--;cells.next+=.56;
+    if(cells.remaining<=0)o.v1CellDivision=null;
+   }
+  }
+  if(o.b.id===20&&o.v1ForesightMark){
+   const mark=o.v1ForesightMark;mark.next-=dt;
+   if(mark.next<=0){
+    st.beams.push({x:o.x,y:o.y,x2:mark.x,y2:mark.y,
+      id:20,color:abilityData[20].color,life:.26,max:.26});
+    const f=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(f&&Math.hypot(mark.x-f.x,mark.y-f.y)<f.r+19)
+     strike(o,f,o.baseDmg*.09,{slow:.18});
+    o.v1ForesightMarks=(o.v1ForesightMarks||0)+1;
+    o.v1ForesightMark=null;
+   }
+  }
+  if(o.b.id===38&&o.v1StickyMass){
+   const mass=o.v1StickyMass;mass.next-=dt;mass.remaining-=dt;
+   if(mass.remaining<=0)o.v1StickyMass=null;
+   else if(mass.next<=0){
+    if(Math.hypot(o.x-mass.lastX,o.y-mass.lastY)>9){
+     const h=zone(o,o.x,o.y,'slime',15,2,.3);
+     if(h)h.v1StickyTrail=true;
+     mass.lastX=o.x;mass.lastY=o.y;
+    }
+    mass.next+=.42;
+   }
+  }
+  if(o.b.id===29&&o.v1FrostWake){
+   const wake=o.v1FrostWake;wake.remaining-=dt;wake.next-=dt;
+   if(wake.remaining<=0)o.v1FrostWake=null;
+   else if(wake.next<=0){
+    if(Math.hypot(o.x-wake.lastX,o.y-wake.lastY)>7){
+     zone(o,o.x,o.y,'frost',17,2,.34);
+     wake.lastX=o.x;wake.lastY=o.y;
+    }
+    wake.next+=.38;
+   }
+  }
+  if(o.b.id===19&&o.v1PressureImpulse){
+   const pulse=o.v1PressureImpulse;pulse.remaining-=dt;pulse.next-=dt;
+   if(pulse.remaining<=0)o.v1PressureImpulse=null;
+   else if(pulse.next<=0){
+    const f=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(f){const dx=f.x-o.x,dy=f.y-o.y,d=Math.hypot(dx,dy)||1;
+     if(d<95){f.vx=(f.vx||0)+dx/d*.14;f.vy=(f.vy||0)+dy/d*.14;}}
+    pulse.next+=.5;
+   }
+  }
   if(o.b.id>=32&&o.b.id<=47)signatureTick32(o,dt,st);
   // Second bespoke batch (24–31): simulate their OWN collision or movement
   // mechanics, not generic on-cast bonus shots.
@@ -1629,7 +1874,7 @@ function tick(dt){
     h.v2RailClock+=h.v2RailTrain===2?.18:.28;
    }
   }
-  if(h.kind==='gas'&&h.v2Drifting>0){
+  if(h.kind==='gas'&&(h.v2Drifting>0||h.v1Gas)){
    h.x=clamp(h.x+(h.vx||0)*dt,16,344);
    h.y=clamp(h.y+(h.vy||0)*dt,16,344);
    if(h.v2Drifting===2&&!h.v2Condensed&&h.life<=.2){
@@ -1663,6 +1908,20 @@ function tick(dt){
   else strike(owner,foe,3*h.power,{knock:h.kind==='zone'?.1:0});
   // Extra effects originate from confirmed hazard hits. V3 produces a
   // distinct consequence instead of doubling a generic power multiplier.
+  if(h.v1GiantPiston){
+   const dx=foe.x-h.x,dy=foe.y-h.y,d=Math.hypot(dx,dy)||1;
+   foe.vx=(foe.vx||0)+dx/d*.22;foe.vy=(foe.vy||0)+dy/d*.22;
+  }
+  if(h.v1ShackleTrap){setStatus(owner,foe,'stun',.38);h.v1ShackleTrap=false;}
+  if(h.v1HauntedGrave){
+   setStatus(owner,foe,'weaken',.75);
+   foe.v2Haunted={owner:owner.uid,next:.4,remaining:2,level:1};
+   h.v1HauntedGrave=false;
+  }
+  if(h.v1CorrosivePuddle)setStatus(owner,foe,'weaken',.75);
+  if(h.v1TimedBomb&&!h.v1BombExploded){
+   h.v1BombExploded=true;radial(owner,foe,.11,{radius:44,knock:.22});
+  }
   if(h.v2Grave&&!h.v2Activated){
    h.v2Activated=true;
    setStatus(owner,foe,'weaken',.9);

@@ -57,6 +57,70 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    assert.ok(cinematicProof.signatures.every(s=>new Set(s).size===3),
      'each cinematic must have three genuinely different animation frames');
    assert.equal(cinematicProof.reducedSame,true,'reduced motion cutscene must remain static');
+   // Reference-sheet 02 portraits must decode as real SVG images in browsers.
+   await page.waitForFunction(()=>window.BVB2Sheet02?.ids?.length===6 &&
+    window.BVB2Sheet02.ids.every(id=>[1,2,3].every(t=>
+     window.BVB2Sheet02.imageForTier(id,t)?.naturalWidth>0)),null,{timeout:10000});
+   const sheetArt=await page.evaluate(()=>window.BVB2Sheet02.ids.map(id=>({
+    id,svgs:[1,2,3].map(t=>window.BVB2Sheet02.artForTier(id,t)),
+    imageWidths:[1,2,3].map(t=>window.BVB2Sheet02.imageForTier(id,t).naturalWidth)
+   })));
+   assert.equal(sheetArt.length,6);
+   for(const ball of sheetArt){
+    assert.ok(ball.imageWidths.every(n=>n>0),'SVG must load in browser: '+ball.id);
+    assert.equal(new Set(ball.svgs).size,3,'V1/V2/V3 portraits differ: '+ball.id);
+    assert.ok(ball.svgs.every((svg,i)=>svg.includes('data-preview-tier="'+(i+1)+'"')));
+   }
+   // Check authored art actually decodes, including evolved early and late balls.
+   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,...Array.from({length:16},(_,i)=>i+32),...Array.from({length:16},(_,i)=>i+48),...Array.from({length:16},(_,i)=>i+64),98,129];
+   await page.waitForFunction(ids=>ids.every(id=>[1,2,3].every(t=>
+    window.BVBArtEvolution.imageForTier(id,t)?.naturalWidth>0)),evolvedSamples,{timeout:20000});
+   const artDiagnostics=await page.evaluate(ids=>ids.map(id=>[1,2,3].map(t=>
+    window.BVBArtEvolution.imageForTier(id,t).naturalWidth)),evolvedSamples);
+   assert.ok(artDiagnostics.every(stages=>stages.every(width=>width>0)),
+    'every selected evolution must decode as an image');
+   const liveAbilityDescriptions=await page.evaluate(()=>Array.from({length:16},(_,i)=>{
+    const id=i+48;
+    return [2,3].map(t=>window.BVB2.evolutionDescription(id,t));
+   }));
+   assert.equal(new Set(liveAbilityDescriptions.map(x=>x[0])).size,16,
+    '16 new evolution skills must have different descriptions');
+   assert.ok(liveAbilityDescriptions.every(x=>x[0].startsWith('V2:')&&
+     x[1].startsWith('V3:')&&x[0]!==x[1]));
+   const sketch49=await page.evaluate(()=>Array.from({length:16},(_,i)=>{
+     const id=48+i;
+     return [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t));
+   }));
+   assert.equal(new Set(sketch49.flat()).size,48,'48 separate SVG costumes must decode');
+   assert.equal(new Set(sketch49.map(row=>row[0].match(/data-sketch49="([^"]+)"/)?.[1])).size,
+     16,'16 visual identities from sketch 49-64 must stay separate');
+   assert.ok(sketch49.every((row,i)=>row.every((s,t)=>
+     s.includes('data-reference-panel="'+(49+i)+'"')&&
+     s.includes('data-evolution="'+(t+1)+'"'))));
+   // All 16 REAL ball names/identities 65–80 must be used for the new art.
+   const thirdSet=await page.evaluate(()=>Array.from({length:16},(_,i)=>{
+     const id=i+64;
+     return {name:B[id].n,pictures:[1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)),
+      upgrades:[2,3].map(t=>window.BVB2.evolutionDescription(id,t))};
+   }));
+   const thirdKeys=thirdSet.map(v=>v.pictures[0].match(/data-visual-identity="([^"]+)"/)?.[1]);
+   assert.equal(new Set(thirdKeys).size,16,'16 real characters keep distinct visual identities');
+   assert.equal(new Set(thirdSet.flatMap(v=>v.pictures)).size,48,'48 unique evolution costumes');
+   assert.ok(thirdSet.every((v,i)=>v.pictures.every((pic,t)=>
+     pic.includes('data-ball-id="'+(i+64)+'"')&&pic.includes('data-evolution="'+(t+1)+'"'))));
+   assert.equal(new Set(thirdSet.map(v=>v.upgrades[0])).size,16,'V2 authored skills');
+   assert.equal(new Set(thirdSet.map(v=>v.upgrades[1])).size,16,'V3 authored skills');
+   const elementTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
+    [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)
+      .match(/data-element="([^"]+)"/)?.[1]||'')));
+   assert.equal(new Set(elementTags.flat()).size,16,'16 separate elements in game');
+   assert.ok(elementTags.every(row=>row[0]===row[1]&&row[1]===row[2]));
+   // The full 33–48 concept-art set must decode as images in every browser.
+   const newMotifs=await page.evaluate(()=>Array.from({length:16},(_,i)=>
+    [1,2,3].map(t=>window.BVBArtEvolution.svgFor(i+32,t)
+      .match(/data-concept="([^"]+)"/)?.[1]||'')));
+   assert.equal(new Set(newMotifs.flat()).size,16);
+   assert.ok(newMotifs.every(row=>row.every(m=>m===row[0]&&m.length>0)));
    if(new URL(base).pathname.split('/').includes('beta')){
      await page.waitForSelector('#bvbBetaPanelOpen');
      await page.click('#bvbBetaPanelOpen');
