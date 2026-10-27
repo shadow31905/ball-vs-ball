@@ -62,7 +62,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
     window.BVB2Sheet02.ids.every(id=>[1,2,3].every(t=>
      window.BVB2Sheet02.imageForTier(id,t)?.naturalWidth>0)),null,{timeout:10000});
    const sheetArt=await page.evaluate(()=>window.BVB2Sheet02.ids.map(id=>({
-    id,svgs:[1,2,3].map(t=>art(id,t)),
+    id,svgs:[1,2,3].map(t=>window.BVB2Sheet02.artForTier(id,t)),
     imageWidths:[1,2,3].map(t=>window.BVB2Sheet02.imageForTier(id,t).naturalWidth)
    })));
    assert.equal(sheetArt.length,6);
@@ -72,13 +72,18 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
     assert.ok(ball.svgs.every((svg,i)=>svg.includes('data-preview-tier="'+(i+1)+'"')));
    }
    // Check authored art actually decodes, including evolved early and late balls.
-   const evolvedSamples=[0,1,2,3,4,5,6,7,8,9,10,11,12,16,24,32,39,47,48,63,98,129];
+   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,32,39,47,48,63,98,129];
    await page.waitForFunction(ids=>ids.every(id=>[1,2,3].every(t=>
     window.BVBArtEvolution.imageForTier(id,t)?.naturalWidth>0)),evolvedSamples,{timeout:20000});
    const artDiagnostics=await page.evaluate(ids=>ids.map(id=>[1,2,3].map(t=>
     window.BVBArtEvolution.imageForTier(id,t).naturalWidth)),evolvedSamples);
    assert.ok(artDiagnostics.every(stages=>stages.every(width=>width>0)),
     'every selected evolution must decode as an image');
+   const elementTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
+    [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)
+      .match(/data-element="([^"]+)"/)?.[1]||'')));
+   assert.equal(new Set(elementTags.flat()).size,16,'16 separate elements in game');
+   assert.ok(elementTags.every(row=>row[0]===row[1]&&row[1]===row[2]));
    if(new URL(base).pathname.split('/').includes('beta')){
      await page.waitForSelector('#bvbBetaPanelOpen');
      await page.click('#bvbBetaPanelOpen');
