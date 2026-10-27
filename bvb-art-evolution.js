@@ -78,6 +78,23 @@ function core(id){
  return '<g transform="translate(21 21) scale(.85)">'+(m?m[1]:'')+'</g>'+
    (id<48?stroke(glyphs[id]||'', '#f9ffff',2.2):'');
 }
+function angryFace(id,tier){
+ if(id>=48)return '';
+ const yy=50+id%3,brow='#172037',iris='#17233f',white=tier===3?'#fff3c3':'#f8fdff';
+ let out='<g class="bvb-cartoon-face" data-face-id="'+id+'">';
+ for(const side of [-1,1]){
+  const x=48+side*11,tilt=side*(id%4-1);
+  out+='<path d="M'+(x-8)+' '+(yy-9+tilt)+'L'+(x+8)+' '+(yy-6-tilt)+
+   '" fill="none" stroke="'+brow+'" stroke-width="3.5" stroke-linecap="round"/>';
+  out+='<path d="M'+(x-7)+' '+(yy-3)+'Q'+x+' '+(yy-9)+' '+(x+8)+' '+(yy-3)+
+   'L'+(x+5)+' '+(yy+6)+'Q'+x+' '+(yy+7)+' '+(x-6)+' '+(yy+4)+'Z" fill="'+white+
+   '" stroke="'+brow+'" stroke-width="1.1"/>';
+  out+='<g class="bvb-cartoon-iris"><ellipse cx="'+(x+side*(id%3))+'" cy="'+(yy+1)+'" rx="2.5" ry="3.3" fill="'+iris+'"/>'+
+   '<circle cx="'+(x+side*(id%3)-1)+'" cy="'+(yy-1)+'" r="1" fill="white"/></g>';
+ }
+ return out+'<path d="M40 '+(yy+11)+'Q48 '+(yy+8+id%4)+' 56 '+(yy+11)+
+  '" stroke="#27334d" stroke-width="1.5" fill="none"/></g>';
+}
 function svgFor(id,tier){
  id=Number(id);if(!Number.isInteger(id)||id<0||id>=B.length)return '';
  tier=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
@@ -98,7 +115,7 @@ function svgFor(id,tier){
  svg+='<g class="bvb-evo-core"><circle cx="48" cy="48" r="27.5" fill="url(#'+grad+')" stroke="'+col+'" stroke-width="2.3"/>';
  svg+=stroke('M30 35Q35 25 47 23','#fff',1.9)+core(id);
  // Eyes remain separate from the motif for per-ball independent animation.
- svg+='<g class="bvb-evo-eyes" opacity=".8">'+circle(39,53,2.6,'#0c1631')+circle(57,53,2.6,'#0c1631')+'</g></g>';
+ svg+='<g class="bvb-evo-eyes">'+angryFace(id,tier)+'</g></g>';
  if(tier>=2){svg+='<g class="bvb-evo-satellite">'+star(79,23,5,6+tier,2.7,col)+'</g>';}
  if(tier===3){svg+='<g class="bvb-evo-final">'+star(19,18,6,10,3.6,'#fff4b5')+stroke('M26 18Q49 4 73 18',col,2)+'</g>';}
  svg+='</svg>';svgCache.set(key,svg);return svg;
@@ -130,6 +147,8 @@ css.textContent=[
  '.bs-card:nth-child(3n) .orb{animation-duration:4.2s}',
  '@keyframes bvbHeart{to{transform:scale(1.045)}}',
  '@keyframes bvbGlance{0%,24%,50%,100%{transform:translateX(0)}37%{transform:translateX(3px)}}',
+ '.orb .bvb-cartoon-iris{animation:bvbEyeSearch 5s ease-in-out infinite}',
+ '@keyframes bvbEyeSearch{0%,22%,55%,100%{transform:translateX(0)}33%,46%{transform:translateX(2px)}}',
  '@keyframes bvbSpin{to{transform:rotate(360deg)}}',
  '@keyframes bvbFloat{to{transform:translateY(-4px) rotate(3deg)}}',
  '@media(prefers-reduced-motion:reduce){.orb,.orb svg[data-bvb-art-v2] *{animation:none!important}}',
