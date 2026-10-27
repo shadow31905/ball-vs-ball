@@ -72,7 +72,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
     assert.ok(ball.svgs.every((svg,i)=>svg.includes('data-preview-tier="'+(i+1)+'"')));
    }
    // Check authored art actually decodes, including evolved early and late balls.
-   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,32,39,47,48,63,98,129];
+   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,...Array.from({length:16},(_,i)=>i+32),48,63,98,129];
    await page.waitForFunction(ids=>ids.every(id=>[1,2,3].every(t=>
     window.BVBArtEvolution.imageForTier(id,t)?.naturalWidth>0)),evolvedSamples,{timeout:20000});
    const artDiagnostics=await page.evaluate(ids=>ids.map(id=>[1,2,3].map(t=>
@@ -84,6 +84,12 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
       .match(/data-element="([^"]+)"/)?.[1]||'')));
    assert.equal(new Set(elementTags.flat()).size,16,'16 separate elements in game');
    assert.ok(elementTags.every(row=>row[0]===row[1]&&row[1]===row[2]));
+   // The full 33–48 concept-art set must decode as images in every browser.
+   const newMotifs=await page.evaluate(()=>Array.from({length:16},(_,i)=>
+    [1,2,3].map(t=>window.BVBArtEvolution.svgFor(i+32,t)
+      .match(/data-concept="([^"]+)"/)?.[1]||'')));
+   assert.equal(new Set(newMotifs.flat()).size,16);
+   assert.ok(newMotifs.every(row=>row.every(m=>m===row[0]&&m.length>0)));
    if(new URL(base).pathname.split('/').includes('beta')){
      await page.waitForSelector('#bvbBetaPanelOpen');
      await page.click('#bvbBetaPanelOpen');
