@@ -33,7 +33,7 @@ test('each V2 and V3 casts an observable, bounded identity-specific action',()=>
 });
 test('V3 creates physical wall consequences without replacing V1 effects',()=>{
  const g=createGame();
- const list=g.run(fixture+'(()=>{const ids=[0,2,6,9,12,14,15],results=[];for(const id of ids){const [o,f]=first16Scenario(id,3);specialAbility(o,f);o.x=17;o.y=170;BVB2.onWall(o,"left");const s=G.v2;o.x=343;o.y=185;G.rt+=.25;BVB2.onWall(o,"right");results.push({id,ricochets:o.bvbRicochets||0,briars:o.bvbBriarBranches||0,webs:s.webs.length,cocoons:o.bvbCocoons||0,reflected:o.bvbReflectedWaves||0,icicles:o.bvbIcicles||0,shedding:o.bvbShedding||0,swing:o.bvbHookWall||0,hazards:s.hazards.length});}return results;})()');
+ const list=g.run(fixture+'(()=>{const ids=[0,2,6,9,12,14,15],results=[];for(const id of ids){const [o,f]=first16Scenario(id,3);specialAbility(o,f);o.x=17;o.y=170;BVB2.onWall(o,"left");const s=G.v2;o.x=343;o.y=185;G.rt+=.25;BVB2.onWall(o,"right");if(id===6){o.x=165;o.y=17;G.rt+=.25;BVB2.onWall(o,"top");}results.push({id,ricochets:o.bvbRicochets||0,briars:o.bvbBriarBranches||0,webs:s.webs.length,cocoons:o.bvbCocoons||0,reflected:o.bvbReflectedWaves||0,icicles:o.bvbIcicles||0,shedding:o.bvbShedding||0,swing:o.bvbHookWall||0,hazards:s.hazards.length});}return results;})()');
  const lookup=Object.fromEntries(list.map(x=>[x.id,x]));
  assert.ok(lookup[0].ricochets>=1);
  assert.ok(lookup[2].briars>=1);
