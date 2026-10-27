@@ -715,6 +715,8 @@ function evolutionDescription(id,tier=1){
  if(!stage)return 'V1: podstawowa wersja zdolności.';
  const bespoke=authoredUpgradeDescription(id,stage);
  if(bespoke)return bespoke;
+ const early=window.BVBFirstSixteen?.description?.(id,stage);
+ if(early)return early;
  const labels={
  orbit:'więcej ostrzy, większa orbita i dłuższa aktywacja',
  web:'sieć dodatkowo spowalnia'+(stage===2?' i zatruwa':''),
@@ -808,6 +810,7 @@ function onContact(g,o,foe,base){
   }
   visual(o,foe,'shard',27,abilityData[45].color,.55);
  }
+ if(o.b.id<16)base=window.BVBFirstSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
  return base;
 }
 
@@ -1011,11 +1014,13 @@ function onWall(o,side){
  }
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
  signatureWall32(o,side,st);
+ if(o.b.id<16)window.BVBFirstSixteen?.onWall?.(G,o,side,first16Api);
 }
 function cooldown(o){
  const d=abilityFor(o);const rate=Math.max(.55,Math.min(1.5,o.abilityRate||1));
  return Math.max(2.25,(d?.cooldown||4)*rate*(o.tier===3?.78:o.tier===2?.90:1));
 }
+const first16Api={shoot,zone,radial,dash,strike,setStatus,visual,roundState,evolutionStage,alive};
 function cast(o,foe){
  if(!o||!foe||!alive(foe)||!G)return;
  const d=abilityFor(o),kind=d.kind;
@@ -1164,6 +1169,7 @@ function cast(o,foe){
  case 'pumpkin':radial(o,foe,.47,{radius:115,knock:.18});break;
  default:shoot(o,foe,{damage:o.baseDmg*.5,homing:.15});
  }
+ if(o.b.id<16)window.BVBFirstSixteen?.onCast?.(G,o,foe,first16Api);
  applyAuthoredUpgrade(o,foe);
  if(typeof snd==='function'&&o.b.id%5===0)snd(420+(o.b.id*19)%650,.11,'triangle',.018,180);
 }
@@ -1377,6 +1383,7 @@ function tick(dt){
   if(o.skillImpact>0)o.skillImpact=Math.max(0,o.skillImpact-dt);
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
   afflictedTick32(o,dt);
+  if(o.b.id<16)window.BVBFirstSixteen?.tick?.(G,o,dt,first16Api);
   if(o.b.id>=32&&o.b.id<=47)signatureTick32(o,dt,st);
   // Second bespoke batch (24–31): simulate their OWN collision or movement
   // mechanics, not generic on-cast bonus shots.
