@@ -151,7 +151,7 @@ function symbol(tag,t){
 }
 function eyes(tag,t){
  const brow='#0b1733';
- if(tag===0&&t===3)return '';
+ // V3 must retain clearly visible eyes, even with the maximum aura.
  if(tag===5&&t===3)return '<g class="sketch-eyes">'+p('M44 71L60 65M68 65L84 71',brow,5)+p('M44 72L55 82M84 72L73 82','#ffffff',3)+'</g>';
  let out='<g class="sketch-eyes">';
  for(const side of [-1,1]){
@@ -199,21 +199,21 @@ function renderCombat(ctx,actor,g){
  const N=2+stage;
  switch(id){
  case 16:ctx.rotate(a*.25);orbit(r+6,.48,-.5);orbit(r+10,.32,.8);break;
- case 17:for(let i=0;i<N;i++)orbit(r+4+i*5,1,0);break;
+ case 17:for(let i=0;i<N;i++){const pulse=2.8*Math.sin(a*1.1-i*.9);orbit(r+4+i*5+pulse,1,Math.sin(a*.35+i)*.08);}break;
  case 18:for(let i=0;i<N+2;i++){let p=i*6.28/(N+2)+a*.2;line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.2)*(r+9),Math.sin(p+.2)*(r+9)],[Math.cos(p+.1)*(r+12),Math.sin(p+.1)*(r+12)]]);}break;
  case 19:for(let i=0;i<N;i++){let p=a*.7+i*6.28/N;dot(Math.cos(p)*(r+10),Math.sin(p)*(r+5),2.5);}break;
  case 20:for(let i=0;i<N*2;i++){let p=i*6.28/(N*2)+a*.26,x=Math.cos(p)*(r+7),y=Math.sin(p)*(r+7);line([[x-3,y+3],[x,y-5],[x+3,y+3]]);}break;
- case 21:for(let i=0;i<8;i++){let p=i*.785;line([[Math.cos(p)*(r+2),Math.sin(p)*(r+2)],[Math.cos(p)*(r+8),Math.sin(p)*(r+8)]]);}break;
+ case 21:for(let i=0;i<8;i++){let p=i*.785+a*.28;line([[Math.cos(p)*(r+2),Math.sin(p)*(r+2)],[Math.cos(p)*(r+8),Math.sin(p)*(r+8)]]);}break;
  case 22:for(let i=0;i<N;i++){let p=a*.2+i*2.09;dot(Math.cos(p)*(r+8),Math.sin(p)*(r+6),3);}break;
- case 23:for(let i=0;i<N+2;i++){let p=i*6.28/(N+2);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.1)*(r+9),Math.sin(p+.1)*(r+10)]]);}break;
+ case 23:for(let i=0;i<N+2;i++){const p=i*6.28/(N+2),recoil=4*Math.max(0,Math.sin(a*2-i*.37));line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.1)*(r+9+recoil),Math.sin(p+.1)*(r+10+recoil)]]);}break;
  case 24:for(let i=0;i<N;i++){let p=a*.5+i*2.1;orbit(r+5+i*2,.3,p);}break;
- case 25:for(let i=0;i<N+2;i++){let p=i*6.28/(N+2);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p)*(r+7),Math.sin(p)*(r+7)]]);}break;
+ case 25:for(let i=0;i<N+2;i++){const p=i*6.28/(N+2),extension=4+3*Math.sin(a*1.4+i*.85);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p)*(r+7+extension),Math.sin(p)*(r+7+extension)]]);}break;
  case 26:for(let i=0;i<N;i++){let p=a+i*2.09;dot(Math.cos(p)*(r+8),Math.sin(p)*(r+8),3);}break;
  case 27:for(let i=0;i<N;i++){let p=i*2.09+a*.1,x=Math.cos(p)*r,y=Math.sin(p)*r;line([[x-4,y+3],[x+5,y-5],[x+3,y-8]]);}break;
  case 28:for(let i=0;i<N+2;i++){let p=i*6.28/(N+2)+a*.12;dot(Math.cos(p)*(r+7),Math.sin(p)*(r+7),2.2);}break;
- case 29:for(let i=0;i<N+3;i++){let p=i*6.28/(N+3);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.2)*(r+12),Math.sin(p+.2)*(r+11)]]);}break;
+ case 29:for(let i=0;i<N+3;i++){const p=i*6.28/(N+3),frost=3*Math.sin(a*.9+i*.6);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.2)*(r+12+frost),Math.sin(p+.2)*(r+11+frost)]]);}break;
  case 30:ctx.rotate(a*.12);orbit(r+9,.37,.6);orbit(r+9,.37,-.6);break;
- case 31:for(let i=0;i<N+4;i++){let p=i*6.28/(N+4);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.08)*(r+6),Math.sin(p+.08)*(r+15)]]);}break;
+ case 31:for(let i=0;i<N+4;i++){const p=i*6.28/(N+4)+a*.24,wobble=Math.sin(a*1.2+i)*3;line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.08)*(r+6+wobble),Math.sin(p+.08)*(r+15+wobble)]]);}break;
  }
  ctx.restore();
 }
