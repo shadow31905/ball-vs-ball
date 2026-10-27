@@ -78,10 +78,10 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
    const oldOption=S.o.ballVisualStyle;
    const stylePreserved=[];
    try{
-    for(const id of [32,34,36,40,44,47]){
-     S.o.ballVisualStyle='detailed';const d=BVBArtEvolution.svgFor(id,3);
-     S.o.ballVisualStyle='classic';const c=BVBArtEvolution.svgFor(id,3);
-     stylePreserved.push({id,unchanged:d===c,notApproved:!BVBArtEvolution.isCompletedRework(id)});
+    for(let id=32;id<48;id++)for(let tier=1;tier<=3;tier++){
+     S.o.ballVisualStyle='detailed';const d=BVBArtEvolution.svgFor(id,tier);
+     S.o.ballVisualStyle='classic';const c=BVBArtEvolution.svgFor(id,tier);
+     stylePreserved.push({id,tier,unchanged:d===c,notApproved:!BVBArtEvolution.isCompletedRework(id)});
     }
    }finally{S.o.ballVisualStyle=oldOption;}
    const untouched=original===JSON.stringify({coins:S.coins,own:S.own,upHp:S.upHp,upDmg:S.upDmg,
@@ -102,6 +102,7 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.equal(result.battle.length,48);
   assert.ok(result.battle.every(x=>x.moves),
     'Static actual canvas sprite: '+JSON.stringify(result.battle.filter(x=>!x.moves)));
+  assert.equal(result.stylePreserved.length,48,'All 16 unfinished balls must preserve all three evolution stages');
   assert.ok(result.stylePreserved.every(x=>x.unchanged&&x.notApproved),
     'Unapproved third batch must not switch appearance');
   assert.equal(result.untouched,true,'Visual tests changed user saves or game mechanics');
