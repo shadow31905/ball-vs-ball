@@ -53,6 +53,7 @@ const rgba=(hex,alpha)=>{
  return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+alpha+')';
 };
 function drawActor(ctx,o,g){
+ if(window.BVBApprovedArt?.has(o?.b?.id))return;
  if(!enabled('fight')||!o||!Number.isFinite(o.x)||!Number.isFinite(o.y)||!o.b)return;
  const options=prefs(),quality=options.artQuality,stage=clamp(o.tier||1,1,3),id=o.b.id||0;
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;

@@ -2387,6 +2387,7 @@ const orbHTML = b => `<span class="orb" style="--oc:${b.c};--rc:${RC[b.r]};width
 
 function preloadArt() {
   for (let i = 0; i < B.length; i++) {
+    if(window.BVBApprovedArt?.has(i)){ART_IMAGES.set(i,window.BVBApprovedArt.imageForTier(i,getBallStats(i).tier));continue;}
     const im = new Image();
     im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(art(i));
     ART_IMAGES.set(i, im);
@@ -3133,7 +3134,9 @@ function draw() {
     cx.lineWidth = 3;
     cx.beginPath(); cx.arc(o.x, o.y, o.r + 3, 0, 6.283); cx.stroke();
 
-    const im = window.BVBArtEvolution?.imageFor?.(o) || window.BVB2Sheet02?.imageFor?.(o) || ART_IMAGES.get(o.b.id);
+    const im = window.BVBApprovedArt?.has(o.b.id)
+      ? window.BVBArtEvolution.imageForTier(o.b.id,o.tier||getBallStats(o.b.id).tier)
+      : window.BVBArtEvolution?.imageFor?.(o) || window.BVB2Sheet02?.imageFor?.(o) || ART_IMAGES.get(o.b.id);
     if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
     window.BVBMotion?.drawActor?.(cx,o,G);
@@ -3223,6 +3226,7 @@ requestAnimationFrame(loop);
 <script src="./bvb-sketch-art-32-47.js"></script>
 <script src="./bvb-sketch-art-48-63.js"></script>
 <script src="./bvb-sketch-art-64-79.js"></script>
+<script src="./bvb-approved-art-00-15.js"></script>
 <script src="./bvb-art-evolution.js"></script>
 <script src="./bvb-motion-results.js"></script>
 <script src="./bvb-signature-motion.js"></script>

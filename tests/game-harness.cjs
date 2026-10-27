@@ -26,7 +26,7 @@ function createGame(){
  vm.runInContext(fs.readFileSync(path.join(root,'bvb-save.js'),'utf8'),c,{filename:'bvb-save.js'});
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
  for(const m of html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g))if(m[1].trim())vm.runInContext(m[1],c,{filename:'index.html'});
- for(const file of ['bvb-anime-update.js','bvb-gameplay.js','bvb-campaign.js','bvb-abilities-v2.js','bvb-abilities-00-15.js','bvb-abilities-48-63.js','bvb-abilities-64-79.js','bvb-art-preview-02.js','bvb-elemental-art-00-15.js','bvb-sketch-art-16-31.js','bvb-sketch-art-32-47.js','bvb-sketch-art-48-63.js','bvb-sketch-art-64-79.js','bvb-art-evolution.js','bvb-motion-results.js','bvb-signature-motion.js','bvb-identities.js','bvb-balance.js','bvb-modes.js','bvb-network.js','bvb-combat-rework.js','bvb-presentation.js']){
+ for(const file of ['bvb-anime-update.js','bvb-gameplay.js','bvb-campaign.js','bvb-abilities-v2.js','bvb-abilities-00-15.js','bvb-abilities-48-63.js','bvb-abilities-64-79.js','bvb-art-preview-02.js','bvb-elemental-art-00-15.js','bvb-sketch-art-16-31.js','bvb-sketch-art-32-47.js','bvb-sketch-art-48-63.js','bvb-sketch-art-64-79.js','bvb-approved-art-00-15.js','bvb-art-evolution.js','bvb-motion-results.js','bvb-signature-motion.js','bvb-identities.js','bvb-balance.js','bvb-modes.js','bvb-network.js','bvb-combat-rework.js','bvb-presentation.js']){
   if(fs.existsSync(path.join(root,file)))vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),c,{filename:file});
  }
  return {context:c,run:code=>vm.runInContext(code,c),storage};

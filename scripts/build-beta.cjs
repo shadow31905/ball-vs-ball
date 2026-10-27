@@ -6,6 +6,14 @@ function buildBeta(out,revision='working-tree'){
  const names=fs.readdirSync(root).filter(n=>/^bvb-.*\.js$/.test(n)&&n!=='bvb-accounts.js');
  const manifest={sourceRevision:revision,builtAt:new Date().toISOString(),files:{}};
  for(const name of names){let source=fs.readFileSync(path.join(root,name),'utf8');if(name==='bvb-combat-ui.js')source=source.replace("const storeKey='bvb-rework-view-v1';","const storeKey='bvb-beta-rework-view-v1';");fs.writeFileSync(path.join(out,name),source);manifest.files[name]=crypto.createHash('sha256').update(source).digest('hex');}
+ // Raster textures are runtime dependencies just like the scripts.
+ const assetDir=path.join(root,'assets','approved-first16');
+ for(const name of fs.readdirSync(assetDir).filter(n=>/^ball-\d{2}-v[123]\.webp$/.test(n))){
+  const rel='assets/approved-first16/'+name,bytes=fs.readFileSync(path.join(assetDir,name));
+  fs.mkdirSync(path.join(out,'assets','approved-first16'),{recursive:true});
+  fs.writeFileSync(path.join(out,rel),bytes);
+  manifest.files[rel]=crypto.createHash('sha256').update(bytes).digest('hex');
+ }
  let html=fs.readFileSync(path.join(root,'index.html'),'utf8');
  // Never accidentally ship beta-only controls through the stable entrypoint.
  if(html.includes('<script src="./bvb-beta-tools.js"></script>')||

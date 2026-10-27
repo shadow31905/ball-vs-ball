@@ -13,6 +13,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.goto(base,{waitUntil:'domcontentloaded',timeout:30000});
    await page.waitForFunction(()=>typeof window.startMatch==='function'&&!!window.BVBReworkUI&&!!window.BVBRework,{timeout:30000});
    await page.evaluate(()=>{if(document.getElementById('accountGate'))document.getElementById('accountGate').hidden=true;});
+   await require('./approved-art-browser.cjs').checkApprovedArt(page);
    // Inspect the *actual canvas pixels* in each browser. Every one of the
    // five full-arena cinematic storyboards must be different and animate
    // between buildup, impact and aftermath, not simply show a recolored ring.
@@ -112,8 +113,8 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    assert.equal(new Set(thirdSet.map(v=>v.upgrades[1])).size,16,'V3 authored skills');
    const elementTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
     [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)
-      .match(/data-element="([^"]+)"/)?.[1]||'')));
-   assert.equal(new Set(elementTags.flat()).size,16,'16 separate elements in game');
+      .match(/data-ball-id="([^"]+)"/)?.[1]||'')));
+   assert.equal(new Set(elementTags.flat()).size,16,'16 separate approved ball identities in game');
    assert.ok(elementTags.every(row=>row[0]===row[1]&&row[1]===row[2]));
    // The full 33–48 concept-art set must decode as images in every browser.
    const newMotifs=await page.evaluate(()=>Array.from({length:16},(_,i)=>

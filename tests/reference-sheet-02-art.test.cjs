@@ -48,11 +48,11 @@ test('tier-specific images are cached, with unmodified art for other balls',()=>
  assert.notEqual(result.stage2,result.stage3);
 });
 
-test('elemental replacement is used as actual equipped and combat artwork for first 16 balls',()=>{
+test('approved raster artwork is used for the first sixteen equipped balls',()=>{
  const g=createGame();
  const data=g.run('Array.from({length:16},(_,id)=>[1,2,3].map(t=>art(id,t)))');
  for(let id=0;id<16;id++)for(let t=1;t<=3;t++){
-  assert.ok(data[id][t-1].includes('data-element="'),id+' V'+t);
+  assert.ok(data[id][t-1].includes('data-approved-art="1"'),id+' V'+t);
   assert.ok(data[id][t-1].includes('data-evolution="'+t+'"'));
  }
 });

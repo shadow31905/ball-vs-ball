@@ -72,6 +72,7 @@ const painters=[
  (c,t)=>{c.save();c.rotate(t*.3);c.beginPath();c.ellipse(0,0,21,9,-.5,0,6.283);c.stroke();dot(c,16,-12,3.4);c.restore();}
 ];
 function draw(ctx,o,g){
+ if(window.BVBApprovedArt?.has(o?.b?.id))return;
  old(ctx,o,g);
  if(!o?.b||!window.BVBMotion.enabled('fight')||!window.BVBMotion.enabled('interior'))return;
  const id=o.b.id,fn=painters[id];

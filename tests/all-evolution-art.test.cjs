@@ -21,14 +21,14 @@ test('all 130 balls render three independently addressable evolution portraits',
  }
  assert.equal(art.size,390);
 });
-test('all 48 early balls keep unique visual identity with 16 elemental reference skins',()=>{
+test('early balls retain unique identity and first sixteen use approved raster skins',()=>{
  const game=createGame();
  const state=game.run('({sig:BVBArtEvolution.signatures,first:Array.from({length:48},(_,i)=>BVBArtEvolution.svgFor(i,1)),elements:Array.from({length:16},(_,i)=>BVBArtEvolution.svgFor(i,3)),later:BVBArtEvolution.svgFor(48,1)})');
  assert.equal(state.sig.length,48);
  assert.equal(new Set(state.sig).size,48);
  assert.ok(state.first.every(s=>s.includes('data-bvb-art-v2')));
  assert.ok(state.elements.every(s=>s.includes('data-evolution="3"')));
- assert.equal(new Set(state.elements.map(s=>s.match(/data-element="([^"]+)"/)[1])).size,16);
+ assert.equal(new Set(state.elements.map(s=>s.match(/data-ball-id="([^"]+)"/)[1])).size,16);
  assert.ok(state.later.includes('data-bvb-art-v2'));
 });
 test('lazy images remain cached per stage, unaffected balls use no random mutations',()=>{
@@ -37,7 +37,7 @@ test('lazy images remain cached per stage, unaffected balls use no random mutati
  assert.equal(data.cached,true);
  assert.equal(data.separate,true);
  assert.equal(data.unchanged,true);
- assert.ok(data.src.startsWith('data:image/svg+xml'));
+ assert.ok(data.src.endsWith('ball-00-v3.webp'));
  assert.equal(data.outOfRange,null);
 });
 test('collection detail shows all three stages for any of the 130 balls',()=>{
