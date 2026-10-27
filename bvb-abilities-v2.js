@@ -1015,11 +1015,54 @@ function onWall(o,side){
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
  signatureWall32(o,side,st);
  if(o.b.id<16)window.BVBFirstSixteen?.onWall?.(G,o,side,first16Api);
+ if(o.b.id===25)for(const h of st.hazards)if(h.id===25&&h.owner===o.uid&&h.kind==='thorn'&&h.age===0)h.v1GiantPiston=true;
 }
 function cooldown(o){
  const d=abilityFor(o);const rate=Math.max(.55,Math.min(1.5,o.abilityRate||1));
  return Math.max(2.25,(d?.cooldown||4)*rate*(o.tier===3?.78:o.tier===2?.90:1));
 }
+
+function distinctFirstFortyEightV1(o,foe){
+ const id=o.b.id,st=roundState();if(!st)return;
+ const level=evolutionStage(o);
+ if(id===15){
+  // Hook sweeps the victim tangentially; Harpoon (30) reels on a straight axis.
+  const dx=foe.x-o.x,dy=foe.y-o.y,d=Math.hypot(dx,dy)||1;
+  foe.vx=(foe.vx||0)-dy/d*.12;foe.vy=(foe.vy||0)+dx/d*.12;
+  o.v1HookOrbit=(o.v1HookOrbit||0)+1;
+ }else if(id===35&&st.hazards.length){
+  // A haunting grave remembers its victim instead of just being a timed bomb.
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===35&&h.kind==='mine'&&level===0)h.v1HauntedGrave=true;
+ }else if(id===40&&st.hazards.length){
+  // Acid erodes armor on real puddle contact; virus is carried by touch.
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===40&&h.kind==='poison'&&level===0)h.v1CorrosivePuddle=true;
+ }else if(id===41){
+  // Photons travel along a reflected diagonal instead of Laser's wall scan.
+  st.wallBeams.push({a:{x:0,y:clamp(o.y-45,15,345)},
+   b:{x:W,y:clamp(foe.y+45,15,345)},owner:o.uid,team:o.team,
+   color:abilityData[41].color,life:1.1+level*.15,width:1.8+level*.4,inside:{}});
+  if(st.wallBeams.length>12)st.wallBeams.splice(0,st.wallBeams.length-12);
+  o.v1PrismReflections=(o.v1PrismReflections||0)+1;
+ }else if(id===43){
+  // Shuriken returns on walls; rifle and thief projectiles do not share its path.
+  for(const shot of st.shots.filter(p=>p.id===43&&p.owner===o.uid&&p.age===0)){
+   shot.bounces=Math.max(2,shot.bounces);shot.starTrail=true;
+   shot.homing=.04;shot.ricochetSplit=Math.max(shot.ricochetSplit||0,level===2?1:0);
+  }
+ }else if(id===46&&st.hazards.length){
+  const h=st.hazards[st.hazards.length-1];
+  if(h.id===46&&h.kind==='mine'&&level===0){
+   h.armAt=1.25;h.v1TimedBomb=true;h.color='#fb923c';
+  }
+ }else if(id===47&&o.axeOrbit&&level===0){
+  // V1 Orbita protects its owner; Topór and Ostrze are primarily offensive.
+  o.v1OrbitShield={remaining:1,expires:(G.rt||0)+2.3};
+  o.status.shield=Math.min(32,(o.status.shield||0)+2);
+ }
+}
+
 const first16Api={shoot,zone,radial,dash,strike,setStatus,visual,roundState,evolutionStage,alive};
 function cast(o,foe){
  if(!o||!foe||!alive(foe)||!G)return;
@@ -1170,6 +1213,7 @@ function cast(o,foe){
  default:shoot(o,foe,{damage:o.baseDmg*.5,homing:.15});
  }
  if(o.b.id<16)window.BVBFirstSixteen?.onCast?.(G,o,foe,first16Api);
+ if(o.b.id<48)distinctFirstFortyEightV1(o,foe);
  applyAuthoredUpgrade(o,foe);
  if(typeof snd==='function'&&o.b.id%5===0)snd(420+(o.b.id*19)%650,.11,'triangle',.018,180);
 }
@@ -1384,6 +1428,17 @@ function tick(dt){
   if(o.status.weaken>0)o.status.weaken=Math.max(0,o.status.weaken-dt);
   afflictedTick32(o,dt);
   if(o.b.id<16)window.BVBFirstSixteen?.tick?.(G,o,dt,first16Api);
+  if(o.b.id===47&&evolutionStage(o)===0&&o.v1OrbitShield?.expires>G.rt){
+   for(const p of st.shots){
+    if(p.life<=0||p.team===o.team)continue;
+    if(Math.hypot(p.x-o.x,p.y-o.y)<=o.r+32){
+     p.life=0;o.v1OrbitShield.remaining--;
+     o.v1SatelliteBlocks=(o.v1SatelliteBlocks||0)+1;
+     visual(o,o,'shield',32,abilityData[47].color,.4);
+     if(o.v1OrbitShield.remaining<=0){o.v1OrbitShield=null;break;}
+    }
+   }
+  }
   if(o.b.id>=32&&o.b.id<=47)signatureTick32(o,dt,st);
   // Second bespoke batch (24–31): simulate their OWN collision or movement
   // mechanics, not generic on-cast bonus shots.
@@ -1670,6 +1725,19 @@ function tick(dt){
   else strike(owner,foe,3*h.power,{knock:h.kind==='zone'?.1:0});
   // Extra effects originate from confirmed hazard hits. V3 produces a
   // distinct consequence instead of doubling a generic power multiplier.
+  if(h.v1GiantPiston){
+   const dx=foe.x-h.x,dy=foe.y-h.y,d=Math.hypot(dx,dy)||1;
+   foe.vx=(foe.vx||0)+dx/d*.22;foe.vy=(foe.vy||0)+dy/d*.22;
+  }
+  if(h.v1HauntedGrave){
+   setStatus(owner,foe,'weaken',.75);
+   foe.v2Haunted={owner:owner.uid,next:.4,remaining:2,level:1};
+   h.v1HauntedGrave=false;
+  }
+  if(h.v1CorrosivePuddle)setStatus(owner,foe,'weaken',.75);
+  if(h.v1TimedBomb&&!h.v1BombExploded){
+   h.v1BombExploded=true;radial(owner,foe,.11,{radius:44,knock:.22});
+  }
   if(h.v2Grave&&!h.v2Activated){
    h.v2Activated=true;
    setStatus(owner,foe,'weaken',.9);
