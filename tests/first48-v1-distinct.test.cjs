@@ -10,7 +10,7 @@ test('overlapping V1 archetypes now have different collision and projectile beha
  assert.equal(result[40].acid,true,'Acid corrodes');
  assert.equal(result[41].reflect,true,'Light ray diagonally reflects');
  assert.ok(result[43].stars.length>=3);
- assert.ok(result[43].stars.every(p=>p.bounce>=2&&p.trail));
+ assert.ok(result[43].stars.every(p=>p.bounce>=2)); // Distinct ricochet; electric trails unlock at V3.
  assert.equal(result[46].fuse,1.25,'Time bomb is not an ordinary mine');
  assert.equal(result[47].orbit,true,'Orbit shields, not merely attacks');
 });
