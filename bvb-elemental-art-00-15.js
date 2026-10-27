@@ -185,5 +185,42 @@ function portrait(id,tier){
  return svg;
 }
 const keys=Object.freeze(THEMES.map(x=>x.tag));
-window.BVBElementalArt={count:16,tiers:3,keys,themes:THEMES,svgFor:portrait};
+function paintCombat(ctx,actor,g){
+ if(!ctx||!actor?.b||actor.b.id<0||actor.b.id>=16)return;
+ const id=actor.b.id,t=Math.max(0,Number(g?.rt)||0),tier=clamp(actor.tier||1,1,3);
+ const setting=window.BVBMotion?.prefs?.()||{};
+ if(setting.artQuality==='low'||setting.artIntensity===0)return;
+ const intensity=Number.isFinite(setting.artIntensity)?setting.artIntensity/100:1;
+ if(window.BVBMotion?.enabled?.('fight')===false)return;
+ const cfg=THEMES[id],size=Math.max(9,Number(actor.r)||18);
+ ctx.save();ctx.translate(actor.x,actor.y);
+ ctx.lineWidth=1.3+tier*.3;ctx.strokeStyle=cfg.hot;ctx.fillStyle=cfg.base;
+ ctx.globalAlpha=.35*intensity+.07*tier;ctx.shadowColor=cfg.base;
+ ctx.shadowBlur=setting.artQuality==='ultra'?10:4;
+ const phase=t*(.7+(id%5)*.18)+id*.3,r=size+4+tier*2;
+ const dot=(x,y,rr)=>{ctx.beginPath();ctx.arc(x,y,rr,0,Math.PI*2);ctx.fill();};
+ const arc=(x,y,rad,a=0,b=Math.PI*2)=>{ctx.beginPath();ctx.arc(x,y,rad,a,b);ctx.stroke();};
+ const line=(points)=>{ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();};
+ const a=i=>phase+i*.9;
+ switch(id){
+ case 0:for(let i=0;i<4+tier;i++){let p=a(i);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.18)*(r+5),Math.sin(p+.18)*(r+9)],[Math.cos(p+.3)*(r+2),Math.sin(p+.3)*(r+3)]]);}break;
+ case 1:for(let i=0;i<4+tier;i++){let p=i*Math.PI*2/(4+tier)+phase*.1;line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p)*(r+7),Math.sin(p)*(r+7)]]);line([[Math.cos(p-.1)*(r+4),Math.sin(p-.1)*(r+4)],[Math.cos(p+.1)*(r+4),Math.sin(p+.1)*(r+4)]]);}break;
+ case 2:for(let i=0;i<3+tier;i++){let p=a(i),x=Math.cos(p)*r,y=Math.sin(p)*r;line([[x,y],[x+Math.sin(p)*5,y-8],[x-Math.cos(p)*3,y-12]]);}break;
+ case 3:for(let i=0;i<2+tier;i++){let p=a(i),x=Math.cos(p)*r,y=Math.sin(p)*r;line([[x-4,y+2],[x-2,y-4],[x+4,y-2],[x+5,y+3],[x-4,y+2]]);}break;
+ case 4:for(let i=0;i<tier+2;i++)arc(0,0,r+2*i,phase+i*.4,phase+1.5+i*.4);break;
+ case 5:for(let i=0;i<2+tier;i++){let p=a(i),x=Math.cos(p)*r,y=Math.sin(p)*r;line([[x-3,y+5],[x,y-6],[x+3,y-12]]);}break;
+ case 6:for(let i=0;i<4+tier*3;i++){let p=i*Math.PI*2/(4+tier*3)+phase*.1;line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p)*(r+7),Math.sin(p)*(r+7)]]);}break;
+ case 7:for(let i=0;i<3+tier*2;i++){let p=a(i),rr=r+2*Math.sin(phase+i);dot(Math.cos(p)*rr,Math.sin(p)*rr,1.6+(i%3));}break;
+ case 8:for(let i=0;i<3+tier;i++){let p=a(i),x=Math.cos(p)*r,y=Math.sin(p)*r;line([[x-3,y+5],[x+5,y-5],[x+3,y-8],[x-3,y+5]]);}break;
+ case 9:for(let i=0;i<4+tier;i++){let p=i*Math.PI*2/(4+tier)+phase*.15;dot(Math.cos(p)*r,Math.sin(p)*r,2.2);}break;
+ case 10:for(let i=0;i<7+tier*3;i++){let p=i*2.399+phase,rr=r+i%5;dot(Math.cos(p)*rr,Math.sin(p)*rr,.8+(i%3)*.3);}break;
+ case 11:for(let i=0;i<3+tier;i++){let p=a(i);line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p+.12)*(r+6),Math.sin(p+.12)*(r+6)],[Math.cos(p+.21)*(r+11),Math.sin(p+.21)*(r+11)]]);}break;
+ case 12:for(let i=0;i<3+tier;i++){let p=a(i),x=Math.cos(p)*r,y=Math.sin(p)*r;line([[x-4,y],[x,y-8],[x+4,y],[x,y+8],[x-4,y]]);}break;
+ case 13:for(let i=0;i<3+tier*2;i++){let p=a(i);arc(Math.cos(p)*r,Math.sin(p)*r,1.7+(i%3));}break;
+ case 14:for(let i=0;i<8+tier*2;i++){let p=i*Math.PI*2/(8+tier*2)+phase*.05;line([[Math.cos(p)*r,Math.sin(p)*r],[Math.cos(p)*(r+4),Math.sin(p)*(r+4)]]);}break;
+ case 15:for(let i=0;i<tier;i++){ctx.save();ctx.rotate(phase*.15+i*.6);ctx.scale(1,.45);arc(0,0,r+i*4);ctx.restore();}break;
+ }
+ ctx.restore();
+}
+window.BVBElementalArt={count:16,tiers:3,keys,themes:THEMES,svgFor:portrait,paintCombat};
 })();
