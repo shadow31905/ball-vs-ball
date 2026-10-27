@@ -135,6 +135,38 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.ok(pref.inventoryOff.every(x=>x==='none'),'Inventory animation toggle must stop every checked V1/V3 rig');
   assert.ok(pref.intensityOff.every(x=>x==='none'),'Zero intensity must stop every checked V1/V3 rig');
   assert.ok(pref.interiorOff.every(x=>x==='none'),'Interior animation toggle must stop core motion');
+  const frozen=await page.evaluate(async()=>{
+   const original={artIntensity:S.o.artIntensity,art_fight:S.o.art_fight,art_interior:S.o.art_interior};
+   const cv=document.createElement('canvas');cv.width=cv.height=128;
+   const ctx=cv.getContext('2d',{willReadFrequently:true});
+   const hash=()=>{let px=ctx.getImageData(0,0,128,128).data,n=2166136261;
+    for(let j=0;j<px.length;j+=8){n^=px[j];n=Math.imul(n,16777619);n^=px[j+3];n=Math.imul(n,16777619);}return n>>>0;};
+   const results=[];
+   try{
+    for(const id of [16,31,32,47]){
+     const image=BVBArtEvolution.imageForTier(id,3);await image.decode();
+     const art=id<32?BVBSketch17to32:BVBSketch33to48;
+     for(const flag of ['intensity','fight']){
+      S.o.artIntensity=flag==='intensity'?0:85;
+      S.o.art_fight=flag==='fight'?0:1;
+      S.o.art_interior=1;BVBMotion.sync();
+      const frames=[];
+      for(const t of [.13,1.67]){
+       ctx.clearRect(0,0,128,128);
+       if(!art.drawCombatSprite(ctx,id,3,64,64,27,t,image))throw Error('No image '+id);
+       frames.push(hash());
+      }
+      results.push({id,flag,stopped:frames[0]===frames[1]});
+     }
+    }
+   }finally{
+    S.o.artIntensity=original.artIntensity;S.o.art_fight=original.art_fight;
+    S.o.art_interior=original.art_interior;BVBMotion.sync();
+   }
+   return results;
+  });
+  assert.equal(frozen.length,8);
+  assert.ok(frozen.every(x=>x.stopped),'Disabling action animation must freeze the actual rendered sprite: '+JSON.stringify(frozen.filter(x=>!x.stopped)));
   await page.emulateMedia({reducedMotion:'reduce'});
   const reduced=await page.evaluate(()=>{
    const el=document.createElement('div');el.innerHTML=BVBSketch33to48.svgFor(32,3);
