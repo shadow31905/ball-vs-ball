@@ -17,6 +17,7 @@ palette.splice(0,16,...window.BVBElementalArt.themes.map(t=>t.base));
 palette.splice(16,16,...window.BVBSketch17to32.concepts.map(t=>t.main));
 palette.splice(32,16,...window.BVBSketch33to48.concepts.map(t=>t.base));
 palette.splice(48,16,...window.BVBSketch49to64.concepts.map(t=>t.main));
+palette.splice(64,16,...window.BVBSketch65to80.concepts.map(t=>t.main));
 const sig=[
  'rush','axe','poison-spines','steal','blade','rifle','web','fangs','spear','burst','chess','dice',
  'icicle','laser','snake','hook','forge','cell','shock','compression','future','matrix','apple','cannon',
@@ -106,6 +107,7 @@ function svgFor(id,tier){
  if(id>=16&&id<32)return window.BVBSketch17to32.svgFor(id,tier);
  if(id>=32&&id<48)return window.BVBSketch33to48.svgFor(id,tier);
  if(id>=48&&id<64)return window.BVBSketch49to64.svgFor(id,tier);
+ if(id>=64&&id<80)return window.BVBSketch65to80.svgFor(id,tier);
  const key=id*4+tier;if(svgCache.has(key))return svgCache.get(key);
  const col=palette[id]||B[id].c||'#94a3b8',grad='evo'+id+'_'+tier,blur='blur'+id+'_'+tier;
  const count=5+(id%8),offset=id*.347;
