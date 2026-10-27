@@ -3138,7 +3138,8 @@ function draw() {
       ? window.BVBArtEvolution.imageForTier(o.b.id,o.tier||getBallStats(o.b.id).tier)
       : window.BVBArtEvolution?.imageFor?.(o) || window.BVB2Sheet02?.imageFor?.(o) || ART_IMAGES.get(o.b.id);
     const liveDrawn=window.BVBArtEvolution?.currentStyle?.()==='classic'?false:window.BVBLiveFirst16?.draw(cx,o.b.id,o.tier||getBallStats(o.b.id).tier,o.x,o.y,o.r,G.rt||0,{scope:'battle',actor:o});
-    if(!liveDrawn){
+    const second16Drawn=!liveDrawn&&window.BVBSketch17to32?.drawCombatSprite?.(cx,o.b.id,o.tier||getBallStats(o.b.id).tier,o.x,o.y,o.r,G.rt||0,im,o.rotation||0);
+    if(!liveDrawn&&!second16Drawn){
       if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
     }
