@@ -20,3 +20,10 @@ test('big thorn piston applies a mechanically distinct physical push',()=>{
  assert.equal(values.flag,true);
  assert.ok(Number.isFinite(values.push));
 });
+test('Light Wings V1 creates a delayed real afterimage along its traveled path',()=>{
+ const g=createGame();
+ const info=g.run(prep+'(()=>{const [o,f]=makeDistinct(36,1);specialAbility(o,f);const created=!!o.v1LightAfterimage;for(let i=0;i<34&&G.ph==="battle";i++)step(1/60);return {created,consumed:!o.v1LightAfterimage,beam:(G.v2?.beams||[]).some(b=>b.id===36)};})()');
+ assert.equal(info.created,true);
+ assert.equal(info.consumed,true);
+ assert.equal(info.beam,true);
+});
