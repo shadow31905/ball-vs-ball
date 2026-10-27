@@ -27,3 +27,15 @@ test('all forty-eight upgraded combat variants simulate with finite values',()=>
  const rows=play('const a=[];for(let id=32;id<48;id++)for(let tier=1;tier<=3;tier++){const [o,f]=prepared(id,tier);specialAbility(o,f);pass(.7);a.push({id,tier,valid:G.bl.every(x=>[x.x,x.y,x.hp,x.vx,x.vy].every(Number.isFinite))});}return a;');
  assert.equal(rows.length,48);assert.ok(rows.every(x=>x.valid));
 });
+
+test('currency upgrades grow HP/damage while all three evolution tiers retain the same base stats',()=>{
+ const result=createGame().run('Array.from({length:16},(_,index)=>{const id=index+32;const tiers=[1,2,3].map(t=>getBallStats(id,t,0,0));const improved=getBallStats(id,1,2,2);return {id,tiers:tiers.map(s=>({hp:s.hp,dmg:s.dmg})),improved:{hp:improved.hp,dmg:improved.dmg}};})');
+ for(const row of result){
+  assert.equal(row.tiers[0].hp,row.tiers[1].hp,row.id+' V2 HP');
+  assert.equal(row.tiers[0].hp,row.tiers[2].hp,row.id+' V3 HP');
+  assert.equal(row.tiers[0].dmg,row.tiers[1].dmg,row.id+' V2 base damage');
+  assert.equal(row.tiers[0].dmg,row.tiers[2].dmg,row.id+' V3 base damage');
+  assert.ok(row.improved.hp>row.tiers[0].hp);
+  assert.ok(row.improved.dmg>row.tiers[0].dmg);
+ }
+});
