@@ -72,13 +72,21 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
     assert.ok(ball.svgs.every((svg,i)=>svg.includes('data-preview-tier="'+(i+1)+'"')));
    }
    // Check authored art actually decodes, including evolved early and late balls.
-   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,...Array.from({length:16},(_,i)=>i+32),48,63,98,129];
+   const evolvedSamples=[...Array.from({length:16},(_,i)=>i),16,24,...Array.from({length:16},(_,i)=>i+32),...Array.from({length:16},(_,i)=>i+48),98,129];
    await page.waitForFunction(ids=>ids.every(id=>[1,2,3].every(t=>
     window.BVBArtEvolution.imageForTier(id,t)?.naturalWidth>0)),evolvedSamples,{timeout:20000});
    const artDiagnostics=await page.evaluate(ids=>ids.map(id=>[1,2,3].map(t=>
     window.BVBArtEvolution.imageForTier(id,t).naturalWidth)),evolvedSamples);
    assert.ok(artDiagnostics.every(stages=>stages.every(width=>width>0)),
     'every selected evolution must decode as an image');
+   const liveAbilityDescriptions=await page.evaluate(()=>Array.from({length:16},(_,i)=>{
+    const id=i+48;
+    return [2,3].map(t=>window.BVB2.evolutionDescription(id,t));
+   }));
+   assert.equal(new Set(liveAbilityDescriptions.map(x=>x[0])).size,16,
+    '16 new evolution skills must have different descriptions');
+   assert.ok(liveAbilityDescriptions.every(x=>x[0].startsWith('V2:')&&
+     x[1].startsWith('V3:')&&x[0]!==x[1]));
    const elementTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
     [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)
       .match(/data-element="([^"]+)"/)?.[1]||'')));
