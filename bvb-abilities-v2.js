@@ -714,6 +714,8 @@ const evolutionStage=o=>Math.max(0,Math.min(2,(o?.tier||1)-1));
 function evolutionDescription(id,tier=1){
  const kind=abilityData[id]?.kind,stage=Math.max(0,Math.min(2,tier-1));
  if(!stage)return 'V1: podstawowa wersja zdolności.';
+ const newer=window.BVBThirdSixteen?.description?.(id,tier);
+ if(newer)return newer;
  const next=window.BVBNextSixteen?.description?.(id,tier);
  if(next)return next;
  const bespoke=authoredUpgradeDescription(id,stage);
@@ -828,6 +830,7 @@ function onContact(g,o,foe,base){
  }
  if(o.b.id<16)base=window.BVBFirstSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
  if(o.b.id>=48&&o.b.id<=63)base=window.BVBNextSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
+ if(o.b.id>=64&&o.b.id<=79)base=window.BVBThirdSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
  return base;
 }
 
@@ -1046,6 +1049,7 @@ function onWall(o,side){
  signatureWall32(o,side,st);
  if(o.b.id<16)window.BVBFirstSixteen?.onWall?.(G,o,side,first16Api);
  if(o.b.id>=48&&o.b.id<=63)window.BVBNextSixteen?.onWall?.(G,o,side,first16Api);
+ if(o.b.id>=64&&o.b.id<=79)window.BVBThirdSixteen?.onWall?.(G,o,side,first16Api);
  if(o.b.id===25)for(const h of st.hazards)if(h.id===25&&h.owner===o.uid&&h.kind==='thorn'&&h.age===0)h.v1GiantPiston=true;
 }
 function cooldown(o){
@@ -1114,6 +1118,10 @@ function cast(o,foe){
   text:d.title.length>21?d.title.slice(0,20)+'…':d.title,c:d.color});
  if(o.b.id>=48&&o.b.id<=63&&window.BVBNextSixteen?.onCast){
   window.BVBNextSixteen.onCast(G,o,foe,first16Api);
+  return;
+ }
+ if(o.b.id>=64&&o.b.id<=79&&window.BVBThirdSixteen?.onCast){
+  window.BVBThirdSixteen.onCast(G,o,foe,first16Api);
   return;
  }
  switch(kind){
@@ -1528,6 +1536,7 @@ function tick(dt){
  const st=roundState();if(!st)return;
  st.tick+=dt;
  window.BVBNextSixteen?.tick?.(G,dt,first16Api);
+ window.BVBThirdSixteen?.tick?.(G,dt,first16Api);
  for(const o of G.bl||[]){
   if(!alive(o))continue;
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
