@@ -59,6 +59,7 @@ jobs:
           BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/combat-browser-smoke.cjs
           BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/ball-visual-styles-browser.cjs
           BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/approved-17-32-browser.cjs
+          BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/second16-motion-browser.cjs
           if [ "$BVB_BROWSER" != firefox ]; then
             node tests/combat-mobile-smoke.cjs
             BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/combat-mobile-smoke.cjs
