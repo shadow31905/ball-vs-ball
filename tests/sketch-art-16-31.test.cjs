@@ -1,8 +1,8 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
 const {createGame}=require('./game-harness.cjs');
-const expected=['gravity','sound','energy','soul','chaos','order','dream','nightmare',
- 'illusion','mirror','morph','camo','life','death','balance','fury'];
+const expected=['forge','cell','lightning','zone','beam','discs','apple','cannon',
+ 'virus','spike','bow','crown','radar','frost','harpoon','swarm'];
 test('sketch panels 17–32: sixteen separate motifs, each with three actual looks',()=>{
  const g=createGame();
  const portraits=g.run('Array.from({length:16},(_,i)=>[1,2,3].map(t=>BVBArtEvolution.svgFor(i+16,t)))');
@@ -35,7 +35,7 @@ test('the 48 sketch looks are live in equipment and portraits; other ranges unaf
  assert.equal(state.all,130);
  assert.ok(state.gallery.includes('data-stage="1"'));
  assert.ok(state.gallery.includes('data-stage="3"'));
- assert.ok(state.gallery.includes('data-motif="dream"'));
+ assert.ok(state.gallery.includes('data-motif="apple"'));
  assert.ok(state.old.includes('data-bvb-art-v2'));
 });
 test('animated combat auras for IDs 16–31 are non-destructive and use no random combat state',()=>{
