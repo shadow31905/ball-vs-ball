@@ -3137,8 +3137,11 @@ function draw() {
     const im = window.BVBApprovedArt?.has(o.b.id)
       ? window.BVBArtEvolution.imageForTier(o.b.id,o.tier||getBallStats(o.b.id).tier)
       : window.BVBArtEvolution?.imageFor?.(o) || window.BVB2Sheet02?.imageFor?.(o) || ART_IMAGES.get(o.b.id);
-    if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
+    const liveDrawn=window.BVBLiveFirst16?.draw(cx,o.b.id,o.tier||getBallStats(o.b.id).tier,o.x,o.y,o.r,G.rt||0,{scope:'battle',actor:o});
+    if(!liveDrawn){
+      if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
+    }
     window.BVBMotion?.drawActor?.(cx,o,G);
 
     cx.shadowBlur = 0;
@@ -3226,9 +3229,11 @@ requestAnimationFrame(loop);
 <script src="./bvb-sketch-art-32-47.js"></script>
 <script src="./bvb-sketch-art-48-63.js"></script>
 <script src="./bvb-sketch-art-64-79.js"></script>
+<script src="./bvb-approved-rig-layout.js"></script>
 <script src="./bvb-approved-art-00-15.js"></script>
 <script src="./bvb-art-evolution.js"></script>
 <script src="./bvb-motion-results.js"></script>
+<script src="./bvb-live-first16.js"></script>
 <script src="./bvb-signature-motion.js"></script>
 <script src="./bvb-identities.js"></script>
 <script src="./bvb-network.js"></script>

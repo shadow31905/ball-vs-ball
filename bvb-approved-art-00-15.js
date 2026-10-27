@@ -25,6 +25,7 @@ function imageForTier(id,tier){
  return cache.get(key);
 }
 function svgFor(id,tier){
+ if(window.BVBLiveFirst16)return window.BVBLiveFirst16.svgFor(id,tier);
  const f=frame(id,tier);if(!f)return '';
  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" '+
   'aria-label="'+f.name+' V'+f.tier+'" data-bvb-art-v2="1" data-approved-art="1" '+

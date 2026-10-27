@@ -19,6 +19,8 @@ function enabled(flag){const o=prefs();return o['art_'+flag]!==0;}
 function sync(){
  const o=prefs();
  document.body?.classList?.toggle('bvb-effects-off',!enabled('inventory'));
+ document.body?.classList?.toggle('bvb-intensity-zero',o.artIntensity===0);
+ document.body?.classList?.toggle('bvb-interior-motion-off',!enabled('interior'));
  document.body?.classList?.toggle('bvb-menu-motion-off',!enabled('menu'));
  document.body?.classList?.toggle('bvb-result-motion-off',!enabled('results'));
  for(const name of ['low','medium','high','ultra'])document.body?.classList?.toggle('bvb-quality-'+name,o.artQuality===name);

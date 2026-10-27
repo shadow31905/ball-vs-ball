@@ -14,6 +14,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
    await page.waitForFunction(()=>typeof window.startMatch==='function'&&!!window.BVBReworkUI&&!!window.BVBRework,{timeout:30000});
    await page.evaluate(()=>{if(document.getElementById('accountGate'))document.getElementById('accountGate').hidden=true;});
    await require('./approved-art-browser.cjs').checkApprovedArt(page);
+   await require('./live-first16-browser.cjs').checkLiveFirst16(page);
    // Inspect the *actual canvas pixels* in each browser. Every one of the
    // five full-arena cinematic storyboards must be different and animate
    // between buildup, impact and aftermath, not simply show a recolored ring.
