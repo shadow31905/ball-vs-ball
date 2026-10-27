@@ -130,10 +130,15 @@ function resultBalls(g,won){
  const label=won?'Zadowolone kulki':'Smutne kulki';
  return '<section class="bvb-result-deck '+(won?'won':'lost')+'" aria-label="'+label+'">'+
   deck.map((b,i)=>{
-   const delay=(b.id%9)*.13+(i*.07);
-   return '<div class="bvb-result-ball" data-bvb-ball="'+b.id+'" style="--delay:'+delay+'s;--tempo:'+(1.25+(b.id%11)*.14)+'s">'+
+   const delay=(b.id%9)*.13+(i*.07),variant=b.id%6;
+   const react=won?['joy','spin','bounce','wave','orbit','spark'][variant]:
+    ['slump','shiver','sink','turn','faint','tremble'][variant];
+   return '<div class="bvb-result-ball" data-bvb-ball="'+b.id+'" data-reaction="'+react+
+    '" style="--delay:'+delay+'s;--tempo:'+(1.25+(b.id%11)*.14)+
+    's;--jump:'+(5+b.id%12)+'px;--tilt:'+(2+b.id%11)+'deg">'+
     '<div class="bvb-result-portrait">'+orb(b)+
-    '<span class="bvb-result-face" aria-hidden="true">'+(won?'◡':'⌢')+'</span></div>'+
+    '<span class="bvb-result-face '+(won?'happy':'sad')+'" aria-hidden="true">'+
+    '<span class="bvb-result-eye"></span><span class="bvb-result-eye"></span><span class="bvb-result-mouth"></span></span></div>'+
     '<small>'+esc(b.n)+'</small></div>';
   }).join('')+'</section>';
 }
@@ -149,7 +154,35 @@ style.textContent=[
 '.bvb-result-ball small{display:block;font-weight:750;font-size:11px;margin-top:5px;overflow-wrap:anywhere}',
 '@keyframes bvbWin{from{transform:translateY(1px) rotate(-4deg)}to{transform:translateY(-9px) rotate(5deg)}}',
 '@keyframes bvbLoss{from{transform:translateY(4px) rotate(-2deg)}to{transform:translateY(8px) rotate(2deg)}}',
-'body.bvb-result-motion-off .bvb-result-ball{animation:none!important}',
+'.bvb-result-face{width:34px;height:26px;bottom:18px;display:flex;justify-content:center;gap:7px;align-items:flex-start;padding-top:5px}',
+ '.bvb-result-eye{display:block;width:5px;height:6px;border-radius:50%;background:#12203b;border:1px solid #ecfdff}',
+ '.bvb-result-face.sad .bvb-result-eye{height:3px;background:#596381}',
+ '.bvb-result-mouth{position:absolute;top:13px;left:10px;width:14px;height:8px;border:2px solid #1d2b45;border-top:0;border-radius:0 0 50% 50%}',
+ '.bvb-result-face.sad .bvb-result-mouth{top:16px;transform:rotate(180deg)}',
+ '.bvb-result-ball[data-reaction="joy"]{animation-name:bvbJoy}',
+ '.bvb-result-ball[data-reaction="spin"]{animation-name:bvbJoySpin}',
+ '.bvb-result-ball[data-reaction="bounce"]{animation-name:bvbJoyBounce}',
+ '.bvb-result-ball[data-reaction="wave"]{animation-name:bvbJoyWave}',
+ '.bvb-result-ball[data-reaction="orbit"]{animation-name:bvbJoyOrbit}',
+ '.bvb-result-ball[data-reaction="spark"]{animation-name:bvbJoySpark}',
+ '.bvb-result-ball[data-reaction="slump"]{animation-name:bvbLoss}',
+ '.bvb-result-ball[data-reaction="shiver"]{animation-name:bvbSadShiver}',
+ '.bvb-result-ball[data-reaction="sink"]{animation-name:bvbSadSink}',
+ '.bvb-result-ball[data-reaction="turn"]{animation-name:bvbSadTurn}',
+ '.bvb-result-ball[data-reaction="faint"]{animation-name:bvbSadFaint}',
+ '.bvb-result-ball[data-reaction="tremble"]{animation-name:bvbSadTremble}',
+ '@keyframes bvbJoy{to{transform:translateY(calc(-1 * var(--jump))) scale(1.05)}}',
+ '@keyframes bvbJoySpin{to{transform:rotate(var(--tilt)) translateY(-7px) scale(1.06)}}',
+ '@keyframes bvbJoyBounce{to{transform:translateY(calc(-1 * var(--jump))) scaleY(.92)}}',
+ '@keyframes bvbJoyWave{to{transform:rotate(calc(-1 * var(--tilt))) translateY(-6px)}}',
+ '@keyframes bvbJoyOrbit{to{transform:translate(5px,-7px) rotate(var(--tilt))}}',
+ '@keyframes bvbJoySpark{to{transform:scale(1.11) translateY(-4px);filter:brightness(1.3) drop-shadow(0 0 7px #eaf5ff)}}',
+ '@keyframes bvbSadShiver{to{transform:translateX(3px) rotate(2deg)}}',
+ '@keyframes bvbSadSink{to{transform:translateY(var(--jump)) scale(.9)}}',
+ '@keyframes bvbSadTurn{to{transform:rotate(calc(-1 * var(--tilt))) translateY(7px)}}',
+ '@keyframes bvbSadFaint{to{transform:rotate(var(--tilt)) scale(.92);filter:brightness(.6)}}',
+ '@keyframes bvbSadTremble{to{transform:translate(-2px,6px) rotate(-2deg)}}',
+ 'body.bvb-result-motion-off .bvb-result-ball{animation:none!important}',
 '@media(prefers-reduced-motion:reduce){.bvb-result-ball{animation:none!important}}',
 'body.bvb-menu-motion-off #menu .bvb3-tile:before,body.bvb-menu-motion-off #menu .bvb3-ghost{animation:none!important}'
 ].join('\n');
