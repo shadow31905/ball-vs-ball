@@ -354,7 +354,9 @@ function drawCombatSprite(ctx,id,tier,x,y,r,time,img,rotation=0){
  if(!ctx||id<16||id>31||!img?.complete||!img.naturalWidth)return false;
  if(![x,y,r].every(Number.isFinite))return false;
  const paused=window.matchMedia?.('(prefers-reduced-motion:reduce)')?.matches||
-              window.BVBMotion?.enabled?.('interior')===false;
+              window.BVBMotion?.enabled?.('fight')===false||
+              window.BVBMotion?.enabled?.('interior')===false||
+              window.BVBMotion?.prefs?.()?.artIntensity===0;
  const pose=combatPose(id,tier,paused?0:time);
  ctx.save();
  ctx.translate(x+pose.x,y+pose.y);
