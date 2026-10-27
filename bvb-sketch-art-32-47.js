@@ -242,6 +242,9 @@ function portrait(id,tier,style='detailed'){
   scope+' .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+fx.css+
   '@keyframes sk33Rotate{to{transform:rotate(360deg)}}@keyframes sk33Pulse{to{transform:scale(1.05)}}'+
   '@keyframes sk33Blink{0%,38%,62%,100%{transform:translateX(0)}44%,55%{transform:translateX(2px)}}'+
+  'body.bvb-effects-off '+scope+' g,body.bvb-intensity-zero '+scope+' g{animation:none!important}'+
+  'body.bvb-interior-motion-off '+scope+' .sk33-core,body.bvb-interior-motion-off '+scope+' .sk33-eyes{animation:none!important}'+
+  'body.bvb-quality-low '+scope+' g{animation-timing-function:steps(8)!important}'+
   '@media(prefers-reduced-motion:reduce){'+scope+' *{animation:none!important}}</style>';
  art+='<g class="sk33-aura">'+ellipse(64,65,40+t*2,22+t,'none',m.light,1.6,i*17)+ellipse(64,65,45+t*2,27+t,'none',m.base,1.8,90-i*11)+'</g>';
  art+=circle(64,65,36,m.base,'opacity=".22" filter="url(#'+gl+')"');
