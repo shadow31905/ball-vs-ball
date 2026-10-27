@@ -263,6 +263,49 @@ function portrait(id,tier,style='detailed'){
  if(t===3)art+='<g class="sk33-sparks">'+sparkle(15,14,7,m.light)+sparkle(113,23,5,m.light)+'</g>';
  art+='</svg>';return art;
 }
+/* Animated real-battle and training sprites, not merely CSS in gallery.
+ * Pure visual transform; does not change actor coordinates, physics or cooldown.
+ */
+function combatPose(id,tier,time){
+ const i=id-32,stage=Math.max(1,Math.min(3,Number(tier)||1));
+ const boost=1+(stage-1)*.23,clock=Number.isFinite(time)?time:0;
+ const a=clock*(2.1+i*.12),v=Math.sin(a),w=Math.cos(a),hit=Math.max(0,v);
+ let x=0,y=0,angle=0,sx=1,sy=1;
+ switch(i){
+  case 0:angle=v*5*boost;sx=1+w*.035*boost;sy=1-v*.03*boost;break; // potion swirls
+  case 1:x=v*1.9*boost;angle=w*2.5*boost;break; // moving train
+  case 2:angle=v*4*boost;sy=1+w*.05*boost;break; // web vibration
+  case 3:y=-hit*2*boost;angle=v*2*boost;break; // rising ghosts
+  case 4:y=-v*2.1*boost;angle=w*5*boost;break; // wingbeat
+  case 5:angle=v*6*boost;y=-hit*1.2*boost;break; // bursting sweets
+  case 6:sx=1+w*.06*boost;sy=1-w*.04*boost;break; // amoebic pulse
+  case 7:x=v*1.6*boost;angle=w*5*boost;break; // taut chains
+  case 8:sy=1+v*.04*boost;y=hit*1.3*boost;break; // dripping acid
+  case 9:x=-hit*2*boost;sx=1+w*.022*boost;break; // firing recoil
+  case 10:x=v*1.6*boost;y=w*.9*boost;angle=v*3*boost;break; // drifting gas
+  case 11:angle=clock*46*boost;break; // shuriken spin
+  case 12:angle=clock*20*boost;sx=1+v*.025*boost;sy=sx;break; // spiral
+  case 13:sx=1+v*.035*boost;angle=w*3*boost;break; // reactive thorns
+  case 14:sx=1+hit*.075*boost;sy=sx;angle=v*3.5*boost;break; // bomb detonation
+  case 15:angle=clock*15*boost;x=v*1.2*boost;y=w*.9*boost;break; // orbit
+ }
+ return {x,y,angle,sx,sy};
+}
+function drawCombatSprite(ctx,id,tier,x,y,r,time,img,rotation=0){
+ if(!ctx||id<32||id>47||!img?.complete||!img.naturalWidth)return false;
+ if(![x,y,r].every(Number.isFinite)||r<=0)return false;
+ const reduceMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||
+  window.BVBMotion?.enabled?.('fight')===false||
+  window.BVBMotion?.enabled?.('interior')===false;
+ const p=combatPose(id,tier,reduceMotion?0:time);
+ ctx.save();ctx.translate(x+p.x,y+p.y);
+ ctx.rotate((Number.isFinite(rotation)?rotation:0)+p.angle*Math.PI/180);
+ ctx.scale(p.sx,p.sy);
+ ctx.drawImage(img,-r,-r,r*2,r*2);
+ ctx.restore();
+ return true;
+}
+
 function combat(ctx,o,g){
  const id=o?.b?.id;if(id<32||id>47||!ctx||!window.BVBMotion?.enabled?.('fight'))return;
  if(window.BVBMotion?.enabled?.('interior')===false||window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches)return;
@@ -317,5 +360,5 @@ function combat(ctx,o,g){
  }
  ctx.restore();
 }
-window.BVBSketch33to48={count:16,tiers:3,firstId:32,lastId:47,concepts:motifs,svgFor:portrait,renderCombat:combat};
+window.BVBSketch33to48={count:16,tiers:3,firstId:32,lastId:47,concepts:motifs,svgFor:portrait,renderCombat:combat,combatPose,drawCombatSprite};
 })();
