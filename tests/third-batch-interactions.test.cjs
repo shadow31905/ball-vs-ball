@@ -9,7 +9,7 @@ function scenario(id,tier,foeId){
  G.obstacles=(id+foeId)%2===0?[{x:180,y:160,r:24,kind:'neon',moving:false}]:[];
  G.bl=[actor(B[id],75,178,0,0,0,tier,0,0),actor(B[foeId],255,178,Math.PI,1,1,1,0,0)];
  BVBRework.prepareActors(G,...G.bl);BVBRework.setSeed(G,330000+id*100+foeId+tier);
- for(const a of G.bl){a.hp=240;a.mh=240;a.baseDmg=12;a.vx=0;a.vy=0;a.abilityCd=999;a.contact=999;a.status={};a.identity=null;}
+ for(const a of G.bl){a.hp=1000000;a.mh=1000000;a.baseDmg=12;a.vx=0;a.vy=0;a.abilityCd=999;a.contact=999;a.status={};a.identity=null;}
  return G.bl;
 }
 `;
@@ -17,7 +17,7 @@ const opponents=[0,6,16,24,31,32,35,40,43,47,64,90,129];
 test('33–48 ability-vs-ability stress: 624 pairings across V1/V2/V3, changing obstacles, stable saves',()=>{
  const g=createGame(),reply=g.run(setup+`(()=>{
   const foes=[0,6,16,24,31,32,35,40,43,47,64,90,129],bugs=[],samples=[];
-  const saveBefore=JSON.stringify(S);
+  const saveBefore=JSON.stringify(S),original=JSON.parse(saveBefore);
   for(let id=32;id<48;id++)for(let tier=1;tier<=3;tier++)for(const foeId of foes){
    const [a,b]=scenario(id,tier,foeId);
    specialAbility(a,b);specialAbility(b,a);
@@ -32,9 +32,9 @@ test('33–48 ability-vs-ability stress: 624 pairings across V1/V2/V3, changing 
    if(bad)bugs.push({id,tier,foeId,executed,hazards:G.v2?.hazards?.length,shots:G.v2?.shots?.length});
    samples.push({id,tier,foeId,executed});
   }
-  return {bugs,samples:samples.length,saveUnchanged:JSON.stringify(S)===saveBefore};
+  return {bugs,samples:samples.length,saveUnchanged:JSON.stringify(S)===saveBefore,changedKeys:Object.keys(S).filter(k=>JSON.stringify(S[k])!==JSON.stringify(original[k]))};
 })()`);
  assert.equal(reply.samples,16*3*opponents.length);
- assert.equal(reply.saveUnchanged,true,'Beta stress testing cannot corrupt progression');
+ assert.equal(reply.saveUnchanged,true,'Beta stress testing cannot corrupt progression: '+JSON.stringify(reply.changedKeys));
  assert.equal(reply.bugs.length,0,'Broken interaction(s): '+JSON.stringify(reply.bugs.slice(0,16)));
 });
