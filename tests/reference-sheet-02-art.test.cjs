@@ -9,9 +9,9 @@ const reference=[
  [10,'Szachy','#ddd5c4','Ruch skoczka','Roszada','Mat królowej'],
  [11,'Kostka','#fff5d8','Rzut przeznaczenia','Zatrzymane oczko','Wielka szóstka']
 ];
-test('six reference-sheet portraits have 18 distinct authored evolution SVGs',()=>{
+test('six historical bespoke SVGs remain intact and can be recovered',()=>{
  const g=createGame();
- const result=g.run('Array.from({length:6},(_,n)=>{const id=n+6;return {id,name:B[id].n,tiers:[1,2,3].map(t=>art(id,t))};})');
+ const result=g.run('Array.from({length:6},(_,n)=>{const id=n+6;return {id,name:B[id].n,tiers:[1,2,3].map(t=>BVB2Sheet02.artForTier(id,t))};})');
  const all=new Set();
  for(const r of result){
   const expected=reference[r.id-6];
@@ -45,4 +45,13 @@ test('tier-specific images are cached, with unmodified art for other balls',()=>
  assert.ok(!result.prior.includes('data-preview-sheet="02"'));
  assert.ok(result.later.includes('data-signature-id="32"'));
  assert.notEqual(result.stage2,result.stage3);
+});
+
+test('elemental replacement is used as actual equipped and combat artwork for first 16 balls',()=>{
+ const g=createGame();
+ const data=g.run('Array.from({length:16},(_,id)=>[1,2,3].map(t=>art(id,t)))');
+ for(let id=0;id<16;id++)for(let t=1;t<=3;t++){
+  assert.ok(data[id][t-1].includes('data-element="'),id+' V'+t);
+  assert.ok(data[id][t-1].includes('data-evolution="'+t+'"'));
+ }
 });
