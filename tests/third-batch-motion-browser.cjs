@@ -106,6 +106,35 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.ok(result.stylePreserved.every(x=>x.unchanged&&x.notApproved),
     'Unapproved third batch must not switch appearance');
   assert.equal(result.untouched,true,'Visual tests changed user saves or game mechanics');
+  const pref=await page.evaluate(()=>{
+   const saved={inventory:S.o.art_inventory,intensity:S.o.artIntensity,interior:S.o.art_interior};
+   const parent=document.createElement('div');
+   for(const id of [32,35,41,47]){
+    for(const tier of [1,3]){
+     const div=document.createElement('div');div.innerHTML=BVBSketch33to48.svgFor(id,tier);
+     parent.append(div.firstElementChild);
+    }
+   }
+   document.body.appendChild(parent);
+   const motion=()=>[...parent.querySelectorAll('.sk33-identity')].map(x=>getComputedStyle(x).animationName);
+   const core=()=>[...parent.querySelectorAll('.sk33-core')].map(x=>getComputedStyle(x).animationName);
+   let normal,inventoryOff,intensityOff,interiorOff;
+   try{
+    BVBMotion.sync();normal=motion();
+    S.o.art_inventory=0;BVBMotion.sync();inventoryOff=motion();
+    S.o.art_inventory=1;S.o.artIntensity=0;BVBMotion.sync();intensityOff=motion();
+    S.o.artIntensity=saved.intensity;S.o.art_interior=0;BVBMotion.sync();interiorOff=core();
+   }finally{
+    S.o.art_inventory=saved.inventory;S.o.artIntensity=saved.intensity;
+    S.o.art_interior=saved.interior;BVBMotion.sync();parent.remove();
+   }
+   return {normal,inventoryOff,intensityOff,interiorOff};
+  });
+  assert.equal(pref.normal.length,8);
+  assert.ok(pref.normal.every(x=>x.startsWith('sk33Skill')));
+  assert.ok(pref.inventoryOff.every(x=>x==='none'),'Inventory animation toggle must stop every checked V1/V3 rig');
+  assert.ok(pref.intensityOff.every(x=>x==='none'),'Zero intensity must stop every checked V1/V3 rig');
+  assert.ok(pref.interiorOff.every(x=>x==='none'),'Interior animation toggle must stop core motion');
   await page.emulateMedia({reducedMotion:'reduce'});
   const reduced=await page.evaluate(()=>{
    const el=document.createElement('div');el.innerHTML=BVBSketch33to48.svgFor(32,3);
