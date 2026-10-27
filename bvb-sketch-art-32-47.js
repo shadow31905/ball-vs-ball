@@ -191,17 +191,55 @@ function skillMotion(i,t,key){
  const css='@keyframes '+kf+'{0%,100%{transform:'+tr[0]+' scale('+(1+(t-1)*.015).toFixed(3)+')}50%{transform:'+tr[1]+' scale('+(1+(t-1)*.045).toFixed(3)+')}}';
  return {name:types[i],css:'svg[data-animation-key="'+key+'"] .sk33-identity{transform-origin:64px 65px;animation:'+kf+' '+duration+'s ease-in-out infinite}'+css};
 }
+/* Sixteen different ability particle families with V1/V2/V3 escalation.
+ * Presentation only: no random calls and no mutation of combat/save state. */
+function abilityFx(i,t,m,key){
+ const types=['alchemy-bubbles','train-sparks','silk-web','ghost-fires','light-feathers',
+  'candy-bursts','living-buds','chain-links','acid-drips','laser-streaks','poison-vapour',
+  'spinning-shuriken','golden-spiral','cactus-thorns','bomb-sparks','orbiting-satellites'];
+ const count=2+2*t,items=[];
+ for(let n=0;n<count;n++){
+  const angle=TAU*n/count,rad=39+t*3+(n%3)*2;
+  const x=64+Math.cos(angle)*rad,y=65+Math.sin(angle)*rad;
+  switch(i){
+   case 0:items.push(circle(x,y,2+n%3,n%2?'#ffc8ff':'#fdf1b7'));break;
+   case 1:items.push(star(x,y,4,3+n%2,1,m.light));break;
+   case 2:items.push(line('M'+f(x-4)+' '+f(y-4)+'L'+f(x)+' '+f(y)+'L'+f(x+4)+' '+f(y-4),m.light,1.4));break;
+   case 3:items.push(flame(x,y,n*20,.19+.07*t,'#b1dcff'));break;
+   case 4:items.push(leaf(x,y,n*35,.12+t*.03,'#fffae1'));break;
+   case 5:items.push(star(x,y,6,2.5+n%3,1,n%2?'#ffb1e3':'#fff3a9'));break;
+   case 6:items.push(ellipse(x,y,3+n%3,3+n%2,'#a1ff9b',m.light,1));break;
+   case 7:items.push(ellipse(x,y,4,2.5,'none','#eff8ff',1.7,n*41));break;
+   case 8:items.push(line('M'+f(x)+' '+f(y-5)+'q-4 7 0 9q4 -2 0 -9Z',m.light,1,'#c2ff51'));break;
+   case 9:items.push(line('M'+f(x-7)+' '+f(y)+'L'+f(x+7)+' '+f(y),m.light,1.7));break;
+   case 10:items.push(ellipse(x,y,5+n%3,3.2,'#94c94d',m.light,1.2));break;
+   case 11:items.push(star(x,y,4,4.5+n%2,1.5,m.light));break;
+   case 12:items.push(star(x,y,5,2.5+n%3,1.5,'#ffe5a0'));break;
+   case 13:items.push(line('M'+f(x-2)+' '+f(y+4)+'L'+f(x)+' '+f(y-5)+'L'+f(x+3)+' '+f(y+4),m.light,1.3));break;
+   case 14:items.push(star(x,y,7,3.5+n%2,1.3,n%2?'#ffdb5b':'#fff6d2'));break;
+   case 15:items.push(circle(x,y,2.5+n%3,'#eff0ff'));break;
+  }
+ }
+ const name='sk33Fx'+key.replace(/[^a-zA-Z0-9]/g,''),
+  scope='svg[data-animation-key="'+key+'"]',
+  duration=(2.9-(t-1)*.18+(i%4)*.12).toFixed(2);
+ const css=scope+' .sk33-ability-fx{transform-origin:64px 65px;animation:'+name+' '+duration+'s ease-in-out infinite}'+
+ '@keyframes '+name+'{0%,100%{opacity:.45;transform:translateY(2px) rotate(-6deg) scale(.92)}'+
+ '45%{opacity:1;transform:translateY(-'+(3+t)+'px) rotate(8deg) scale('+(1+.035*t).toFixed(3)+')}'+
+ '75%{opacity:.7;transform:translateY(-1px) rotate(-2deg) scale(1)}}';
+ return {type:types[i],css,markup:'<g class="sk33-ability-fx" data-skill-effect="'+types[i]+'">'+items.join('')+'</g>'};
+}
 function portrait(id,tier,style='detailed'){
  id=Number(id);if(!Number.isInteger(id)||id<32||id>47)return '';
  const t=Math.min(3,Math.max(1,Math.round(Number(tier)||1))),i=id-32,m=motifs[i],classic=style==='classic';
- const key='sk33-'+id+'-'+t+'-'+(classic?'c':'d'),move=skillMotion(i,t,key);
+ const key='sk33-'+id+'-'+t+'-'+(classic?'c':'d'),move=skillMotion(i,t,key),fx=abilityFx(i,t,m,key);
  const g='grad-'+key,gl='glow-'+key,wide='data-reference-panel="'+m.ref+'"';
  let art='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" data-bvb-art-v2="1" data-ball-id="'+id+'" data-evolution="'+t+'" '+wide+' data-concept="'+m.key+'" data-animation-key="'+key+'" data-visual-style="'+(classic?'classic':'detailed')+'" data-ability-animation="'+move.name+'" aria-label="'+m.name+' V'+t+'">';
  art+='<defs><radialGradient id="'+g+'" cx="28%" cy="22%" r="81%"><stop stop-color="'+m.light+'"/><stop offset=".3" stop-color="'+m.base+'"/><stop offset=".76" stop-color="'+m.base+'"/><stop offset="1" stop-color="'+m.dark+'"/></radialGradient><filter id="'+gl+'" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="'+(2.5+t)+'"/></filter></defs>';
  const scope='svg[data-animation-key="'+key+'"]';
  art+='<style>'+scope+' .sk33-aura{transform-origin:64px 65px;animation:sk33Rotate '+(6+(i%5)*.67)+'s linear infinite}'+
   scope+' .sk33-core{transform-origin:64px 65px;animation:sk33Pulse '+(2.15+(i%7)*.14)+'s ease-in-out infinite alternate}'+
-  scope+' .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+
+  scope+' .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+fx.css+
   '@keyframes sk33Rotate{to{transform:rotate(360deg)}}@keyframes sk33Pulse{to{transform:scale(1.05)}}'+
   '@keyframes sk33Blink{0%,38%,62%,100%{transform:translateX(0)}44%,55%{transform:translateX(2px)}}'+
   '@media(prefers-reduced-motion:reduce){'+scope+' *{animation:none!important}}</style>';
@@ -211,6 +249,7 @@ function portrait(id,tier,style='detailed'){
  const core=classic?'#222b3c':'url(#'+g+')';
  art+=circle(64,65,27+t*1.35,core,'stroke="'+m.light+'" stroke-width="'+(2.1+t*.4)+'"');
  art+='<g class="sk33-identity">'+outside(i,t,m)+'</g>';
+ art+=fx.markup;
  if(classic)art+=ellipse(64,64,31+t*1.1,30+t*.8,'none','#070b18',2.4);
  {let face='<g class="sk33-eyes">';
  for(let side of [-1,1]){
