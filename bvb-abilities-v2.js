@@ -972,6 +972,12 @@ function onWall(o,side){
   train.vy=side==='top'?160:side==='bottom'?-160:0;
  }
  if(d.kind==='grid'&&o.b.id===27)zone(o,o.x,o.y,'shock',30,2,.55);
+ if(o.b.id===27&&o.v1CrownCircuit?.until>G.rt){
+  const offset=side==='left'||side==='right'?{x:0,y:25}:{x:25,y:0};
+  zone(o,clamp(o.x+offset.x,15,345),clamp(o.y+offset.y,15,345),
+   'shock',19+o.v1CrownCircuit.stored*2,2,.35);
+  o.v1CrownPylons=(o.v1CrownPylons||0)+1;
+ }
  if(d.kind==='frost'&&o.b.id===29)zone(o,o.x,o.y,'frost',19,3,.38);
  if(o.b.id===16&&evolutionStage(o)>0){
   o.v2ForgeHeat=Math.min(6,(o.v2ForgeHeat||0)+1);
@@ -1128,7 +1134,13 @@ function cast(o,foe){
   break;
  }
  case 'frost':
-  shoot(o,foe,{count:o.b.id===12?3:2,damage:o.baseDmg*.24,slow:1.05,spread:.26,color:'#a5f3fc'});break;
+  if(o.b.id===29){
+   // Frost leaves a cold wake; the earlier ice identity releases shards.
+   o.v1FrostWake={lastX:o.x,lastY:o.y,next:.3,remaining:2.3};
+   zone(o,o.x,o.y,'frost',16,2.2,.32);
+   visual(o,o,'tail',31,'#b2faff',.5);
+  }else shoot(o,foe,{count:3,damage:o.baseDmg*.24,slow:1.05,spread:.26,color:'#a5f3fc'});
+  break;
  case 'beam':{
   const lead=.19,target={x:foe.x+foe.vx*22*lead,y:foe.y+foe.vy*22*lead};
   roundState().beams.push({x:o.x,y:o.y,x2:target.x,y2:target.y,color:d.color,life:.35+evolutionStage(o)*.1,max:.35+evolutionStage(o)*.1,id:o.b.id});
@@ -1153,9 +1165,27 @@ function cast(o,foe){
  case 'shock':case 'storm':
   shoot(o,foe,{count:kind==='storm'?3:o.b.id===83?2:1,damage:o.baseDmg*.32,stun:.22,homing:.45,color:'#fde047',spread:.23,randomAim:kind==='storm'});o.v2ShockUntil=G.rt+1.5+evolutionStage(o)*.2;break;
  case 'zone':case 'gas':case 'poison':
-  zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);if(kind==='poison')o.v2InfectUntil=G.rt+3;break;
+  if(o.b.id===24){
+   // Virus is a contact carrier, not another puddle-placing identity.
+   o.v1VirusCarrier={until:G.rt+3.5,next:0};
+   o.v2InfectUntil=G.rt+3.5;
+   visual(o,o,'growth',32,d.color,.55);
+  }else if(o.b.id===19){
+   zone(o,o.x,o.y,'zone',31,3.1,.38);
+   o.v1PressureImpulse={next:.3,remaining:2.2};
+   visual(o,o,'ring',39,d.color,.53);
+  }else zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);
+  break;
  case 'grid':
-  for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)zone(o,clamp(foe.x+x*31,12,348),clamp(foe.y+y*31,12,348),'grid',16,2.8,.06+(x+1)*.02+(y+1)*.01);break;
+  if(o.b.id===27){ // Crown stores charges at the walls; WDC uses a numbered 3x3 board.
+   o.v1CrownCircuit={until:G.rt+3.3,stored:Math.min(3,(o.v1CrownStored||0)+1)};
+   o.v1CrownStored=o.v1CrownCircuit.stored;
+   zone(o,o.x,o.y,'shock',24,2.1,.30);
+   visual(o,o,'orbit',35,d.color,.55);
+  }else for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)
+   zone(o,clamp(foe.x+x*31,12,348),clamp(foe.y+y*31,12,348),
+    'grid',16,2.8,.06+(x+1)*.02+(y+1)*.01);
+  break;
  case 'healshot':
   shoot(o,foe,{damage:o.baseDmg*.38,healOnHit:7*scale,speed:170,homing:.3,color:'#fbbf24'});break;
  case 'arrow':
@@ -1452,6 +1482,27 @@ function tick(dt){
      visual(o,o,'shield',32,abilityData[47].color,.4);
      if(o.v1OrbitShield.remaining<=0){o.v1OrbitShield=null;break;}
     }
+   }
+  }
+  if(o.b.id===29&&o.v1FrostWake){
+   const wake=o.v1FrostWake;wake.remaining-=dt;wake.next-=dt;
+   if(wake.remaining<=0)o.v1FrostWake=null;
+   else if(wake.next<=0){
+    if(Math.hypot(o.x-wake.lastX,o.y-wake.lastY)>7){
+     zone(o,o.x,o.y,'frost',17,2,.34);
+     wake.lastX=o.x;wake.lastY=o.y;
+    }
+    wake.next+=.38;
+   }
+  }
+  if(o.b.id===19&&o.v1PressureImpulse){
+   const pulse=o.v1PressureImpulse;pulse.remaining-=dt;pulse.next-=dt;
+   if(pulse.remaining<=0)o.v1PressureImpulse=null;
+   else if(pulse.next<=0){
+    const f=G.bl.find(t=>t.team!==o.team&&alive(t));
+    if(f){const dx=f.x-o.x,dy=f.y-o.y,d=Math.hypot(dx,dy)||1;
+     if(d<95){f.vx=(f.vx||0)+dx/d*.14;f.vy=(f.vy||0)+dy/d*.14;}}
+    pulse.next+=.5;
    }
   }
   if(o.b.id>=32&&o.b.id<=47)signatureTick32(o,dt,st);
