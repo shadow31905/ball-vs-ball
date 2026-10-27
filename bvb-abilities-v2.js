@@ -1166,9 +1166,12 @@ function cast(o,foe){
   shoot(o,foe,{count:kind==='storm'?3:o.b.id===83?2:1,damage:o.baseDmg*.32,stun:.22,homing:.45,color:'#fde047',spread:.23,randomAim:kind==='storm'});o.v2ShockUntil=G.rt+1.5+evolutionStage(o)*.2;break;
  case 'zone':case 'gas':case 'poison':
   if(o.b.id===24){
-   // Virus is a contact carrier, not another puddle-placing identity.
+   // V1 is contact-only; V2 incubates at the target, V3 spreads the strain.
+   const stage=evolutionStage(o);
    o.v1VirusCarrier={until:G.rt+3.5,next:0};
    o.v2InfectUntil=G.rt+3.5;
+   if(stage>0)zone(o,foe.x,foe.y,'poison',17+stage*7,2.1+stage*.5,.23+stage*.1);
+   if(stage===2)zone(o,clamp(foe.x+28,15,345),clamp(foe.y-28,15,345),'poison',19,2.2,.27);
    visual(o,o,'growth',32,d.color,.55);
   }else if(o.b.id===19){
    zone(o,o.x,o.y,'zone',31,3.1,.38);
