@@ -58,6 +58,12 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.equal(proof.detailSelect,'detailed');
   assert.ok(proof.changed.every(x=>x.different));
   assert.equal(proof.statsStable,true,'Style must not modify HP, DMG, ownership or abilities');
+  // Exercise the real settings dropdown, not only the underlying function.
+  await page.evaluate(()=>panel('set'));
+  await page.selectOption('#bvbBallVisualStyle','detailed');
+  assert.equal(await page.evaluate(()=>BVBArtEvolution.currentStyle()),'detailed');
+  await page.selectOption('#bvbBallVisualStyle','classic');
+  assert.equal(await page.evaluate(()=>BVBArtEvolution.currentStyle()),'classic');
   await page.reload({waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>!!window.BVBArtEvolution&&!!window.BVBMotion);
   const persisted=await page.evaluate(()=>({style:BVBArtEvolution.currentStyle(),value:S.o.ballVisualStyle,portrait:BVBArtEvolution.svgFor(16,2).includes('data-visual-style="classic"')}));
