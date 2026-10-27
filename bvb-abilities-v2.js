@@ -714,6 +714,8 @@ const evolutionStage=o=>Math.max(0,Math.min(2,(o?.tier||1)-1));
 function evolutionDescription(id,tier=1){
  const kind=abilityData[id]?.kind,stage=Math.max(0,Math.min(2,tier-1));
  if(!stage)return 'V1: podstawowa wersja zdolności.';
+ const next=window.BVBNextSixteen?.description?.(id,tier);
+ if(next)return next;
  const bespoke=authoredUpgradeDescription(id,stage);
  if(bespoke)return bespoke;
  const early=window.BVBFirstSixteen?.description?.(id,stage);
@@ -825,6 +827,7 @@ function onContact(g,o,foe,base){
   visual(o,foe,'shard',27,abilityData[45].color,.55);
  }
  if(o.b.id<16)base=window.BVBFirstSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
+ if(o.b.id>=48&&o.b.id<=63)base=window.BVBNextSixteen?.onContact?.(G,o,foe,base,first16Api)??base;
  return base;
 }
 
@@ -1042,6 +1045,7 @@ function onWall(o,side){
  if(d.kind==='charge'){o.skillCharge=Math.min(5,(o.skillCharge||0)+1);}
  signatureWall32(o,side,st);
  if(o.b.id<16)window.BVBFirstSixteen?.onWall?.(G,o,side,first16Api);
+ if(o.b.id>=48&&o.b.id<=63)window.BVBNextSixteen?.onWall?.(G,o,side,first16Api);
  if(o.b.id===25)for(const h of st.hazards)if(h.id===25&&h.owner===o.uid&&h.kind==='thorn'&&h.age===0)h.v1GiantPiston=true;
 }
 function cooldown(o){
@@ -1108,6 +1112,10 @@ function cast(o,foe){
  G.pop ||= [];
  if(G.pop.length<24)G.pop.push({x:o.x,y:Math.max(22,o.y-o.r-24),age:0,life:1.1,
   text:d.title.length>21?d.title.slice(0,20)+'…':d.title,c:d.color});
+ if(o.b.id>=48&&o.b.id<=63&&window.BVBNextSixteen?.onCast){
+  window.BVBNextSixteen.onCast(G,o,foe,first16Api);
+  return;
+ }
  switch(kind){
  case 'web': visual(o,o,'web',27,d.color,.5);break; // webs form only on actual wall impacts
  case 'charge': o.skillCharge=Math.min(5,(o.skillCharge||0)+1+evolutionStage(o));dash(o,foe,.22);break;
@@ -1519,6 +1527,7 @@ function tick(dt){
  if(!G||G.ph!=='battle'||netRole==='guest')return;
  const st=roundState();if(!st)return;
  st.tick+=dt;
+ window.BVBNextSixteen?.tick?.(G,dt,first16Api);
  for(const o of G.bl||[]){
   if(!alive(o))continue;
   o.skillReflect=Math.max(0,(o.skillReflect||0)-dt);
