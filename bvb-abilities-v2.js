@@ -1048,7 +1048,7 @@ function distinctFirstFortyEightV1(o,foe){
  }else if(id===43){
   // Shuriken returns on walls; rifle and thief projectiles do not share its path.
   for(const shot of st.shots.filter(p=>p.id===43&&p.owner===o.uid&&p.age===0)){
-   shot.bounces=Math.max(2,shot.bounces);shot.starTrail=true;
+   shot.bounces=Math.max(2,shot.bounces);shot.starTrail=false; // V3 alone leaves electric ricochet marks.
    shot.homing=.04;shot.ricochetSplit=Math.max(shot.ricochetSplit||0,level===2?1:0);
   }
  }else if(id===46&&st.hazards.length){
