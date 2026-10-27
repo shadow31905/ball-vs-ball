@@ -72,7 +72,11 @@ function cast(g,o,foe,api){
   o.status.shield=Math.min(32,(o.status.shield||0)+2);
   visual(o,o,'shield',38,'#ebfcff',.7);
   signature.until=t+1;signature.max=0;
-  if(level>=1){foe.aiTarget={vx:-foe.vy,vy:foe.vx};foe.aiDecisionClock=.55;}
+  if(level>=1){
+   // The first evolved mirror creates an actual reflected afterimage projectile.
+   foe.aiTarget={vx:-foe.vy,vy:foe.vx};foe.aiDecisionClock=.55;
+   shoot(o,foe,{count:1,damage:o.baseDmg*.13,ghost:true,bounces:1,color:'#e5f5ff'});
+  }
   if(level===2)mark('shock',foe.x,foe.y,18,1.2,.2);
   break;
  }
