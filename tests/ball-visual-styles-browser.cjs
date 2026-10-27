@@ -15,6 +15,20 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   const proof=await page.evaluate(async()=>{
    const getStats=()=>JSON.stringify({coins:S.coins,candies:S.candies,own:S.own,upHp:S.upHp,upDmg:S.upDmg,tiers:S.ev,abilityKinds:BVB2.abilities.map(s=>s?.kind)});
    const before=getStats();
+   const sampleIds=[0,16,31,129];
+   const pixels=async()=>{
+    const cv=document.createElement('canvas');cv.width=cv.height=96;
+    const ctx=cv.getContext('2d',{willReadFrequently:true}),result=[];
+    for(const id of sampleIds){
+     const image=BVBArtEvolution.imageForTier(id,3);await image.decode();
+     ctx.clearRect(0,0,96,96);ctx.drawImage(image,0,0,96,96);
+     const values=ctx.getImageData(0,0,96,96).data;let hash=2166136261;
+     for(let k=0;k<values.length;k+=4){hash^=values[k];hash=Math.imul(hash,16777619);hash^=values[k+3];hash=Math.imul(hash,16777619);}
+     result.push(hash>>>0);
+    }
+    return result;
+   };
+   const detailedPixels=await pixels();
    BVBMotion.change('ballStyle','classic');
    const classicSelect=document.querySelector('#bvbBallVisualStyle')?.value;
    const variants=[];
@@ -28,16 +42,18 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
     await a.decode();imageChecks.push({id,stage3:a.naturalWidth>0});
    }
    const afterClassic=getStats();
+   const classicPixels=await pixels();
    BVBMotion.change('ballStyle','detailed');
    const detailSelect=document.querySelector('#bvbBallVisualStyle')?.value;
    const changed=[0,16,31,129].map(id=>({id,different:!BVBArtEvolution.svgFor(id,3).includes('data-visual-style="classic"')}));
    const afterDetail=getStats();
    BVBMotion.change('ballStyle','classic');
-   return {variants,imageChecks,changed,classicSelect,detailSelect,statsStable:before===afterClassic&&before===afterDetail,stored:S.o.ballVisualStyle};
+   return {variants,imageChecks,changed,classicSelect,detailSelect,pixelChanges:detailedPixels.map((hash,i)=>hash!==classicPixels[i]),statsStable:before===afterClassic&&before===afterDetail,stored:S.o.ballVisualStyle};
   });
   assert.equal(proof.variants.length,48);
   assert.ok(proof.variants.every(v=>v.classic&&v.hasEyes&&v.hasGear),JSON.stringify(proof.variants.filter(v=>!v.classic||!v.hasEyes||!v.hasGear)));
   assert.ok(proof.imageChecks.every(x=>x.stage3),'All checked styles must decode as images');
+  assert.ok(proof.pixelChanges.every(Boolean),'Switch must change real rendered pixel data, not just text or CSS');
   assert.equal(proof.classicSelect,'classic');
   assert.equal(proof.detailSelect,'detailed');
   assert.ok(proof.changed.every(x=>x.different));
