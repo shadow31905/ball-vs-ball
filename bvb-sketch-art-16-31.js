@@ -321,6 +321,50 @@ function portrait(id,tier,style='detailed'){
  if(t===3)out+='<g class="sketch-sparks">'+star(14,105,6,6,2,v.glow)+star(109,102,5,6,2,v.glow)+'</g>';
  return out+'</svg>';
 }
+
+/* The arena and skill-preview canvases cannot rely on CSS animation inside
+ * SVG <img> textures. Animate the decoded portrait explicitly per frame.
+ * State-free: the rendering time is read, not written to game simulation.
+ */
+function combatPose(id,tier,time){
+ const tag=id-16,q=1+(Math.max(1,Math.min(3,tier))-1)*.22;
+ const t=Number.isFinite(time)?time:0,w=Math.sin(t*(2.1+tag*.085)),v=Math.cos(t*(2.1+tag*.085));
+ let x=0,y=0,angle=0,sx=1,sy=1;
+ switch(tag){
+ case 0: angle=w*5*q;x=w*1.1*q;y=-Math.max(0,v)*1.2*q;break; // forge hammer
+ case 1: sx=1+w*.045*q;sy=1-w*.025*q;y=-v*.7*q;break; // mitosis
+ case 2: x=w*1.25*q;angle=v*5*q;break; // electric jitter
+ case 3: angle=Math.sin(t*.8)*7*q;sx=1+w*.035*q;sy=sx;break; // field expansion
+ case 4: x=-Math.max(0,w)*2*q;sx=1+v*.025*q;break; // laser recoil
+ case 5: angle=t*42*q;break; // rotating saw
+ case 6: y=-1.5*w*q;angle=v*3*q;break; // growing apple
+ case 7: x=-Math.max(0,w)*2.1*q;angle=-v*3*q;break; // cannon kick
+ case 8: angle=w*6*q;sx=1+v*.05*q;sy=1-v*.03*q;break; // infection
+ case 9: sx=1+w*.065*q;sy=1+w*.065*q;break; // massive spike growth
+ case 10: x=w*1.1*q;angle=w*6*q;break; // bowstring draw
+ case 11: angle=v*4*q;y=w*.6*q;break; // charge buildup
+ case 12: angle=Math.sin(t*.72)*8*q;sx=1+w*.035*q;sy=sx;break; // radar scanner
+ case 13: angle=w*3*q;sy=1+v*.045*q;break; // growing ice
+ case 14: x=w*2.2*q;angle=v*5*q;break; // harpoon thrust
+ case 15: x=w*1.5*q;y=v*1.4*q;angle=w*5*q;break; // hive flight
+ }
+ return {x,y,angle,sx,sy};
+}
+function drawCombatSprite(ctx,id,tier,x,y,r,time,img,rotation=0){
+ if(!ctx||id<16||id>31||!img?.complete||!img.naturalWidth)return false;
+ if(![x,y,r].every(Number.isFinite))return false;
+ const paused=window.matchMedia?.('(prefers-reduced-motion:reduce)')?.matches||
+              window.BVBMotion?.enabled?.('interior')===false;
+ const pose=combatPose(id,tier,paused?0:time);
+ ctx.save();
+ ctx.translate(x+pose.x,y+pose.y);
+ ctx.rotate(rotation+pose.angle*Math.PI/180);
+ ctx.scale(pose.sx,pose.sy);
+ ctx.drawImage(img,-r,-r,r*2,r*2);
+ ctx.restore();
+ return true;
+}
+
 function renderCombat(ctx,actor,g){
  const id=actor?.b?.id;if(id<16||id>31||!ctx)return;
  const opt=window.BVBMotion?.prefs?.()||{};
@@ -353,5 +397,5 @@ function renderCombat(ctx,actor,g){
  }
  ctx.restore();
 }
-window.BVBSketch17to32={count:16,tiers:3,firstId:16,lastId:31,concepts:themes,svgFor:portrait,renderCombat};
+window.BVBSketch17to32={count:16,tiers:3,firstId:16,lastId:31,concepts:themes,svgFor:portrait,renderCombat,combatPose,drawCombatSprite,motionTypes:motionType};
 })();
