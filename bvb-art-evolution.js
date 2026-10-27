@@ -106,8 +106,11 @@ function angryFace(id,tier){
  * every approved classic source sprite is exported and reviewed.
  */
 const classicCache=new Map();
+const completedReworkIds=new Set(Array.from({length:32},(_,id)=>id));
+function isCompletedRework(id){return Number.isInteger(id)&&completedReworkIds.has(id);}
 function currentStyle(){return S?.o?.ballVisualStyle==='classic'?'classic':'detailed';}
 function classicSvg(id,tier){
+ if(id>=16&&id<32)return window.BVBSketch17to32.svgFor(id,tier,'classic');
  const key=id*4+tier;
  if(classicCache.has(key))return classicCache.get(key);
  const base=previous(id,1);
@@ -139,14 +142,14 @@ function refreshVisualStyle(){
  for(const node of nodes){
   const id=Number(node.getAttribute('data-ball-id'));
   const tier=Number(node.getAttribute('data-evolution'));
-  if(Number.isInteger(id)&&id>=0&&id<B.length&&tier>=1&&tier<=3)node.outerHTML=svgFor(id,tier);
+  if(Number.isInteger(id)&&isCompletedRework(id)&&tier>=1&&tier<=3)node.outerHTML=svgFor(id,tier);
  }
 }
 
 function svgFor(id,tier){
  id=Number(id);if(!Number.isInteger(id)||id<0||id>=B.length)return '';
  tier=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
- if(currentStyle()==='classic')return classicSvg(id,tier);
+ if(currentStyle()==='classic'&&isCompletedRework(id))return classicSvg(id,tier);
  if(window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.svgFor(id,tier);
  if(id<16)return window.BVBElementalArt.svgFor(id,tier);
  if(id>=16&&id<32)return window.BVBSketch17to32.svgFor(id,tier);
@@ -179,7 +182,7 @@ function imageForTier(id,tier){
  if(!Number.isInteger(id)||id<0||id>=B.length)return null;
  if(currentStyle()==='detailed'&&window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.imageForTier(id,tier);
  const stage=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
- const key=currentStyle()+':'+id*4+':'+stage;
+ const key=(isCompletedRework(id)?currentStyle():'unchanged')+':'+id*4+':'+stage;
  if(!imageCache.has(key)){
   const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgFor(id,stage));imageCache.set(key,img);
  }
@@ -239,6 +242,6 @@ css.textContent+='\n.bvb-evo-triptych{display:grid;grid-template-columns:repeat(
  '\n.bvb-evo-preview strong{color:#f8fafc}'+
  '\n.bvb-evo-preview .orb{--s:70px!important;max-width:100%}'+
  '\n.bvb-evo-preview[data-stage="3"]{border-color:#f7cf6b;box-shadow:0 0 12px #fbbf2450}';
-window.BVBArtEvolution={count:B.length,tiers:3,signatures:Object.freeze(sig),svgFor,imageForTier,imageFor,colors:palette,galleryHtml,currentStyle,refreshVisualStyle};
+window.BVBArtEvolution={count:B.length,tiers:3,signatures:Object.freeze(sig),svgFor,imageForTier,imageFor,colors:palette,galleryHtml,currentStyle,isCompletedRework,refreshVisualStyle};
 ART_IMAGES.clear();preloadArt();
 })();
