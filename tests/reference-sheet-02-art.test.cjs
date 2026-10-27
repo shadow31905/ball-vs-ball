@@ -44,7 +44,7 @@ test('tier-specific images are cached, with unmodified art for other balls',()=>
  assert.equal(result.noImage,null);
  assert.ok(!result.prior.includes('data-preview-sheet="02"'));
  assert.ok(result.later.includes('data-reference-panel="33"'));
- assert.ok(result.later.includes('data-concept="calm"'));
+ assert.ok(result.later.includes('data-concept="alchemy"'),'33 must be the original Eliksir, not a placeholder');
  assert.notEqual(result.stage2,result.stage3);
 });
 
