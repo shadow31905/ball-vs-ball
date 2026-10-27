@@ -192,20 +192,21 @@ function skillMotion(i,t,key){
  const css='@keyframes '+kf+'{0%,100%{transform:'+tr[0]+'}50%{transform:'+tr[1]+'}}';
  return {name:types[i],css:'.sk33-identity{transform-origin:64px 65px;animation:'+kf+' '+duration+'s ease-in-out infinite}'+css};
 }
-function portrait(id,tier){
+function portrait(id,tier,style='detailed'){
  id=Number(id);if(!Number.isInteger(id)||id<32||id>47)return '';
- const t=Math.min(3,Math.max(1,Math.round(Number(tier)||1))),i=id-32,m=motifs[i];
+ const t=Math.min(3,Math.max(1,Math.round(Number(tier)||1))),i=id-32,m=motifs[i],classic=style==='classic';
  const move=skillMotion(i,t,'sk33-'+id+'-'+t);
  const key='sk33-'+id+'-'+t,g='grad-'+key,gl='glow-'+key,wide='data-reference-panel="'+m.ref+'"';
- let art='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" data-bvb-art-v2="1" data-ball-id="'+id+'" data-evolution="'+t+'" '+wide+' data-concept="'+m.key+'" data-ability-animation="'+move.name+'" aria-label="'+m.name+' V'+t+'">';
+ let art='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" data-bvb-art-v2="1" data-ball-id="'+id+'" data-evolution="'+t+'" '+wide+' data-concept="'+m.key+'" data-visual-style="'+(classic?'classic':'detailed')+'" data-ability-animation="'+move.name+'" aria-label="'+m.name+' V'+t+'">';
  art+='<defs><radialGradient id="'+g+'" cx="28%" cy="22%" r="81%"><stop stop-color="'+m.light+'"/><stop offset=".3" stop-color="'+m.base+'"/><stop offset=".76" stop-color="'+m.base+'"/><stop offset="1" stop-color="'+m.dark+'"/></radialGradient><filter id="'+gl+'" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="'+(2.5+t)+'"/></filter></defs>';
  art+='<style>.sk33-aura{transform-origin:64px 64px;animation:sk33Rotate '+(5+(i%5)*.67)+'s linear infinite}.sk33-core{transform-origin:64px 64px;animation:sk33Pulse '+(2.15+(i%7)*.14)+'s ease-in-out infinite alternate} .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+'@keyframes sk33Rotate{to{transform:rotate(360deg)}}@keyframes sk33Pulse{to{transform:scale(1.05)}}@keyframes sk33Blink{0%,38%,62%,100%{transform:translateX(0)}44%,55%{transform:translateX(2px)}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}</style>';
  art+='<g class="sk33-aura">'+outside(i,t,m)+'</g>';
  art+=circle(64,65,36,m.base,'opacity=".22" filter="url(#'+gl+')"');
  art+='<g class="sk33-core">';
- const core='url(#'+g+')';
+ const core=classic?'#222b3c':'url(#'+g+')';
  art+=circle(64,65,27+t*1.35,core,'stroke="'+m.light+'" stroke-width="'+(2.1+t*.4)+'"');
  art+='<g class="sk33-identity">'+outside(i,t,m)+'</g>';
+ if(classic)art+=ellipse(64,64,31+t*1.1,30+t*.8,'none','#070b18',2.4);
  {let face='<g class="sk33-eyes">';
  for(let side of [-1,1]){
   const x=64+side*12,y=73;
@@ -233,23 +234,42 @@ function combat(ctx,o,g){
  const dot=(x,y,R)=>{ctx.beginPath();ctx.arc(x,y,R,0,TAU);ctx.fill();};
  const stroke=pts=>{ctx.beginPath();pts.forEach(([x,y],k)=>k?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();};
  const point=(k,n,radius)=>[Math.cos(TAU*k/n+a*.2)*radius,Math.sin(TAU*k/n+a*.2)*radius];
+
  switch(i){
- case 0:for(let k=0;k<st+2;k++)orbital(r+5+k*4,k*.58+a*.14);break;
- case 1:for(let k=0;k<st+3;k++)arc(0,0,r+k*3,a+k, a+k+1.5);break;
- case 2:for(let k=0;k<st+3;k++){let [x,y]=point(k,st+3,r+5);stroke([[x,y],[x+3,y-8],[x+7,y-12]]);}break;
- case 3:for(let k=0;k<st+3;k++){let [x,y]=point(k,st+3,r+8);stroke([[x-3,y+4],[x-4,y-3],[x+4,y-7],[x+7,y+2]]);}break;
- case 4:for(let k=0;k<st+3;k++){let [x,y]=point(k,st+3,r+6);ctx.strokeRect(x-3,y-3,6,6);}break;
- case 5:for(let k=0;k<st+1;k++)orbital(r+8+k*3,k*.9+a*.22);break;
- case 6:for(let k=0;k<st+4;k++){let [x,y]=point(k,st+4,r+7);stroke([[x-4,y+3],[x,y-8],[x+4,y+3]]);}break;
- case 7:orbital(r+11,a*.4);orbital(r+11,-a*.4);break;
- case 8:orbital(r+7,a*.23);orbital(r+12,-a*.2);break;
- case 9:for(let k=0;k<st+5;k++){let [x,y]=point(k,st+5,r+7);dot(x,y,2);}break;
- case 10:for(let k=0;k<st+3;k++)orbital(r+5+k*2,k*.3);break;
- case 11:for(let k=0;k<st+6;k++){let [x,y]=point(k,st+6,r+5);stroke([[x,y],[x-4,y+10]]);}break;
- case 12:for(let k=0;k<st+4;k++){let [x,y]=point(k,st+4,r+8);stroke([[x-4,y+6],[x,y-8],[x+4,y+6]]);}break;
- case 13:for(let k=0;k<st+3;k++){let [x,y]=point(k,st+3,r+7);arc(x,y,4,a,a+Math.PI);}break;
- case 14:orbital(r+9,a*.38);orbital(r+14,-a*.27);break;
- case 15:for(let k=0;k<st+6;k++){let [x,y]=point(k,st+6,r+6);stroke([[x,y],[x*1.25,y*1.25]]);}break;
+ case 0: // alchemy bubbles
+  for(let k=0;k<st+3;k++){const [x,y]=point(k,st+3,r+7);dot(x,y,2.3+(k%3));}orbital(r+6,a*.22);break;
+ case 1: // train tracks
+  stroke([[-r-6,10],[-r-6,-4],[-r+11,-4],[r+8,-4],[r+8,10]]);
+  for(let k=0;k<st+2;k++){let x=-r+7+k*11;stroke([[x,r+3],[x+4+3*Math.sin(a+k),r+10],[x+10,r+13]]);}break;
+ case 2: // spider webs
+  for(let k=0;k<4+st;k++){const p=point(k,4+st,r+6);stroke([[0,0],[p[0],p[1]],[p[0]*1.24+3*Math.sin(a),p[1]*1.24]]);}break;
+ case 3: // grave and ghost fire
+  for(let k=0;k<st+2;k++){let x=-r+k*16;stroke([[x,r+9],[x+4*Math.sin(a+k),r-1],[x+4*Math.cos(a+k),r-11]]);}break;
+ case 4: // flying light feathers
+  for(let k=0;k<st+3;k++){let p=point(k,st+3,r+9);stroke([[p[0]-4,p[1]-6],[p[0],p[1]+2],[p[0]+7,p[1]-2]]);}break;
+ case 5: // candy explosions
+  for(let k=0;k<st+4;k++){let p=point(k,st+4,r+6+2*Math.sin(a*1.8+k));dot(p[0],p[1],2.8+k%2);}break;
+ case 6: // slime buds
+  for(let k=0;k<st+3;k++){let p=point(k,st+3,r+5);dot(p[0],p[1],2.6+2*Math.sin(a+k));}break;
+ case 7: // shackle links
+  for(let k=0;k<st+2;k++){let p=point(k,st+2,r+9);ctx.save();ctx.translate(p[0],p[1]);ctx.rotate(a*.26+k);ctx.strokeRect(-5,-3,10,6);ctx.restore();}break;
+ case 8: // acid drops
+  for(let k=0;k<st+4;k++){let p=point(k,st+4,r+7);dot(p[0],p[1]+3*Math.sin(a+k),2.4);}break;
+ case 9: // laser
+  for(let k=0;k<st+3;k++){let angle=a*.34+k*TAU/(st+3);stroke([[10*Math.cos(angle),10*Math.sin(angle)],[Math.cos(angle)*(r+12),Math.sin(angle)*(r+12)]]);}break;
+ case 10: // poison cloud
+  for(let k=0;k<st+4;k++){let p=point(k,st+4,r+9);arc(p[0]+4*Math.sin(a*.6+k),p[1],3.7,0,TAU);}break;
+ case 11: // shuriken
+  for(let k=0;k<st+4;k++){let angle=a*.85+k*TAU/(st+4);stroke([[8*Math.cos(angle),8*Math.sin(angle)],[(r+10)*Math.cos(angle+.23),(r+10)*Math.sin(angle+.23)]]);}break;
+ case 12: // Fibonacci spiral
+  for(let k=0;k<st+6;k++){let radius=5+k*2.8;arc(0,0,radius,a*.1+k*.62,a*.1+(k+1)*.62);}break;
+ case 13: // cactus spines
+  for(let k=0;k<st+6;k++){let p=point(k,st+6,r+5);stroke([[p[0]*.83,p[1]*.83],[p[0]*1.27,p[1]*1.27]]);}break;
+ case 14: // bomb sparks
+  for(let k=0;k<st+4;k++){let p=point(k,st+4,r+9);dot(p[0],p[1],2+Math.max(0,Math.sin(a+k))*2.5);}break;
+ case 15: // orbiting satellites
+  orbital(r+9,a*.32);orbital(r+13,-a*.28);
+  for(let k=0;k<st+2;k++){let p=point(k,st+2,r+10);dot(p[0],p[1],3);}break;
  }
  ctx.restore();
 }
