@@ -43,7 +43,8 @@ test('tier-specific images are cached, with unmodified art for other balls',()=>
  assert.equal(result.actor,null,'unloaded images should safely fall back to existing art');
  assert.equal(result.noImage,null);
  assert.ok(!result.prior.includes('data-preview-sheet="02"'));
- assert.ok(result.later.includes('data-signature-id="32"'));
+ assert.ok(result.later.includes('data-reference-panel="33"'));
+ assert.ok(result.later.includes('data-concept="calm"'));
  assert.notEqual(result.stage2,result.stage3);
 });
 
