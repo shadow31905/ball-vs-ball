@@ -172,7 +172,7 @@ function portrait(id,tier){
  const effects=symbol(tag,t);
  out+='<g class="sketch-aura">'+effects+'</g>';
  out+=c(64,65,37,v.main,'opacity=".29" filter="url(#'+b+')"');
- out+='<g class="sketch-heart">'+c(64,65,28+(t-1)*1.7,'url(#'+g+'"','stroke="'+v.glow+'" stroke-width="'+(2+t*.38)+'"');
+ out+='<g class="sketch-heart">'+c(64,65,28+(t-1)*1.7,'url(#'+g+')','stroke="'+v.glow+'" stroke-width="'+(2+t*.38)+'"');
  if(tag===14){out+=p('M64 38Q55 62 64 65T64 93','#eaf9ff',2.3);out+=p('M64 39Q85 54 64 65Q42 82 64 93','none',0,'#faabec');}
  if(tag===6)out+=p('M51 40Q65 35 75 42','none',0,'#fffcff');
  if(tag===11&&t===3)out+=p('M45 47L61 42L78 53L91 73L74 96L49 90L37 69Z','#414844',2,'#7b8671');
