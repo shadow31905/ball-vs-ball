@@ -959,6 +959,7 @@ function onWall(o,side){
    const h=zone(o,o.x,o.y,'poison',17,3,.24);
    if(h)h.v1WidowNest=true;
    o.v1WidowNests=(o.v1WidowNests||0)+1;
+   webPoint(o,side); // Preserve Black Spider's recognizable wall-web identity.
   }else webPoint(o,side);
  }
  if(d.kind==='pet')o.v2PetPower=Math.min(1.5,(o.v2PetPower||1)+.1);
@@ -1211,7 +1212,7 @@ function cast(o,foe){
    visual(o,o,'ring',39,d.color,.53);
   }else if(o.b.id===42){ // Gas moves, acid remains as a puddle.
    const h=zone(o,foe.x,foe.y,'gas',33,3,.37);
-   if(h){h.v1Gas=true;h.v2Drifting=1;h.vx=9;h.vy=-5;}
+   if(h){h.v1Gas=true;h.vx=9;h.vy=-5;}
   }else zone(o,foe.x,foe.y,kind,kind==='gas'?38:30,3,.42);
   break;
  case 'grid':
@@ -1836,7 +1837,7 @@ function tick(dt){
     h.v2RailClock+=h.v2RailTrain===2?.18:.28;
    }
   }
-  if(h.kind==='gas'&&h.v2Drifting>0){
+  if(h.kind==='gas'&&(h.v2Drifting>0||h.v1Gas)){
    h.x=clamp(h.x+(h.vx||0)*dt,16,344);
    h.y=clamp(h.y+(h.vy||0)*dt,16,344);
    if(h.v2Drifting===2&&!h.v2Condensed&&h.life<=.2){
