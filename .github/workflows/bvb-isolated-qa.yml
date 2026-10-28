@@ -1,0 +1,31 @@
+name: BVB isolated beta QA
+on:
+  push:
+    branches: ['qa/batch1-isolated-20261029']
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    env:
+      BVB_EXPECTED_SHA256: eace90eaddc91e21ba5e5e9a5db97a2c35b1ad8221555bdf18ff611a79ba7263
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node inflate.cjs
+      - run: npm install --no-audit --no-fund playwright@1.62.1
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - run: node test-005.cjs ${{ matrix.browser }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bvb-005-${{ matrix.browser }}
+          path: evidence/
+          retention-days: 7
