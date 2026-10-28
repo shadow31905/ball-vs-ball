@@ -56,14 +56,15 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
     return v>>>0;};
    const rows=[],battle=[];
    for(let id=32;id<48;id++){
-    const styles=[];
+    const styles=[],pixelStyles=[];
     for(const style of ['detailed','classic']){
-     const stage=[];
+     const stage=[],pixels=[];
      for(let tier=1;tier<=3;tier++){
       const svg=art.svgFor(id,tier,style);
       const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);await img.decode();
       ctx.clearRect(0,0,128,128);ctx.drawImage(img,0,0,128,128);
       stage.push(hash());
+      pixels.push(new Uint8ClampedArray(ctx.getImageData(0,0,128,128).data));
       if(style==='detailed'){
        const moveHashes=[];
        for(const time of [.31,1.67]){
@@ -75,9 +76,13 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
        battle.push({id,tier,moves:moveHashes[0]!==moveHashes[1]});
       }
      }
-     styles.push(stage);
+     styles.push(stage);pixelStyles.push(pixels);
     }
-    rows.push({id,name:B[id].n,concept:art.concepts[id-32].name,
+    const changed=(a,b)=>{let n=0;for(let p=0;p<a.length;p+=4){
+      if(Math.abs(a[p]-b[p])+Math.abs(a[p+1]-b[p+1])+Math.abs(a[p+2]-b[p+2])+Math.abs(a[p+3]-b[p+3])>=20)n++;
+     }return n;};
+    const visualChanges=pixelStyles.map(p=>[changed(p[0],p[1]),changed(p[1],p[2])]);
+    rows.push({id,name:B[id].n,concept:art.concepts[id-32].name,visualChanges,
      uniqueEvolution:styles.every(x=>new Set(x).size===3),
      differentStyles:styles[0].every((x,j)=>x!==styles[1][j])});
    }
@@ -109,6 +114,8 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.equal(result.rows.length,16);
   assert.ok(result.rows.every(x=>x.name===x.concept&&x.uniqueEvolution&&x.differentStyles),
     'Art mismatch: '+JSON.stringify(result.rows.filter(x=>x.name!==x.concept||!x.uniqueEvolution||!x.differentStyles)));
+  assert.ok(result.rows.every(x=>x.visualChanges.every(v=>v.every(n=>n>=120))),
+    'V2 or V3 invisible in actual PNG pixels: '+JSON.stringify(result.rows.filter(x=>x.visualChanges.some(v=>v.some(n=>n<120))).map(x=>({id:x.id,changed:x.visualChanges}))));
   assert.equal(result.battle.length,48);
   assert.ok(result.battle.every(x=>x.moves),
     'Static actual canvas sprite: '+JSON.stringify(result.battle.filter(x=>!x.moves)));
@@ -188,6 +195,6 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.equal(reduced.animation,'none');
   assert.equal(reduced.particles,'none');
   assert.deepEqual(errors,[],'No browser exceptions');
-  console.log('PASS third-batch animated art '+engineName+': 96/96 SVG rigs and particles; 64 V2 and 32 V3 independently moving hardware stages; 48/48 live canvas motions; 16 original identities; evolving 2 styles; style gate; reduced motion; no save mutations.');
+  console.log('PASS third-batch animated art '+engineName+': 96/96 SVG rigs and particles; 64 V2 and 32 V3 independently moving hardware stages; 48/48 live canvas motions; per-stage pixel differences verified; 16 original identities; evolving 2 styles; style gate; reduced motion; no save mutations.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});
