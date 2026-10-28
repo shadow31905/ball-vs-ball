@@ -7,14 +7,19 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
  try{
  const page=await browser.newPage({viewport:{width:1280,height:1000},reducedMotion:'no-preference'});
  page.on('pageerror',e=>report.errors.push(e.message));
+ await page.bringToFront();
  await page.goto('file://'+path.resolve('beta.html'),{waitUntil:'load'});
  await page.waitForFunction(()=>window.BVBBatch1Beta?.ready&&window.BVBApprovedArt?.state?.().ready);
  for(const tier of [1,2,3]){
   await page.evaluate(t=>{BVBBatch1Beta.setTier(t);panel('col');document.getElementById('ov').hidden=true;},tier);
   await page.locator('#pb svg[data-live-first16]').first().waitFor({state:'visible'});
   const read=()=>page.locator('#pb svg[data-live-first16]').evaluateAll(nodes=>nodes.map(svg=>({id:Number(svg.dataset.ballId),tier:Number(svg.dataset.evolution),visible:svg.getBoundingClientRect().width>0&&getComputedStyle(svg).visibility!=='hidden',animations:document.getAnimations().filter(a=>a.effect?.target&&svg.contains(a.effect.target)).map(a=>({name:a.animationName,state:a.playState,time:a.currentTime})),transforms:[...svg.querySelectorAll('g[class]')].map(g=>({cls:g.getAttribute('class'),transform:getComputedStyle(g).transform,opacity:getComputedStyle(g).opacity})),sources:[...svg.querySelectorAll('image')].map(im=>im.getAttribute('href'))})));
-  const before=await read();await page.screenshot({path:out+'/V'+tier+'-before.png',fullPage:true});
-  await page.waitForTimeout(400);const after=await read();await page.screenshot({path:out+'/V'+tier+'-after.png',fullPage:true});
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await page.waitForFunction(()=>document.getAnimations().some(a=>a.playState==='running'&&a.currentTime>100),{},{timeout:10000});
+  const before=await read();
+  await page.waitForTimeout(500);const after=await read();
+  await page.screenshot({path:out+'/V'+tier+'-after.png',fullPage:true,animations:'allow'});
+  report.visibility={state:await page.evaluate(()=>document.visibilityState),timeline:await page.evaluate(()=>document.timeline.currentTime)};
   for(let id=0;id<13;id++){
    const a=before.find(x=>x.id===id),b=after.find(x=>x.id===id);const errors=[];
    if(before.filter(x=>x.id===id).length!==1||!a||!b)errors.push('MISSING_OR_DUPLICATE_CARD');
