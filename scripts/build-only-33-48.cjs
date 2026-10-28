@@ -87,6 +87,9 @@ tools=replace(tools,"window.BVBBetaAdmin={open,close};",
 scripts['bvb-beta-tools.js']=tools;
 // No cloud or PeerJS network dependency; local training/combat remain available.
 let html=load('index.html');
+// The isolated offline playtest has no cloud login. Never block the test menu.
+html=replace(html,'<div id="accountGate" class="account-gate"',
+ '<div id="accountGate" hidden class="account-gate"','skip cloud-only login gate');
 html=replace(html,"let K = 'bvb_beta_rework_v4';",
   "let K = '"+isolatedKey+"';",'separate player profile');
 html=html.replace(/<script\s+src="https:\/\/unpkg\.com\/peerjs[^"]*"\s*><\/script>\s*/ig,'');
