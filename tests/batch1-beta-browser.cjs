@@ -49,11 +49,11 @@ const BASE=process.env.BVB_BATCH1_URL||'http://127.0.0.1:8765/beta-batch1/index.
   const offlineErrors=[];offline.on('pageerror',e=>offlineErrors.push(e.message));
   await offline.goto(standalone,{waitUntil:'domcontentloaded'});
   await offline.waitForFunction(()=>window.BVBBatch1Beta?.ready&&window.BVBApprovedArt?.state().ready,{timeout:40000});
-  const offlineState=await offline.evaluate(()=>({count:B.length,owned:S.own.length,art:BVBArtEvolution.svgFor(12,3).includes('data-approved-art'),src:BVBApprovedArt.frame(12,3).source.slice(0,15)}));
+  const offlineState=await offline.evaluate(()=>({count:B.length,owned:S.own.length,art:BVBArtEvolution.svgFor(12,3).includes('data-approved-art'),src:BVBApprovedArt.frame(12,3).source.startsWith('data:image/webp;base64,')}));
   assert.equal(offlineState.count,13);
   assert.equal(offlineState.owned,13);
   assert.ok(offlineState.art);
-  assert.equal(offlineState.src,'data:image/webp;');
+  assert.equal(offlineState.src,true);
   assert.deepEqual(offlineErrors,[]);
   console.log('PASS standalone file:// HTML: all 13 balls and approved imagery without server');
  }finally{await browser.close();}
