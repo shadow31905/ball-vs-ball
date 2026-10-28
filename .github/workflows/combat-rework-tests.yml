@@ -62,3 +62,40 @@ jobs:
             BVB_TEST_URL=http://127.0.0.1:8765/beta/ node tests/combat-mobile-smoke.cjs
           fi
           if [ "$BVB_BROWSER" = chromium ]; then node tests/combat-network-browser.cjs; fi
+
+  batch1-download:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate 13-ball private beta and its offline assets
+        run: node --test tests/batch1-beta-build.test.cjs
+      - name: Build portable 13-ball HTML and folder
+        run: BVB_SOURCE_REVISION="$GITHUB_SHA" node scripts/build-batch1-beta.cjs
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run real beta browser and offline HTML tests
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bvb-batch1-http.log 2>&1 &
+          sleep 2
+          node tests/batch1-beta-browser.cjs
+      - name: Package download, no public deployment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BVB-Beta-Partia-1-13-Kulek
+          path: |
+            beta-batch1/ball-vs-ball-partia-1.html
+            beta-batch1/index.html
+            beta-batch1/*.js
+            beta-batch1/assets/approved-first16/*.webp
+            beta-batch1/README.txt
+            beta-batch1/build.json
+            beta-batch1/screenshot-kolekcja.png
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,47 @@
+name: Download beta - only batch 1 (13 balls)
+on:
+  push:
+    branches:
+      - feature/beta-batch1-13-only-20261028
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-beta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify sandbox builder and local assets
+        run: node --test tests/batch1-beta-build.test.cjs
+      - name: Build 13-only private beta
+        run: BVB_SOURCE_REVISION="$GITHUB_SHA" node scripts/build-batch1-beta.cjs
+      - name: Install Chromium for real beta verification
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test 13-ball collection, evolution, real combat and offline HTML
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bvb-batch1-http.log 2>&1 &
+          sleep 2
+          node tests/batch1-beta-browser.cjs
+      - name: Upload private downloadable beta
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BVB-Beta-Partia-1-13-Kulek
+          path: |
+            beta-batch1/ball-vs-ball-partia-1.html
+            beta-batch1/index.html
+            beta-batch1/*.js
+            beta-batch1/assets/approved-first16/*.webp
+            beta-batch1/README.txt
+            beta-batch1/build.json
+            beta-batch1/screenshot-kolekcja.png
+          if-no-files-found: error
+          retention-days: 14
