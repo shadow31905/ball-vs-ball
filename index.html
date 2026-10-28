@@ -2002,8 +2002,10 @@ function pull(isHalloween) {
     const i = Math.floor((cw / 2 - new DOMMatrix(getComputedStyle(sp).transform).m41) / IW);
     if (i != li) { li = i; SFX.tick(); }
   }, 30);
+  let settled = false;
   const done = () => {
-    if (!$('#sp')) return;
+    if (settled || !$('#sp')) return;
+    settled = true;
     clearInterval(iv);
     clearTimeout(tm);
     w.r > 1 ? SFX.rare() : SFX.win();
@@ -2013,11 +2015,15 @@ function pull(isHalloween) {
       <b style="color:${RC[w.r]}">${RN[w.r]}</b>
       <p style="font-size:0.88rem;color:var(--mu);margin:8px 0">${getBallStats(w.id).activeDesc}</p>
       <p style="font-weight:800;color:#fde047;margin-bottom:12px">${dupMsg}</p>
+      <div id="bvbChestSkill" aria-label="Animacja umiejętności zdobytej kulki"></div>
       <div class="grid-2">
         <button class="b ac" style="padding:12px" onclick="openBallDetail(${w.id})">Pokaż w ekwipunku</button>
-        <button class="b graj" style="font-size:1rem;padding:12px" onclick="$('#ov').hidden=true;panel('${isHalloween ? 'hw' : 'shop'}')">OK</button>
+        <button class="b graj" id="bvbOpenAgain" style="font-size:1rem;padding:12px" ${(isHalloween ? S.candies < 50 : S.coins < 100) ? 'disabled' : ''} onclick="pull(${Boolean(isHalloween)})">📦 Otwórz jeszcze raz ${isHalloween ? '(50 🍬)' : '(100 🪙)'}</button>
+        <button class="b" style="padding:12px;grid-column:1/-1" onclick="$('#ov').hidden=true;panel('${isHalloween ? 'hw' : 'shop'}')">Wróć do sklepu</button>
       </div>
     `;
+    window.BVB2Preview?.mount?.(w.id,document.getElementById('bvbChestSkill'),{source:'chest'});
+    window.skipPull = () => {};
   };
   const tm = setTimeout(done, 5400);
   window.skipPull = done;

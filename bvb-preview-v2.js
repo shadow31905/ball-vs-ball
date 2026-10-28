@@ -18,15 +18,16 @@ const zones=new Set(['poison','gas','mine','zone','lava','sun','frost','thorn','
 const beams=new Set(['beam','prism','tether','ray']);
 const dashes=new Set(['dash','blink','charge','chess']);
 const colors={frost:'#9ee9ff',shield:'#67e8f9',heal:'#86efac',shock:'#facc15',poison:'#b5f574',lava:'#fb923c'};
-let ticket=0;
-function play(id){
- const canvas=document.getElementById('bvb-skill-preview-canvas');
+const activePreviews=new WeakMap();
+function play(id,explicitCanvas=null){
+ const canvas=explicitCanvas||document.getElementById('bvb-skill-preview-canvas');
  if(!canvas||!B[id])return;
  const ctx=canvas.getContext('2d');if(!ctx)return;
  const evolution=getBallStats(id).tier,skill=window.BVB2.abilities[id],type=skill.kind,color=colors[type]||skill.color||'#c4b5fd';
  const authored=window.BVB2.authoredUpgrades?.[id]||null;
  const reduceMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches||false;
- const token=++ticket,start=performance.now(),W=320,H=150;
+ const token=(activePreviews.get(canvas)||0)+1;activePreviews.set(canvas,token);
+ const start=performance.now(),W=320,H=150;
  function circle(x,y,r,c){
   ctx.fillStyle=c;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
  }
@@ -391,10 +392,44 @@ function play(id){
   }
   ctx.restore();
  }
+ // Actual visible blade throw, hit and rebound for Shuriken (game ball #44).
+ // The source ball is visually surrounded by spinning blades before launch.
+ // V2 sends additional staggered blades; V3 returns an energized ricochet.
+ function throwShuriken(phase,ox,oy,ex,ey,tier){
+  if(phase<.28)return;
+  const blades=tier===1?1:tier===2?3:5;
+  const progress=Math.min(1,Math.max(0,(phase-.40)/1.16));
+  const ease=progress*progress*(3-2*progress);
+  ctx.save();
+  for(let n=0;n<blades;n++){
+   const delay=n*.12,p=Math.min(1,Math.max(0,(phase-.40-delay)/1.05));
+   const launched=p>0,travel=p*p*(3-2*p);
+   let x=ox+16+(ex-ox-39)*travel;
+   let y=oy+(n-(blades-1)/2)*13+Math.sin(travel*4+n)*5;
+   if(tier===3&&p>.76){const bounce=(p-.76)/.24;x-=bounce*29;y+=(n%2?-1:1)*bounce*17;}
+   ctx.save();
+   ctx.translate(x,y);ctx.rotate(phase*10+n*.83);
+   const radius=tier===1?8:tier===2?9.5:10.5;
+   ctx.shadowColor='#95eaff';ctx.shadowBlur=13;
+   ctx.fillStyle='#e8f6ff';ctx.strokeStyle='#65caff';ctx.lineWidth=1.7;
+   ctx.beginPath();
+   for(let k=0;k<8;k++){const a=k*Math.PI/4,r=k%2?3:radius;const px=Math.cos(a)*r,py=Math.sin(a)*r;
+    if(k===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}
+   ctx.closePath();ctx.fill();ctx.stroke();
+   circle(0,0,2.5,'#17294a');ctx.restore();
+   if(launched){glowingLine(x-17,y+2,x-7,y+2,2,'#76ddff',.5);}
+  }
+  if(ease>.89){ctx.globalAlpha=Math.max(0,1-(ease-.89)*7);
+   ctx.strokeStyle='#f7faff';ctx.lineWidth=2;
+   for(let k=0;k<9;k++){const a=k*2*Math.PI/9;const dx=Math.cos(a),dy=Math.sin(a);
+    ctx.beginPath();ctx.moveTo(ex+dx*12,ey+dy*12);
+    ctx.lineTo(ex+dx*(17+tier*4),ey+dy*(17+tier*4));ctx.stroke();}}
+  ctx.restore();
+ }
  function frame(now){
   // Stop the preview when the menu, collection window or its parent view is hidden.
   // Otherwise requestAnimationFrame would keep rendering during the actual fight on phones.
-  if(token!==ticket||canvas!==document.getElementById('bvb-skill-preview-canvas')||canvas.closest?.('[hidden]'))return;
+  if(token!==activePreviews.get(canvas)||!canvas.isConnected||canvas.closest?.('[hidden]'))return;
   const phase=reduceMotion?1.45:((now-start)/1000)%2.9,t=Math.min(1,Math.max(0,(phase-.35)/1.2));
   ctx.clearRect(0,0,W,H);
   const grad=ctx.createLinearGradient(0,0,W,H);grad.addColorStop(0,'#0b1433');grad.addColorStop(1,'#1c1647');
@@ -407,7 +442,9 @@ function play(id){
   const ox=dashes.has(type)?65+Math.max(0,t-.1)*76:67,ex=248,oy=H/2,ey=H/2;
   const opacity=phase>2.3?Math.max(.05,(2.9-phase)/.6):1;
   ctx.save();ctx.globalAlpha=opacity;
-  if(type==='web'){
+  if(id===43){
+   throwShuriken(phase,ox,oy,ex,ey,evolution);
+  }else if(type==='web'){
    const startX=12,startY=42,endX=W-12,endY=111;
    if(phase>.38)circle(startX,startY,4,'#fef9c3');
    if(phase>.9)circle(endX,endY,4,'#fef9c3');
@@ -445,8 +482,8 @@ function play(id){
      circle(ox+Math.cos(angle)*27,oy+Math.sin(angle)*27,4,color);
     }
   }
-  if(id>=32&&id<=47&&phase>.35)drawV1Signature32(id,t,ox,oy,ex,ey,color);
-  if(authored&&evolution>=2&&phase>.48){
+  if(id>=32&&id<=47&&id!==43&&phase>.35)drawV1Signature32(id,t,ox,oy,ex,ey,color);
+  if(id!==43&&authored&&evolution>=2&&phase>.48){
    drawEvolvedEffect(authored[0],1,t,ox,oy,ex,ey);
    if(evolution>=3)drawEvolvedEffect(authored[1],2,t,ox,oy,ex,ey);
   }
@@ -457,9 +494,27 @@ function play(id){
    ctx.lineWidth=2;ctx.beginPath();ctx.arc(ex,ey,20+(phase-1.2)*15,0,7);ctx.stroke();
   }
   ctx.restore();
-  if(!reduceMotion&&phase<2.9)requestAnimationFrame(frame);
+  if(!reduceMotion)requestAnimationFrame(frame);
  }
  requestAnimationFrame(frame);
+}
+/* Reusable, independent skill playback for inventory, pre-fight and chest rewards.
+ * Independent canvases avoid clashing element IDs or terminating one another. */
+function mount(id,host,options={}){
+ if(!B[id]||!host)return null;
+ const skill=window.BVB2?.abilities?.[id],stage=getBallStats(id).tier;
+ const section=document.createElement('section');
+ section.className='bvb-skill-preview';section.dataset.skillBallId=String(id);
+ const title=document.createElement('h3');title.textContent='✨ '+B[id].n+' · V'+stage+' — animacja umiejętności';
+ const canvas=document.createElement('canvas');canvas.width=320;canvas.height=150;
+ canvas.className='bvb-skill-canvas';canvas.setAttribute('aria-label','Animacja umiejętności kulki '+B[id].n);
+ const description=document.createElement('p');description.textContent=skill?.desc||getBallStats(id).activeDesc||'';
+ const replay=document.createElement('button');replay.className='b ac';
+ replay.type='button';replay.textContent='▶ Odtwórz umiejętność ponownie';
+ replay.addEventListener('click',()=>play(id,canvas));
+ section.append(title,canvas,description,replay);host.append(section);
+ requestAnimationFrame(()=>play(id,canvas));
+ return {section,canvas,replay};
 }
 const prev=openBallDetail;
 openBallDetail=function(id){
@@ -483,5 +538,5 @@ openBallDetail=function(id){
  box.querySelector('#bvbReplaySkill').addEventListener('click',()=>play(id));
  requestAnimationFrame(()=>play(id));
 };
-window.BVB2Preview={play};
+window.BVB2Preview={play,mount};
 })();
