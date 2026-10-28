@@ -23,6 +23,18 @@ function buildBatch1(out=path.join(root,'beta-batch1'),revision='working-tree'){
  html=html.replace('</body>','<script src="./bvb-batch1-beta.js"></script>\n</body>');
  fs.writeFileSync(htmlPath,html);
  manifest.files['index.html']=digest(html);
+ // The ability catalog still enumerates all 130 original definitions even though
+ // this sandbox exposes only 13 playable IDs. Keep metadata lookups bounds-safe.
+ const abilitiesPath=path.join(out,'bvb-abilities-v2.js');
+ let abilities=fs.readFileSync(abilitiesPath,'utf8');
+ const metadataFallback="color:colors[kind]||B[id].c";
+ ensure(abilities.includes(metadataFallback),'Ability metadata fallback marker missing');
+ abilities=abilities.replace(metadataFallback,"color:colors[kind]||(B[id]?.c||RAW_BALLS[id]?.[3]||'#94a3b8')");
+ const imageFallback="const col=B[id].c,accent=data.color";
+ ensure(abilities.includes(imageFallback),'Ability art fallback marker missing');
+ abilities=abilities.replace(imageFallback,"const col=(B[id]?.c||RAW_BALLS[id]?.[3]||'#94a3b8'),accent=data.color");
+ fs.writeFileSync(abilitiesPath,abilities);
+ manifest.files['bvb-abilities-v2.js']=digest(abilities);
  const mode=fs.readFileSync(path.join(root,'bvb-batch1-beta.js'),'utf8');
  fs.writeFileSync(path.join(out,'bvb-batch1-beta.js'),mode);
  manifest.files['bvb-batch1-beta.js']=digest(mode);
