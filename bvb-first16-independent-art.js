@@ -175,9 +175,9 @@ function svgFor(id,tier){
  '@keyframes bvbIndBreath'+id+'{to{transform:scale('+(1.02+tier*.012).toFixed(3)+')}}'+
  '@media(prefers-reduced-motion:reduce){.bvb-ind-aura,.bvb-ind-core{animation:none!important}}</style>';
  s+=circ(64,64,43,c.base,'none',0).replace('/>',' opacity=".30" filter="url(#'+uid+'-glow)"/>');
- s+='<g class="bvb-ind-aura">'+motif(id,tier,c)+'</g>';
- s+='<g class="bvb-ind-core">'+circ(64,64,31+tier,'url(#'+uid+'-core)',c.hot,tier===3?3.5:2.2)+
- path('M41 43Q53 25 72 30','none','#ffffff',2.5)+face(id,tier,c)+'</g>';
+ s+='<g class="bvb-ind-core">'+circ(64,64,31+tier,'url(#'+uid+'-core)',c.hot,tier===3?3.5:2.2)+path('M41 43Q53 25 72 30','none','#ffffff',2.5)+'</g>';
+ // Individual identity marks must be visible ABOVE the ball, never buried under the core.
+ s+='<g class="bvb-ind-aura">'+motif(id,tier,c)+'</g>'+face(id,tier,c);
  if(tier>=2)s+='<g class="bvb-ind-upgrade">'+path('M20 83Q64 '+(112+tier*2)+' 108 83','none',c.hot,1.4+tier*.7)+'</g>';
  if(tier===3)s+='<g class="bvb-ind-master">'+star(64,13,6,9,3,c.hot)+'</g>';
  return s+'</svg>';
