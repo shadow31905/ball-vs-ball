@@ -1,0 +1,47 @@
+name: Playtest ONLY balls 33-48 (offline HTML)
+
+on:
+  push:
+    branches: [test/only-rework-33-48]
+    paths:
+      - 'scripts/build-only-33-48.cjs'
+      - 'tests/isolated-33-48-browser.cjs'
+      - '.github/workflows/playtest-only-33-48.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bvb-playtest-only-33-48
+  cancel-in-progress: true
+
+jobs:
+  playable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build standalone original game with ONLY rework 33-48
+        run: |
+          node scripts/build-only-33-48.cjs
+          test -s only-33-48/BALL_VS_BALL_TEST_TYLKO_33-48.html
+          ! grep -q 'src="./bvb-' only-33-48/BALL_VS_BALL_TEST_TYLKO_33-48.html
+      - name: Install Chromium for actual offline browser test
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test opening the actual offline game and only its 16 reworked balls
+        run: node tests/isolated-33-48-browser.cjs
+      - name: Deliver standalone test game (main is untouched)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BALL_VS_BALL_TYLKO_KULKI_33-48
+          path: |
+            only-33-48/BALL_VS_BALL_TEST_TYLKO_33-48.html
+            only-33-48/JAK_URUCHOMIC.txt
+          if-no-files-found: error
+          retention-days: 30
