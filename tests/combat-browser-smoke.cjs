@@ -110,11 +110,26 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
      pic.includes('data-ball-id="'+(i+64)+'"')&&pic.includes('data-evolution="'+(t+1)+'"'))));
    assert.equal(new Set(thirdSet.map(v=>v.upgrades[0])).size,16,'V2 authored skills');
    assert.equal(new Set(thirdSet.map(v=>v.upgrades[1])).size,16,'V3 authored skills');
-   const elementTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
+   const originalTags=await page.evaluate(()=>Array.from({length:16},(_,id)=>
     [1,2,3].map(t=>window.BVBArtEvolution.svgFor(id,t)
-      .match(/data-element="([^"]+)"/)?.[1]||'')));
-   assert.equal(new Set(elementTags.flat()).size,16,'16 separate elements in game');
-   assert.ok(elementTags.every(row=>row[0]===row[1]&&row[1]===row[2]));
+      .match(/data-concept="([^"]+)"/)?.[1]||'')));
+   assert.equal(new Set(originalTags.flat()).size,16,'16 approved original identities in game');
+   assert.ok(originalTags.every(row=>row[0]===row[1]&&row[1]===row[2]));
+   // Decode every approved evolution as a REAL browser bitmap, not only SVG text.
+   const first16Pixels=await page.evaluate(()=>{
+     const canvas=document.createElement('canvas');canvas.width=canvas.height=128;
+     const c=canvas.getContext('2d',{willReadFrequently:true}),hashes=[];
+     for(let id=0;id<16;id++)for(let tier=1;tier<=3;tier++){
+       const img=window.BVBArtEvolution.imageForTier(id,tier);
+       c.clearRect(0,0,128,128);c.drawImage(img,0,0,128,128);
+       const p=c.getImageData(0,0,128,128).data;let hash=2166136261;
+       for(let i=0;i<p.length;i+=12){hash=Math.imul((hash^p[i])>>>0,16777619);hash=Math.imul((hash^p[i+1])>>>0,16777619);}
+       hashes.push(hash>>>0);
+     }
+     return hashes;
+   });
+   assert.equal(first16Pixels.length,48);
+   assert.equal(new Set(first16Pixels).size,48,'48 independent pixel-level appearances');
    // The full 33–48 concept-art set must decode as images in every browser.
    const newMotifs=await page.evaluate(()=>Array.from({length:16},(_,i)=>
     [1,2,3].map(t=>window.BVBArtEvolution.svgFor(i+32,t)
