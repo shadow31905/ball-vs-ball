@@ -20,7 +20,7 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
    for(let id=32;id<48;id++)for(let tier=1;tier<=3;tier++)for(const style of ['detailed','classic']){
     const el=document.createElement('div');el.innerHTML=art.svgFor(id,tier,style);
     const svg=el.firstElementChild;host.appendChild(svg);
-    variants.push({id,tier,style,svg,motion:svg.querySelector('.sk33-identity'),particles:svg.querySelector('.sk33-ability-fx')});
+    variants.push({id,tier,style,svg,motion:svg.querySelector('.sk33-identity'),particles:svg.querySelector('.sk33-ability-fx'),gear2:svg.querySelector('.sk33-stage2'),gear3:svg.querySelector('.sk33-stage3')});
    }
    document.body.appendChild(host);
    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
@@ -28,6 +28,8 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
     for(const a of host.getAnimations({subtree:true})){a.pause();a.currentTime=milliseconds;}
     return variants.map(v=>({
      motion:getComputedStyle(v.motion).transform,particles:getComputedStyle(v.particles).transform,
+     gear2:v.gear2?getComputedStyle(v.gear2).transform:null,gear3:v.gear3?getComputedStyle(v.gear3).transform:null,
+     gearName2:v.gear2?getComputedStyle(v.gear2).animationName:null,gearName3:v.gear3?getComputedStyle(v.gear3).animationName:null,
      motionName:getComputedStyle(v.motion).animationName,
      particleName:getComputedStyle(v.particles).animationName,
      key:v.svg.getAttribute('data-animation-key'),
@@ -40,7 +42,11 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
     id:variants[i].id,tier:variants[i].tier,style:variants[i].style,key:v.key,effect:v.effect,
     rightName:v.validName,motionNamed:v.motionName.startsWith('sk33Skill'),
     particleNamed:v.particleName.startsWith('sk33Fx'),
-    moving:v.motion!==second[i].motion,particleMoving:v.particles!==second[i].particles
+    moving:v.motion!==second[i].motion,particleMoving:v.particles!==second[i].particles,
+    stagedCorrect:variants[i].tier===1?!variants[i].gear2&&!variants[i].gear3:
+     variants[i].tier===2?!!variants[i].gear2&&!variants[i].gear3:!!variants[i].gear2&&!!variants[i].gear3,
+    hardwareV2:variants[i].tier===1||v.gearName2?.startsWith('sk33Gear')&&v.gear2!==second[i].gear2,
+    hardwareV3:variants[i].tier<3||v.gearName3?.startsWith('sk33Apex')&&v.gear3!==second[i].gear3
    }));
    host.remove();
    const pixelCanvas=document.createElement('canvas');pixelCanvas.width=pixelCanvas.height=128;
@@ -96,6 +102,10 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
     'Invalid names or missing animated layer: '+JSON.stringify(result.variants.filter(x=>!x.rightName||!x.motionNamed||!x.particleNamed).slice(0,5)));
   assert.ok(result.variants.every(x=>x.moving&&x.particleMoving),
     'Static SVG animation: '+JSON.stringify(result.variants.filter(x=>!x.moving||!x.particleMoving).slice(0,5)));
+  assert.ok(result.variants.every(x=>x.stagedCorrect&&x.hardwareV2&&x.hardwareV3),
+    'Unfinished or static evolving equipment: '+JSON.stringify(result.variants.filter(x=>!x.stagedCorrect||!x.hardwareV2||!x.hardwareV3).slice(0,8)));
+  assert.equal(result.variants.filter(x=>x.tier>=2).length,64,'V2 physical hardware present in both appearances');
+  assert.equal(result.variants.filter(x=>x.tier===3).length,32,'V3 physical hardware present in both appearances');
   assert.equal(result.rows.length,16);
   assert.ok(result.rows.every(x=>x.name===x.concept&&x.uniqueEvolution&&x.differentStyles),
     'Art mismatch: '+JSON.stringify(result.rows.filter(x=>x.name!==x.concept||!x.uniqueEvolution||!x.differentStyles)));
@@ -178,6 +188,6 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
   assert.equal(reduced.animation,'none');
   assert.equal(reduced.particles,'none');
   assert.deepEqual(errors,[],'No browser exceptions');
-  console.log('PASS third-batch animated art '+engineName+': 96/96 SVG rigs and particles; 48/48 live canvas motions; 16 original identities; evolving 2 styles; style gate; reduced motion; no save mutations.');
+  console.log('PASS third-batch animated art '+engineName+': 96/96 SVG rigs and particles; 64 V2 and 32 V3 independently moving hardware stages; 48/48 live canvas motions; 16 original identities; evolving 2 styles; style gate; reduced motion; no save mutations.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});
