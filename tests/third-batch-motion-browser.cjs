@@ -135,23 +135,28 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
    document.body.appendChild(parent);
    const motion=()=>[...parent.querySelectorAll('.sk33-identity')].map(x=>getComputedStyle(x).animationName);
    const core=()=>[...parent.querySelectorAll('.sk33-core')].map(x=>getComputedStyle(x).animationName);
-   let normal,inventoryOff,intensityOff,interiorOff;
+   const equipment=()=>[...parent.querySelectorAll('.sk33-stage2,.sk33-stage3')].map(x=>getComputedStyle(x).animationName);
+   let normal,inventoryOff,intensityOff,interiorOff,normalEquipment,offEquipment,intensityEquipment;
    try{
-    BVBMotion.sync();normal=motion();
-    S.o.art_inventory=0;BVBMotion.sync();inventoryOff=motion();
-    S.o.art_inventory=1;S.o.artIntensity=0;BVBMotion.sync();intensityOff=motion();
+    BVBMotion.sync();normal=motion();normalEquipment=equipment();
+    S.o.art_inventory=0;BVBMotion.sync();inventoryOff=motion();offEquipment=equipment();
+    S.o.art_inventory=1;S.o.artIntensity=0;BVBMotion.sync();intensityOff=motion();intensityEquipment=equipment();
     S.o.artIntensity=saved.intensity;S.o.art_interior=0;BVBMotion.sync();interiorOff=core();
    }finally{
     S.o.art_inventory=saved.inventory;S.o.artIntensity=saved.intensity;
     S.o.art_interior=saved.interior;BVBMotion.sync();parent.remove();
    }
-   return {normal,inventoryOff,intensityOff,interiorOff};
+   return {normal,inventoryOff,intensityOff,interiorOff,normalEquipment,offEquipment,intensityEquipment};
   });
   assert.equal(pref.normal.length,8);
   assert.ok(pref.normal.every(x=>x.startsWith('sk33Skill')));
   assert.ok(pref.inventoryOff.every(x=>x==='none'),'Inventory animation toggle must stop every checked V1/V3 rig');
   assert.ok(pref.intensityOff.every(x=>x==='none'),'Zero intensity must stop every checked V1/V3 rig');
   assert.ok(pref.interiorOff.every(x=>x==='none'),'Interior animation toggle must stop core motion');
+  assert.equal(pref.normalEquipment.length,8,'Every V3 sample must have two moving hardware layers');
+  assert.ok(pref.normalEquipment.every(x=>x.startsWith('sk33Gear')||x.startsWith('sk33Apex')));
+  assert.ok(pref.offEquipment.every(x=>x==='none'),'Inventory off must stop evolution hardware');
+  assert.ok(pref.intensityEquipment.every(x=>x==='none'),'Zero intensity must stop evolution hardware');
   const frozen=await page.evaluate(async()=>{
    const original={artIntensity:S.o.artIntensity,art_fight:S.o.art_fight,art_interior:S.o.art_interior};
    const cv=document.createElement('canvas');cv.width=cv.height=128;
@@ -190,10 +195,14 @@ const url=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/beta/';
    document.body.appendChild(el);
    const animation=getComputedStyle(el.querySelector('.sk33-identity')).animationName;
    const particles=getComputedStyle(el.querySelector('.sk33-ability-fx')).animationName;
-   el.remove();return {animation,particles};
+   const gear2=getComputedStyle(el.querySelector('.sk33-stage2')).animationName;
+   const gear3=getComputedStyle(el.querySelector('.sk33-stage3')).animationName;
+   el.remove();return {animation,particles,gear2,gear3};
   });
   assert.equal(reduced.animation,'none');
   assert.equal(reduced.particles,'none');
+  assert.equal(reduced.gear2,'none');
+  assert.equal(reduced.gear3,'none');
   assert.deepEqual(errors,[],'No browser exceptions');
   console.log('PASS third-batch animated art '+engineName+': 96/96 SVG rigs and particles; 64 V2 and 32 V3 independently moving hardware stages; 48/48 live canvas motions; per-stage pixel differences verified; 16 original identities; evolving 2 styles; style gate; reduced motion; no save mutations.');
  }finally{await browser.close();}
