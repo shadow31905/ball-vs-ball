@@ -100,9 +100,56 @@ function angryFace(id,tier){
  return out+'<path d="M40 '+(yy+11)+'Q48 '+(yy+8+id%4)+' 56 '+(yy+11)+
   '" stroke="#27334d" stroke-width="1.5" fill="none"/></g>';
 }
+
+/* This is a cosmetic view preference, never part of actor state or battle RNG.
+ * Classic portraits are a temporary identity-preserving vector layer until
+ * every approved classic source sprite is exported and reviewed.
+ */
+const classicCache=new Map();
+const completedReworkIds=new Set(Array.from({length:32},(_,id)=>id));
+function isCompletedRework(id){return Number.isInteger(id)&&completedReworkIds.has(id);}
+function currentStyle(){return S?.o?.ballVisualStyle==='classic'?'classic':'detailed';}
+function classicSvg(id,tier){
+ if(id>=16&&id<32)return window.BVBSketch17to32.svgFor(id,tier,'classic');
+ const key=id*4+tier;
+ if(classicCache.has(key))return classicCache.get(key);
+ const base=previous(id,1);
+ const source=(base.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i)||[])[1]||'';
+ const motif=source.replace(/^\s*<rect\b[^>]*\/>/i,'');
+ const color=palette[id]||B[id]?.c||'#72ddff';
+ const eyeColor=['#44caff','#ff4d6e','#95ff4d','#c777ff'][id%4];
+ const angle=id*17%360;
+ const speed=(3.3+(id%7)*.25-(tier-1)*.2).toFixed(2);
+ const ring='<g class="bvb-classic-orbit" transform-origin="32px 32px"><ellipse cx="32" cy="32" rx="'+(27+tier*.8)+'" ry="'+(24+tier)+'" transform="rotate('+angle+' 32 32)" fill="none" stroke="'+color+'" stroke-width="'+(1+tier*.4)+'" opacity=".92"/>'+
+  (tier>=2?'<path d="M9 22L4 18 12 9M51 45L59 52 50 59" fill="none" stroke="'+color+'" stroke-width="2"/>':'')+
+  (tier===3?'<path d="M32 1L36 9L32 6L28 9ZM32 63L28 55L32 58L36 55Z" fill="'+color+'"/>':'')+'</g>';
+ const face='<g class="bvb-classic-face"><path d="M15 28L27 34L25 39L14 33ZM49 28L37 34L39 39L50 33Z" fill="'+eyeColor+'" stroke="#080d18" stroke-width="1.4"/>'+
+  '<path d="M16 29L27 34M48 29L37 34" stroke="#f4ffff" stroke-width=".7" opacity=".78"/></g>';
+ const core='<g class="bvb-classic-core"><circle cx="32" cy="32" r="23.7" fill="#232832" stroke="#070b14" stroke-width="3"/>'+
+  '<path d="M15 17Q21 10 34 11" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="2"/></g>';
+ const equipment='<g class="bvb-classic-equipment">'+motif+'</g>';
+ const extra=tier===3?'<g class="bvb-classic-final"><circle cx="12" cy="11" r="2" fill="'+eyeColor+'"/><circle cx="52" cy="15" r="2.8" fill="'+color+'"/></g>':'';
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="'+B[id].n+' V'+tier+' Klasyczny" data-bvb-art-v2="1" data-visual-style="classic" data-ball-id="'+id+'" data-evolution="'+tier+'">'+
+  '<style>.bvb-classic-orbit{animation:bvbClassicOrbit '+speed+'s linear infinite}.bvb-classic-equipment{transform-origin:32px 32px;animation:bvbClassicEquip '+(2.3+id%4*.35).toFixed(2)+'s ease-in-out infinite alternate}.bvb-classic-core{transform-origin:32px 32px;animation:bvbClassicBeat 2.8s ease-in-out infinite alternate}'+
+  '@keyframes bvbClassicOrbit{to{transform:rotate(360deg)}}@keyframes bvbClassicEquip{to{transform:rotate(5deg)}}@keyframes bvbClassicBeat{to{transform:scale(1.02)}}@media(prefers-reduced-motion:reduce){*{animation:none!important}}</style>'+
+  ring+core+equipment+face+extra+'</svg>';
+ classicCache.set(key,svg);return svg;
+}
+function refreshVisualStyle(){
+ imageCache.clear();
+ ART_IMAGES.clear();preloadArt();
+ const nodes=document.querySelectorAll?.('.orb svg[data-bvb-art-v2],.bvb-evo-preview svg[data-bvb-art-v2]')||[];
+ for(const node of nodes){
+  const id=Number(node.getAttribute('data-ball-id'));
+  const tier=Number(node.getAttribute('data-evolution'));
+  if(Number.isInteger(id)&&isCompletedRework(id)&&tier>=1&&tier<=3)node.outerHTML=svgFor(id,tier);
+ }
+}
+
 function svgFor(id,tier){
  id=Number(id);if(!Number.isInteger(id)||id<0||id>=B.length)return '';
  tier=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
+ if(currentStyle()==='classic'&&isCompletedRework(id))return classicSvg(id,tier);
  if(window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.svgFor(id,tier);
  if(id<16)return window.BVBElementalArt.svgFor(id,tier);
  if(id>=16&&id<32)return window.BVBSketch17to32.svgFor(id,tier);
@@ -132,10 +179,10 @@ function svgFor(id,tier){
 }
 art=function(id,tier){return svgFor(id,tier==null?getBallStats(id).tier:tier);};
 function imageForTier(id,tier){
- if(window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.imageForTier(id,tier);
  if(!Number.isInteger(id)||id<0||id>=B.length)return null;
+ if(currentStyle()==='detailed'&&window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.imageForTier(id,tier);
  const stage=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
- const key=id*4+stage;
+ const key=(isCompletedRework(id)?currentStyle():'unchanged')+':'+id*4+':'+stage;
  if(!imageCache.has(key)){
   const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgFor(id,stage));imageCache.set(key,img);
  }
@@ -195,6 +242,6 @@ css.textContent+='\n.bvb-evo-triptych{display:grid;grid-template-columns:repeat(
  '\n.bvb-evo-preview strong{color:#f8fafc}'+
  '\n.bvb-evo-preview .orb{--s:70px!important;max-width:100%}'+
  '\n.bvb-evo-preview[data-stage="3"]{border-color:#f7cf6b;box-shadow:0 0 12px #fbbf2450}';
-window.BVBArtEvolution={count:B.length,tiers:3,signatures:Object.freeze(sig),svgFor,imageForTier,imageFor,colors:palette,galleryHtml};
+window.BVBArtEvolution={count:B.length,tiers:3,signatures:Object.freeze(sig),svgFor,imageForTier,imageFor,colors:palette,galleryHtml,currentStyle,isCompletedRework,refreshVisualStyle};
 ART_IMAGES.clear();preloadArt();
 })();

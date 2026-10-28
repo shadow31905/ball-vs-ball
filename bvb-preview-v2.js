@@ -35,8 +35,10 @@ function play(id){
   ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();
  }
  function sprite(ball,x,y,r){
-  if(window.BVBLiveFirst16?.draw(ctx,ball,evolution,x,y,r,(performance.now()-start)/1000,{scope:'preview'}))return;
+  if(window.BVBArtEvolution?.currentStyle?.()!=='classic'&&window.BVBLiveFirst16?.draw(ctx,ball,evolution,x,y,r,(performance.now()-start)/1000,{scope:'preview'}))return;
   const img=window.BVBArtEvolution?.imageForTier?.(ball,evolution)||window.BVB2Sheet02?.imageForTier?.(ball,evolution)||ART_IMAGES.get(ball);
+  if(window.BVBSketch17to32?.drawCombatSprite?.(ctx,ball,evolution,x,y,r,(performance.now()-start)/1000,img))return;
+  if(window.BVBSketch33to48?.drawCombatSprite?.(ctx,ball,evolution,x,y,r,(performance.now()-start)/1000,img))return;
   if(img?.complete&&img.naturalWidth)ctx.drawImage(img,x-r,y-r,r*2,r*2);
   else circle(x,y,r,B[ball]?.c||'#fff');
  }

@@ -10,6 +10,7 @@ const labels=['Wnętrze i oczy kulek','Walka i efekty ruchu','Ekwipunek i lobby'
 function prefs(){
  const o=S?.o||{};
  if(!['low','medium','high','ultra'].includes(o.artQuality))o.artQuality='ultra';
+ if(!['detailed','classic'].includes(o.ballVisualStyle))o.ballVisualStyle='detailed';
  if(!Number.isFinite(o.artIntensity))o.artIntensity=85;
  o.artIntensity=clamp(Math.round(o.artIntensity),0,100);
  for(const f of flags)if(typeof o['art_'+f]!=='number')o['art_'+f]=1;
@@ -25,18 +26,25 @@ function sync(){
  document.body?.classList?.toggle('bvb-result-motion-off',!enabled('results'));
  for(const name of ['low','medium','high','ultra'])document.body?.classList?.toggle('bvb-quality-'+name,o.artQuality===name);
  document.body?.style?.setProperty('--bvb-intensity',String(o.artIntensity/100));
+ document.body?.setAttribute?.('data-bvb-ball-style',o.ballVisualStyle);
 }
 function change(type,value){
  const o=prefs();
  if(type==='quality'&&['low','medium','high','ultra'].includes(value))o.artQuality=value;
+ else if(type==='ballStyle'&&['detailed','classic'].includes(value))o.ballVisualStyle=value;
  else if(type==='intensity')o.artIntensity=clamp(Number(value)||0,0,100);
  else if(flags.includes(type))o['art_'+type]=value?1:0;
  sync();save();panel('set');
+ if(type==='ballStyle')window.BVBArtEvolution?.refreshVisualStyle?.();
 }
 function settingsHtml(){
  const o=prefs();sync();
  return '<div class="cd" id="bvbAnimationSettings"><h3>🎨 Animacje i grafika</h3>'+
   '<p style="color:#cbd5e1;font-size:.77rem">Efekty wizualne nie zmieniają siły umiejętności.</p>'+
+  '<label for="bvbBallVisualStyle">Wygląd kulek</label>'+ 
+  '<select id="bvbBallVisualStyle" class="inp" onchange="BVBMotion.change(\'ballStyle\',this.value)">'+
+  [['detailed','Szczegółowy'],['classic','Klasyczny']].map(([v,n])=>
+    '<option value="'+v+'"'+(o.ballVisualStyle===v?' selected':'')+'>'+n+'</option>').join('')+'</select>'+
   '<label for="bvbArtQuality">Jakość grafiki</label>'+
   '<select id="bvbArtQuality" class="inp" onchange="BVBMotion.change(\'quality\',this.value)">'+
   [['low','Niska'],['medium','Średnia'],['high','Wysoka'],['ultra','Ultra — maksymalna']].map(([v,n])=>
@@ -55,7 +63,7 @@ const rgba=(hex,alpha)=>{
  return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+alpha+')';
 };
 function drawActor(ctx,o,g){
- if(window.BVBApprovedArt?.has(o?.b?.id))return;
+ if(window.BVBApprovedArt?.has(o?.b?.id)&&prefs().ballVisualStyle!=='classic')return;
  if(!enabled('fight')||!o||!Number.isFinite(o.x)||!Number.isFinite(o.y)||!o.b)return;
  const options=prefs(),quality=options.artQuality,stage=clamp(o.tier||1,1,3),id=o.b.id||0;
  const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
