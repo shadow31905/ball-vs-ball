@@ -41,6 +41,7 @@ const MOTIONS=Object.freeze([
  '0%,100%{transform:rotate(-22deg) scale(.95)}40%{transform:rotate(22deg) scale(1.08)}75%{transform:rotate(4deg) scale(1.03)}',
  '0%,100%{transform:rotate(-34deg) translateX(-3px)}50%{transform:rotate(27deg) translateX(5px)}'
 ]);
+const renderCache=new Map();
 const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const n=x=>Number(x).toFixed(2);
 const path=(d,fill='none',stroke='none',w=1)=>'<path d="'+d+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+w+'" stroke-linejoin="round" stroke-linecap="round"/>';
@@ -166,6 +167,7 @@ function face(id,t,c){
 function svgFor(id,tier){
  id=Number(id);tier=Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
  if(!Number.isInteger(id)||id<0||id>=16)return '';
+ const cacheKey=id*4+tier;if(renderCache.has(cacheKey))return renderCache.get(cacheKey);
  const c=THEMES[id],uid='ind-'+id+'-'+tier;
  let s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" data-bvb-art-v2="1" data-ball-id="'+id+'" data-evolution="'+tier+'" data-original-name="'+esc(c.name)+'" data-concept="'+c.tag+'" aria-label="'+esc(c.name)+' V'+tier+'">';
  s+='<title>'+esc(c.name)+' V'+tier+'</title><defs><radialGradient id="'+uid+'-core" cx="25%" cy="19%" r="84%"><stop stop-color="'+c.hot+'"/><stop offset=".28" stop-color="'+c.base+'"/><stop offset=".83" stop-color="'+c.base+'"/><stop offset="1" stop-color="'+c.dark+'"/></radialGradient><filter id="'+uid+'-glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3"/></filter></defs>';
@@ -180,7 +182,7 @@ function svgFor(id,tier){
  s+='<g class="bvb-ind-aura">'+motif(id,tier,c)+'</g>'+face(id,tier,c);
  if(tier>=2)s+='<g class="bvb-ind-upgrade">'+path('M20 83Q64 '+(112+tier*2)+' 108 83','none',c.hot,1.4+tier*.7)+'</g>';
  if(tier===3)s+='<g class="bvb-ind-master">'+star(64,13,6,9,3,c.hot)+'</g>';
- return s+'</svg>';
+ s+='</svg>';renderCache.set(cacheKey,s);return s;
 }
 function paintCombat(ctx,actor,g){
  if(!ctx||!actor||!actor.b||!Number.isInteger(actor.b.id)||actor.b.id>=16||actor.b.id<0)return;
