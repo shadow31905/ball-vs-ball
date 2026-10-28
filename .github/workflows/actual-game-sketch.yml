@@ -1,0 +1,55 @@
+name: Actual in-game ball reference sheets 0-48
+on:
+  push:
+    branches: [art/accurate-game-sketch-00-48]
+    paths:
+      - 'scripts/export-game-source-sketch.cjs'
+      - 'scripts/render-game-source-sketch.py'
+      - '.github/workflows/actual-game-sketch.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sketches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install true SVG and transparent PNG renderers
+        run: python -m pip install pillow cairosvg
+      - name: Export real game identity art for all 49 balls
+        run: node scripts/export-game-source-sketch.cjs
+      - name: Draw precise reference sheets without inventing characters
+        run: python scripts/render-game-source-sketch.py
+      - name: Check original names and actual game textures
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('out-game-source-sketch')
+          x=json.loads((p/'manifest.json').read_text())['balls']
+          expected=['Szarża','Topór','Trujący kolec','Złodziej','Ostrze','Karabin','Pająk','Wampir','Włócznia','Rozbłysk','Szachy','Kostka','Lodowy Stożek','Laser','Wąż','Hak']
+          assert [y['name'] for y in x[:16]]==expected
+          assert len(x)==49 and x[48]['name']=='Medyk'
+          assert len(list((p/'separate-transparent-pngs').glob('*.png')))==147
+          assert (p/'BVB_0-48_ORYGINALNE_GRAFIKI_DO_GRY.zip').stat().st_size>100000
+          print('PASS source-authentic sprites 0–48 and 147 export slices')
+          PY
+      - name: Deliver originals, sheet sketches and exact-alpha sprites
+        uses: actions/upload-artifact@v4
+        with:
+          name: BVB_SZKICE_PRAWDZIWE_KULKI_0-48
+          path: |
+            out-game-source-sketch/BVB_SZKIC_Z_GRY_00-15.png
+            out-game-source-sketch/BVB_SZKIC_Z_GRY_16-31.png
+            out-game-source-sketch/BVB_SZKIC_Z_GRY_32-47.png
+            out-game-source-sketch/BVB_SZKIC_Z_GRY_48.png
+            out-game-source-sketch/BVB_0-48_ORYGINALNE_GRAFIKI_DO_GRY.zip
+          if-no-files-found: error
+          retention-days: 30
