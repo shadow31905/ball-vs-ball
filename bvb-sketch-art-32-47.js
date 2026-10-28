@@ -229,17 +229,144 @@ function abilityFx(i,t,m,key){
  '75%{opacity:.7;transform:translateY(-1px) rotate(-2deg) scale(1)}}';
  return {type:types[i],css,markup:'<g class="sk33-ability-fx" data-skill-effect="'+types[i]+'">'+items.join('')+'</g>'};
 }
+
+/* Artist-authored, identity-specific physical evolution hardware.
+ * Each V2 keeps V1 silhouette, then adds one new recognizable device.
+ * V3 retains V2 and introduces a DIFFERENT, larger device.
+ * Keep bolts, sparks and chains outside the eye-readability area.
+ */
+function stagedHardware(i,t,m,key){
+ if(t===1)return {v2:'',v3:'',css:''};
+ const c=m.light,b=m.base;
+ const ring=(x,y,rx,ry,color=c,width=2,angle=0)=>ellipse(x,y,rx,ry,'none',color,width,angle);
+ const dot=(x,y,r,color=c)=>circle(x,y,r,color);
+ const L=(d,color=c,width=2)=>line(d,color,width);
+ const S=(x,y,k=6,R=6,color=c)=>star(x,y,k,R,Math.max(1,R*.28),color);
+ const P=(xy,color=b)=>poly(xy,color,c,1.5);
+ let v2='',v3='';
+ switch(i){
+ case 0: // Eliksir: reacting flasks → alchemical synthesis array
+  v2=ring(21,34,9,13,'#ffe0ff',2,-22)+P([[17,16],[25,16],[25,21],[30,29],[27,38],[16,38],[12,28],[17,22]],'#9d4be2')+dot(22,30,3,'#fff6a2');
+  v3=ring(64,15,28,8,'#ffcfef',3)+S(100,19,8,10,'#ffe681')+dot(106,39,5,'#fff0b2')+L('M102 20L106 34L99 45','#ffd7f9',2.5);
+  break;
+ case 1: // Konduktor: second carriage → parallel locomotive route
+  v2=P([[10,42],[31,42],[35,48],[35,61],[10,61]],'#7eabd3')+
+    dot(16,65,5,'#d9edff')+dot(29,65,5,'#d9edff')+L('M9 71H47','#fff1a6',3);
+  v3=P([[91,21],[118,21],[119,43],[90,43]],'#f6c053')+
+    ring(105,34,18,12,'#fff5bc',2)+L('M12 103L114 103M20 113L106 113','#fbe1a0',3);
+  break;
+ case 2: // Czarny Pająk: new eye cluster → double web trap
+  v2=ring(64,29,16,9,'#f2b2f4',2)+
+    dot(58,28,3,'#fb4c9d')+dot(66,25,3,'#fb4c9d')+dot(74,28,3,'#fb4c9d')+
+    L('M35 17L11 37L35 45M93 17L116 37L93 45','#d9a6f8',2);
+  v3=ring(64,64,55,43,'#c888e9',2,35)+
+    L('M8 33L35 53L14 97M120 33L94 53L113 97','#e0baff',2.5)+S(64,12,8,8,'#ff7dae');
+  break;
+ case 3: // Grób: gravestone reliquary → haunted graveyard portals
+  v2=P([[10,96],[10,52],[19,44],[33,52],[33,96]],'#59647d')+
+    L('M22 55V79M15 67H29','#e1e9ff',2.5)+flame(26,22,6,.33,'#92d5ff');
+  v3=P([[93,99],[93,52],[104,42],[115,52],[115,99]],'#7080a6')+
+    L('M104 52V81M96 65H112','#e5ecff',2.6)+ring(64,18,40,14,'#b9a3f7',2);
+  break;
+ case 4: // Skrzydło Światła: feather afterimage → radiant wing crown
+  v2=leaf(23,49,-40,.58,'#fff4be')+leaf(110,51,40,.58,'#fff4be')+
+    S(64,17,8,7,'#fff9d1');
+  v3=P([[35,13],[43,24],[53,12],[64,24],[75,12],[84,24],[93,13],[90,34],[38,34]],'#ffe698')+
+    ring(64,24,38,9,'#fff8df',2)+S(64,6,8,6,'#fff9de');
+  break;
+ case 5: // Pudełko Cukierków: wrapped drops → candy shower
+  v2=dot(19,35,7,'#a3f6ff')+P([[8,35],[13,28],[13,42]],'#ff8dd1')+
+    P([[25,28],[31,34],[25,42]],'#ff8dd1')+S(102,33,6,8,'#fff49c');
+  v3=dot(108,19,8,'#ffcd64')+P([[91,19],[98,10],[98,28]],'#ff87be')+
+    P([[118,10],[125,19],[118,28]],'#ff87be')+
+    S(22,17,6,8,'#ffffff')+S(76,10,5,6,'#fff2aa');
+  break;
+ case 6: // Szlam: budding cell → autonomous split
+  v2=ellipse(21,78,13,16,'#49e6a0','#d6ffaf',2)+
+    dot(18,74,3,'#faffdb')+dot(25,78,3,'#faffdb');
+  v3=ellipse(109,82,16,18,'#61ed8f','#e8ffc0',2.5)+
+    dot(105,75,3,'#faffdb')+dot(114,80,3,'#faffdb')+
+    L('M16 108Q64 93 115 109','#a8ffb2',2.8);
+  break;
+ case 7: // Kajdany: extra shackle locks → cross-link anchor
+  v2=ring(25,39,9,16,'#e9faff',4,25)+
+    L('M33 47L42 58L50 63','#a4c6f2',3)+dot(27,36,3,'#ffeeba');
+  v3=ring(103,32,12,20,'#e9faff',4,-25)+
+    L('M38 30L91 48M37 44L92 26','#cadcff',3)+
+    P([[57,15],[71,15],[76,30],[64,40],[53,30]],'#98b9e3');
+  break;
+ case 8: // Kwas: reactive catalyst → active acid floor
+  v2=ring(20,42,9,16,'#dfff93',2,-18)+
+    L('M19 58Q8 73 18 83','#c8ff4e',3)+dot(14,87,4,'#d6ff6f');
+  v3=L('M14 110Q37 98 59 110Q81 118 114 107','#caff45',5)+
+    L('M27 118Q65 108 103 118','#efff87',3)+dot(110,95,7,'#d9ff47');
+  break;
+ case 9: // Promień Świetlny: ricochet lens → crossing prism beams
+  v2=ring(24,31,12,12,'#ffffff',3)+
+    L('M16 39L3 55M24 18L17 4','#b4f8ff',3);
+  v3=P([[107,17],[122,39],[108,55],[91,35]],'#68e8ff')+
+    L('M91 30L120 7M91 43L127 75','#f5ffff',3)+S(116,24,7,8,'#ffffff');
+  break;
+ case 10: // Trujący Gaz: emitted vapour → expanding poisonous fog
+  v2=ellipse(22,33,17,11,'#8acb4d','#d7ff80',2)+
+    ellipse(12,44,8,7,'#a4d85a','#efff9d',1.5);
+  v3=ellipse(107,22,18,14,'#8cce59','#e2ff9a',2)+
+    ellipse(119,37,8,8,'#9eea61','#e8ff9b',1.5)+
+    ring(64,65,57,45,'#dcff8c',2);
+  break;
+ case 11: // Shuriken: extra spinning blade → giant crossed shurikens
+  v2=S(23,39,4,12,'#e6efff')+dot(23,39,3,'#354b78');
+  v3=S(105,27,4,17,'#dce6ff')+dot(105,27,4,'#354b78')+
+    S(65,11,4,9,'#f0f8ff');
+  break;
+ case 12: // Fibonacci: sequence symbols → golden ratio crown
+  v2=ring(22,30,13,13,'#ffdf8c',2)+S(22,30,5,9,'#fff2c2')+
+    L('M28 109Q64 120 99 104','#ffcf67',3);
+  v3=ring(64,21,31,15,'#ffe6ab',3)+
+    L('M37 20Q69 -4 89 26Q103 47 72 48','#fff2c2',3)+S(105,42,8,9,'#ffdc84');
+  break;
+ case 13: // Kaktus: reactive spines → crystalline blooming cactus
+  v2=leaf(24,42,-37,.48,'#7fe06d')+
+    S(26,33,7,9,'#ffbada')+S(109,75,6,7,'#eeffbc');
+  v3=leaf(106,35,37,.51,'#83ec70')+
+    S(105,20,8,13,'#ffd7ea')+S(14,75,8,11,'#efffc3')+
+    L('M52 10L56 25M75 10L72 25','#eeffd1',2.5);
+  break;
+ case 14: // Bomba: secondary trigger → three chain charges
+  v2=P([[18,34],[22,22],[31,27],[34,40],[28,47],[18,44]],'#40495c')+
+    L('M25 24L19 13','#f4bc8a',3)+S(18,9,7,7,'#fff49d');
+  v3=dot(111,88,12,'#364155')+dot(18,92,11,'#364155')+
+    L('M111 76L114 64M18 81L16 70','#ffd596',3)+
+    S(113,59,7,8,'#ffe28f')+S(15,66,7,7,'#ffe28f');
+  break;
+ case 15: // Orbita: new moon → satellite interception constellation
+  v2=ring(64,65,53,24,'#c9d0ff',2.8,25)+
+    dot(19,47,7,'#d9e5ff')+dot(105,86,6,'#d9e5ff');
+  v3=ring(64,65,60,36,'#e5e8ff',3,-27)+
+    dot(115,30,7,'#f7efff')+dot(18,99,6,'#f7efff')+S(64,8,7,8,'#ffffff');
+  break;
+ }
+ const name='sk33Gear'+key.replace(/[^a-zA-Z0-9]/g,''),
+  extra='sk33Apex'+key.replace(/[^a-zA-Z0-9]/g,''),
+  scope='svg[data-animation-key="'+key+'"]';
+ const css=scope+' .sk33-stage2{transform-origin:64px 65px;animation:'+name+' '+(3.7-i%3*.21).toFixed(2)+'s ease-in-out infinite}'+
+  scope+' .sk33-stage3{transform-origin:64px 65px;animation:'+extra+' '+(3.1-i%4*.13).toFixed(2)+'s ease-in-out infinite}'+
+  '@keyframes '+name+'{0%,100%{opacity:.8;transform:rotate(-3deg) scale(.97)}50%{opacity:1;transform:rotate(3deg) scale(1.03)}}'+
+  '@keyframes '+extra+'{0%,100%{opacity:.85;transform:rotate(-4deg) scale(.96)}50%{opacity:1;transform:rotate(5deg) scale(1.08)}}';
+ return {v2,v3,css};
+}
+
 function portrait(id,tier,style='detailed'){
  id=Number(id);if(!Number.isInteger(id)||id<32||id>47)return '';
  const t=Math.min(3,Math.max(1,Math.round(Number(tier)||1))),i=id-32,m=motifs[i],classic=style==='classic';
- const key='sk33-'+id+'-'+t+'-'+(classic?'c':'d'),move=skillMotion(i,t,key),fx=abilityFx(i,t,m,key);
+ const key='sk33-'+id+'-'+t+'-'+(classic?'c':'d'),move=skillMotion(i,t,key),fx=abilityFx(i,t,m,key),gear=stagedHardware(i,t,m,key);
  const g='grad-'+key,gl='glow-'+key,wide='data-reference-panel="'+m.ref+'"';
  let art='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" data-bvb-art-v2="1" data-ball-id="'+id+'" data-evolution="'+t+'" '+wide+' data-concept="'+m.key+'" data-animation-key="'+key+'" data-visual-style="'+(classic?'classic':'detailed')+'" data-ability-animation="'+move.name+'" aria-label="'+m.name+' V'+t+'">';
  art+='<defs><radialGradient id="'+g+'" cx="28%" cy="22%" r="81%"><stop stop-color="'+m.light+'"/><stop offset=".3" stop-color="'+m.base+'"/><stop offset=".76" stop-color="'+m.base+'"/><stop offset="1" stop-color="'+m.dark+'"/></radialGradient><filter id="'+gl+'" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="'+(2.5+t)+'"/></filter></defs>';
  const scope='svg[data-animation-key="'+key+'"]';
  art+='<style>'+scope+' .sk33-aura{transform-origin:64px 65px;animation:sk33Rotate '+(6+(i%5)*.67)+'s linear infinite}'+
   scope+' .sk33-core{transform-origin:64px 65px;animation:sk33Pulse '+(2.15+(i%7)*.14)+'s ease-in-out infinite alternate}'+
-  scope+' .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+fx.css+
+  scope+' .sk33-eyes{animation:sk33Blink 4.6s ease-in-out infinite}'+move.css+fx.css+gear.css+
   '@keyframes sk33Rotate{to{transform:rotate(360deg)}}@keyframes sk33Pulse{to{transform:scale(1.05)}}'+
   '@keyframes sk33Blink{0%,38%,62%,100%{transform:translateX(0)}44%,55%{transform:translateX(2px)}}'+
   'body.bvb-effects-off '+scope+' g,body.bvb-intensity-zero '+scope+' g{animation:none!important}'+
@@ -252,6 +379,8 @@ function portrait(id,tier,style='detailed'){
  const core=classic?'#222b3c':'url(#'+g+')';
  art+=circle(64,65,27+t*1.35,core,'stroke="'+m.light+'" stroke-width="'+(2.1+t*.4)+'"');
  art+='<g class="sk33-identity">'+outside(i,t,m)+'</g>';
+ if(t>=2)art+='<g class="sk33-stage2" data-evo-upgrade="V2">'+gear.v2+'</g>';
+ if(t===3)art+='<g class="sk33-stage3" data-evo-upgrade="V3">'+gear.v3+'</g>';
  art+=fx.markup;
  if(classic)art+=ellipse(64,64,31+t*1.1,30+t*.8,'none','#070b18',2.4);
  {let face='<g class="sk33-eyes">';
