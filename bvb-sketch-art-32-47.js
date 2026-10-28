@@ -349,11 +349,52 @@ function stagedHardware(i,t,m,key){
  const name='sk33Gear'+key.replace(/[^a-zA-Z0-9]/g,''),
   extra='sk33Apex'+key.replace(/[^a-zA-Z0-9]/g,''),
   scope='svg[data-animation-key="'+key+'"]';
- const css=scope+' .sk33-stage2{transform-origin:64px 65px;animation:'+name+' '+(3.7-i%3*.21).toFixed(2)+'s ease-in-out infinite}'+
-  scope+' .sk33-stage3{transform-origin:64px 65px;animation:'+extra+' '+(3.1-i%4*.13).toFixed(2)+'s ease-in-out infinite}'+
-  '@keyframes '+name+'{0%,100%{opacity:.8;transform:rotate(-3deg) scale(.97)}50%{opacity:1;transform:rotate(3deg) scale(1.03)}}'+
-  '@keyframes '+extra+'{0%,100%{opacity:.85;transform:rotate(-4deg) scale(.96)}50%{opacity:1;transform:rotate(5deg) scale(1.08)}}';
- return {v2,v3,css};
+
+ /* All hardware motions follow the identity. A potion brews, a train travels,
+  * webbing tightens, wings flap, chains pull and satellites orbit. V3 escalates
+  * with a different motion path, not a faster copy of V2. */
+ const tracks=[
+  [['translate(-1px,1px) rotate(-6deg)','translate(2px,-3px) rotate(9deg)','translate(-1px,1px) rotate(-6deg)'],
+   ['scale(.94) rotate(-8deg)','scale(1.12) rotate(13deg)','scale(.94) rotate(-8deg)']],
+  [['translate(-4px,0px)','translate(5px,-1px)','translate(-4px,0px)'],
+   ['translate(-5px,-1px)','translate(7px,1px)','translate(-5px,-1px)']],
+  [['scale(.95) rotate(-8deg)','scale(1.08) rotate(9deg)','scale(.95) rotate(-8deg)'],
+   ['rotate(-15deg) scale(.94)','rotate(17deg) scale(1.1)','rotate(-15deg) scale(.94)']],
+  [['translate(0px,2px) rotate(-3deg)','translate(0px,-4px) rotate(4deg)','translate(0px,2px) rotate(-3deg)'],
+   ['translate(0px,4px) rotate(-5deg)','translate(0px,-7px) rotate(6deg)','translate(0px,4px) rotate(-5deg)']],
+  [['rotate(-14deg) scale(.96)','rotate(13deg) scale(1.06)','rotate(-14deg) scale(.96)'],
+   ['rotate(-8deg) scale(.93)','rotate(14deg) scale(1.13)','rotate(-8deg) scale(.93)']],
+  [['translate(0px,2px) rotate(-10deg)','translate(3px,-5px) rotate(12deg)','translate(0px,2px) rotate(-10deg)'],
+   ['translate(-3px,1px) scale(.94)','translate(4px,-6px) scale(1.12)','translate(-3px,1px) scale(.94)']],
+  [['scale(.89,1.04) rotate(-3deg)','scale(1.12,.9) rotate(6deg)','scale(.89,1.04) rotate(-3deg)'],
+   ['scale(.87,1.09)','scale(1.16,.84)','scale(.87,1.09)']],
+  [['translate(-3px,0px) rotate(-4deg)','translate(4px,-2px) rotate(7deg)','translate(-3px,0px) rotate(-4deg)'],
+   ['translate(-5px,0px) rotate(-10deg)','translate(6px,-3px) rotate(9deg)','translate(-5px,0px) rotate(-10deg)']],
+  [['translate(0px,-3px) scale(.95)','translate(0px,4px) scale(1.03)','translate(0px,-3px) scale(.95)'],
+   ['scale(.87,.98) translateY(-3px)','scale(1.14,1.03) translateY(4px)','scale(.87,.98) translateY(-3px)']],
+  [['translate(-3px,0px) rotate(-5deg)','translate(4px,-1px) rotate(5deg)','translate(-3px,0px) rotate(-5deg)'],
+   ['rotate(-16deg) scale(.95)','rotate(17deg) scale(1.07)','rotate(-16deg) scale(.95)']],
+  [['translate(-3px,-1px) scale(.97)','translate(5px,-4px) scale(1.05)','translate(-3px,-1px) scale(.97)'],
+   ['translate(-6px,0px) scale(.92)','translate(7px,-3px) scale(1.15)','translate(-6px,0px) scale(.92)']],
+  [['rotate(0deg)','rotate(180deg)','rotate(360deg)'],
+   ['rotate(0deg)','rotate(-180deg)','rotate(-360deg)']],
+  [['rotate(-15deg) scale(.94)','rotate(22deg) scale(1.08)','rotate(-15deg) scale(.94)'],
+   ['rotate(-25deg) scale(.91)','rotate(32deg) scale(1.12)','rotate(-25deg) scale(.91)']],
+  [['scale(.96,1)','scale(1.07,1.12)','scale(.96,1)'],
+   ['rotate(-7deg) scale(.94)','rotate(8deg) scale(1.16)','rotate(-7deg) scale(.94)']],
+  [['translate(-2px,0px) rotate(-5deg)','translate(3px,2px) rotate(6deg)','translate(-2px,0px) rotate(-5deg)'],
+   ['scale(.88) rotate(-8deg)','scale(1.16) rotate(9deg)','scale(.88) rotate(-8deg)']],
+  [['rotate(0deg)','rotate(180deg)','rotate(360deg)'],
+   ['rotate(0deg)','rotate(-180deg)','rotate(-360deg)']]
+ ];
+ const speedMode=[11,15].includes(i)?'linear':'ease-in-out';
+ const v2Track=tracks[i][0],v3Track=tracks[i][1];
+ const keyframe=(animation,frames)=>'@keyframes '+animation+'{0%{opacity:.85;transform:'+frames[0]+'}'+
+ '50%{opacity:1;transform:'+frames[1]+'}100%{opacity:.85;transform:'+frames[2]+'}}';
+ const css=scope+' .sk33-stage2{transform-origin:64px 65px;animation:'+name+' '+(3.7-i%3*.21).toFixed(2)+'s '+speedMode+' infinite}'+
+  scope+' .sk33-stage3{transform-origin:64px 65px;animation:'+extra+' '+(3.1-i%4*.13).toFixed(2)+'s '+speedMode+' infinite}'+
+  keyframe(name,v2Track)+keyframe(extra,v3Track);
+  return {v2,v3,css};
 }
 
 function portrait(id,tier,style='detailed'){
