@@ -1,7 +1,7 @@
-name: BVB isolated beta QA
+name: BVB batch2 baseline before rework
 on:
   push:
-    branches: ['qa/batch1-isolated-20261029']
+    branches: ['qa/batch2-id13-25-20261029']
 permissions:
   contents: read
 jobs:
@@ -27,17 +27,14 @@ jobs:
       - run: node patch-042.cjs
       - run: node patch-043.cjs
       - run: node patch-044.cjs
-      - run: node patch-045.cjs
       - run: npm install --no-audit --no-fund playwright@1.62.1
       - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: node test-005.cjs ${{ matrix.browser }}
-      - run: node test-006.cjs ${{ matrix.browser }}
-      - run: node test-007-009.cjs ${{ matrix.browser }}
-      - run: node quick-perf.cjs ${{ matrix.browser }}
-      - run: node test-40.cjs ${{ matrix.browser }}
+      - run: node patch-045.cjs
+      - run: node patch-batch2.cjs
+      - run: node test-batch2.cjs ${{ matrix.browser }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: bvb-005-${{ matrix.browser }}
+          name: bvb-batch2-${{ matrix.browser }}
           path: evidence/
           retention-days: 7
