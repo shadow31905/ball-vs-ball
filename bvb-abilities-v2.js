@@ -36,7 +36,7 @@ const entries=[
 ['tether','Żelazny Harpun','Harpun przyciąga wroga na krótki dystans.'],
 ['swarm','Rój Obrońców','Pszczoły śledzą i zatruwają przeciwnika.'],
 ['potion','Alchemiczny Rzut','Losowy eliksir tworzy jeden z przydatnych efektów.'],
-['train','Widmowy Pociąg','Odbicie przywołuje linię torów i przejeżdżający pociąg.'],
+['train','Żelazny Szlak','Ruch Konduktora buduje szyny za kulką, a lokomotywa jedzie po rzeczywistych zakrętach po osiągnięciu limitu torów.'],
 ['web','Czarna Pajęczyna','Sieć między ścianami dodatkowo lekko zatruwa.'],
 ['mine','Grób Cieni','Na ziemi pojawia się pułapka z duchową energią.'],
 ['dash','Lot Światła','Błyskawiczny lot zostawia jasną smugę.'],
@@ -962,7 +962,7 @@ function onWall(o,side){
   visual(o,o,'beam',23,d.color,.48);
  }
  if(d.kind==='turret'||d.kind==='pet')zone(o,o.x,o.y,d.kind,23,4,.65);
- if(d.kind==='train'){
+ if(d.kind==='train'&&o.b.id!==33){
   zone(o,o.x,o.y,'train',20,2.5,.65);
   const train=st.hazards[st.hazards.length-1];
   train.vx=side==='left'?160:side==='right'?-160:0;
