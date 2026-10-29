@@ -36,7 +36,7 @@ function buildBeta(out,revision='working-tree'){
    '  S.coins = Math.max(100000, Number(S.coins) || 0);\n'+
    '  S.candies = Math.max(100000, Number(S.candies) || 0);\n'+
    '  for(const b of B){S.dup[b.id]=Math.max(20,Number(S.dup[b.id])||0);S.dupV2[b.id]=Math.max(20,Number(S.dupV2[b.id])||0);}')
-  .replace('</body>','<script src="./bvb-conductor-tracks-beta.js"></script>\n<script src="./bvb-beta-batch26-38-controls.js"></script>\n<script src="./bvb-beta-tools.js"></script>\n</body>')
+  .replace('</body>','<script src="./bvb-conductor-tracks-beta.js"></script>\n<script src="./bvb-beta-batch26-38-controls.js"></script>\n<script src="./bvb-beta-batch39-51.js"></script>\n<script src="./bvb-beta-tools.js"></script>\n</body>')
   .replace('<title>','<meta name="bvb-beta-build" content="'+String(revision).replace(/[^a-zA-Z0-9._/-]/g,'')+'"><title>BETA · ');
  fs.writeFileSync(path.join(out,'index.html'),html);manifest.files['index.html']=crypto.createHash('sha256').update(html).digest('hex');
  fs.writeFileSync(path.join(out,'build.json'),JSON.stringify(manifest,null,2));
