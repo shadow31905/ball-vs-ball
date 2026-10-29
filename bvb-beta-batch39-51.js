@@ -39,6 +39,13 @@ function pulse(source,point,radius,damage,color){
  G.rings||=[];G.rings.push({x:point.x,y:point.y,radius,age:0,life:.48,c:color});
  if(Math.hypot(target.x-point.x,target.y-point.y)<radius)hurt(source,target,damage);
 }
+// Keep the collection and ability preview consistent with the mechanics tested here.
+for(let id=FIRST;id<=LAST;id++){
+ const data=window.BVB2?.abilities?.[id];
+ if(B[id]){B[id].d=descriptions[id][0];B[id].skillTitle=names[id-FIRST];}
+ if(data){data.title=names[id-FIRST];data.desc=descriptions[id][0];}
+}
+if(window.BVB2?.abilities?.[49])window.BVB2.abilities[49].kind='reflect';
 const previousStats=getBallStats;
 getBallStats=function(id,...args){
  const st=previousStats(id,...args);
@@ -166,6 +173,18 @@ step=function(dt){
    if(id===46&&o.b39Bombs&&now>=o.b39Bombs.next){
      const q=o.b39Bombs;hurt(o,foe,q.level===3?4:6);wave(foe,42,'#ff8c60');
      q.remaining--;q.next+=.42;if(q.remaining<=0)o.b39Bombs=null;
+   }
+   if(id===47&&lv===3){
+     // Intercept actual enemy projectiles, not a decorative shield flash.
+     const shots=G.v2?.shots||[];
+     if(now>=(o.b39InterceptAt||0))for(let k=shots.length-1;k>=0;k--){
+       const p=shots[k];if(p.team===o.team||Math.hypot(p.x-o.x,p.y-o.y)>o.r+27)continue;
+       shots.splice(k,1);o.b39InterceptAt=now+.65;
+       o.status.shield=Math.min(25,(o.status.shield||0)+2);
+       announce(o,'PRZECHWYT!','#d4b5ff');wave(o,44,'#ab94ff');
+       if(foe.hp>0)hurt(o,foe,1.5);
+       break;
+     }
    }
    if(id===47&&o.b39Satellite){
      const q=o.b39Satellite;
