@@ -4,6 +4,6 @@ Kopia oryginału z commita `f1ce9dc1e4e9c2846323d44c2cf85d77f90708ae`. Zachowuje
 
 Zapis lokalny: `bvb_beta_original_16_v1`; nie korzysta z zapisu głównej gry. Wszystkie 16 kulek jest odblokowane; na testy ewolucji dostępne jest 10 000 monet i cukierków. Kampania, przeciwnicy i skrzynki używają tylko tych 16 kulek.
 
-Uruchamianie lokalne: `python -m http.server 8765`, następnie otwórz `http://127.0.0.1:8765/`. Hosting wymaga zwykłego serwera statycznego, bez backendu.
+Uruchamianie lokalne: `python -m http.server 8765`, następnie otwórz `http://127.0.0.1:8765/`. Beta służy wyłącznie do testów lokalnych, bez hostingu i bez multiplayer.
 
-Gałąź bety: `beta/original-first16-offline`. Workflow `beta-pages.yml` najpierw testuje Chromium i WebKit, a następnie przygotowuje hosting pod `/beta/`. Do artefaktu kopiuje oryginalne pliki gałęzi `main` bez zmian i sprawdza ich zawartość bajt po bajcie. Nie zapisuje do gałęzi `main`. Wdrożenie zatrzymuje się, jeśli oryginał od czasu przygotowania bety został zmieniony. GitHub Pages i reguły środowiska `github-pages` muszą zezwalać na to wdrożenie.
+Gałąź bety: `beta/original-first16-offline`. GitHub Actions sprawdza Chromium i WebKit. Testuje 48 wariantów V1/V2/V3 w walce, tryby gry, losowania, przeciwników kampanii oraz brak multiplayer. Nie wdraża strony i nie zapisuje do gałęzi `main`.
