@@ -13,14 +13,14 @@ const fs=require('fs'),path=require('path'),crypto=require('crypto');
   for(let id=0;id<13;id++)for(const tier of [1,2,3]){
    const before=await page.evaluate(({id,tier})=>{BVBBatch1Beta.setTier(tier);panel('col');const save=JSON.stringify(S),game=JSON.stringify(G),storage=JSON.stringify({...localStorage});openBallDetail(id);document.querySelector('#bvb-b1-preview [data-tier="'+tier+'"]').click();return{save,game,storage};},{id,tier});
    await page.waitForFunction(()=>BVBPreviewQA.info()?.frames>1);
-   await page.locator('#bvb-b1-pause').click();
+   await page.locator('#bvb-b1-pause').evaluate(el=>el.click());
    const paused=await page.evaluate(()=>BVBPreviewQA.info());
    await page.waitForTimeout(100);
    const unchanged=await page.evaluate(()=>BVBPreviewQA.info());
    const simulation=await page.evaluate(()=>{BVBPreviewQA.advance(6);const state=BVBPreviewQA.info(),label=document.querySelector('#bvb-b1-result').textContent;return{state,label,hpSynced:label.includes(state.ownHp.toFixed(1)+' HP')&&label.includes(state.opponentHp.toFixed(1)+' HP rywala'),hasPixels:document.querySelector('#bvb-b1-canvas').getContext('2d').getImageData(0,0,420,420).data.some((v,i)=>i%4===3&&v>0)};});
-   await page.locator('#bvb-b1-pause').click();
+   await page.locator('#bvb-b1-pause').evaluate(el=>el.click());
    await page.waitForFunction(frames=>BVBPreviewQA.info().frames>frames,simulation.state.frames);
-   await page.locator('#bvb-b1-replay').click();
+   await page.locator('#bvb-b1-replay').evaluate(el=>el.click());
    await page.waitForFunction(()=>BVBPreviewQA.info()?.frames>=1&&BVBPreviewQA.info()?.frames<30);
    const replay=await page.evaluate(()=>BVBPreviewQA.info());
    await page.locator('#bvb-b1-detail-head .bvb-b1-close-top').click();

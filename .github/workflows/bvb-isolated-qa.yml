@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [webkit]
+        browser: [chromium, firefox, webkit]
     env:
       BVB_EXPECTED_SHA256: eace90eaddc91e21ba5e5e9a5db97a2c35b1ad8221555bdf18ff611a79ba7263
     steps:
@@ -27,9 +27,14 @@ jobs:
       - run: node patch-042.cjs
       - run: node patch-043.cjs
       - run: node patch-044.cjs
+      - run: node patch-045.cjs
       - run: npm install --no-audit --no-fund playwright@1.62.1
       - run: npx playwright install --with-deps ${{ matrix.browser }}
-      - run: node profile-webkit.cjs
+      - run: node test-005.cjs ${{ matrix.browser }}
+      - run: node test-006.cjs ${{ matrix.browser }}
+      - run: node test-007-009.cjs ${{ matrix.browser }}
+      - run: node quick-perf.cjs ${{ matrix.browser }}
+      - run: node test-40.cjs ${{ matrix.browser }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
