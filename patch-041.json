@@ -1,0 +1,1 @@
+{"changes": [{"old": "  target.hp -= damage - blocked;", "new": "  target.hp = Math.max(0, target.hp - (damage - blocked));"}], "sha256": "ff31857600719e531f56675b6845839414a43efac1396dcce96bbde8a183bd8c"}
