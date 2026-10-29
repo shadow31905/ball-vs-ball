@@ -743,7 +743,7 @@ const RAW_BALLS = [
   ['Harpun','⚓',2,'#0f766e','Wbija harpun w cel, wiążąc i przyciągając wroga na 3 sekundy.'],
   ['Rój','🐝',2,'#facc15','Wypuszcza rój 3 samonaprowadzających pszczół zatruwających cel.'],
   ['Eliksir','⚗️',3,'#c084fc','Rzuca losowe fiolki alchemiczne: trucizna, lód, ogień lub leczenie.'],
-  ['Konduktor','🚂',2,'#c28f56','W czasie ruchu układa za sobą tory. Gdy osiągną limit długości, pojawia się pociąg i jedzie po wszystkich zakrętach od początku do końca trasy.'],
+  ['Konduktor','ϟ',2,'#fde047','Leczy się od ścian, a co 4 odbicia wyzwala falę uderzeniową.'],
   ['Czarny Pająk','🕷️',2,'#334155','Stawia czarne, jadowite sieci unieruchamiające i trujące cel.'],
   ['Grób','🪦',2,'#6b7280','Stawia na arenie nagrobki blokujące ruch i wypuszczające duchy.'],
   ['Skrzydło Światła','🪶',0,'#fef08a','Niezwykle szybka kula wykonująca świetliste zrywy z piórami.'],
@@ -1040,12 +1040,6 @@ function load() {
   S.dup = (S.dup && typeof S.dup === 'object') ? S.dup : {};
   S.dupV2 = (S.dupV2 && typeof S.dupV2 === 'object') ? S.dupV2 : {};
   S.tr = (S.tr && typeof S.tr === 'object') ? S.tr : {};
-  // BETA-ONLY: make all 130 balls and all 3 evolution tiers testable.
-  // Separate storage key prevents beta changes from touching the stable save.
-  S.own = B.map(b => b.id);
-  S.coins = Math.max(100000, Number(S.coins) || 0);
-  S.candies = Math.max(100000, Number(S.candies) || 0);
-  for(const b of B){S.dup[b.id]=Math.max(20,Number(S.dup[b.id])||0);S.dupV2[b.id]=Math.max(20,Number(S.dupV2[b.id])||0);}
   S.upDmg = (S.upDmg && typeof S.upDmg === 'object') ? S.upDmg : {};
   S.upHp = (S.upHp && typeof S.upHp === 'object') ? S.upHp : {};
 
@@ -3230,7 +3224,5 @@ requestAnimationFrame(loop);
 <script src="./bvb-training.js"></script>
 <script src="./bvb-presentation.js"></script>
 <script src="./bvb-changelog-v3.js"></script>
-<script src="./bvb-conductor-tracks-beta.js"></script>
-<script src="./bvb-beta-batch26-38-controls.js"></script>
 </body>
 </html>
