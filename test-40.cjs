@@ -44,6 +44,7 @@ const fs=require('fs'),path=require('path'),crypto=require('crypto');
     report.mobile.push({id,tier,viewport,detail,closed:await page.locator('#ov').evaluate(x=>x.hidden),horizontalOverflow:detail.canvas.x<0||detail.canvas.right>viewport.width+1});
    }
   }
+  report.performance=await require('./performance-40.cjs')(page);save();
   report.storage=await page.evaluate(()=>{panel('col');S.o.vm=.37;save();return{expected:S.o.vm,storage:JSON.stringify({...localStorage})};});
   await page.reload();await page.waitForFunction(()=>window.BVBBatch1Beta?.ready);report.storage.actual=await page.evaluate(()=>S.o.vm);
   report.storage.status=report.storage.expected===report.storage.actual?'PASS':'FAIL';
@@ -51,6 +52,6 @@ const fs=require('fs'),path=require('path'),crypto=require('crypto');
  finally{save();await browser.close();}
  function failures(value){if(!value||typeof value!=='object')return[];if(value.status==='FAIL')return[value];return Object.values(value).flatMap(failures);}
  const failed=failures(report);
- console.log('NEW40_RESULT='+JSON.stringify({browser:name,previewPassed:report.preview.filter(x=>x.status==='PASS').length,previewTotal:report.preview.length,mobileCases:report.mobile.length,mobileOverflow:report.mobile.filter(x=>x.horizontalOverflow),storage:report.storage?{expected:report.storage.expected,actual:report.storage.actual,status:report.storage.status}:null,errors,exception:report.exception,failed,scenarios:Object.fromEntries(['006','007','009','critical','regression','ice','dice'].map(n=>[n,Array.isArray(report['scenario'+n])?report['scenario'+n].filter(x=>x.status==='PASS').length:report['scenario'+n]?Object.fromEntries(Object.entries(report['scenario'+n]).map(([k,v])=>[k,v.filter(x=>x.status==='PASS').length])):null]))}));
+ console.log('NEW40_RESULT='+JSON.stringify({browser:name,previewPassed:report.preview.filter(x=>x.status==='PASS').length,previewTotal:report.preview.length,mobileCases:report.mobile.length,mobileOverflow:report.mobile.filter(x=>x.horizontalOverflow),performance:report.performance?{status:report.performance.status,duration:report.performance.duration,cases:report.performance.cases.length,retained:report.performance.retainedPerformance,failures:report.performance.cases.filter(x=>x.status!=='PASS')}:null,storage:report.storage?{expected:report.storage.expected,actual:report.storage.actual,status:report.storage.status}:null,errors,exception:report.exception,failed,scenarios:Object.fromEntries(['006','007','009','critical','regression','ice','dice'].map(n=>[n,Array.isArray(report['scenario'+n])?report['scenario'+n].filter(x=>x.status==='PASS').length:report['scenario'+n]?Object.fromEntries(Object.entries(report['scenario'+n]).map(([k,v])=>[k,v.filter(x=>x.status==='PASS').length])):null]))}));
  if(report.exception||errors.length||failed.length||report.mobile.some(x=>x.horizontalOverflow))process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1});
