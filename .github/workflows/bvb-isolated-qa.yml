@@ -24,12 +24,13 @@ jobs:
       - run: node patch-007.cjs
       - run: node patch-040.cjs
       - run: node patch-041.cjs
+      - run: node patch-042.cjs
       - run: npm install --no-audit --no-fund playwright@1.62.1
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       - run: node test-005.cjs ${{ matrix.browser }}
       - run: node test-006.cjs ${{ matrix.browser }}
       - run: node test-007-009.cjs ${{ matrix.browser }}
-      - run: node test-40.cjs ${{ matrix.browser }} --mechanics-only
+      - run: node test-40.cjs ${{ matrix.browser }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

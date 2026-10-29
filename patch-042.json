@@ -1,0 +1,1 @@
+{"changes": [{"old": ".bvb-b1-preview{margin-top:12px;", "new": "body:has(#ov:not([hidden])) #pb [data-live-first16] *{animation-play-state:paused!important}\n.bvb-b1-preview{margin-top:12px;"}], "sha256": "9ac6d06fcc817c2746627dc846883dfe474562290d8bb2fd12c9a61ab0793304"}
