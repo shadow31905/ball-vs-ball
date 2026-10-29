@@ -9,7 +9,7 @@ const fs=require('fs'),path=require('path'),crypto=require('crypto');
  const save=()=>fs.writeFileSync(out+'/new-40.json',JSON.stringify(report,null,2));
  async function open(){await page.goto('file://'+path.resolve('beta.html'));await page.waitForFunction(()=>window.BVBBatch1Beta?.ready&&window.BVBApprovedArt?.state?.().ready);}
  try{
-  await open();
+  await page.bringToFront();await open();
   for(let id=0;id<13;id++)for(const tier of [1,2,3]){
    const before=await page.evaluate(({id,tier})=>{BVBBatch1Beta.setTier(tier);panel('col');const save=JSON.stringify(S),game=JSON.stringify(G),storage=JSON.stringify({...localStorage});openBallDetail(id);document.querySelector('#bvb-b1-preview [data-tier="'+tier+'"]').click();return{save,game,storage};},{id,tier});
    await page.waitForFunction(()=>BVBPreviewQA.info()?.frames>1);
