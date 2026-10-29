@@ -26,6 +26,7 @@ jobs:
       - run: node patch-041.cjs
       - run: node patch-042.cjs
       - run: node patch-043.cjs
+      - run: node patch-044.cjs
       - run: npm install --no-audit --no-fund playwright@1.62.1
       - run: npx playwright install --with-deps ${{ matrix.browser }}
       - run: node test-005.cjs ${{ matrix.browser }}

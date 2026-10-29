@@ -1,0 +1,1 @@
+{"changes": [{"old": "body.bvb-preview-open #pb [data-live-first16] *{animation-play-state:paused!important}", "new": "body.bvb-preview-open [data-live-first16] *{animation-play-state:paused!important}"}], "sha256": "2942989a52384a824953b50d890e2d7d7f6c5237b188fbb97e024f8971b0f222"}
