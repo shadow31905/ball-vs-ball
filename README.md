@@ -1,38 +1,9 @@
-# 🎮 Ball VS Ball (BVB)
+# Ball VS Ball — beta testowa ID 0–15
 
-**Graj:** https://shadow31905.github.io/ball-vs-ball/
+Kopia oryginału z commita `f1ce9dc1e4e9c2846323d44c2cf85d77f90708ae`. Zachowuje układ oryginalnego menu. Dostępne są wyłącznie kulki ID 0–15 i ich V1/V2/V3 po reworku. Multiplayer, PeerJS oraz zapisy do chmury nie są dołączone.
 
-## ✅ Baza Supabase jest podłączona
+Zapis lokalny: `bvb_beta_original_16_v1`; nie korzysta z zapisu głównej gry. Wszystkie 16 kulek jest odblokowane; na testy ewolucji dostępne jest 10 000 monet i cukierków. Kampania, przeciwnicy i skrzynki używają tylko tych 16 kulek.
 
-Projekt **Ball VS Ball** w Supabase działa i został podłączony do gry w pliku `supabase-config.js`. Baza ma włączone reguły RLS chroniące zapisy graczy. Rejestracja, logowanie, prywatny postęp, znajomi i zaproszenia używają Supabase.
+Uruchamianie lokalne: `python -m http.server 8765`, następnie otwórz `http://127.0.0.1:8765/`. Hosting wymaga zwykłego serwera statycznego, bez backendu.
 
-**Uwaga o e-mailach:** Supabase domyślnie wymaga potwierdzenia adresu e-mail. Żeby link w mailu prawidłowo wracał do BVB, właściciel projektu powinien jeszcze ustawić adresy przekierowań w panelu Supabase:
-
-1. Otwórz [Auth → URL Configuration](https://supabase.com/dashboard/project/mcmvowcsvcinnmanejeh/auth/url-configuration).
-2. W **Site URL** wpisz `https://shadow31905.github.io/ball-vs-ball/`.
-3. Dodaj ten sam adres do **Redirect URLs** i zapisz.
-
-Bez tego potwierdzenie e-maila może prowadzić na domyślny adres `localhost:3000`. Po kliknięciu linku w e-mailu można wtedy ręcznie wrócić do strony gry i spróbować się zalogować.
-
-**Nie udostępniaj nikomu swojego hasła ani kluczy tajnych Supabase.** Klucz `sb_publishable_...` w `supabase-config.js` jest publiczny i może być używany w przeglądarce; nigdy nie umieszczaj tam `service_role` ani klucza `secret`.
-
-## 👤 Konta
-
-- Na początku gry: **Zaloguj się / Stwórz konto / Graj bez konta**.
-- Nick: 3–16 znaków; litery A–Z, cyfry i `_`.
-- Nazwy nie mogą się powtarzać niezależnie od wielkości liter, np. `Kuba` i `kuba` to ten sam nick. Wymusza to unikalny indeks w bazie.
-- Gracz sam decyduje o przesłaniu lokalnego postępu do chmury lub pobraniu istniejącego zapisu. Przed pobraniem gry z chmury tworzona jest lokalna kopia zapasowa.
-- Publiczny ranking jest informacyjny: nie ma jeszcze ochrony przed fałszowaniem wyników.
-
-## 🌐 1vs1 przez internet
-
-Obaj gracze otwierają stronę. Jeden wybiera **Multiplayer online → Utwórz pokój** i przesyła link zaproszenia, drugi klika **Dołącz do pokoju**. Host rozpoczyna mecz. Połączenie PeerJS/WebRTC może działać między różnymi sieciami Wi-Fi; nie każda sieć je przepuszcza, ponieważ nie ma serwera TURN.
-
-## 📁 Pliki
-
-- `index.html` — gra BVB
-- `bvb-accounts.js` — obsługa kont Supabase
-- `supabase-config.js` — bezpieczna publiczna konfiguracja Supabase
-- `supabase-schema.sql` — schemat i reguły bezpieczeństwa użyte do tworzenia bazy
-
-**Firebase nie jest używany.**
+Gałąź bety: `beta/original-first16-offline`. Workflow `beta-pages.yml` najpierw testuje Chromium i WebKit, a następnie przygotowuje hosting pod `/beta/`. Do artefaktu kopiuje oryginalne pliki gałęzi `main` bez zmian i sprawdza ich zawartość bajt po bajcie. Nie zapisuje do gałęzi `main`. Wdrożenie zatrzymuje się, jeśli oryginał od czasu przygotowania bety został zmieniony. GitHub Pages i reguły środowiska `github-pages` muszą zezwalać na to wdrożenie.

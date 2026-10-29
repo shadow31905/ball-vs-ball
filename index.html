@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head>
+<head><meta name="bvb-beta-build" content="original-first16"><meta name="bvb-original-source" content="f1ce9dc1e4e9c2846323d44c2cf85d77f90708ae">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Ball VS Ball — Ultimate Edition (130 Kulek + Brawl Stars Inventory + V2/V3 + Multiplayer)</title>
-  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="./supabase-config.js" defer></script>
-  <script src="./bvb-accounts.js" defer></script>
+  <title>Ball VS Ball — BETA · 16 kulek po reworku</title>
   <style>
     :root {
       --bg: #070a18;
@@ -607,12 +603,9 @@
 
       <section class="bvb-menu-section" aria-labelledby="bvb-menu-modes">
         <h2 id="bvb-menu-modes">⚔️ Tryby walki</h2>
-        <p class="bvb-section-caption">Inne wyzwania, bossowie oraz gra ze znajomymi.</p>
+        <p class="bvb-section-caption">Wyzwania, bossowie i trening w wersji testowej.</p>
 
         <button class="b boss-button" onclick="bossMenu()">👹 BOSS FIGHT · 6 STRAŻNIKÓW</button>
-        <button class="b" onclick="mpMenu()">
-          <span class="icon-globe">🌐</span> Multiplayer 1 vs 1 / Co-Op 2v2 (online)
-        </button>
         <button class="b" id="svBtn" onclick="startMatch(1)">Survival (rekord: fala 0)</button>
         <button class="b" id="infBtn" onclick="startMatch(7)">
           <span class="icon-inf">♾️</span> Nieskończoność (rekord: fala 0)
@@ -706,7 +699,7 @@ const rnd = a => a[Math.random() * a.length | 0];
 const sh = a => [...a].sort(() => Math.random() - 0.5);
 
 // ============================================================================
-// 1. PEŁNA LISTA WSZYSTKICH 130 KULEK (Z WYSOKIEJ JAKOŚCI SVG I HALLOWEEN)
+// 1. PEŁNA LISTA WSZYSTKICH 16 KULEK (Z WYSOKIEJ JAKOŚCI SVG I HALLOWEEN)
 // ============================================================================
 const RAW_BALLS = [
   ['Szarża','💨',0,'#38bdf8','Im dłużej leci bez zderzenia, tym szybciej pędzi i mocniej uderza.'],
@@ -725,120 +718,6 @@ const RAW_BALLS = [
   ['Laser','🔴',2,'#ef4444','Obracająca się wiązka laserowa rani każdego wroga w zasięgu.'],
   ['Wąż','🐍',1,'#4ade80','Z czasem rośnie mu długi ogon, który rani i odpycha wroga.'],
   ['Hak','🪝',2,'#94a3b8','Wystrzeliwuje hak na łańcuchu i przyciąga przeciwnika do siebie.'],
-  ['Przekuwacz','🔨',1,'#f59e0b','Odbicie od ściany przywołuje pomocnika i wzmacnia pancerz.'],
-  ['Komórka','🦠',1,'#2dd4bf','Rośnie z czasem, a po zniszczeniu dzieli się przez mitozę na mniejszą kulę.'],
-  ['Elektryk','⚡',2,'#facc15','Piorun trafia z dystansu i ogłusza wroga na 1,2 s.'],
-  ['Strefa','🟣',2,'#818cf8','Utrzymuje wokół siebie strefę grawitacyjną raniącą wroga.'],
-  ['Promień','🌠',3,'#3b82f6','Ładuje i wystrzeliwuje ultraszybki promień energii (20 obrażeń).'],
-  ['WDC','🔢',2,'#1d4ed8','Po 3 s tworzy na 6 s siatkę 3x3 z losowymi obrażeniami (1–100 DMG) w każdym polu, nadpisując swoje obrażenia kontaktowe!'],
-  ['Jabłko','🍎',2,'#f43f5e','Upuszcza jabłka, które leczą właściciela i ranią wroga.'],
-  ['Armata','💣',1,'#475569','Strzela ciężką kulą armatnią z ogromnym odrzutem (22 DMG).'],
-  ['Wirus','☣️',3,'#a3e635','Zarażony wróg traci kontrolę nad kierunkiem lotu i punkty HP.'],
-  ['Wielki Kolec','📍',1,'#64748b','Olbrzymia masa (145 HP); zadaje dodatkowe obrażenia równe 8% max HP celu.'],
-  ['Łuk','🏹',1,'#d97706','Co 3 s wystrzeliwuje szybką strzałę, która rykoszetuje od ścian.'],
-  ['Król Elektryków','👑',2,'#eab308','Przywołuje potrójne uderzenie pioruna i elektryczną siatkę.'],
-  ['Zasięg','⭕',1,'#06b6d4','Co 3 s rozszerzający się pierścień energii rani pobliskiego wroga.'],
-  ['Mróz','❄️',1,'#38bdf8','Zostawia mroźne plamy, które zamrażają i ranią przeciwnika.'],
-  ['Harpun','⚓',2,'#0f766e','Wbija harpun w cel, wiążąc i przyciągając wroga na 3 sekundy.'],
-  ['Rój','🐝',2,'#facc15','Wypuszcza rój 3 samonaprowadzających pszczół zatruwających cel.'],
-  ['Eliksir','⚗️',3,'#c084fc','Rzuca losowe fiolki alchemiczne: trucizna, lód, ogień lub leczenie.'],
-  ['Konduktor','ϟ',2,'#fde047','Leczy się od ścian, a co 4 odbicia wyzwala falę uderzeniową.'],
-  ['Czarny Pająk','🕷️',2,'#334155','Stawia czarne, jadowite sieci unieruchamiające i trujące cel.'],
-  ['Grób','🪦',2,'#6b7280','Stawia na arenie nagrobki blokujące ruch i wypuszczające duchy.'],
-  ['Skrzydło Światła','🪶',0,'#fef08a','Niezwykle szybka kula wykonująca świetliste zrywy z piórami.'],
-  ['Pudełko Cukierków','🍬',2,'#f472b6','Wystrzeliwuje cukierkowy pocisk (22 DMG) i spowalnia trafiony cel.'],
-  ['Szlam','🟢',1,'#84cc16','Bardzo wytrzymała kula śluzu (155 HP) zostawiająca lepkie plamy.'],
-  ['Kajdany','⛓️',2,'#78716c','Co 5 s przykuwa wroga łańcuchem na 3 sekundy.'],
-  ['Kwas','🧪',1,'#a3e635','Tworzy żrące plamy kwasu osłabiające pancerz wroga o 35%.'],
-  ['Promień Świetlny','✨',1,'#fde047','Wystrzeliwuje promień fotonowy odbijający się 4 razy od ścian.'],
-  ['Trujący Gaz','☁️',1,'#4d7c0f','Wypuszcza wielką chmurę toksycznego gazu dławiącego przeciwnika.'],
-  ['Shuriken','✴️',1,'#cbd5e1','Rzuca 3 rykoszetujące gwiazdki ninja.'],
-  ['Fibonacci','🐚',2,'#f59e0b','Obrażenia zderzeń rosną wg ciągu Fibonacciego (1, 1, 2, 3, 5, 8, 13, 21, 34, 55)!'],
-  ['Kaktus','🪴',2,'#15803d','Odbija 40% otrzymanych obrażeń i wystrzeliwuje igły przy trafieniu.'],
-  ['Bomba','💣',1,'#374151','Wyrzuca tykające bomby eksplodujące po 1,5 sekundy.'],
-  ['Orbita','🪐',2,'#60a5fa','Otoczona przez 3 krążące satelity zadające obrażenia kontaktowe.'],
-  ['Medyk','❤️‍🩹',2,'#f87171','Co 4 s leczy swoje HP i generuje barierę ochronną.'],
-  ['Prawda','◇',3,'#c084fc','Co 5 s tworzy tarczę odbijającą 100% obrażeń w atakującego.'],
-  ['Szkło','🔮',0,'#a5f3fc','Szklana armata: zadaje 250% obrażeń, ale ma tylko 65 HP.'],
-  ['Portal','🌌',1,'#6366f1','Przy odbiciu od ściany teleportuje się przez portal i miażdży lądowaniem.'],
-  ['Tarcza','🛡️',2,'#22d3ee','Co 5 s tworzy tarczę energetyczną pochłaniającą 25 pkt obrażeń.'],
-  ['Magik','🎩',2,'#9333ea','Tworzy iluzję i zamienia się miejscami z przeciwnikiem.'],
-  ['Chronos','⏳',2,'#d97706','Co 6 s zatrzymuje/spowalnia czas dla wroga o 75% na 2,5 sekundy.'],
-  ['Ninja','🥷',2,'#1e293b','Teleportuje się za plecy wroga i zadaje cios krytyczny z cienia.'],
-  ['Pirat','🏴‍☠️',1,'#92400e','Oddaje salwę burtową z 3 kul armatnich jednocześnie.'],
-  ['Górnik','⛏️',1,'#ca8a04','Podkłada ukryte miny zbliżeniowe na podłodze areny.'],
-  ['Szeryf','🤠',1,'#b45309','Strzela z rewolweru pociskiem, który po odbiciu celuje we wroga.'],
-  ['Magma','🌋',2,'#ea580c','Zostawia płonący ślad lawy i wywołuje erupcję wulkaniczną.'],
-  ['Plazma','🔮',2,'#ec4899','Wystrzeliwuje powolną kulę plazmy rażącą cel w locie.'],
-  ['Meteor','☄️',1,'#b91c1c','Sprowadza deszcz meteorytów bezpośrednio na pozycję przeciwnika.'],
-  ['Cyklon','🌪️',1,'#2dd4bf','Tworzy wir powietrzny wciągający i spychający wroga.'],
-  ['Pryzmat','🌈',2,'#f43f5e','Rozszczepia promień światła na 5 kolorowych wiązek laserowych.'],
-  ['Echo','📡',1,'#38bdf8','Wypuszcza falę dźwiękową, która powtarza się echem po 1,5 s.'],
-  ['Grawitacja','🌑',3,'#4f46e5','Przyciąga przeciwnika stałym polem grawitacyjnym i orbitami.'],
-  ['Kotwica','⚓',2,'#1e3a8a','Odporna na odrzut (145 HP); wywołuje wstrząs przy uderzeniu w mur.'],
-  ['Lustro','🪞',2,'#e2e8f0','Aktywuje lustrzaną powłokę odbijającą pociski i obrażenia.'],
-  ['Pustka','🕳️',2,'#4c1d95','Tworzy czarną dziurę wciągającą wroga i pożerającą pociski.'],
-  ['Słońce','☀️',2,'#facc15','Pali przeciwnika gorącą aurą słoneczną w bliskim zasięgu.'],
-  ['Księżyc','🌙',2,'#94a3b8','Zmienia fazy księżyca (Prędkość, Obrażenia, Tarcza, Niewidzialność).'],
-  ['Zaćmienie','🌒',2,'#312e81','Zaciemnia pole widzenia i dezorientuje kierunek ruchu wroga.'],
-  ['Supernowa','🌟',3,'#fde047','Co 6 s wyzwala gigantyczną eksplozję gwiezdną (30 DMG).'],
-  ['Mgławica','🌌',2,'#a855f7','Zostawia obłoki gwiezdnego pyłu wybuchające przy kontakcie.'],
-  ['Pulsar','💫',2,'#06b6d4','Co 2 s emituje pierścień magnetyczny odpychający wroga.'],
-  ['Kwazar','💥',2,'#f97316','Wystrzeliwuje podwójny dżet radiacyjny z obu biegunów.'],
-  ['Kometa','☄️',1,'#38bdf8','Przyspiesza w locie i zostawia zamrażający warkocz kometarny.'],
-  ['Asteroida','🪨',0,'#78716c','160 HP; przy zderzeniu rozrzuca odłamki skalne po arenie.'],
-  ['Kwant','⚛️',2,'#22d3ee','Wchodzi w superpozycję, atakując z dwóch miejsc jednocześnie.'],
-  ['Atom','🟢',2,'#10b981','Krążące elektrony wyzwalają wybuch rozszczepienia przy kolizji.'],
-  ['Proton','➕',2,'#ef4444','Nadaje ładunek dodatni – ściany gwałtownie odpychają wroga.'],
-  ['Neutron','🔘',2,'#64748b','Całkowicie niewrażliwa na spowolnienia, zamrożenia i trucizny.'],
-  ['Elektron','⚡',1,'#facc15','Porusza się błyskawicznymi przeskokami kwantowymi.'],
-  ['Iskra','🎇',1,'#fb923c','Każde odbicie od ściany wypuszcza iskry i zwiększa prędkość.'],
-  ['Piekło','🔥',2,'#dc2626','Podpala ściany i podłogę areny – wróg w ogniu płonie.'],
-  ['Tsunami','🌊',2,'#0284c7','Wysyła szeroką falę pływową przez całą szerokość areny.'],
-  ['Wstrząs','🌍',2,'#854d0e','Uderzenie w ścianę posyła pęknięcie sejsmiczne pod wroga.'],
-  ['Nawałnica','🌩️',2,'#0ea5e9','Przyciąga cel wichurą i razi go piorunem z bliska.'],
-  ['Zamieć','🌨️',2,'#bae6fd','Wywołuje śnieżycę na całej arenie, zamrażając pole walki.'],
-  ['Miraż','👥',1,'#fcd34d','Tworzy 3 złudzenia optyczne i robi gwałtowne uniki.'],
-  ['Widmo','👻',1,'#c084fc','Staje się niematerialna na 2 s i otrzymuje o połowę mniej obrażeń.'],
-  ['Upiór','🧟',1,'#6366f1','Nakłada klątwę zadającą obrażenia i osłabiającą wroga w pobliżu.'],
-  ['Zjawa','👤',2,'#4c1d95','Znika w cieniu i zadaje potrójne obrażenia przy wyjściu z ukrycia.'],
-  ['Kosiarz','镰',3,'#dc2626','Zadaje obrażenia od brakującego HP; poniżej 15% HP wykonuje egzekucję!'],
-  ['Zagłada','💀',2,'#7f1d1d','Nakłada licznik Zagłady, który wybucha potężną falą.'],
-  ['Chaos','🎭',3,'#db2777','Co 4 s wyzwala losową umiejętność innej kulki wzmocnioną o 25%!'],
-  ['Porządek','⚖️',3,'#f8fafc','Strzela precyzyjnie w miejsce, gdzie wróg będzie za chwilę.'],
-  ['Feniks','🪽',3,'#ff9f1c','Po śmierci odradza się z popiołów z 50% HP i ognistą aurą!'],
-  ['Kraken','🦑',3,'#0f766e','Wypuszcza 4 macki chwytające i przyciągające przeciwnika.'],
-  ['Król Dyń','🎃',4,'#ea580c','Wielofazowy Boss Halloween: rzuca wybuchowymi dyniami, wzywa nietoperze i płomienie!'],
-  ['🎃 Wiedźma','🧙‍♀️',5,'#9333ea','[HALLOWEEN] Rzuca kociołkiem tworzącym pole zamiany w żabę i spowolnienia.'],
-  ['🎃 Kocioł','🍲',5,'#15803d','[HALLOWEEN] Rozlewa wrzący kwas osłabiający pancerz wroga o 40%.'],
-  ['🎃 Czarny Kot','🐈‍⬛',5,'#38bdf8','[HALLOWEEN] Aura pecha: odbicia wroga mają 35% szans na samookaleczenie.'],
-  ['🎃 Nietoperz','🦇',5,'#6366f1','[HALLOWEEN] Wysyła falę echolokacji i przywołuje nietoperze kradnące HP.'],
-  ['🎃 Zombie','🧟‍♂️',5,'#4d7c0f','[HALLOWEEN] Po śmierci walczy jeszcze przez 4 sekundy jako nieśmiertelny szkielet!'],
-  ['🎃 Voodoo','🪆',5,'#d97706','[HALLOWEEN] Łączy się nicią klątwy – przekazuje 40% otrzymanych obrażeń wrogowi.'],
-  ['🎃 Strach na Wróble','🌾',5,'#ca8a04','[HALLOWEEN] Wywołuje koszmar, odpychając i dezorientując wroga.'],
-  ['🎃 Ognik','🕯️',5,'#06b6d4','[HALLOWEEN] Zostawia błękitne płomyki dusz ignorujące pancerz i tarcze.'],
-  ['🎃 Wilkołak','🐺',5,'#b45309','[HALLOWEEN] Co 4 s wpada w szał księżyca: przyspiesza, skacze na cel i leczy się z ran.'],
-  ['🎃 Banshee','👻',5,'#a855f7','[HALLOWEEN] Co 4,5 s wydaje krzyk rozchodzący się falą, który ogłusza i osłabia wroga.'],
-  ['🎃 Golem Cmentarny','🗿',5,'#64748b','[HALLOWEEN] Potężna masa (165 HP); stawia monolity nagrobne i wywołuje wstrząs.'],
-  ['🎃 Krwawy Księżyc','🩸',5,'#dc2626','[HALLOWEEN] Tworzy karmazynową aurę wywołującą krwawienie i zwiększającą obrażenia.'],
-  ['🎃 Duch Latarni','🏮',5,'#f97316','[HALLOWEEN] Wystrzeliwuje błędne ogniki krążące po orbicie i podpalające cel.'],
-  ['🎃 Mumia','🤕',5,'#eab308','[HALLOWEEN] Wystrzeliwuje bandaże krępujące ruch przeciwnika i wysysające energię.'],
-  ['🎃 Gargulec','🦇',5,'#475569','[HALLOWEEN] Co 5 s kamienieje (redukcja obrażeń), po czym eksploduje odłamkami skalnymi.'],
-  ['🎃 Nekromanta','💀',5,'#7e22ce','[HALLOWEEN] Co 4,5 s przywołuje 2 duchy szkieletów ścigające przeciwnika.'],
-  ['🎃 Przeklęte Lustro','🪞',5,'#ec4899','[HALLOWEEN] Tworzy mroczny duplikat i odbija część obrażeń w atakującego.'],
-  ['🎃 Pająk Wdowa','🕷️',5,'#ef4444','[HALLOWEEN] Rozstawia toksyczne kokony, które pękają i zatruwają cel.'],
-  ['🎃 Jeździec Bez Głowy','🏇',5,'#ea580c','[HALLOWEEN] Co 4 s wykonuje widmową szarżę przez arenę, zostawiając płonący ślad.'],
-  ['🎃 Żniwiarz Dusz','⚰️',5,'#14b8a6','[HALLOWEEN] Zbiera dusze przy trafieniu; po zebraniu 3 dusz wyzwala wybuch duchowy.'],
-  ['🎃 Dzwon Północy','🔔',5,'#b8a6ff','[HALLOWEEN] Mroczny dzwon wysysa energię i wysyła falę cienia.'],
-  ['🎃 Lodowy Upiór','🥶',5,'#6ee7f9','[HALLOWEEN] Zamraża przeciwnika eterycznym oddechem.'],
-  ['🎃 Królowa Kruków','🐦‍⬛',5,'#8472e5','[HALLOWEEN] Przyzywa przeklęte cienie kruków, które wysysają dusze.'],
-  ['🎃 Zgniła Dynia','🎃',5,'#f59e0b','[HALLOWEEN] Podpala arenę zielonym ogniem i płomieniami.'],
-  ['🎃 Widmowy Rycerz','🛡️',5,'#64748b','[HALLOWEEN] Nakłada tarczę ochronną i wzmacnia pancerz.'],
-  ['🎃 Cukierkowy Koszmar','🍭',5,'#f472b6','[HALLOWEEN] Wywołuje magiczny wybuch przeklętych cukierków.'],
-  ['🎃 Księżycowy Nietoperz','🌘',5,'#a78bfa','[HALLOWEEN] Wampiryczny lot i wysysanie zdrowia przeciwnika.'],
-  ['🎃 Grobowy Alchemik','⚗️',5,'#84cc16','[HALLOWEEN] Trujące opary zatruwają przeciwnika.'],
-  ['🎃 Płacząca Marionetka','🎭',5,'#e879f9','[HALLOWEEN] Mroczna klątwa wysysa energię i spowalnia wroga.'],
-  ['🎃 Kryształ Zaświatów','💎',5,'#22d3ee','[HALLOWEEN] Elektryczne błyskawice z kryształu rażą cel.']
 ];
 
 const B = RAW_BALLS.map(([n, e, r, c, d], id) => ({ id, n, e, r, c, d }));
@@ -902,7 +781,7 @@ const INF_REWARD_PER_WAVE = 25, INF_HP_BASE = 1, INF_HP_LIN = 0.22, INF_HP_QUAD 
 const infHp = w => INF_HP_BASE + INF_HP_LIN * (w - 1) + INF_HP_QUAD * (w - 1) * (w - 1);
 const infDmg = w => 1 + INF_DMG_LIN * (w - 1);
 
-let K = 'bvb_hw_120_v3';
+let K = 'bvb_beta_original_16_v1';
 let S, diff = 1, G = null, P = [], R = [], F = [], E = [], AC, MU = { s: 0, m: 0 }, bi = 0, bt = null;
 
 const DO = { vm: 0.7, vs: 0.8, nd: 1, sk: 1, pq: 1, vb: 1 };
@@ -910,14 +789,7 @@ const AV = ['😎', '🤖', '👾', '🦊', '🐲', '🎃', '👑'];
 const EMO = ['😎', '😂', '😡', '👏'];
 const FIB = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55];
 
-const BOSSD = [
-  { id: 99, abilityId: 99, bossHpMult: 1.65, bossDmgMult: 1.10, n: 'Król Dyń', e: '🎃', r: 4, c: '#ea580c', bi: 0 },
-  { id: 99, abilityId: 23, bossHpMult: 1.85, bossDmgMult: 1.05, n: 'Iron Titan', e: '🤖', r: 3, c: '#94a3b8', bi: 1 },
-  { id: 99, abilityId: 68, bossHpMult: 1.70, bossDmgMult: 1.12, n: 'Shadow Orb', e: '👁️', r: 3, c: '#6d28d9', bi: 2 },
-  { id: 99, abilityId: 12, bossHpMult: 1.72, bossDmgMult: 1.08, n: 'Frost Monarch', e: '🥶', r: 3, c: '#7dd3fc', bi: 3 },
-  { id: 99, abilityId: 71, bossHpMult: 1.80, bossDmgMult: 1.10, n: 'Void King', e: '🕳️', r: 4, c: '#4c1d95', bi: 4 },
-  { id: 99, abilityId: 95, bossHpMult: 1.68, bossDmgMult: 1.15, n: 'Chaos Sphere', e: '🎭', r: 4, c: '#ec4899', bi: 5 }
-];
+const BOSSD = [0,1,7,12,13,15].map((id,bi)=>({...B[id],abilityId:id,bossHpMult:1.65,bossDmgMult:1.10,bi}));
 
 const MODS = [
   { n: 'Szybka gra', sp: 1.45 },
@@ -956,7 +828,7 @@ const BPR = Array.from({ length: 20 }, (_, i) => ({ c: 50 + 15 * i, it: i == 4 ?
 const BASE_HP_TABLE = {
   25: 145, 38: 155, 50: 65, 52: 140, 66: 145, 77: 160, 81: 135, 98: 135, 99: 190, 101: 125, 104: 130, 110: 165, 114: 140
 };
-const BASE_CD_TABLE = [0,3,3.5,0,2.2,4,4,0,4,5,5,4,4,4,0,5,0,0,5,4,5,9,4,5,5,0,3.5,6,4,4,6,5,5,0,5,6,4,4,5,6,4,5,5,4,0,0,5,0,5,6,0,6,5,6,7,5,5,5,4,4,5,5,5,5,5,5,0,6,7,4,4,6,8,5,3,5,0,0,6,0,5,0,4,0,6,5,0,6,7,6,6,5,6,0,7,4,5,0,6,5,6,6,5,6,6,0,6,5,4,4.5,5,4,4,4.5,5,4.5,5,4,4,4.5];
+const BASE_CD_TABLE = [0,3,3.5,0,2.2,4,4,0,4,5,5,4,4,4,0,5];
 
 function getBallStats(id, customTier, customDmgLv, customHpLv) {
   const b = B[id] || B[0];
@@ -982,7 +854,7 @@ function getBallStats(id, customTier, customDmgLv, customHpLv) {
 
 const orb = b => orbHTML(b);
 const roll = (halloweenOnly = false) => {
-  if (halloweenOnly) return rnd(B.filter(b => b.id >= 99));
+  if (halloweenOnly) return rnd(B);
   let x = Math.random() * 100, r = 0;
   for (; r < 4 && x >= RW[r]; r++) x -= RW[r];
   const pool = B.filter(b => b.r == r && b.id < 99);
@@ -1292,240 +1164,11 @@ function startBossFight(index) {
   startMatch(11);
 }
 
-function mpMenu() {
-  show('pn');
-  $('#pb').innerHTML = `<h2 style="margin:12px 0">🌐 Multiplayer online</h2>
-    <p style="color:var(--mu);margin-bottom:12px">Jedna osoba tworzy pokój i wysyła kod drugiej osobie. Obie osoby muszą mieć otwartą grę i połączenie z internetem.</p>
-    <button class="b graj" onclick="hostNet()">Utwórz pokój</button>
-    <button class="b ac" id="netInvite" hidden onclick="copyNetInvite()">🔗 Kopiuj link dla znajomego</button>
-    <button class="b graj" id="netStart" hidden onclick="startOnlineMatch()">⚔️ Rozpocznij 1vs1</button>
-    <label style="display:block;margin:12px 0 5px">Kod pokoju</label>
-    <input id="peerCode" class="inp" autocomplete="off" placeholder="Wklej kod hosta" />
-    <button class="b" onclick="joinNet()">Dołącz do pokoju</button>
-    <div id="netFriendsHint" style="margin:8px 0;color:var(--mu);font-size:.85rem"></div>
-    <p id="netStatus" role="status" style="margin:10px 0;color:#93c5fd">Niepołączono.</p>
-    <button class="b" onclick="disconnectNet();mpMenu()">Rozłącz</button>`;
-}
-function startOnlineMatch() {
-  if (netRole !== 'host' || !activeConn?.open) { netStatus('Najpierw połącz się ze znajomym.'); return; }
-  if (!guestOnlineDeck || guestOnlineDeck.length !== 3) {
-    netStatus('Czekam na kolekcję kulek znajomego.'); return;
-  }
-  startMatch(12);
-}
-// Każdy gracz korzysta z własnych odblokowanych kulek, a nie z losowych kulek bota.
-function makeOwnOnlineDeck() {
-  const owned = B.filter(b => S.own.includes(b.id));
-  return sh(owned.length >= 3 ? owned : [B[0], B[1], B[2]]).slice(0, 3).map(b => b.id);
-}
-function netStatus(message) {
-  const el = $('#netStatus');
-  if (el) el.textContent = message;
-}
-async function copyNetInvite() {
-  const id = peer?.id;
-  if (!id) { netStatus('Najpierw utwórz pokój.'); return; }
-  if (!['http:', 'https:'].includes(location.protocol)) {
-    netStatus('Link do pokoju będzie działał po opublikowaniu gry na GitHub Pages.'); return;
-  }
-  const link = new URL(location.href);
-  link.search = '';
-  link.hash = '';
-  link.searchParams.set('room', id);
-  try {
-    await navigator.clipboard.writeText(link.href);
-    netStatus('Link skopiowany! Wyślij go znajomemu.');
-  } catch (_) {
-    window.prompt('Skopiuj ten link i wyślij znajomemu:', link.href);
-  }
-}
-function hostNet() {
-  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
-  if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
-  disconnectNet(false);
-  try {
-    peer = new Peer();
-    peer.on('open', id => {
-      netRole = 'host'; netStatus('Pokój gotowy. Wyślij ten kod znajomemu: ' + id);
-      const el = $('#netStatus'); if (el) el.dataset.peerId = id;
-      const invite = $('#netInvite'); if (invite) invite.hidden = !['http:', 'https:'].includes(location.protocol);
-      window.BVBCloud?.showLobbyFriends?.();
-    });
-    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
-    peer.on('connection', conn => {
-      if (activeConn) { try { conn.close(); } catch(e) {} return; }
-      activeConn = conn; setupNetConnection(conn);
-    });
-    peer.on('error', err => netStatus('Błąd połączenia: ' + (err.type || err.message || 'nieznany')));
-  } catch (e) { netStatus('Nie udało się utworzyć pokoju: ' + e.message); }
-}
-function joinNet() {
-  remoteBallId = null; remoteAimAngle = null; hostAimAngle = null; guestBallId = null; guestOnlineDeck = null;
-  const code = ($('#peerCode')?.value || '').trim();
-  if (!code) { netStatus('Najpierw wpisz kod pokoju.'); return; }
-  if (typeof Peer === 'undefined') { netStatus('Nie udało się załadować PeerJS. Sprawdź internet i odśwież stronę.'); return; }
-  disconnectNet(false);
-  reconnectRoom = code;
-  try {
-    peer = new Peer();
-    peer.on('disconnected', () => { if (peer && !peer.destroyed) { try { peer.reconnect(); } catch (_) {} } });
-    peer.on('open', () => {
-      netRole = 'guest';
-      activeConn = peer.connect(code, { reliable: true });
-      setupNetConnection(activeConn);
-    });
-    peer.on('error', err => netStatus('Błąd połączenia: ' + (err.type || err.message || 'nieznany')));
-  } catch (e) { netStatus('Nie udało się dołączyć: ' + e.message); }
-}
-function setupNetConnection(conn) {
-  const connectWatchdog = setTimeout(() => { if (!conn.open && activeConn === conn) { try { conn.close(); } catch (_) {} } }, 10000);
-  conn.on('open', () => {
-    clearTimeout(connectWatchdog);
-    reconnectSeq++; reconnectTries = 0;
-    netStatus('Połączono! Rola: ' + (netRole === 'host' ? 'host' : 'gość') + '. Kanał danych działa.');
-    const btn = $('#netStart'); if (btn) btn.hidden = true;
-    netSend({ type: 'hello', role: netRole, name: 'Ball VS Ball' });
-    if (netRole === 'guest') {
-      netSend({ type: 'deck', ids: makeOwnOnlineDeck() });
-      window.BVBGameplay?.resendTactic?.();
-      // Re-send the current round's unacknowledged input after a connection drop.
-      if (G?.m === 12 && guestMatchId === G.matchId && guestRound === G.rn) {
-        if (guestBallId != null) netSend({type:'pick', id:guestBallId, matchId:G.matchId, rn:G.rn});
-        if (guestAimSent) netSend({type:'fire', angle:guestAimAngle, matchId:G.matchId, rn:G.rn});
-      }
-    } else if (G?.m === 12) broadcastState();
-  });
-  conn.on('data', data => {
-    if (!data || typeof data !== 'object') return;
-    if (data.type === 'hello') {
-      netStatus(netRole === 'host' ? 'Połączono. Czekam na kulki znajomego…' : 'Połączono ze znajomym. Czekam na rozpoczęcie meczu.');
-    }
-    if (data.type === 'deck' && netRole === 'host' && (!G || G.finished || G.m !== 12)) {
-      const ids = data.ids;
-      if (Array.isArray(ids) && ids.length === 3 &&
-          new Set(ids).size === 3 && ids.every(id => Number.isInteger(id) && B[id])) {
-        guestOnlineDeck = ids.map(id => B[id]);
-        netStatus('Połączono! Obaj gracze użyją swoich odblokowanych kulek.');
-        const btn = $('#netStart'); if (btn) btn.hidden = false;
-      } else {
-        netStatus('Nieprawidłowa kolekcja znajomego. Połączcie się ponownie.');
-      }
-    }
-    if (data.type === 'state' && netRole === 'guest' && data.state) {
-      // The host owns the simulation; reverse perspectives for the guest.
-      const hostState = data.state;
-      if (guestMatchId !== hostState.matchId || guestRound !== hostState.rn) {
-        guestMatchId = hostState.matchId;
-        guestRound = hostState.rn; guestBallId = null; guestAimSent = false;
-        guestAimAngle = -Math.PI / 2;
-      }
-      const hostDeck = hostState.my, guestDeck = hostState.bt;
-      const hostBall = hostState.pb, guestBall = hostState.bb;
-      G = hostState;
-      G.my = guestDeck;
-      G.bt = hostDeck;
-      G.h = [hostState.h[1], hostState.h[0]];
-      G.lastRoundWinner = Number.isInteger(hostState.lastRoundWinner) && hostState.lastRoundWinner >= 0 ? 1 - hostState.lastRoundWinner : -1;
-      G.pb = guestBall;
-      G.bb = hostBall;
-      G.pa = guestAimAngle;
-      G.bl = (hostState.bl || []).map(o => ({ ...o, team: 1 - o.team, y: 360 - o.y, vy: -o.vy,
-        trail: (o.trail || []).map(p => ({ x: p.x, y: 360 - p.y })) }));
-      G.fx = (hostState.fx || []).map(f => ({ ...f, y: 360 - f.y, vy: -f.vy }));
-      G.rings = (hostState.rings || []).map(r => ({ ...r, y: 360 - r.y }));
-      G.pop = (hostState.pop || []).map(p => ({ ...p, y: 360 - p.y }));
-      G.obstacles=(hostState.obstacles||[]).map(p=>({...p,y:360-p.y,dy:-p.dy}));
-      G.portal=hostState.portal?{...hostState.portal,y:360-hostState.portal.y}:null;
-      show('game');
-      if (hostState.ph === 'draft' || (hostState.ph === 'aim' && guestBallId == null)) {
-        G.ph = 'draft';
-        renderDraft();
-        $('#fire').hidden = true;
-      } else if (hostState.ph === 'aim') {
-        G.ph = 'aim';
-        G.pb = B.find(b => b.id === guestBallId) || G.my[0];
-        G.bb = hostBall;
-        $('#cards').innerHTML = '';
-        $('#fire').hidden = false;
-        $('#fire').disabled = guestAimSent;
-        $('#msg').textContent = guestAimSent ? 'Czekam na drugi strzał…' : 'Wyceluj i naciśnij WYSTRZEL!';
-      } else {
-        $('#cards').innerHTML = '';
-        $('#fire').hidden = true;
-      }
-      if (hostState.ph === 'draft' && guestBallId != null) {
-        $('#cards').innerHTML = '';
-        $('#msg').textContent = 'Kulę wybrano. Czekam na wybór hosta…';
-      }
-      hearts();
-      window.BVBGameplay?.onGuestState?.(hostState);
-      if (!G.finished) $('#ov').hidden = true; // A new online rematch clears the old end screen.
-      if (G.finished) {
-        const guestWon = G.h[0] > 0;
-        $('#ov').hidden = false;
-        $('#ovb').innerHTML = `<h2>${guestWon ? '🏆 Zwycięstwo!' : '💀 Koniec walki'}</h2><p style="margin:10px 0;color:var(--mu)">Wynik meczu online</p><button class="b graj" onclick="$('#ov').hidden=true;menu()">Menu główne</button>`;
-      }
-    }
-    if (data.type === 'tactic' && netRole === 'host') window.BVBGameplay?.applyRemoteTactic?.(data);
-    if (data.type === 'pick' && netRole === 'host') {
-      if (!G || G.m !== 12 || !['draft','aim'].includes(G.ph) || data.matchId !== G.matchId || data.rn !== G.rn) return;
-      // Gość może wybierać tylko spośród trzech kulek ze swojej talii.
-      remoteBallId = G?.bt?.find(b => b.id === data.id) || null;
-      if (!remoteBallId) return;
-      if (G && G.ph === 'aim') G.bb = remoteBallId;
-      broadcastState();
-    }
-    if (data.type === 'fire' && netRole === 'host') {
-      if (!G || G.m !== 12 || G.ph !== 'aim' || data.matchId !== G.matchId || data.rn !== G.rn || !remoteBallId) return;
-      remoteAimAngle = Number.isFinite(data.angle) ? data.angle : -Math.PI / 2;
-      if (G && G.ph === 'aim' && hostAimAngle != null && remoteBallId != null) launchMatch(remoteAimAngle);
-    }
-    if (data.type === 'ping') netSend({type:'pong', at:data.at});
-  });
-  conn.on('close', () => {
-    clearTimeout(connectWatchdog);
-    if (activeConn !== conn) return;
-    activeConn = null;
-    const btn = $('#netStart'); if (btn) btn.hidden = true;
-    if (netRole === 'guest' && reconnectRoom && peer && !peer.destroyed) scheduleNetReconnect();
-    else netStatus('Połączenie zamknięte. Host może przyjąć ponowne połączenie.');
-  });
-  conn.on('error', err => {
-    netStatus('Błąd kanału: ' + (err.message || 'nieznany'));
-    if (activeConn === conn) { try { conn.close(); } catch (_) {} }
-  });
-}
-function netSend(data) {
-  try { if (activeConn && activeConn.open) activeConn.send(data); } catch (e) {}
-}
-function broadcastState() {
-  if (netRole !== 'host' || !activeConn || !activeConn.open || !G) return;
-  try { netSend({ type: 'state', state: JSON.parse(JSON.stringify(G)) }); } catch (e) {}
-}
-function scheduleNetReconnect() {
-  if (reconnectTries >= 6) { netStatus('Nie udało się odzyskać połączenia. Utwórz pokój ponownie.'); return; }
-  const attempt = ++reconnectTries, seq = ++reconnectSeq;
-  netStatus('Próba ponownego połączenia ' + attempt + '/6…');
-  setTimeout(() => {
-    if (seq !== reconnectSeq || netRole !== 'guest' || activeConn?.open || !reconnectRoom || !peer || peer.destroyed) return;
-    if (peer.disconnected) {
-      try { peer.reconnect(); } catch (_) {}
-      scheduleNetReconnect();
-      return;
-    }
-    try {
-      activeConn = peer.connect(reconnectRoom, { reliable:true });
-      setupNetConnection(activeConn);
-    } catch (_) { scheduleNetReconnect(); }
-  }, Math.min(12000, 900 * Math.pow(2, attempt - 1)));
-}
-function disconnectNet(updateStatus = true) {
-  reconnectSeq++; reconnectTries = 0; reconnectRoom = '';
-  try { if (activeConn) activeConn.close(); } catch (e) {}
-  try { if (peer && !peer.destroyed) peer.destroy(); } catch (e) {}
-  activeConn = null; peer = null; netRole = null; guestRound = -1; guestMatchId = null; guestBallId = null; guestAimSent = false; guestOnlineDeck = null;
-  if (updateStatus) netStatus('Rozłączono.');
-}
+// Network transport is omitted in this test-only beta. Offline hooks remain
+// for shared round code; they cannot open rooms, sockets or send game state.
+function netSend() {}
+function broadcastState() {}
+function disconnectNet() {netRole=null;activeConn=null;peer=null;}
 let pendingBossIndex = 0, netRole = null, remoteBallId = null, remoteAimAngle = null, hostAimAngle = null, netSyncAt = 0, guestBallId = null, guestRound = -1, guestMatchId = null, guestAimSent = false, guestAimAngle = -Math.PI / 2, guestOnlineDeck = null;
 let reconnectSeq = 0, reconnectTries = 0, reconnectRoom = '';
 
@@ -1601,14 +1244,14 @@ function panel(k) {
   $('#pn').dataset.panel = k;
   show('pn');
   const p = $('#pb');
-  if (k === 'account') { if (window.BVBCloud?.renderAccount) window.BVBCloud.renderAccount(); else p.innerHTML='<div class="cd"><h2>👤 Konto BVB</h2><p>Aby korzystać z kont online, trzeba podłączyć Supabase. Gra bez konta działa bez zmian.</p></div>'; return; }
+  if (k === 'account') { if (window.BVBCloud?.renderAccount) window.BVBCloud.renderAccount(); else p.innerHTML='<div class="cd"><h2>👤 Profil testowy</h2><p>Ta beta zapisuje postęp lokalnie. Konta online i multiplayer nie są dostępne.</p></div>'; return; }
   if (k === 'arena') {arenaMenuPanel(p);return;}
   if (k === 'ach') {achievementsPanel(p);return;}
 
   if (k == 'hw') {
     const winCandy = DIFF_CANDY[diff];
     const loseCandy = Math.round(winCandy * 0.25);
-    const hwBalls = B.filter(b => b.id >= 100);
+    const hwBalls = B;
     p.innerHTML = `
       <div class="cd hw-card">
         <h2>🎃 HALLOWEEN EVENT (${hwBalls.length + 1} KULEK)</h2>
@@ -2204,7 +1847,7 @@ function claimBp(i) {
 }
 
 // ============================================================================
-// 3. WEKTOROWY GENERATOR SVG DLA WSZYSTKICH 130 KULEK + 5 BOSSÓW
+// 3. WEKTOROWY GENERATOR SVG DLA WSZYSTKICH 16 KULEK + 5 BOSSÓW
 // ============================================================================
 const LIMIT = { projectiles: 96, zones: 48, particles: 150, events: 64, bounces: 8 };
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -2587,6 +2230,7 @@ function freshGame(mode, my, bt) {
 }
 
 function startMatch(mode = 0) {
+  if(Number(mode)===12)return false; // Online mode is not part of the test beta.
   if (netRole === 'guest' && activeConn) { netStatus('Host rozpoczyna mecz. Poczekaj na synchronizację.'); return; }
   $('#ov').hidden = true;
   refreshPeriods();
@@ -2596,8 +2240,8 @@ function startMatch(mode = 0) {
     netStatus('Poczekaj na połączenie i kolekcję znajomego.'); return;
   }
   const botThree = mode === 12 ? guestOnlineDeck.slice() :
-    (mode == 9 || mode == 10) ? [B[99], ...sh(B.filter(b => b.id >= 100)).slice(0, 2)] : sh(B.filter(b => b.id < 99)).slice(0, 3);
-  if (mode === 11) botThree[0] = { ...B[99], ...BOSSD[pendingBossIndex], isBoss: true };
+    (mode == 9 || mode == 10) ? [B[0], ...sh(B).slice(0, 2)] : sh(B.filter(b => b.id < 99)).slice(0, 3);
+  if (mode === 11) botThree[0] = { ...B[0], ...BOSSD[pendingBossIndex], isBoss: true };
   const previousArena = G?.finished ? G.th : null;
   G = freshGame(mode, myThree, botThree);
   window.BVBGameplay?.newMatch?.(G);
@@ -2651,7 +2295,7 @@ function pick(i) {
     G.ph = 'aim';
     netSend({ type: 'pick', id: G.pb.id, matchId: G.matchId, rn: G.rn });
   } else {
-    G.bb = G.m===13 ? G.bt[0] : G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : ((G.m == 9 || G.m == 10) ? B[99] : (remoteBallId || rnd(G.bt)));
+    G.bb = G.m===13 ? G.bt[0] : G.m === 11 ? { ...B[0], ...BOSSD[G.bossIndex || 0], isBoss: true } : ((G.m == 9 || G.m == 10) ? B[0] : (remoteBallId || rnd(G.bt)));
     G.ph = 'aim';
     broadcastState();
   }
@@ -2690,7 +2334,7 @@ function launchMatch(remoteAngle = null) {
   const botAim = remoteAngle == null
     ? computeBotAim(180, 60, 180, 300, Math.cos(G.pa), Math.sin(G.pa), diff)
     : remoteAngle;
-  const enemyBall = G.m === 11 ? { ...B[99], ...BOSSD[G.bossIndex || 0], isBoss: true } : G.bb;
+  const enemyBall = G.m === 11 ? { ...B[0], ...BOSSD[G.bossIndex || 0], isBoss: true } : G.bb;
   // The guest sees the same X axis and a mirrored Y axis: flip only the Y component.
   const enemyAngle = remoteAngle == null ? botAim : -remoteAngle;
   // Standard bot difficulty is one profile, not hidden V2 + upgrades + random boosts.
@@ -2910,8 +2554,8 @@ function step(dt) {
           const overtime=G.rt>=30?1.10:1;
           const momentumA=1 + Math.min(.10,Math.max(0,(b.actualPace||1.2)-1.2)*.12);
           const momentumB=1 + Math.min(.10,Math.max(0,(a.actualPace||1.2)-1.2)*.12);
-          const damageToA=Math.max(3,b.baseDmg*(b.power||1)*overtime*momentumA*(b.status.weaken>0?.8:1));
-          const damageToB=Math.max(3,a.baseDmg*(a.power||1)*overtime*momentumB*(a.status.weaken>0?.8:1));
+          const damageToA=window.BVB2?.onContact?.(G,b,a,Math.max(3,b.baseDmg*(b.power||1)*overtime*momentumA*(b.status.weaken>0?.8:1)))??3;
+          const damageToB=window.BVB2?.onContact?.(G,a,b,Math.max(3,a.baseDmg*(a.power||1)*overtime*momentumB*(a.status.weaken>0?.8:1)))??3;
           const heavyImpact=Math.random()<.075; // Rare cinematic collisions: ~7.5%.
           if(heavyImpact) {
             G.hitStop=.075;
@@ -3072,7 +2716,7 @@ function draw() {
     cx.beginPath(); cx.arc(o.x, o.y, o.r + 3, 0, 6.283); cx.stroke();
 
     const im = ART_IMAGES.get(o.b.id);
-    if (im?.complete && im.naturalWidth) cx.drawImage(im, o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+    if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);if(!window.BVBBatch01Animation?.drawActor(cx,o,G))cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
 
     cx.shadowBlur = 0;
@@ -3098,6 +2742,7 @@ function draw() {
 }
 
 function loop(t) {
+  window.BVBBatch01Animation?.renderPortraits?.(t);
   const elapsed = Math.min(0.1, Math.max(0, (t - (frameLast || t)) / 1000));
   frameLast = t;
   if (G) {
@@ -3127,28 +2772,22 @@ window.BVBGameBridge = {
   importState: data => {try {const x=JSON.parse(data);if(!x || !Array.isArray(x.own))return false;localStorage.setItem(K,JSON.stringify(x));load();return true;} catch(e){return false;}},
   goMenu: () => menu(),
   getRoom: () => (netRole==='host' && activeConn?.open || netRole==='host' && peer?.id) ? peer?.id : null,
-  joinRoom: room => {if(typeof room!=='string' || !room || room.length>150)return;mpMenu();$('#peerCode').value=room;joinNet();}
+  joinRoom: () => false
 };
 window.addEventListener('bvb-cloud-ready',()=>{
   if ($('#pn')?.dataset.panel === 'account' && !$('#pn').hidden) window.BVBCloud?.renderAccount?.();
 });
 load();
 menu();
-const invitedRoom = new URLSearchParams(location.search).get('room');
-if (invitedRoom && invitedRoom.length < 150) {
-  mpMenu();
-  $('#peerCode').value = invitedRoom;
-  netStatus('Kod pokoju wpisany. Kliknij „Dołącz do pokoju”, żeby połączyć się ze znajomym.');
-}
 requestAnimationFrame(loop);
 </script>
 <script src="./bvb-anime-update.js"></script>
 <script src="./bvb-gameplay.js"></script>
 <script src="./bvb-campaign.js"></script>
 <script src="./bvb-abilities-v2.js"></script>
+<script src="./bvb-abilities-00-15.js"></script>
 <script src="./bvb-preview-v2.js"></script>
 <script src="./bvb-ui-v2.js"></script>
 <script src="./bvb-main-menu-v3.js"></script>
-<script src="./bvb-changelog-v3.js"></script>
-</body>
+<script src="./bvb-batch01-frames.js"></script><script src="./bvb-beta-art.js"></script><script src="./bvb-first16-rig.js"></script><script src="./bvb-beta-vampire.js"></script><script src="./bvb-beta-setup.js"></script></body>
 </html>

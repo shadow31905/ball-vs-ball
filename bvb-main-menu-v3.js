@@ -35,7 +35,7 @@ for(const [key,title,sub,parent] of [
  ['balls','🔮 KULKI I SKLEP','Zbieraj kulki i poznawaj ich umiejętności.','home'],
  ['rewards','🎁 NAGRODY I WYDARZENIA','Odbieraj nagrody i podejmuj wyzwania.','home'],
  ['account','⚙️ KONTO I USTAWIENIA','Profil, znajomi, ranking i personalizacja.','home'],
- ['extra','✨ WIĘCEJ TRYBÓW','Dodatkowe wyzwania i multiplayer.','modes'],
+ ['extra','✨ WIĘCEJ TRYBÓW','Dodatkowe wyzwania dla jednego gracza.','modes'],
  ['events','🎃 WYDARZENIA','Specjalne walki i sezonowe nagrody.','rewards'],
  ['settings','⚙️ ARENY I USTAWIENIA','Ustaw wygląd areny, muzykę i efekty.','account'],
  ['bosses','👹 WYBIERZ BOSSA','Wybierz przeciwnika przed ustaleniem trudności.','modes'],
@@ -54,9 +54,9 @@ if(bot)bot.setAttribute('onclick',"window.BVBMenu.prepare('bot')");
 if(boss)boss.setAttribute('onclick',"window.BVBMenu.prepare('boss')");
 move(screens.modes.list,'startMatch(4)','🎯 Trening','Ćwicz umiejętności swoich kulek.');
 move(screens.modes.list,'window.BVBCampaign?.open?.()','🗺️ Kampania','50 poziomów i bossowie.');
-screens.modes.list.append(custom('••• Więcej trybów','Survival, Boss Rush, Chaos, Turniej i PvP.',()=>open('extra'),'bvb3-wide'));
+screens.modes.list.append(custom('••• Więcej trybów','Survival, Boss Rush, Chaos i Turniej.',()=>open('extra'),'bvb3-wide'));
 for(const action of ['startMatch(1)','startMatch(7)','startMatch(3)','startMatch(5)','startMatch(6)'])move(screens.extra.list,action);
-move(screens.extra.list,'mpMenu()','🌐 Multiplayer','Zaproś znajomego do walki online.');
+
 move(screens.balls.list,"panel('col')",'🔮 Kolekcja','Przeglądaj wszystkie kulki i ulepszenia.');
 move(screens.balls.list,"panel('shop')",'📦 Skrzynki','Otwieraj skrzynki i zdobywaj kulki.');
 move(screens.balls.list,"panel('st')",'🛒 Sklep','Kupuj przedmioty i dodatki.');
