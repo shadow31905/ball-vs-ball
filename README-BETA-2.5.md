@@ -23,7 +23,11 @@ python -m http.server 8765 --bind 127.0.0.1
 Otwórz **http://localhost:8765/** w przeglądarce. Wybierz **Panel testowy BETA**. Nie otwieraj przez `file://`, ponieważ gra wczytuje części silnika przez `fetch`.
 
 ## Dostęp i prywatność
-**Ta beta nie jest wdrożona w Internecie.** Lokalny serwer HTTP należy uruchomić wyłącznie na komputerze właściciela (domyślnie zalecane `--bind 127.0.0.1`). To NIE jest internetowa beta zabezpieczona logowaniem. Repozytorium jest publiczne, dlatego kod gałęzi także jest czytelny publicznie. Aby zapewnić dostęp do online bety tylko właścicielowi, konieczny jest osobny hosting z rzeczywistą kontrolą dostępu (np. weryfikacja konta na serwerze). Nie publikuj jej zwyczajnym linkiem GitHub Pages ani nie stosuj hasła zaszytego w HTML.
+Wersja beta 2.5 została udostępniona **przez osobną funkcję Supabase Edge Functions**, pod adresem `https://mcmvowcsvcinnmanejeh.supabase.co/functions/v1/bvb-beta-25/`. Sama ścieżka URL nie daje dostępu. Wejście wymaga długiego, losowego klucza przekazanego właścicielowi prywatnie i bezpiecznego ciasteczka HttpOnly po pierwszym wejściu. Nie zapisuj klucza w repozytorium, adresie zamieszczonym publicznie ani w kodzie klienta. To ograniczenie dostępu na zasadzie posiadania tajnego linku, **nie weryfikacja tożsamości osoby**. Każdy, kto pozna prawidłowy link, może wejść.
+
+Proxy pobiera pliki oznaczonego, niezmiennego commita z GitHub. Repozytorium jest publiczne (sam kod źródłowy nie jest tajny). Funkcja nie zapisuje danych do Supabase ani nie używa produkcyjnej bazy kont. Profil lokalny ma inny klucz niż gra stabilna.
+
+Funkcja ma własny adres i nie wpływa na publiczną stronę gry. Pełny test uruchomienia na telefonie i sprawdzenie wydajności transferu wymagają osobnego potwierdzenia; samo wdrożenie nie dowodzi pełnej sprawności gry.
 
 ## Zakres testów przed akceptacją
 1. Ekran startowy, grafiki i animacje vs oryginał.
