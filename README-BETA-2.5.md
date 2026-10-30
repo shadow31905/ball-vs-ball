@@ -17,7 +17,7 @@ Na komputerze z Git i Pythonem:
 ```bash
 git clone --branch beta/2.5-isolated-20261030 --single-branch https://github.com/shadow31905/ball-vs-ball.git bvb-beta-25
 cd bvb-beta-25
-python -m http.server 8765
+python -m http.server 8765 --bind 127.0.0.1
 ```
 
 Otwórz **http://localhost:8765/** w przeglądarce. Wybierz **Panel testowy BETA**. Nie otwieraj przez `file://`, ponieważ gra wczytuje części silnika przez `fetch`.
