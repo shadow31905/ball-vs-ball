@@ -1,0 +1,17 @@
+name: BVB 2.5 — isolated beta checks
+on:
+  push:
+    branches:
+      - beta/2.5-isolated-20261030
+  workflow_dispatch:
+jobs:
+  verify-isolation:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/beta25-isolation.test.cjs
