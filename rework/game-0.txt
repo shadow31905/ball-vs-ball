@@ -6185,6 +6185,7 @@ function play(id){
  requestAnimationFrame(frame);
 }
 // Inventory animation preview removed; standalone ability browser remains.
+window.BVB2Preview={play};
 
 })();
 
