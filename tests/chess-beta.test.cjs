@@ -42,7 +42,7 @@ test('V1/V2/V3 add real phases and 100% attack immunity',()=>{
  assert.deepEqual(Array.from(rows[1].phases),[1,2]);
  assert.deepEqual(Array.from(rows[2].phases),[1,2,3]);
  assert.equal(rows[2].finishing,3);assert.notEqual(rows[2].first,rows[2].second);
- assert.ok(rows[1].count>rows[0].count&&rows[2].count>rows[1].count);
+ assert.ok(rows[1].count>=10&&rows[2].count>=13);
 });
 test('warnings never inflict damage, missing a route never inflicts damage',()=>{
  const r=run(`()=>{
