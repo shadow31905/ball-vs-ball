@@ -75,7 +75,7 @@
         }));
         secondPaths.sort((a,b)=>proximity(a)-proximity(b));
       }
-      for(let n=0;n<6;n++result.push({...secondPaths[n%secondPaths.length],
+      for(let n=0;n<6;n++)result.push({...secondPaths[n%secondPaths.length],
         damage:tier===3?12:10,speed:tier===3?550:480,phase:2});
     }
     if(tier===3){
