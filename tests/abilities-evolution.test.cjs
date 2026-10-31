@@ -17,6 +17,7 @@ function abilityAudit(){
     const v=G.v2||{};
     samples.push({hp:o.hp,targetHP:f.hp,shield:o.status.shield||0,foeStatus:f.status,foeVx:f.vx,foeVy:f.vy,vx:o.vx,vy:o.vy,r:o.r,
      impact:o.skillImpact,charge:o.skillCharge,reflect:o.skillReflect,scale:o.skillScale,
+      chess:o.chess?.routes?.map(r=>({piece:r.piece,phase:r.phase,damage:r.damage,points:r.points}))||null,
      orbit:o.axeOrbit,tail:o.v2Tail,
      shots:(v.shots||[]).map(s=>({vx:s.vx,vy:s.vy,r:s.r,damage:s.damage,homing:s.homing,bounces:s.bounces,ghost:s.ghost})),
      hazards:(v.hazards||[]).map(h=>({kind:h.kind,radius:h.radius,life:h.life,power:h.power,armAt:h.armAt,vx:h.vx,vy:h.vy})),
