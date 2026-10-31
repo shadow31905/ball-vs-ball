@@ -47,13 +47,16 @@ test('V1/V2/V3 add real phases and 100% attack immunity',()=>{
 test('warnings never inflict damage, missing a route never inflicts damage',()=>{
  const r=run(`()=>{
   const [o,foe]=chessCase(1);o.x=180;o.y=180;
+  // Keep a moving-AI opponent outside every segment to isolate a true miss.
+  const park=()=>{foe.x=330;foe.y=330;foe.vx=0;foe.vy=0;};
+  park();
   const hp=foe.hp;
   o.chess={active:true,phase:'warn',routes:[{piece:'knight',phase:1,speed:390,damage:7,
    points:[{x:180,y:180},{x:266,y:180},{x:266,y:223}]}],
    index:0,dist:0,warning:.25,lastPhase:0};
-  for(let i=0;i<10;i++)step(1/60);
+  for(let i=0;i<10;i++){park();step(1/60);}
   const warningHP=foe.hp;
-  for(let i=0;i<120&&o.chess?.active;i++)step(1/60);
+  for(let i=0;i<120&&o.chess?.active;i++){park();step(1/60);}
   return{hp,warningHP,finalHP:foe.hp,finished:!o.chess,cooldown:o.abilityCd};
  }`);
  assert.equal(r.warningHP,r.hp);assert.equal(r.finalHP,r.hp);
