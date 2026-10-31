@@ -701,6 +701,7 @@
     <div id="ovb"></div>
   </div>
 
+<script src="./bvb-approved-art-00-15.js"></script>
 <script>
 const $ = s => document.querySelector(s);
 const rnd = a => a[Math.random() * a.length | 0];
@@ -2235,7 +2236,8 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 let fixedAccumulator = 0, frameLast = 0, serial = 0, peer = null, activeConn = null;
 const ART = new Map(), ART_IMAGES = new Map();
 
-function art(id) {
+function art(id, tier) {
+  if(window.BVBApprovedArt?.has(id))return window.BVBApprovedArt.svgFor(id, tier ?? getBallStats(id).tier);
   if (ART.has(id)) return ART.get(id);
   const col = B[id]?.c || '#a855f7';
   const path = (d, c = '#e2e8f0', w = 2) => `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
@@ -2386,6 +2388,10 @@ const orbHTML = b => `<span class="orb" style="--oc:${b.c};--rc:${RC[b.r]};width
 
 function preloadArt() {
   for (let i = 0; i < B.length; i++) {
+    if(window.BVBApprovedArt?.has(i)){
+      ART_IMAGES.set(i,window.BVBApprovedArt.imageForTier(i,getBallStats(i).tier));
+      continue;
+    }
     const im = new Image();
     im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(art(i));
     ART_IMAGES.set(i, im);
@@ -3132,7 +3138,9 @@ function draw() {
     cx.lineWidth = 3;
     cx.beginPath(); cx.arc(o.x, o.y, o.r + 3, 0, 6.283); cx.stroke();
 
-    const im = ART_IMAGES.get(o.b.id);
+    const im = window.BVBApprovedArt?.has(o.b.id)
+      ? window.BVBApprovedArt.imageForTier(o.b.id,o.tier||getBallStats(o.b.id).tier)
+      : ART_IMAGES.get(o.b.id);
     if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
     else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
 
