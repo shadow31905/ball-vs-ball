@@ -3138,11 +3138,19 @@ function draw() {
     cx.lineWidth = 3;
     cx.beginPath(); cx.arc(o.x, o.y, o.r + 3, 0, 6.283); cx.stroke();
 
-    const im = window.BVBApprovedArt?.has(o.b.id)
-      ? window.BVBApprovedArt.imageForTier(o.b.id,o.tier||getBallStats(o.b.id).tier)
-      : ART_IMAGES.get(o.b.id);
-    if (im?.complete && im.naturalWidth) {cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();}
-    else { cx.fillStyle = o.b.c; cx.fillRect(o.x - o.r, o.y - o.r, o.r * 2, o.r * 2); }
+    const tier = o.tier || getBallStats(o.b.id).tier;
+    const im = window.BVBArtEvolution?.imageForTier?.(o.b.id, tier)
+      || (window.BVBApprovedArt?.has(o.b.id)
+        ? window.BVBApprovedArt.imageForTier(o.b.id,tier)
+        : ART_IMAGES.get(o.b.id));
+    const drawn = window.BVBLiveFirst16?.draw?.(cx,o.b.id,tier,o.x,o.y,o.r,G.rt||0,{scope:'battle',actor:o});
+    if (!drawn) {
+      if (im?.complete && im.naturalWidth) {
+        cx.save();cx.translate(o.x,o.y);cx.rotate(o.rotation||0);
+        cx.drawImage(im,-o.r,-o.r,o.r*2,o.r*2);cx.restore();
+      } else { cx.fillStyle = o.b.c; cx.fillRect(o.x-o.r,o.y-o.r,o.r*2,o.r*2); }
+    }
+    window.BVBMotion?.drawActor?.(cx,o,G);
 
     cx.shadowBlur = 0;
     if (o.status.shield > 0) {
@@ -3220,6 +3228,16 @@ requestAnimationFrame(loop);
 <script src="./bvb-gameplay.js"></script>
 <script src="./bvb-campaign.js"></script>
 <script src="./bvb-abilities-v2.js"></script>
+<script src="./bvb-elemental-art-00-15.js"></script>
+<script src="./bvb-sketch-art-16-31.js"></script>
+<script src="./bvb-sketch-art-32-47.js"></script>
+<script src="./bvb-sketch-art-48-63.js"></script>
+<script src="./bvb-sketch-art-64-79.js"></script>
+<script src="./bvb-approved-rig-layout.js"></script>
+<script src="./bvb-art-evolution.js"></script>
+<script src="./bvb-motion-results.js"></script>
+<script src="./bvb-live-first16.js"></script>
+<script src="./bvb-signature-motion.js"></script>
 <script src="./bvb-identities.js"></script>
 <script src="./bvb-network.js"></script>
 <script src="./bvb-balance.js"></script>

@@ -12,7 +12,7 @@ const has=id=>Number.isInteger(id)&&id>=0&&id<16;
 const stage=tier=>Math.max(1,Math.min(3,Math.trunc(Number(tier)||1)));
 const frames=Object.freeze(names.flatMap((name,id)=>[1,2,3].map(tier=>Object.freeze({
  id,tier,name,width:256,height:256,
- source:'https://raw.githubusercontent.com/shadow31905/ball-vs-ball/c530aefe0b1546e24e181f0394c0da9501257438/assets/approved-first16/ball-'+String(id).padStart(2,'0')+'-v'+tier+'.webp'
+ source:'./assets/approved-first16/ball-'+String(id).padStart(2,'0')+'-v'+tier+'.webp'
 }))));
 const cache=new Map();
 function frame(id,tier){return has(id)?frames[id*3+stage(tier)-1]:null;}
