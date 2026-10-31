@@ -67,7 +67,15 @@
     if(tier>=2){
       const pool=tier===3?PIECES.filter(p=>p!==first):PIECES;
       const second=choose(pool),secondPaths=paths(second);
-      for(let n=0;n<6;n++)result.push({...secondPaths[n%secondPaths.length],
+      if(tier===3){
+        // V3 reads the foe's velocity and prioritises routes likely to intercept it.
+        const tx=clampCoord(foe.x+(foe.vx||0)*22),ty=clampCoord(foe.y+(foe.vy||0)*22);
+        const proximity=r=>Math.min(...r.points.slice(1).map((p,i)=>{
+          const a=r.points[i];return closestSegment(tx,ty,a.x,a.y,p.x,p.y);
+        }));
+        secondPaths.sort((a,b)=>proximity(a)-proximity(b));
+      }
+      for(let n=0;n<6;n++result.push({...secondPaths[n%secondPaths.length],
         damage:tier===3?12:10,speed:tier===3?550:480,phase:2});
     }
     if(tier===3){
