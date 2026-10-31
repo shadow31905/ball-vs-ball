@@ -53,17 +53,30 @@ test('10: energy dash produces a real shockwave with tier-dependent range',()=>{
  assert.ok(out.every(x=>x.visuals>0),'impact has a matching warning/visual');
 });
 
-test('11: chess movement uses a cardinal axis, attacks nearby, and evolutions add projectiles',()=>{
- const out=play(`(()=>{
-  const r=[];
-  for(let tier=1;tier<=3;tier++){
-   const [a,b]=auditMatch(10,tier,75),hp=b.hp;
-   specialAbility(a,b);
-   r.push({tier,vx:a.vx,vy:a.vy,damage:hp-b.hp,shots:G.v2?.shots?.length||0});
-  }return r;
- })()`);
- assert.ok(out.every(x=>x.vx===1&&x.vy===0&&x.damage>0));
- assert.deepEqual(Array.from(out,x=>x.shots),[0,2,4]); // shoot() adds the evolution stage to requested projectiles.
+test('11: chess uses physical routes, tier-specific combos and no instant ranged hits',()=>{
+  const out=play(`(()=>{
+    const results=[];
+    for(let tier=1;tier<=3;tier++){
+      const [a,b]=auditMatch(10,tier,75),hp=b.hp;
+      BVBRework.setSeed(G,1850+tier);
+      specialAbility(a,b);
+      const c=a.chess;
+      results.push({tier,active:c?.active,phase:c?.phase,
+        initialDamage:hp-b.hp,routes:c?.routes.length,
+        phases:[...new Set(c?.routes.map(r=>r.phase))],
+        shieldTest:(()=>{const original=a.hp;applyDamage(a,70);return a.hp===original})(),
+        damage:c?.routes.map(r=>r.damage)});
+    }return results;
+  })()`);
+  assert.ok(out.every(x=>x.active&&x.phase==='center'&&x.initialDamage===0));
+  assert.equal(out[0].phases.length,1);
+  assert.deepEqual(Array.from(out[1].phases),[1,2]);
+  assert.deepEqual(Array.from(out[2].phases),[1,2,3]);
+  assert.ok(out.every(x=>x.shieldTest));
+  assert.equal(out[0].routes>=4,true);
+  assert.equal(out[1].routes>out[0].routes,true);
+  assert.equal(out[2].routes>out[1].routes,true);
+  assert.ok(out[1].damage.includes(10)&&out[2].damage.includes(15));
 });
 
 test('12: every side of the die performs its described real effect',()=>{
