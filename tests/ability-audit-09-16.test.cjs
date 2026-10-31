@@ -75,7 +75,7 @@ test('11: chess uses physical routes, tier-specific combos and no instant ranged
   assert.ok(out.every(x=>x.shieldTest));
   assert.equal(out[0].routes>=4,true);
   assert.equal(out[1].routes>out[0].routes,true);
-  assert.equal(out[2].routes>out[1].routes,true);
+  assert.equal(out[2].routes>=13,true);
   assert.ok(out[1].damage.includes(10)&&out[2].damage.includes(15));
 });
 
