@@ -1,0 +1,3548 @@
+{
+  "project": "Ball VS Ball 2.0",
+  "source": "ORIGINAL published main",
+  "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
+  "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
+  "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
+  "verified_variants": 39,
+  "expected_variants": 393,
+  "records": [
+    {
+      "id": 0,
+      "name": "Szarża",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "abe6941613fa95b45d15306a0dfdd07549dfd4d661357de89d96f6d1bcf8aefd",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 0,
+      "name": "Szarża",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "7f83ecbb11497cf13ede22d1066f271328d93629c789e58a84b61a8b168a6814",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 0,
+      "name": "Szarża",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "daaec6f1f32bd179bd89ea3fa458624300e5d9da6c946d8a81e81f96119a9e58",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 1,
+      "name": "Topór",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "bb7b62564441213e64ed13749128aa855b181c8fa47b1d4841a7943ef7d23af8",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 1,
+      "name": "Topór",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "7e461e1c51aafaa25b1acd171dbb6fad70b13ef5900b8e0b8b00259b280c420f",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 1,
+      "name": "Topór",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "2c99285b5bc79d83799c54d4f28e552ed458c583d6891cf79cef98ef6695ad99",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 2,
+      "name": "Trujący kolec",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "cf060bfb17e65c498bd04be7a6fdd07626ca1d800542c4d8c9306802e975eb08",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 2,
+      "name": "Trujący kolec",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "50ed0e4c46d4cc85d0f481bce6f6de4ab4aed4a6481b124d1e52050d7f8fe2f9",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 2,
+      "name": "Trujący kolec",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "df41856a0ac184723b5bae8140f09500b8fe7c91441779769a684828b2caaa9d",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 3,
+      "name": "Złodziej",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "5caa94e8f8293b2c99dd58a2c4a1b0087ebe04e17c8a2da5fc1d5e04c2b64130",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 3,
+      "name": "Złodziej",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "bbbaed14a09f1923b85b841e898f8ffaab15de341126898cb433207eff5dc0cc",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 3,
+      "name": "Złodziej",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "b7c8b2a567d45695566fb8b56a5fa56e8fdf2e1a8928843519f44d2eb6855c03",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 4,
+      "name": "Ostrze",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "7f4a93f5d67a1ea4580c713012c631ce64298f021b03d0a680ba238e743f0fb4",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 4,
+      "name": "Ostrze",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "80cbb30203e25a58c1ade581acd5a3ce99328a42d744c8b9fbf1f3e8c35aabb5",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 4,
+      "name": "Ostrze",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "c50e406ef6401f70702acddbcaeb20a826314eb653e3ca8176dc704632537f6e",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 5,
+      "name": "Karabin",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "f62d1da2da64f7ad8269d35d5ea31f77aed41e3dd0e71097e627416f24c740ac",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 5,
+      "name": "Karabin",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "56529df06acd916b8e2b0e161d2a6d435f2292ebab1cae455c9dbbf1a610dd8f",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 5,
+      "name": "Karabin",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "41c11f81a2fca58ccc47e0bc5c91db5747ea6e618fa11a5415fccf7480b33472",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 6,
+      "name": "Pająk",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "f37c6ea95c136add9968b844e1af476db948fa3d3ba9bc4a0bf300d6fd07102b",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 6,
+      "name": "Pająk",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "46ed014fc2983890f55434c36546b2cde61750ad12e68adc40aa55b29ac9202d",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 6,
+      "name": "Pająk",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "bbb00581e488556ce13858319fa93a6ead3b3a790d671c3aac0f6b96810eab43",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 7,
+      "name": "Wampir",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "f7244400c38f40e4632f0f80228d35ae3bac5bdd890a6d9aff9a27c07b838b08",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 7,
+      "name": "Wampir",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "446df97468557fdeef9356bbaa33411cd1437d96123b3909bdb1a2d466f4e9cf",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 7,
+      "name": "Wampir",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "74f7ea70986707508f7fd0f65ac886082fec4e7024de6de7f3d98c26c5428ead",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 8,
+      "name": "Włócznia",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "9492e8983978dbfddc4d92ed0dc716131117364ed7d67abb2dc582e797938d94",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 8,
+      "name": "Włócznia",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "91197142325ec23b2369ad4a5d7e42f3f653d8afe549e412d98257120c7cdd46",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 8,
+      "name": "Włócznia",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "3a1e82bc3439d343cc6706d9355f227acbc5f51d4898a594972b369a4aa66213",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 9,
+      "name": "Rozbłysk",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "77c52a7fa6e5f4b2011ea3d71a78ce389b8d38a55bc69c9b63d5b7fda3dbbec2",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 9,
+      "name": "Rozbłysk",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "2a752a85178cb4d429d1717583f9bd518e848aa2373f3fdb60fc9bca6e8d2732",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 9,
+      "name": "Rozbłysk",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "e6431867b5733335b75073b63979ea433533cfb7cfccabcb0d177119bd5f214c",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 10,
+      "name": "Szachy",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "f1ba76d4f19c22e6c9f21fe5c075b07647b7c92766e9c32586714f8c918fa8e9",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 10,
+      "name": "Szachy",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "fe7d5341de4f43b33c72a173c7a143458f52dec6fa3c824cd4b6913e7bd0336c",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 10,
+      "name": "Szachy",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "3e5dac1deb4d8fab249f3c3887f9a270e593f24ae92d99bd32f8933d3fe2f5ff",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 11,
+      "name": "Kostka",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "bcb6b14d2ec747e176f6f199efb3940fed0e247f86f52ad85ae008f73fea1f96",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 11,
+      "name": "Kostka",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "64c238c0e0c2c7c4cb87391103cb7c1e67fec20c33a5d796b685e3fa1a9a2bf0",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 11,
+      "name": "Kostka",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "fc1fb78bc3e38b76c0301d5c2190f6aeb263f27a7ad174b651ae7e58d7565cb6",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 12,
+      "name": "Lodowy Stożek",
+      "tier": 1,
+      "verified_visually": true,
+      "sourceHash": "e0e6743704c5a01b680ca2f359d65b090d05a089a41ddfbc36e9e7744e13c6f0",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 12,
+      "name": "Lodowy Stożek",
+      "tier": 2,
+      "verified_visually": true,
+      "sourceHash": "d3aa1bc01008d531f3dceef617acb329ec1b76f05a9f5864e626e9d083fe70ea",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 12,
+      "name": "Lodowy Stożek",
+      "tier": 3,
+      "verified_visually": true,
+      "sourceHash": "7748888969cf11724e705d65bb72d1b8cdf72dc925553b638f625d255be5148a",
+      "source": "window.BVBBatch01Frames in rework/game-0.txt and game-1.txt",
+      "description_file": "part-00-12.md"
+    },
+    {
+      "id": 13,
+      "name": "Laser",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 13,
+      "name": "Laser",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 13,
+      "name": "Laser",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 14,
+      "name": "Wąż",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 14,
+      "name": "Wąż",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 14,
+      "name": "Wąż",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 15,
+      "name": "Hak",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 15,
+      "name": "Hak",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 15,
+      "name": "Hak",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 16,
+      "name": "Przekuwacz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 16,
+      "name": "Przekuwacz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 16,
+      "name": "Przekuwacz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 17,
+      "name": "Komórka",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 17,
+      "name": "Komórka",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 17,
+      "name": "Komórka",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 18,
+      "name": "Elektryk",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 18,
+      "name": "Elektryk",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 18,
+      "name": "Elektryk",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 19,
+      "name": "Strefa",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 19,
+      "name": "Strefa",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 19,
+      "name": "Strefa",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 20,
+      "name": "Promień",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 20,
+      "name": "Promień",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 20,
+      "name": "Promień",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 21,
+      "name": "WDC",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 21,
+      "name": "WDC",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 21,
+      "name": "WDC",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 22,
+      "name": "Jabłko",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 22,
+      "name": "Jabłko",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 22,
+      "name": "Jabłko",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 23,
+      "name": "Armata",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 23,
+      "name": "Armata",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 23,
+      "name": "Armata",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 24,
+      "name": "Wirus",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 24,
+      "name": "Wirus",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 24,
+      "name": "Wirus",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 25,
+      "name": "Wielki Kolec",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 25,
+      "name": "Wielki Kolec",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 25,
+      "name": "Wielki Kolec",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 26,
+      "name": "Łuk",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 26,
+      "name": "Łuk",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 26,
+      "name": "Łuk",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 27,
+      "name": "Król Elektryków",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 27,
+      "name": "Król Elektryków",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 27,
+      "name": "Król Elektryków",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 28,
+      "name": "Zasięg",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 28,
+      "name": "Zasięg",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 28,
+      "name": "Zasięg",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 29,
+      "name": "Mróz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 29,
+      "name": "Mróz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 29,
+      "name": "Mróz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 30,
+      "name": "Harpun",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 30,
+      "name": "Harpun",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 30,
+      "name": "Harpun",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 31,
+      "name": "Rój",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 31,
+      "name": "Rój",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 31,
+      "name": "Rój",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 32,
+      "name": "Eliksir",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 32,
+      "name": "Eliksir",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 32,
+      "name": "Eliksir",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 33,
+      "name": "Konduktor",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 33,
+      "name": "Konduktor",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 33,
+      "name": "Konduktor",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 34,
+      "name": "Czarny Pająk",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 34,
+      "name": "Czarny Pająk",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 34,
+      "name": "Czarny Pająk",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 35,
+      "name": "Grób",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 35,
+      "name": "Grób",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 35,
+      "name": "Grób",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 36,
+      "name": "Skrzydło Światła",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 36,
+      "name": "Skrzydło Światła",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 36,
+      "name": "Skrzydło Światła",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 37,
+      "name": "Pudełko Cukierków",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 37,
+      "name": "Pudełko Cukierków",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 37,
+      "name": "Pudełko Cukierków",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 38,
+      "name": "Szlam",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 38,
+      "name": "Szlam",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 38,
+      "name": "Szlam",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 39,
+      "name": "Kajdany",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 39,
+      "name": "Kajdany",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 39,
+      "name": "Kajdany",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 40,
+      "name": "Kwas",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 40,
+      "name": "Kwas",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 40,
+      "name": "Kwas",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 41,
+      "name": "Promień Świetlny",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 41,
+      "name": "Promień Świetlny",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 41,
+      "name": "Promień Świetlny",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 42,
+      "name": "Trujący Gaz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 42,
+      "name": "Trujący Gaz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 42,
+      "name": "Trujący Gaz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 43,
+      "name": "Shuriken",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 43,
+      "name": "Shuriken",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 43,
+      "name": "Shuriken",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 44,
+      "name": "Fibonacci",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 44,
+      "name": "Fibonacci",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 44,
+      "name": "Fibonacci",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 45,
+      "name": "Kaktus",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 45,
+      "name": "Kaktus",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 45,
+      "name": "Kaktus",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 46,
+      "name": "Bomba",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 46,
+      "name": "Bomba",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 46,
+      "name": "Bomba",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 47,
+      "name": "Orbita",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 47,
+      "name": "Orbita",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 47,
+      "name": "Orbita",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 48,
+      "name": "Medyk",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 48,
+      "name": "Medyk",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 48,
+      "name": "Medyk",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 49,
+      "name": "Prawda",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 49,
+      "name": "Prawda",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 49,
+      "name": "Prawda",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 50,
+      "name": "Szkło",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 50,
+      "name": "Szkło",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 50,
+      "name": "Szkło",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 51,
+      "name": "Portal",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 51,
+      "name": "Portal",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 51,
+      "name": "Portal",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 52,
+      "name": "Tarcza",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 52,
+      "name": "Tarcza",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 52,
+      "name": "Tarcza",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 53,
+      "name": "Magik",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 53,
+      "name": "Magik",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 53,
+      "name": "Magik",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 54,
+      "name": "Chronos",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 54,
+      "name": "Chronos",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 54,
+      "name": "Chronos",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 55,
+      "name": "Ninja",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 55,
+      "name": "Ninja",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 55,
+      "name": "Ninja",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 56,
+      "name": "Pirat",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 56,
+      "name": "Pirat",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 56,
+      "name": "Pirat",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 57,
+      "name": "Górnik",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 57,
+      "name": "Górnik",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 57,
+      "name": "Górnik",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 58,
+      "name": "Szeryf",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 58,
+      "name": "Szeryf",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 58,
+      "name": "Szeryf",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 59,
+      "name": "Magma",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 59,
+      "name": "Magma",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 59,
+      "name": "Magma",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 60,
+      "name": "Plazma",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 60,
+      "name": "Plazma",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 60,
+      "name": "Plazma",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 61,
+      "name": "Meteor",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 61,
+      "name": "Meteor",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 61,
+      "name": "Meteor",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 62,
+      "name": "Cyklon",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 62,
+      "name": "Cyklon",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 62,
+      "name": "Cyklon",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 63,
+      "name": "Pryzmat",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 63,
+      "name": "Pryzmat",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 63,
+      "name": "Pryzmat",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 64,
+      "name": "Echo",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 64,
+      "name": "Echo",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 64,
+      "name": "Echo",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 65,
+      "name": "Grawitacja",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 65,
+      "name": "Grawitacja",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 65,
+      "name": "Grawitacja",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 66,
+      "name": "Kotwica",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 66,
+      "name": "Kotwica",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 66,
+      "name": "Kotwica",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 67,
+      "name": "Lustro",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 67,
+      "name": "Lustro",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 67,
+      "name": "Lustro",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 68,
+      "name": "Pustka",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 68,
+      "name": "Pustka",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 68,
+      "name": "Pustka",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 69,
+      "name": "Słońce",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 69,
+      "name": "Słońce",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 69,
+      "name": "Słońce",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 70,
+      "name": "Księżyc",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 70,
+      "name": "Księżyc",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 70,
+      "name": "Księżyc",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 71,
+      "name": "Zaćmienie",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 71,
+      "name": "Zaćmienie",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 71,
+      "name": "Zaćmienie",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 72,
+      "name": "Supernowa",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 72,
+      "name": "Supernowa",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 72,
+      "name": "Supernowa",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 73,
+      "name": "Mgławica",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 73,
+      "name": "Mgławica",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 73,
+      "name": "Mgławica",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 74,
+      "name": "Pulsar",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 74,
+      "name": "Pulsar",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 74,
+      "name": "Pulsar",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 75,
+      "name": "Kwazar",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 75,
+      "name": "Kwazar",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 75,
+      "name": "Kwazar",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 76,
+      "name": "Kometa",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 76,
+      "name": "Kometa",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 76,
+      "name": "Kometa",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 77,
+      "name": "Asteroida",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 77,
+      "name": "Asteroida",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 77,
+      "name": "Asteroida",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 78,
+      "name": "Kwant",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 78,
+      "name": "Kwant",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 78,
+      "name": "Kwant",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 79,
+      "name": "Atom",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 79,
+      "name": "Atom",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 79,
+      "name": "Atom",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 80,
+      "name": "Proton",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 80,
+      "name": "Proton",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 80,
+      "name": "Proton",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 81,
+      "name": "Neutron",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 81,
+      "name": "Neutron",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 81,
+      "name": "Neutron",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 82,
+      "name": "Elektron",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 82,
+      "name": "Elektron",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 82,
+      "name": "Elektron",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 83,
+      "name": "Iskra",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 83,
+      "name": "Iskra",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 83,
+      "name": "Iskra",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 84,
+      "name": "Piekło",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 84,
+      "name": "Piekło",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 84,
+      "name": "Piekło",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 85,
+      "name": "Tsunami",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 85,
+      "name": "Tsunami",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 85,
+      "name": "Tsunami",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 86,
+      "name": "Wstrząs",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 86,
+      "name": "Wstrząs",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 86,
+      "name": "Wstrząs",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 87,
+      "name": "Nawałnica",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 87,
+      "name": "Nawałnica",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 87,
+      "name": "Nawałnica",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 88,
+      "name": "Zamieć",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 88,
+      "name": "Zamieć",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 88,
+      "name": "Zamieć",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 89,
+      "name": "Miraż",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 89,
+      "name": "Miraż",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 89,
+      "name": "Miraż",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 90,
+      "name": "Widmo",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 90,
+      "name": "Widmo",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 90,
+      "name": "Widmo",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 91,
+      "name": "Upiór",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 91,
+      "name": "Upiór",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 91,
+      "name": "Upiór",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 92,
+      "name": "Zjawa",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 92,
+      "name": "Zjawa",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 92,
+      "name": "Zjawa",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 93,
+      "name": "Kosiarz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 93,
+      "name": "Kosiarz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 93,
+      "name": "Kosiarz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 94,
+      "name": "Zagłada",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 94,
+      "name": "Zagłada",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 94,
+      "name": "Zagłada",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 95,
+      "name": "Chaos",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 95,
+      "name": "Chaos",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 95,
+      "name": "Chaos",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 96,
+      "name": "Porządek",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 96,
+      "name": "Porządek",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 96,
+      "name": "Porządek",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 97,
+      "name": "Feniks",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 97,
+      "name": "Feniks",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 97,
+      "name": "Feniks",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 98,
+      "name": "Kraken",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 98,
+      "name": "Kraken",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 98,
+      "name": "Kraken",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 99,
+      "name": "Król Dyń",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 99,
+      "name": "Król Dyń",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 99,
+      "name": "Król Dyń",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 100,
+      "name": "🎃 Wiedźma",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 100,
+      "name": "🎃 Wiedźma",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 100,
+      "name": "🎃 Wiedźma",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 101,
+      "name": "🎃 Kocioł",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 101,
+      "name": "🎃 Kocioł",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 101,
+      "name": "🎃 Kocioł",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 102,
+      "name": "🎃 Czarny Kot",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 102,
+      "name": "🎃 Czarny Kot",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 102,
+      "name": "🎃 Czarny Kot",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 103,
+      "name": "🎃 Nietoperz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 103,
+      "name": "🎃 Nietoperz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 103,
+      "name": "🎃 Nietoperz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 104,
+      "name": "🎃 Zombie",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 104,
+      "name": "🎃 Zombie",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 104,
+      "name": "🎃 Zombie",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 105,
+      "name": "🎃 Voodoo",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 105,
+      "name": "🎃 Voodoo",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 105,
+      "name": "🎃 Voodoo",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 106,
+      "name": "🎃 Strach na Wróble",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 106,
+      "name": "🎃 Strach na Wróble",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 106,
+      "name": "🎃 Strach na Wróble",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 107,
+      "name": "🎃 Ognik",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 107,
+      "name": "🎃 Ognik",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 107,
+      "name": "🎃 Ognik",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 108,
+      "name": "🎃 Wilkołak",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 108,
+      "name": "🎃 Wilkołak",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 108,
+      "name": "🎃 Wilkołak",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 109,
+      "name": "🎃 Banshee",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 109,
+      "name": "🎃 Banshee",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 109,
+      "name": "🎃 Banshee",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 110,
+      "name": "🎃 Golem Cmentarny",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 110,
+      "name": "🎃 Golem Cmentarny",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 110,
+      "name": "🎃 Golem Cmentarny",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 111,
+      "name": "🎃 Krwawy Księżyc",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 111,
+      "name": "🎃 Krwawy Księżyc",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 111,
+      "name": "🎃 Krwawy Księżyc",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 112,
+      "name": "🎃 Duch Latarni",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 112,
+      "name": "🎃 Duch Latarni",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 112,
+      "name": "🎃 Duch Latarni",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 113,
+      "name": "🎃 Mumia",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 113,
+      "name": "🎃 Mumia",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 113,
+      "name": "🎃 Mumia",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 114,
+      "name": "🎃 Gargulec",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 114,
+      "name": "🎃 Gargulec",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 114,
+      "name": "🎃 Gargulec",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 115,
+      "name": "🎃 Nekromanta",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 115,
+      "name": "🎃 Nekromanta",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 115,
+      "name": "🎃 Nekromanta",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 116,
+      "name": "🎃 Przeklęte Lustro",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 116,
+      "name": "🎃 Przeklęte Lustro",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 116,
+      "name": "🎃 Przeklęte Lustro",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 117,
+      "name": "🎃 Pająk Wdowa",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 117,
+      "name": "🎃 Pająk Wdowa",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 117,
+      "name": "🎃 Pająk Wdowa",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 118,
+      "name": "🎃 Jeździec Bez Głowy",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 118,
+      "name": "🎃 Jeździec Bez Głowy",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 118,
+      "name": "🎃 Jeździec Bez Głowy",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 119,
+      "name": "🎃 Żniwiarz Dusz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 119,
+      "name": "🎃 Żniwiarz Dusz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 119,
+      "name": "🎃 Żniwiarz Dusz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 120,
+      "name": "🎃 Dzwon Północy",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 120,
+      "name": "🎃 Dzwon Północy",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 120,
+      "name": "🎃 Dzwon Północy",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 121,
+      "name": "🎃 Lodowy Upiór",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 121,
+      "name": "🎃 Lodowy Upiór",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 121,
+      "name": "🎃 Lodowy Upiór",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 122,
+      "name": "🎃 Królowa Kruków",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 122,
+      "name": "🎃 Królowa Kruków",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 122,
+      "name": "🎃 Królowa Kruków",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 123,
+      "name": "🎃 Zgniła Dynia",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 123,
+      "name": "🎃 Zgniła Dynia",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 123,
+      "name": "🎃 Zgniła Dynia",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 124,
+      "name": "🎃 Widmowy Rycerz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 124,
+      "name": "🎃 Widmowy Rycerz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 124,
+      "name": "🎃 Widmowy Rycerz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 125,
+      "name": "🎃 Cukierkowy Koszmar",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 125,
+      "name": "🎃 Cukierkowy Koszmar",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 125,
+      "name": "🎃 Cukierkowy Koszmar",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 126,
+      "name": "🎃 Księżycowy Nietoperz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 126,
+      "name": "🎃 Księżycowy Nietoperz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 126,
+      "name": "🎃 Księżycowy Nietoperz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 127,
+      "name": "🎃 Grobowy Alchemik",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 127,
+      "name": "🎃 Grobowy Alchemik",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 127,
+      "name": "🎃 Grobowy Alchemik",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 128,
+      "name": "🎃 Płacząca Marionetka",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 128,
+      "name": "🎃 Płacząca Marionetka",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 128,
+      "name": "🎃 Płacząca Marionetka",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 129,
+      "name": "🎃 Kryształ Zaświatów",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 129,
+      "name": "🎃 Kryształ Zaświatów",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 129,
+      "name": "🎃 Kryształ Zaświatów",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 130,
+      "name": "Trebusz",
+      "tier": 1,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 130,
+      "name": "Trebusz",
+      "tier": 2,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    },
+    {
+      "id": 130,
+      "name": "Trebusz",
+      "tier": 3,
+      "verified_visually": false,
+      "sourceHash": null,
+      "source": null,
+      "description_file": null
+    }
+  ]
+}
