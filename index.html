@@ -7,4 +7,25 @@
 #bvb-loading-fill{height:100%;width:0;background:linear-gradient(90deg,#3278ed,#77edff);transition:width .12s linear}
 #bvb-loading-screen button{font:inherit;color:inherit;background:#244b7d;border:1px solid #75d6ff;border-radius:8px;padding:8px 18px}
 @media(max-width:600px){#bvb-loading-screen{font-size:12px}.track{margin:5px auto!important;height:6px!important}}
-</style></head><body><div id="bvb-loading-screen" role="dialog" aria-label="Ładowanie gry"><div class="scene"><video autoplay muted loop playsinline preload="auto" aria-hidden="true" src="rework/loading-intro.mp4"></video><div class="meter"><div id="bvb-loading-label" role="status">ŁADOWANIE GRY · 0%</div><div class="track" role="progressbar" aria-label="Postęp ładowania" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="bvb-loading-fill"></div></div></div></div></div><script src="./bvb-loader.js?v=20261101-1"></script></body></html>
+</style></head><body><div id="bvb-loading-screen" role="dialog" aria-label="Ładowanie gry"><div class="scene"><video autoplay muted loop playsinline preload="auto" aria-hidden="true" src="rework/loading-intro.mp4"></video><div class="meter"><div id="bvb-loading-label" role="status">ŁADOWANIE GRY · 0%</div><div class="track" role="progressbar" aria-label="Postęp ładowania" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="bvb-loading-fill"></div></div></div></div></div><script>
+(function(){
+  // Na telefonach używaj stabilnej, lekkiej wersji; pełny rework pozostaje pod ?full=1.
+  var q = new URLSearchParams(location.search);
+  var mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if (mobile && q.get('full') !== '1') {
+    location.replace('./index-safe.html?v=20261101-5');
+    return;
+  }
+  var script=document.createElement('script');
+  script.src='./bvb-loader.js?v=20261101-2';
+  script.onerror=function(){
+    var label=document.getElementById('bvb-loading-label');
+    if(label)label.textContent='Nie można uruchomić pełnej wersji';
+    var btn=document.createElement('button');
+    btn.textContent='Uruchom stabilną wersję';
+    btn.onclick=function(){location.replace('./index-safe.html?v=20261101-5');};
+    document.querySelector('#bvb-loading-screen .meter')?.append(btn);
+  };
+  document.body.appendChild(script);
+})();
+</script></body></html>
