@@ -1,0 +1,364 @@
+{
+  "sourceBranch": "main",
+  "sourceCommit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
+  "sourceFiles": [
+    "rework/game-1.txt",
+    "rework/game-2.txt"
+  ],
+  "sourceArray": "const frameData=[...] in module BVB ID 26–38",
+  "renderer": "window.BVBBatch2638Art / art() override",
+  "verification": "Wszystkie 39 indywidualnych WebP 224×224 z ID 26–38 V1/V2/V3 zostały wyświetlone i wizualnie obejrzane. FNV1a jest odciskiem tekstu base64, nie kryptograficznym SHA pliku.",
+  "records": [
+    {
+      "id": 26,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 0,
+      "base64Length": 13992,
+      "fingerprintFnv1aBase64": "18ebdc25",
+      "visualVerified": true
+    },
+    {
+      "id": 26,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 1,
+      "base64Length": 16876,
+      "fingerprintFnv1aBase64": "2e568a9b",
+      "visualVerified": true
+    },
+    {
+      "id": 26,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 2,
+      "base64Length": 18984,
+      "fingerprintFnv1aBase64": "e3280987",
+      "visualVerified": true
+    },
+    {
+      "id": 27,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 3,
+      "base64Length": 13900,
+      "fingerprintFnv1aBase64": "5f808a61",
+      "visualVerified": true
+    },
+    {
+      "id": 27,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 4,
+      "base64Length": 14032,
+      "fingerprintFnv1aBase64": "e568887a",
+      "visualVerified": true
+    },
+    {
+      "id": 27,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 5,
+      "base64Length": 19700,
+      "fingerprintFnv1aBase64": "384f8503",
+      "visualVerified": true
+    },
+    {
+      "id": 28,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 6,
+      "base64Length": 14360,
+      "fingerprintFnv1aBase64": "a184e72e",
+      "visualVerified": true
+    },
+    {
+      "id": 28,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 7,
+      "base64Length": 16208,
+      "fingerprintFnv1aBase64": "a47494c4",
+      "visualVerified": true
+    },
+    {
+      "id": 28,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 8,
+      "base64Length": 22396,
+      "fingerprintFnv1aBase64": "93f43dd1",
+      "visualVerified": true
+    },
+    {
+      "id": 29,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 9,
+      "base64Length": 17320,
+      "fingerprintFnv1aBase64": "3cec1b8b",
+      "visualVerified": true
+    },
+    {
+      "id": 29,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 10,
+      "base64Length": 19176,
+      "fingerprintFnv1aBase64": "f672d8f9",
+      "visualVerified": true
+    },
+    {
+      "id": 29,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 11,
+      "base64Length": 20116,
+      "fingerprintFnv1aBase64": "c9bdfdb9",
+      "visualVerified": true
+    },
+    {
+      "id": 30,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 12,
+      "base64Length": 18756,
+      "fingerprintFnv1aBase64": "8caaf0aa",
+      "visualVerified": true
+    },
+    {
+      "id": 30,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 13,
+      "base64Length": 21332,
+      "fingerprintFnv1aBase64": "90e88791",
+      "visualVerified": true
+    },
+    {
+      "id": 30,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 14,
+      "base64Length": 21296,
+      "fingerprintFnv1aBase64": "a6af4ac4",
+      "visualVerified": true
+    },
+    {
+      "id": 31,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 15,
+      "base64Length": 18632,
+      "fingerprintFnv1aBase64": "0d9c9484",
+      "visualVerified": true
+    },
+    {
+      "id": 31,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 16,
+      "base64Length": 19508,
+      "fingerprintFnv1aBase64": "ff7e2479",
+      "visualVerified": true
+    },
+    {
+      "id": 31,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 17,
+      "base64Length": 21444,
+      "fingerprintFnv1aBase64": "da181e2b",
+      "visualVerified": true
+    },
+    {
+      "id": 32,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 18,
+      "base64Length": 15312,
+      "fingerprintFnv1aBase64": "2bc83818",
+      "visualVerified": true
+    },
+    {
+      "id": 32,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 19,
+      "base64Length": 19072,
+      "fingerprintFnv1aBase64": "b5606a26",
+      "visualVerified": true
+    },
+    {
+      "id": 32,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 20,
+      "base64Length": 22200,
+      "fingerprintFnv1aBase64": "721cb255",
+      "visualVerified": true
+    },
+    {
+      "id": 33,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 21,
+      "base64Length": 21552,
+      "fingerprintFnv1aBase64": "bbefb25f",
+      "visualVerified": true
+    },
+    {
+      "id": 33,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 22,
+      "base64Length": 18252,
+      "fingerprintFnv1aBase64": "a26f3561",
+      "visualVerified": true
+    },
+    {
+      "id": 33,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 23,
+      "base64Length": 22028,
+      "fingerprintFnv1aBase64": "9a330393",
+      "visualVerified": true
+    },
+    {
+      "id": 34,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 24,
+      "base64Length": 17064,
+      "fingerprintFnv1aBase64": "02272711",
+      "visualVerified": true
+    },
+    {
+      "id": 34,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 25,
+      "base64Length": 20776,
+      "fingerprintFnv1aBase64": "f17d673a",
+      "visualVerified": true
+    },
+    {
+      "id": 34,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 26,
+      "base64Length": 21512,
+      "fingerprintFnv1aBase64": "d45fc132",
+      "visualVerified": true
+    },
+    {
+      "id": 35,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 27,
+      "base64Length": 18372,
+      "fingerprintFnv1aBase64": "ebf27ff0",
+      "visualVerified": true
+    },
+    {
+      "id": 35,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 28,
+      "base64Length": 23496,
+      "fingerprintFnv1aBase64": "75f61473",
+      "visualVerified": true
+    },
+    {
+      "id": 35,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 29,
+      "base64Length": 23972,
+      "fingerprintFnv1aBase64": "c54149ab",
+      "visualVerified": true
+    },
+    {
+      "id": 36,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 30,
+      "base64Length": 17592,
+      "fingerprintFnv1aBase64": "ad6a8361",
+      "visualVerified": true
+    },
+    {
+      "id": 36,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 31,
+      "base64Length": 21420,
+      "fingerprintFnv1aBase64": "247b83da",
+      "visualVerified": true
+    },
+    {
+      "id": 36,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 32,
+      "base64Length": 24452,
+      "fingerprintFnv1aBase64": "9c950023",
+      "visualVerified": true
+    },
+    {
+      "id": 37,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 33,
+      "base64Length": 17112,
+      "fingerprintFnv1aBase64": "848f5314",
+      "visualVerified": true
+    },
+    {
+      "id": 37,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 34,
+      "base64Length": 21240,
+      "fingerprintFnv1aBase64": "3425c6b1",
+      "visualVerified": true
+    },
+    {
+      "id": 37,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 35,
+      "base64Length": 24528,
+      "fingerprintFnv1aBase64": "90a19cf2",
+      "visualVerified": true
+    },
+    {
+      "id": 38,
+      "tier": 1,
+      "format": "image/webp",
+      "sourceArrayIndex": 36,
+      "base64Length": 19472,
+      "fingerprintFnv1aBase64": "5923cba2",
+      "visualVerified": true
+    },
+    {
+      "id": 38,
+      "tier": 2,
+      "format": "image/webp",
+      "sourceArrayIndex": 37,
+      "base64Length": 23464,
+      "fingerprintFnv1aBase64": "4e2a2a62",
+      "visualVerified": true
+    },
+    {
+      "id": 38,
+      "tier": 3,
+      "format": "image/webp",
+      "sourceArrayIndex": 38,
+      "base64Length": 26796,
+      "fingerprintFnv1aBase64": "a16ed03f",
+      "visualVerified": true
+    }
+  ]
+}
