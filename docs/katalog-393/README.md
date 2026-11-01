@@ -25,7 +25,12 @@ Opis ma być użyteczny dla Claude/Gemini, ale nawet bardzo dokładny tekst nie 
 - **ID 007–012**: [opisy V1/V2/V3](opisy/007-012.md).
 - **ID 000–012**: [dowody pochodzenia i 39 zweryfikowanych wizualnie obrazów](evidence/000-012.json).
 
-Pozostałe **ID 013–130** nie są jeszcze gotowe. Ich opisów nie wolno traktować jako ukończonych. Pracę kontynuować w osobnych plikach i uzupełniać `PROGRESS.json`.
+- **ID 013–015**: [opisy 9 indywidualnie obejrzanych WebP](opisy/013-015.md) i [dowody](evidence/013-015.json).
+- **ID 016–025**: [opisy 30 wariantów widocznych na atlasie gry](opisy/016-025.md) i [dowody wraz z prostokątami wycięcia](evidence/016-025-atlas.json). **Uwaga:** oglądano oryginalny atlas, nie każdy końcowy crop Canvas.
+- **ID 026–032**: [opisy 21 indywidualnie obejrzanych WebP](opisy/026-032.md).
+- **ID 033–038**: [opisy 18 indywidualnie obejrzanych WebP](opisy/033-038.md) oraz [dowody ID 026–038](evidence/026-038.json).
+
+**Postęp:** 117/393 opisanych; 87/393 obejrzanych jako osobne grafiki; 30/393 obejrzanych na oryginalnym atlasie (końcowy crop wymaga weryfikacji). Pozostałe **ID 039–130** nie są jeszcze opisane. Pracę kontynuować w osobnych plikach i uzupełniać `PROGRESS.json`.
 
 ## Zakaz zmian gry
 
