@@ -1,6 +1,6 @@
 # Oryginalna gra Ball VS Ball 2.0 — katalog 393 wyglądów
 
-**Status: W TRAKCIE.** Zweryfikowano wizualnie **39 z 393 portretów** (ID 0–12, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 354 wariantów.
+**Status: W TRAKCIE.** Zweryfikowano wizualnie **78 z 393 portretów** (ID 0–12 oraz ID 26–38, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 315 wariantów.
 
 ## Ustalenie autentycznego źródła
 
@@ -11,7 +11,8 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 ## Pochodzenie obrazów
 
 - **ID 0–15:** osadzona w HTML tablica `window.BVBBatch01Frames` — oryginalne portrety WebP, każdy opisany `id`, `tier`, `sourceHash`, `width`, `height`, `anchor`, `data`. Fragmenty zaczynają się w `game-0.txt` i przechodzą przez `game-1.txt`.
-- **ID 16–25 i 26–38:** osadzone dane WebP w kolejnych blokach oryginalnego HTML. Ich mapowanie i wyglądy jeszcze do zbadania.
+- **ID 16–25:** do ustalenia faktyczne źródło renderowania.
+- **ID 26–38:** osadzona tablica 39 obrazów WebP `frameData` w `game-1.txt` i `game-2.txt`, indeks `(id-26)*3+(tier-1)`. Wszystkie 39 obrazów obejrzane.
 - **ID 39–130:** oryginalne obrazy PNG osadzone w `window.BVB3951_SPRITE_SOURCES` i późniejszych podobnych obiektach z kluczami `"<id>:<tier>"`; mapowanie i priorytety ostatnich nadpisań wymagają potwierdzenia.
 - Wszystkie portrety **muszą być faktycznie wyświetlone i obejrzane** przed nadaniem statusu `verified_visually: true`. Samo istnienie base64 lub kodu to za mało.
 
@@ -20,6 +21,8 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 - `manifest.json`: pełne 393 pozycje, nazwy, ewolucje, flagi weryfikacji, hash źródła dla zweryfikowanych.
 - `part-00-06.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-07-12.md`: **18** opisów V1/V2/V3, wszystkie obejrzane.
+- `part-26-32.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
+- `part-33-38.md`: **18** opisów V1/V2/V3, wszystkie obejrzane.
 
 ## Metoda tworzenia opisów
 
