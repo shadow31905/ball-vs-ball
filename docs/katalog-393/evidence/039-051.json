@@ -1,0 +1,405 @@
+{
+  "sourceBranch": "main",
+  "sourceCommit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
+  "sourceFiles": [
+    "rework/game-2.txt",
+    "rework/game-3.txt",
+    "rework/game-4.txt",
+    "rework/game-5.txt"
+  ],
+  "embeddedCollection": "window.BVB3951_SPRITE_SOURCES",
+  "renderer": "window.BVB3951Visual",
+  "verification": "Każdy z 39 PNG dla ID 39–51 V1/V2/V3 został indywidualnie wyświetlony i wizualnie obejrzany. FNV1a jest odciskiem tekstu base64, nie SHA pliku.",
+  "records": [
+    {
+      "id": 39,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 141248,
+      "fingerprintFnv1aBase64": "3b338345",
+      "sourcePart": 2,
+      "sourceOffset": 262535,
+      "visualVerified": true
+    },
+    {
+      "id": 39,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 170652,
+      "fingerprintFnv1aBase64": "a9cbee06",
+      "sourcePart": 2,
+      "sourceOffset": 403815,
+      "visualVerified": true
+    },
+    {
+      "id": 39,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 210560,
+      "fingerprintFnv1aBase64": "572e95c0",
+      "sourcePart": 2,
+      "sourceOffset": 574499,
+      "visualVerified": true
+    },
+    {
+      "id": 40,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 136764,
+      "fingerprintFnv1aBase64": "8192f947",
+      "sourcePart": 2,
+      "sourceOffset": 785091,
+      "visualVerified": true
+    },
+    {
+      "id": 40,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 159884,
+      "fingerprintFnv1aBase64": "03c54101",
+      "sourcePart": 2,
+      "sourceOffset": 921887,
+      "visualVerified": true
+    },
+    {
+      "id": 40,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 180640,
+      "fingerprintFnv1aBase64": "b0e792ae",
+      "sourcePart": 2,
+      "sourceOffset": 1081803,
+      "visualVerified": true
+    },
+    {
+      "id": 41,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 138016,
+      "fingerprintFnv1aBase64": "2d23c4e2",
+      "sourcePart": 2,
+      "sourceOffset": 1262475,
+      "visualVerified": true
+    },
+    {
+      "id": 41,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 161860,
+      "fingerprintFnv1aBase64": "8e0538f1",
+      "sourcePart": 2,
+      "sourceOffset": 1400523,
+      "visualVerified": true
+    },
+    {
+      "id": 41,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 192592,
+      "fingerprintFnv1aBase64": "a6a4f28e",
+      "sourcePart": 2,
+      "sourceOffset": 1562415,
+      "visualVerified": true
+    },
+    {
+      "id": 42,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 130456,
+      "fingerprintFnv1aBase64": "965a20ad",
+      "sourcePart": 2,
+      "sourceOffset": 1755039,
+      "visualVerified": true
+    },
+    {
+      "id": 42,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 130976,
+      "fingerprintFnv1aBase64": "be42a0f8",
+      "sourcePart": 2,
+      "sourceOffset": 1885527,
+      "visualVerified": true
+    },
+    {
+      "id": 42,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 135860,
+      "fingerprintFnv1aBase64": "20d2ba3f",
+      "sourcePart": 3,
+      "sourceOffset": 16535,
+      "visualVerified": true
+    },
+    {
+      "id": 43,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 139672,
+      "fingerprintFnv1aBase64": "87f0cdc6",
+      "sourcePart": 3,
+      "sourceOffset": 152427,
+      "visualVerified": true
+    },
+    {
+      "id": 43,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 159688,
+      "fingerprintFnv1aBase64": "851b7237",
+      "sourcePart": 3,
+      "sourceOffset": 292131,
+      "visualVerified": true
+    },
+    {
+      "id": 43,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 181984,
+      "fingerprintFnv1aBase64": "88eca1a2",
+      "sourcePart": 3,
+      "sourceOffset": 451851,
+      "visualVerified": true
+    },
+    {
+      "id": 44,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 144996,
+      "fingerprintFnv1aBase64": "c0e7fb24",
+      "sourcePart": 3,
+      "sourceOffset": 633867,
+      "visualVerified": true
+    },
+    {
+      "id": 44,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 199628,
+      "fingerprintFnv1aBase64": "683bd584",
+      "sourcePart": 3,
+      "sourceOffset": 778895,
+      "visualVerified": true
+    },
+    {
+      "id": 44,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 211560,
+      "fingerprintFnv1aBase64": "d537e2f1",
+      "sourcePart": 3,
+      "sourceOffset": 978555,
+      "visualVerified": true
+    },
+    {
+      "id": 45,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 120436,
+      "fingerprintFnv1aBase64": "4a79a726",
+      "sourcePart": 3,
+      "sourceOffset": 1190147,
+      "visualVerified": true
+    },
+    {
+      "id": 45,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 132652,
+      "fingerprintFnv1aBase64": "74c829cb",
+      "sourcePart": 3,
+      "sourceOffset": 1310615,
+      "visualVerified": true
+    },
+    {
+      "id": 45,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 143288,
+      "fingerprintFnv1aBase64": "796da4c4",
+      "sourcePart": 3,
+      "sourceOffset": 1443299,
+      "visualVerified": true
+    },
+    {
+      "id": 46,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 131448,
+      "fingerprintFnv1aBase64": "a9a5a6e5",
+      "sourcePart": 3,
+      "sourceOffset": 1586619,
+      "visualVerified": true
+    },
+    {
+      "id": 46,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 151728,
+      "fingerprintFnv1aBase64": "ec175059",
+      "sourcePart": 3,
+      "sourceOffset": 1718099,
+      "visualVerified": true
+    },
+    {
+      "id": 46,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 173460,
+      "fingerprintFnv1aBase64": "d56953a0",
+      "sourcePart": 3,
+      "sourceOffset": 1869859,
+      "visualVerified": true
+    },
+    {
+      "id": 47,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 157768,
+      "fingerprintFnv1aBase64": "992386cf",
+      "sourcePart": 4,
+      "sourceOffset": 43351,
+      "visualVerified": true
+    },
+    {
+      "id": 47,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 186896,
+      "fingerprintFnv1aBase64": "af703586",
+      "sourcePart": 4,
+      "sourceOffset": 201151,
+      "visualVerified": true
+    },
+    {
+      "id": 47,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 218604,
+      "fingerprintFnv1aBase64": "f0b1540d",
+      "sourcePart": 4,
+      "sourceOffset": 388079,
+      "visualVerified": true
+    },
+    {
+      "id": 48,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 121984,
+      "fingerprintFnv1aBase64": "55506706",
+      "sourcePart": 4,
+      "sourceOffset": 606715,
+      "visualVerified": true
+    },
+    {
+      "id": 48,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 147480,
+      "fingerprintFnv1aBase64": "496db4f6",
+      "sourcePart": 4,
+      "sourceOffset": 728731,
+      "visualVerified": true
+    },
+    {
+      "id": 48,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 174492,
+      "fingerprintFnv1aBase64": "9c165a7f",
+      "sourcePart": 4,
+      "sourceOffset": 876243,
+      "visualVerified": true
+    },
+    {
+      "id": 49,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 139004,
+      "fingerprintFnv1aBase64": "cb54428c",
+      "sourcePart": 4,
+      "sourceOffset": 1050767,
+      "visualVerified": true
+    },
+    {
+      "id": 49,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 168812,
+      "fingerprintFnv1aBase64": "ea8be31f",
+      "sourcePart": 4,
+      "sourceOffset": 1189803,
+      "visualVerified": true
+    },
+    {
+      "id": 49,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 198924,
+      "fingerprintFnv1aBase64": "b6397851",
+      "sourcePart": 4,
+      "sourceOffset": 1358647,
+      "visualVerified": true
+    },
+    {
+      "id": 50,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 174580,
+      "fingerprintFnv1aBase64": "494adb8d",
+      "sourcePart": 4,
+      "sourceOffset": 1557603,
+      "visualVerified": true
+    },
+    {
+      "id": 50,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 200436,
+      "fingerprintFnv1aBase64": "8ebbc6b7",
+      "sourcePart": 4,
+      "sourceOffset": 1732215,
+      "visualVerified": true
+    },
+    {
+      "id": 50,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 224340,
+      "fingerprintFnv1aBase64": "7b878b3f",
+      "sourcePart": 4,
+      "sourceOffset": 1932683,
+      "visualVerified": true
+    },
+    {
+      "id": 51,
+      "tier": 1,
+      "format": "image/png",
+      "base64Length": 142720,
+      "fingerprintFnv1aBase64": "177d5ecd",
+      "sourcePart": 5,
+      "sourceOffset": 157055,
+      "visualVerified": true
+    },
+    {
+      "id": 51,
+      "tier": 2,
+      "format": "image/png",
+      "base64Length": 175964,
+      "fingerprintFnv1aBase64": "83c63a57",
+      "sourcePart": 5,
+      "sourceOffset": 299807,
+      "visualVerified": true
+    },
+    {
+      "id": 51,
+      "tier": 3,
+      "format": "image/png",
+      "base64Length": 207480,
+      "fingerprintFnv1aBase64": "2153f678",
+      "sourcePart": 5,
+      "sourceOffset": 475803,
+      "visualVerified": true
+    }
+  ]
+}
