@@ -1,0 +1,39 @@
+{
+  "targetBalls": 131,
+  "targetVariants": 393,
+  "sourceBranch": "main",
+  "sourceCommit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
+  "scope": "full desktop original assembled by bvb-loader.js",
+  "verifiedVisualIds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "verifiedVariants": 39,
+  "describedVariants": 39,
+  "remainingVariants": 354,
+  "completedDescriptionFiles": [
+    "opisy/000-006.md",
+    "opisy/007-012.md"
+  ],
+  "evidenceFiles": [
+    "evidence/000-012.json"
+  ],
+  "nextIds": [
+    13,
+    14,
+    15
+  ],
+  "status": "IN_PROGRESS",
+  "noUserNotificationBeforeComplete": true
+}
