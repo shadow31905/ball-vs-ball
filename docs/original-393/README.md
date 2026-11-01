@@ -11,6 +11,7 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 ## Pochodzenie obrazów
 
 - **ID 0–15:** osadzona w HTML tablica `window.BVBBatch01Frames` — oryginalne portrety WebP, każdy opisany `id`, `tier`, `sourceHash`, `width`, `height`, `anchor`, `data`. Fragmenty zaczynają się w `game-0.txt` i przechodzą przez `game-1.txt`.
+- **ID 13–15:** oryginalna funkcja `art(id)` generuje te same statyczne SVG niezależnie od poziomu. Trzy ikony wyrenderowano i obejrzano, ale **dziewięć wariantów walki V1/V2/V3 pozostaje niezweryfikowanych**; `part-13-15-static-unverified.md`.
 - **ID 16–25:** osadzone oryginalne PNG z kluczami `"<id>:<tier>"` w `game-7.txt`–`game-10.txt`; wszystkie 30 obejrzane.
 - **ID 26–38:** osadzona tablica 39 obrazów WebP `frameData` w `game-1.txt` i `game-2.txt`, indeks `(id-26)*3+(tier-1)`. Wszystkie 39 obrazów obejrzane.
 - **ID 39–64:** osadzone oryginalne obrazy PNG z kluczami `"<id>:<tier>"`; wszystkie 78 obejrzane. **ID 65–130:** kolejne obrazy PNG, ich wyglądy i priorytety ostatnich nadpisań wymagają dalszej weryfikacji.
@@ -21,6 +22,7 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 - `manifest.json`: pełne 393 pozycje, nazwy, ewolucje, flagi weryfikacji, hash źródła dla zweryfikowanych.
 - `part-00-06.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-07-12.md`: **18** opisów V1/V2/V3, wszystkie obejrzane.
+- `part-13-15-static-unverified.md`: **3** oryginalne ikony SVG wyrenderowane, **9** wyglądów ewolucji walki nadal niezweryfikowanych.
 - `part-16-20.md`: **15** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-21-25.md`: **15** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-26-32.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
