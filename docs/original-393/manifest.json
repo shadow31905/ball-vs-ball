@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 186,
+  "verified_variants": 189,
   "expected_variants": 393,
   "records": [
     {
@@ -3521,28 +3521,28 @@
       "id": 130,
       "name": "Trebusz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"130:1\" in rework/game-31.txt",
+      "description_file": "part-130-trebusz.md"
     },
     {
       "id": 130,
       "name": "Trebusz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"130:2\" in rework/game-31.txt",
+      "description_file": "part-130-trebusz.md"
     },
     {
       "id": 130,
       "name": "Trebusz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"130:3\" in rework/game-31.txt",
+      "description_file": "part-130-trebusz.md"
     }
   ]
 }
