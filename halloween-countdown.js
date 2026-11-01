@@ -1,4 +1,4 @@
-/* Odliczanie do odejścia Halloween Eventu, 7.11.2026, 00:00 (Polska). */
+/* Odliczanie do odejścia halloween, 7.11.2026, 00:00 (Polska). */
 (function () {
   'use strict';
   const ID = 'bvb-halloween-countdown';
@@ -7,6 +7,9 @@
   function mount() {
     const menu = document.getElementById('menu');
     if (!menu || document.getElementById(ID)) return;
+    // Zastąp starszy banner, jeśli jest wciąż obecny w pamięci strony.
+    document.getElementById('bvb-halloween-departure')?.remove();
+    document.getElementById('bvb-halloween-departure-style')?.remove();
 
     const style = document.createElement('style');
     style.id = ID + '-style';
@@ -30,7 +33,7 @@
     banner.id = ID;
     banner.setAttribute('aria-label', 'Odliczanie do odejścia Halloween Eventu');
     banner.innerHTML = [
-      '<h2 class="bvb-hw-title">🎃 Odejście Halloween Eventu</h2>',
+      '<h2 class="bvb-hw-title">🎃 odejście halloween</h2>',
       '<p class="bvb-hw-desc">Sobota, 7 listopada 2026 · 00:00</p>',
       '<div class="bvb-hw-units" role="timer" aria-live="off">',
       '<div class="bvb-hw-unit"><span class="bvb-hw-value" data-unit="d">00</span><span class="bvb-hw-label">DNI</span></div>',
@@ -41,6 +44,11 @@
       '<p class="bvb-hw-finished" hidden>Halloween Event dobiegł końca!</p>'
     ].join('');
     menu.insertBefore(banner, menu.firstChild);
+    // Menu V3 przebudowuje swoje dzieci — zachowaj banner po przebudowie.
+    const keepVisible = new MutationObserver(() => {
+      if (menu.isConnected && !banner.isConnected) menu.insertBefore(banner, menu.firstChild);
+    });
+    keepVisible.observe(menu, { childList: true });
 
     const nodes = banner.querySelectorAll('[data-unit]');
     const finished = banner.querySelector('.bvb-hw-finished');
