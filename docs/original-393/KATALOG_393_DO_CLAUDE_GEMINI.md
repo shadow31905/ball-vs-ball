@@ -836,3 +836,830 @@ Ciemna stalowa kula z jasnym cyjanowym okiem, otoczona **bardzo gęstymi fioleto
 
 <!-- END part-58-64.md -->
 
+<!-- START part-65-70.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 65–70 (V1/V2/V3)
+
+**Źródło:** oryginalny `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`, pełna gra z `rework/game-15.txt`–`game-17.txt`, PNG pod kluczami `"<id>:<tier>"`. **18/18 portretów naprawdę otwarto i obejrzano.** Styl: fantastyczne metaliczne kule 3D z intensywnymi efektami kosmicznymi; w obrazach widoczne są ciemne/transparentne obszary kadru. Nie zmieniać proporcji i liczby elementów bez odniesienia do oryginalnego PNG.
+
+## ID 065 — Grawitacja
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kula** z jednym dominującym **jasnocyjanowym skośnym okiem**, segmentowanym hełmem i metalicznymi refleksami. Wokół rdzenia **duży cienki srebrno-złoty pierścień orbity** biegnący ukośnie od lewej góry przez przód do prawego dołu. Za kulą **fioletowo-ultramarynowa mgławica**, małe czarne kuliste satelity po lewej. Brak klasycznej korony.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama czarna metaliczna kula z cyjanowym okiem, ale **gęstsze fioletowe pole grawitacyjne**, więcej **małych ciemnych odłamków i satelitów** na obwodzie. Srebrny pierścień orbitalny nadal przecina przednią część kuli, za nią purpurowe błyskawice i niebieskie światło. Nie zamieniać odłamków w planety z lądami.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnocyjanowym okiem, otoczona **bardzo szerokim fioletowo-niebieskim wirującym polem**, licznymi czarnymi skalnymi odłamkami i **dużym srebrnym ukośnym pierścieniem** biegnącym przed kulą. Na górze i prawej intensywne błękitne rozbłyski, wokół gęste purpurowe smugi. Zachować jeden rdzeń i wyraźny metalowy pierścień.
+
+## ID 066 — Kotwica
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnogranatowa metaliczna kulka** z jednym dużym **białoniebieskim okiem**, złoto-mosiężnymi płytami i **grubym złotym łańcuchem** oplecionym dookoła rdzenia. Po lewej **duża stylizowana złota kotwica**, na dole i w tle jasnoniebieskie rozpryski wody. Na prawym brzegu częściowo widoczny drugi złoty łuk. Nie robić całego statku.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z cyjanowym okiem i złotymi płytami, lecz **więcej łańcuchów** tworzy duży łuk ponad kulą i wzdłuż dołu. Po obu bokach **większe złote fragmenty kotwic**, wokół silniejsze błękitne rozpryski wody i drobne bąbelki. Zachować wyraźne ogniwa łańcucha.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemnoniebieska kula z dwoma jasnymi niebieskimi oczami, opasana **masywnym złotym łańcuchem**, z **dwiema wielkimi symetrycznymi złotymi kotwicami** po lewej i prawej, ostre ramiona skierowane ku górze. Wokół duży jasnobłękitny wir wody, bąbelki i białe iskry. Nie zastępować kotwic trójzębami.
+
+## ID 067 — Lustro
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Srebrno-czarna kulka** z segmentowanym metalicznym hełmem i **dwoma dużymi świecącymi niebieskobiałymi oczami**. Po bokach i na górze **kilka dużych lewitujących srebrno-niebieskich odłamków szkła/lustra** o ostrych wielokątnych krawędziach. Za nimi chłodna niebieska poświata, tło ciemne. Nie rysować prostokątnego lustra na stojaku.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama srebrna metaliczna twarz z niebieskimi oczami, ale **więcej lewitujących szklanych wielokątów** po obu bokach i nad kulą; na powierzchniach **niebiesko-fioletowe refleksy**. Drobne błękitne iskry między odłamkami. Rdzeń nadal największym elementem.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarnostalowa kulka z dużymi niebieskimi oczami, otoczona **gęstą koroną wielu wysokich ostrych lustrzanych odłamków**, na których widoczne są **tęczowe, opalizujące refleksy** w odcieniach cyjanu, różu i fioletu. Odłamki rozchodzą się promieniście na boki i w górę, niektóre na dole. Zachować metaliczny rdzeń w środku.
+
+## ID 068 — Pustka
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarnofioletowa kula** z dwojgiem **jasnofioletowych ostro skośnych oczu**, metalicznymi segmentami i **czarnym okrągłym otworem** na górze czoła, otoczonym intensywnym fioletowym światłem. Wokół kulki **purpurowe wirujące smugi** i drobne ciemne odłamki. Nie zastępować otworu trzecim okiem.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z fioletowymi oczami i ciemnym otworem na czole, ale wokół **dwa duże srebrno-fioletowe sierpowate łuki** i **gęstsza fioletowa energia**. Więcej ciemnych odłamków unosi się w wirze. Zachować głęboki czarny środek otworu.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemnofioletowa kula z dwoma jasnymi fioletowymi oczami i czarnym otworem na górze, otoczona **bardzo gęstą jasnofioletową wirującą materią** i licznymi czarnymi odłamkami. Po lewej duży srebrny sierp, po prawej intensywny fioletowy wir; zewnętrzny obrys niemal w całości wypełnia purpurowa energia. Nie zmieniać koloru na niebieski.
+
+## ID 069 — Słońce
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kulka** ze złotymi segmentami i **dwoma pomarańczowo-białymi świecącymi oczami**. Wokół niej **złoto-pomarańczowa korona słoneczna z ostrymi trójkątnymi promieniami** rozchodzącymi się promieniście, za nią małe iskry i ogniste smugi. Po lewej złoty okrągły mechanizm. Nie zamieniać rdzenia w gładką żółtą kulę.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama czarno-złota kula z pomarańczowymi oczami, ale **większa liczba długich ostrych złotych promieni** i jasna **pomarańczowa kolista korona** za nimi. Mocniejsze złote refleksy na hełmie, więcej rozżarzonych iskier. Promienie nie są zwykłymi metalowymi kolcami bez światła.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemny rdzeń z pomarańczowymi oczami i złotym hełmem, otoczony **gęstym pełnym wieńcem bardzo długich złoto-pomarańczowych promieni** oraz jasnym kolistym pierścieniem ognia. Na górze i po bokach szczególnie wysokie promienie, silny żółty blask. Zachować czarną twarz i dwoje oczu.
+
+## ID 070 — Księżyc
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnosrebrna metaliczna kula** z dwojgiem **jasnobłękitnych oczu**, na górze i bokach **srebrne płyty z wyraźnymi okrągłymi kraterami**. Po lewej i prawej **duże srebrne sierpy księżyca** okalające głowę, u dołu błękitne wodno-kosmiczne smugi i małe jasne kuliste satelity. Tło ciemne.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama srebrno-czarna kula z niebieskimi oczami i kraterami, lecz **większe i liczniejsze srebrne księżycowe sierpy** po bokach, **więcej małych niebieskobiałych księżyców/kul** wokół i intensywniejsza błękitna aura. Nie zmieniać srebra na złoto.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemnosrebrna kulka z cyjanowymi oczami, otoczona **dużymi szerokimi srebrnymi sierpami** tworzącymi niemal pełny okrąg, **wieloma małymi kulistymi księżycami** i jasnym niebieskobiałym rozświetleniem. Na metalowych płytach wyraźne kraterowe okręgi, u dołu silne błękitne smugi. Zachować motyw księżyca, nie pierścieni Saturna.
+
+
+<!-- END part-65-70.md -->
+
+<!-- START part-71-77.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 71–77 (V1/V2/V3)
+
+**Źródło:** `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`, oryginalne PNG z `rework/game-16.txt`–`game-17.txt` pod kluczami `"<id>:<tier>"`. **21/21 wariantów rzeczywiście otwartych i obejrzanych**. To fantastyczne, metaliczne kule 3D na ciemnym lub przezroczystym tle; należy zachować konkretną geometrię i kolor efektów, nie wymyślać nowych postaci.
+
+## ID 071 — Zaćmienie
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnogranatowo-czarna metaliczna kula** z dwoma **pomarańczowo-białymi skośnymi oczami**, na powierzchni czarne segmenty i złote kanciaste płytki. Z lewej strony **szeroki złoto-pomarańczowy świetlisty półksiężyc**, z prawej **jasnoniebieski półksiężyc**; oba zakrzywiają się wokół głowy, jak dwie połówki zaćmienia. Nie robić jednokolorowej aureoli.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z pomarańczowymi oczami, ale **większe i jaśniejsze przeciwległe łuki**: złoto-pomarańczowy po lewej i błękitny po prawej, z dodatkowymi iskrami. Złote i srebrne refleksy na pancerzu, większy kontrast ciepłej i zimnej strony. Zachować dokładny podział barw.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna metaliczna kulka z pomarańczowymi oczami w centrum **niemal pełnego wirującego pierścienia**: lewa połowa ognisto-złota, prawa połowa intensywnie niebieska, na granicy białe rozbłyski. Na zewnątrz drobne czarne odłamki i iskry. Nie zamieniać w dwa osobne obiekty.
+
+## ID 072 — Supernowa
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnografitowa kulka** z dwoma bardzo jasnymi **czerwono-białymi oczami** i złotymi ostro zakończonymi płytami na czole. Wokół **promienisty wybuch różowo-czerwonej i pomarańczowej energii** z kilkoma długimi ostrymi świetlistymi promieniami. Na ciemnym tle różowe iskry i zygzakowate błyski. Nie zamieniać w gładką gwiazdę bez twarzy.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z czerwonymi oczami, ale **większe, liczniejsze czerwono-pomarańczowe ostre promienie** rozchodzące się od kulki, mocniejsze różowe błyskawice i wyraźniejsze złote płyty. Promienie tworzą gwiazdowy rozbłysk, nie regularne koło.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kulka z dwoma jaskrawymi czerwonymi oczami i czarno-złotym hełmem, otoczona **bardzo gęstym wybuchem długich czerwono-różowych ostrych promieni** na wszystkich bokach, szczególnie w górnych rogach. Silne białoróżowe błyski, pomarańczowe iskry i duża aura. Zachować czarną twarz pośrodku.
+
+## ID 073 — Mgławica
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarnofioletowa kula** z dwoma **jasnofioletowymi oczami**, ostrymi metalicznymi płytami i delikatnymi złotymi akcentami. Wokół **wirujący obłok kosmicznej materii** w kolorach purpury, różu, ultramaryny i cyjanu, z kilkoma ciemnymi drobnymi odłamkami. Na górze małe fioletowe wiry. Nie robić samego obłoku bez kulki.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarnofioletowy rdzeń z dużymi liliowymi oczami, ale **gęstsza mgławica** z jasnoniebieskimi i różowymi płomienistymi smugami; po bokach **większe zakrzywione srebrno-czarne płyty**. Wokół drobne czarne odłamki i purpurowe iskry. Zachować chłodną fioletowo-cyjanową paletę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z fioletowymi oczami, otoczona **bardzo szeroką jasną mgławicą** w kolorach różu, fioletu, niebieskiego i cyjanu, z licznymi świetlistymi chmurami i drobnymi czarnymi odłamkami. Duże czarne sierpowate płyty po bokach, kulka nadal centralna. Nie zastępować mgławicy jednolitym neonowym pierścieniem.
+
+## ID 074 — Pulsar
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kulka** z jednym dużym **cyjanowym świecącym okiem**, złotymi ostrymi akcentami i okrągłymi mechanicznymi modułami po bokach. Z lewej i prawej **dwa duże jasnoniebieskie koncentryczne pierścienie**, połączone **poziomą świetlistą wiązką** przechodzącą przez rdzeń. Nad i pod kulką małe niebieskie punkty. Nie zamieniać w zwykłą planetę.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z cyjanowym okiem i bocznymi pierścieniami, lecz **większe i jaśniejsze niebieskie okręgi** oraz **dodatkowe małe poziome pierścienie nad i pod kulką**. Świetlista pozioma oś nadal widoczna. Złote refleksy na pancerzu.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kulka z dużym niebieskim okiem, po bokach **bardzo jasne koncentryczne błękitne pierścienie**, nad i pod rdzeniem **wielowarstwowe poziome koła** i pionowa oś błękitnego światła. Całość przypomina symetryczny kosmiczny emiter. Nie usuwać bocznych pierścieni.
+
+## ID 075 — Kwazar
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarno-fioletowa metaliczna kula** z dwoma dużymi **jasnofioletowymi skośnymi oczami** i złotymi kanciastymi akcentami. Po lewej i prawej **dwa duże purpurowo-różowe wirujące pierścienie**, z których wychodzą jasne fioletowe smugi; za kulą różowe i złote iskry. Nie robić niebieskich pierścieni jak u Pulsara.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z fioletowymi oczami, ale **gęstsze fioletowo-różowe pierścienie** i więcej **złotych odłamków** w wirze; po prawej jasna fioletowa wiązka, po lewej większy wir. Pancerz z drobnymi złotymi liniami. Zachować asymetrię rozbłysków.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z dwoma liliowymi oczami, otoczona **bardzo jasnymi, grubymi purpurowo-różowymi wirami** po obu bokach, **złotymi geometrycznymi odłamkami** i gęstą fioletową energią. Długie jasne smugi wychodzą w prawo, za kulą purpurowa aura. Nie zmieniać palety na pomarańczową.
+
+## ID 076 — Kometa
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnogranatowa opancerzona kula** z dwoma **jasnocyjanowymi oczami** i srebrnymi ostrymi płytami na czole. Za kulą w lewo **długi błękitno-biały płomienisty ogon**, z **pomarańczowymi iskrami** przy dolnej krawędzi. Sylwetka wydłużona poziomo, skierowana w prawo. Nie zamieniać ogona na ptasie skrzydła.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama ciemna kula z niebieskimi oczami, ale **większy, gęstszy niebieski ogon** i więcej ostrych srebrnych płyt na bokach, pomarańczowe rozbłyski między niebieskimi smugami. Na górze dłuższe jasne łuki. Zachować kierunek pędu.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemnoniebieska kulka z dużymi cyjanowymi oczami, otoczona **bardzo szerokim niebiesko-białym ogonem komety**, licznymi ostrymi metalowymi płytami i jasnymi pomarańczowymi iskrami. Ogon zawija się od lewej góry przez dół, tworząc silny wir. Nie robić czerwonego meteoru.
+
+## ID 077 — Asteroida
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna kulista bryła skalno-metaliczna** z dwojgiem **pomarańczowych świecących oczu** i pęknięciami wypełnionymi **pomarańczowym żarem**. Wokół kilka **małych szarych ostrych kamiennych odłamków**, po lewej i u góry, oraz drobne iskry. Powierzchnia szorstka, nie gładka.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z pomarańczowymi oczami, ale **więcej większych szarych odłamków skał** unoszących się wokół i **silniejszy pomarańczowy żar** w szczelinach. Ciemna twarz centralna, ostre skały na górze i po bokach. Nie zmieniać w lodową kulę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna skała z dużymi pomarańczowymi oczami, otoczona **bardzo gęstym wieńcem dużych srebrnoszarych ostrych odłamków skalnych**, szczególnie na górze i po lewej. Wokół silna pomarańczowa energia i liczne małe kawałki skały. Zachować nieregularny kamienny charakter, nie zastępować stalowymi ostrzami.
+
+
+<!-- END part-71-77.md -->
+
+<!-- START part-78-84.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 78–84 (V1/V2/V3)
+
+**Źródło:** `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`, oryginalne PNG z `rework/game-17.txt`–`game-19.txt`, klucze `"<id>:<tier>"`. **21/21 obrazów otwarto i obejrzano**. Portrety mają centralny ciemny metaliczny rdzeń, duże świecące oczy i rozbudowane zewnętrzne efekty, a różnice ewolucji polegają na zwiększaniu liczby i wielkości tych efektów. Nie wymyślać nowych kolorów i motywów.
+
+## ID 078 — Kwant
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnogranatowa metaliczna kula** z dwoma **jasnofioletowymi skośnymi oczami** i złotymi wstawkami na segmentowanym hełmie. Wokół **cyjanowo-fioletowe pierścienie orbitalne** oraz **kilka małych lewitujących sześcianów** w odcieniach fioletu, różu i niebieskiego. Po lewej duży okrągły mechaniczny moduł. Nie zastępować sześcianów kulami.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z liliowymi oczami, lecz **więcej różowo-cyjanowych sześcianów** i **gęstsze fioletowe oraz błękitne łuki orbitalne**. Na hełmie mocniejsze złote refleksy, po lewej gruby okrągły moduł. Zachować kontrast fioletowych oczu i niebieskiej energii.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna metaliczna kula z fioletowymi oczami, otoczona **bardzo gęstą siecią neonowych cyjanowych i różowofioletowych orbit** oraz **wieloma małymi świecącymi sześcianami** na górze i po bokach. Większe niebieskie wiry i drobne iskry. Nie zmieniać w zwykły model atomu z okrągłymi elektronami.
+
+## ID 079 — Atom
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarno-złota kulka** z dużymi **jasnobłękitnymi oczami**, po lewej okrągły metaliczny moduł. Dookoła **kilka cienkich złotych eliptycznych orbit** przecinających się pod różnymi kątami, a na nich **małe jaskrawoniebieskie kuliste elektrony**. Niebieska poświata wokół rdzenia. Nie dodawać kwadratowych cząstek.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z cyjanowymi oczami, ale **więcej złotych orbit** i **liczniejsze niebieskie kuliste elektrony** rozmieszczone wokół całego obwodu. Silniejsze błękitne błyskawice między orbitami, więcej złotych refleksów na hełmie. Centralna kulka nadal największa.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna metaliczna kula z jasnoniebieskimi oczami w środku **bardzo gęstego modelu atomu**, z **wieloma złotymi eliptycznymi orbitami** i **licznymi świecącymi niebieskimi kulkami**. Za rdzeniem gęsta niebieska energia i białe iskry. Nie zamieniać orbit na pełne koła ułożone tylko w jednej płaszczyźnie.
+
+## ID 080 — Proton
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma dużymi **czerwono-białymi świecącymi oczami**, złotymi ostrymi płytami na czole i **okrągłym czerwonym mechanicznym modułem** po lewej. Wokół **intensywna czerwona energia**, cienkie błyskawice i małe czerwone świetliste kulki. Tło ciemne. Nie robić niebieskich oczu.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarno-złoty rdzeń z czerwonymi oczami, ale **większe złote ostre elementy** na czole i bokach, **więcej czerwonych małych kulistych punktów** oraz mocniejsze czerwone błyskawice. Lewy okrągły moduł większy i jaśniejszy. Zachować czerwono-złotą paletę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z czerwonymi oczami i bardzo bogatą złotą zbroją, **duży czerwony świetlisty moduł** po lewej, wokół **gęsta sieć czerwonych błyskawic i liczne czerwone kuliste punkty**. Na górze dodatkowe ostre złote płyty. Nie zamieniać w ognistą skałę.
+
+## ID 081 — Neutron
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Srebrno-czarna kulka** z jednym dużym **jasnobłękitnym okiem**, segmentowanymi stalowymi płytami i **małymi srebrno-błękitnymi kryształowymi odłamkami** lewitującymi po bokach. Wokół delikatny niebieski wir energii. Nie dodawać czerwonych efektów.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam srebrny rdzeń z cyjanowym okiem, ale **więcej dużych ostrych lodowo-srebrnych odłamków** wokół, szczególnie na górze i po bokach. Gęstsza błękitna aura i białe iskry. Odłamki mają stalowo-krystaliczny charakter, nie są roślinnymi kolcami.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemnosrebrna kula z niebieskim okiem, otoczona **niemal pełnym wieńcem dużych srebrno-błękitnych ostrych odłamków**, na tle **bardzo gęstego błękitnego wiru energii**. Na górze i po bokach wiele drobnych kryształów. Zachować ciemny rdzeń w środku.
+
+## ID 082 — Elektron
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnoniebieska metaliczna kula** z dwoma dużymi **jasnocyjanowymi oczami** i srebrnymi ostrymi płytami na czole. Z lewej **okrągły niebieski mechaniczny moduł**, dookoła **błękitne elektryczne łuki** tworzące częściową aureolę. Nie zamieniać w złoty atom.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama czarna metaliczna kula z cyjanowymi oczami, ale **większe srebrne zakrzywione płyty** po lewej i na górze, **gęstsze niebieskie błyskawice** wokół obwodu. Okrągły moduł po lewej wyraźnie świeci błękitem. Zachować chłodną niebieską kolorystykę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemny rdzeń z bardzo jasnymi niebieskimi oczami, otoczony **licznymi srebrnymi ostrymi płytami** i **gęstym niemal pełnym pierścieniem niebieskich błyskawic**. Na górze i po prawej dodatkowe metaliczne fragmenty, intensywny cyjanowy blask. Nie zmieniać w płaski symbol błyskawicy.
+
+## ID 083 — Iskra
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kulka** z dwoma **złotożółtymi świecącymi oczami**, ciemnymi metalicznymi płytami i **kilkoma dużymi ostrymi złotymi trójkątnymi elementami** po bokach. Wokół **żółte rozgałęzione błyskawice** i ciepły bursztynowy blask. Nie zamieniać w słońce z regularną koroną.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z żółtymi oczami, lecz **więcej ostrych złotych elementów** i **silniejsze żółte błyskawice** wokół całej kuli. W dolnej części kilka srebrnych odblasków, w tle małe białe iskry. Zachować nieregularną kompozycję.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z jasnymi żółtymi oczami i **gęstym wieńcem złotych ostrych szpiców**, wokół **bardzo silne żółte oraz niebieskie błyskawice** tworzące szeroką aureolę. Wyraźnie więcej złotych płyt niż V1, na górze wysokie ostre elementy. Nie usuwać niebieskich wyładowań charakterystycznych dla V3.
+
+## ID 084 — Piekło
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kulka** z dwoma **czerwono-białymi oczami**, ciemnym pancerzem i **gęstymi czerwono-pomarańczowymi płomieniami** wirującymi wokół. Po lewej ostre czarne fragmenty, na górze ogniste łuki. Tło ciemne. Nie robić zwykłej czerwonej kulki.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z czerwonymi oczami, ale **większy wir czerwono-pomarańczowych płomieni** i **więcej ostrych czarnych płyt** na bokach. Mocniejsze rozświetlenie żarem na górze i dole. Zachować centralną twarz.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna metaliczna kula z bardzo jasnymi czerwonymi oczami, otoczona **niemal pełnym pierścieniem ogromnych czerwono-pomarańczowych płomieni**, szczególnie wysoko nad głową. Wewnątrz złote rozżarzone pęknięcia i czarne ostre płyty, na zewnątrz liczne iskry. Nie zastępować ognia zielonymi efektami.
+
+
+<!-- END part-78-84.md -->
+
+<!-- START part-85-90.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 85–90 (V1/V2/V3)
+
+**Źródło:** oryginalny `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`. ID 85–86: osadzone PNG `"<id>:<tier>"` w `rework/game-19.txt`; ID 87–90: osadzone PNG `"<id>_V<tier>"` w `PARTY87_ART`, `rework/game-19.txt`–`game-21.txt`. **18/18 portretów rzeczywiście otwartych i obejrzanych.** Nie mylić obu formatów kluczy. Dla zgodności 1:1 dołączyć oryginalny obraz jako referencję, bo sam opis nie zapewnia dokładności pikselowej.
+
+## ID 085 — Tsunami
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnoniebieska metaliczna kula** z dwoma **jasnocyjanowymi oczami**, ostrymi srebrnymi płytami po lewej i na górze. Wokół **wielka niebieska wirująca fala wody**, z białymi grzbietami i małymi kroplami, głównie po lewej i pod kulką. Nie zamieniać w lodowe kryształy.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama granatowa kula z cyjanowymi oczami i srebrnymi ostrymi płytami, lecz **większa, wyższa fala** zawijająca się za głową i po lewej, więcej **jasnych niebieskich kropli** na zewnątrz. Silniejsze białe refleksy na wodzie. Zachować metaliczny rdzeń.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna niebieska kulka z jasnymi oczami, otoczona **ogromnym niemal zamkniętym wirem niebiesko-białej wody**, z licznymi małymi bąbelkami na górze i dużą falą po lewej. Srebrne zakrzywione płyty nadal widoczne na głowie. Nie zastępować wody płomieniami.
+
+## ID 086 — Wstrząs
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kula** z dwoma **złotopomarańczowymi skośnymi oczami**, wyraźnymi **rozżarzonymi pomarańczowymi pęknięciami** na metalowym pancerzu. Po bokach **kilka dużych szarych odłamków skał** lewitujących wokół rdzenia, za nimi pomarańczowy blask. Nie robić gładkiej kulki.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z pomarańczowymi oczami, ale **więcej odłamków skalnych** i **wyraźny jasnopomarańczowy okrągły pierścień wstrząsu** wokół. Pęknięcia na pancerzu gęstsze, odłamki unoszą się z lewej i prawej. Zachować skalno-metaliczny wygląd.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z pomarańczowymi oczami i pęknięciami, otoczona **kilkoma jasnymi pomarańczowymi koncentrycznymi pierścieniami** oraz **wieloma ostrymi szarymi odłamkami**. Pierścienie tworzą pełny wir, odłamki są większe niż w V1. Nie zmieniać w ogniste słońce.
+
+## ID 087 — Nawałnica
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa metaliczna kula** z dwoma **jasnoniebieskimi oczami**, segmentowanym hełmem i **dwoma wielkimi srebrnymi sierpowatymi płytami** po lewej i prawej. Za kulą **jasnobłękitna burzowa chmura** z cienkimi białymi błyskawicami, u dołu niebieski blask. Tło przezroczyste.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama czarna kula z cyjanowymi oczami, ale **większe srebrne zakrzywione płyty** okalające rdzeń i **gęstsza niebieska burzowa aura**. Po bokach wyraźne białoniebieskie błyskawice, pancerz bardziej masywny. Zachować dwa główne srebrne łuki.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemny metaliczny rdzeń z bardzo jasnymi niebieskimi oczami, otoczony **niemal pełnym wieńcem wielkich srebrnych sierpowatych płyt**, na górze **wysoki srebrny trójkątny szpic**, pod kulą mały błękitny kryształ. W tle gęsta niebieska burza i białe wyładowania. Nie usuwać centralnej twarzy.
+
+## ID 088 — Zamieć
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kulka** z dwoma **jasnobłękitnymi oczami** i srebrnym segmentowanym hełmem. Po lewej i prawej **kilka dużych ostrych niebieskich kryształów lodu**, w tle zimna błękitna poświata. Kula znajduje się nisko w kadrze, nad nią dużo pustej przestrzeni. Nie dodawać ognia.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama ciemna kula z cyjanowymi oczami, ale **większy i gęstszy wieniec lodowych kryształów** po obu bokach, **wysoki centralny kryształ** nad głową. Jasne błękitne smugi i drobne odłamki, na czole mały niebieski klejnot. Nie zmieniać w przezroczystą lodową kulę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemny metaliczny rdzeń z dużymi błękitnymi oczami, otoczony **bardzo gęstą koroną wysokich jasnocyjanowych kryształów** na górze i po bokach, kilka długich iglic na dole. Silna białoniebieska poświata i zimne iskry. Zachować czarny rdzeń pośrodku.
+
+## ID 089 — Miraż
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kulka** z dwoma **złotopomarańczowymi oczami**, złotymi segmentami i ciemnymi szczelinami. Po obu bokach **kilka jasnych wielobarwnych kryształowych rombów**, głównie różowo-złotych, z niebieskimi refleksami, otoczonych ciepłą złotą poświatą. Nie zastępować rombów gwiazdkami.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z pomarańczowymi oczami, ale **większe łukowe złote ramy** po bokach i **więcej tęczowych kryształowych rombów** ułożonych w półkolisty wieniec. Złote i różowe smugi na obwodzie, w centrum ciemna twarz. Zachować symetrię kryształów.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z złotymi oczami w środku **niemal pełnej złotej okrągłej ramy**, otoczona **licznymi różowo-fioletowo-błękitnymi rombowymi kryształami** i jasnymi ciepłymi refleksami. Na górze centralny duży romb, po bokach większe kryształy, u dołu mały romb. Nie robić jednego dużego pryzmatu zamiast wielu.
+
+## ID 090 — Widmo
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnofioletowa metaliczna kula** z dwoma **jasnofioletowymi skośnymi oczami**, ostrymi srebrnymi płytami i **dużymi półprzezroczystymi fioletowymi widmowymi wstęgami** po obu bokach, jak duchowe skrzydła. W tle purpurowy dym i błyski. Nie dodawać ludzkiej sylwetki ducha.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama ciemna kula z fioletowymi oczami, ale **większe fioletowe wstęgi i zakrzywione srebrne płyty** wokół głowy, **gęstsza purpurowa aura**. Na czole ostrzejszy srebrny hełm. Zachować półprzezroczyste widmowe kształty.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarnofioletowa kula z dużymi jasnymi fioletowymi oczami, otoczona **szerokimi, wielowarstwowymi fioletowymi widmowymi skrzydłami** i **wysokim centralnym fioletowym kryształem** na czole. Po bokach duże srebrne ostre płyty, w tle gęste purpurowe smugi i iskry. Nie zastępować widmowych skrzydeł ptasimi piórami.
+
+
+<!-- END part-85-90.md -->
+
+<!-- START part-91-97.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 91–97 (V1/V2/V3)
+
+**Źródło:** oryginalny `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`; `PARTY87_ART`, klucze `"<id>_V<tier>"`, osadzone PNG w `rework/game-20.txt`–`game-22.txt`. **21/21 obrazów rzeczywiście otwartych i obejrzanych.** Portrety to pojedyncze ciemne metaliczne kule fantasy 3D z intensywnymi świecącymi oczami, osobnymi ozdobami i aurą. Nie dodawać realistycznych ludzkich ciał. Do wierności 1:1 potrzebny oryginalny obraz referencyjny.
+
+## ID 091 — Upiór
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kula** z dwoma **jaskrawoczerwonymi oczami**, segmentowanym hełmem i **dwoma ostrymi czerwono-czarnymi rogami** po bokach góry. Wokół **czerwone widmowe płomienie** i drobne czerwone rozbłyski, na pancerzu czerwone szczeliny. Nie robić humanoidalnego demona.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z czerwonymi oczami, lecz **większe i liczniejsze zakrzywione rogi** oraz **duże srebrno-czerwone ostre skrzydła/płyty** po bokach. Gęstsza czerwona aura i świecące linie na hełmie. Zachować centralną kulistą twarz.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z dużymi czerwonymi oczami, otoczona **olbrzymimi symetrycznymi czarno-srebrnymi rogami i ostrymi skrzydłami**, w centrum czoła **duży czerwony kryształ**. Wokół bardzo gęsta czerwona widmowa energia i drobne błyski. Nie zmieniać na zielonego zombie.
+
+## ID 092 — Zjawa
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jasnocyjanowymi oczami**, ukryta pod **dużym srebrno-granatowym kapturem** z długim opadającym lewym brzegiem. Na czole **niebieski rombowy klejnot** w srebrnej oprawie. Wokół **błękitne półprzezroczyste widmowe wstęgi**. Nie robić zwykłej szaty bez kuli.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z cyjanowymi oczami i srebrno-granatowym kapturem, ale **większa błękitna aura** i **dłuższe, szerzej rozłożone brzegi kaptura**. Niebieski kryształ na czole wyraźniejszy, srebrne kanciaste elementy przy policzkach. Zachować widmowy charakter.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z dużymi niebieskimi oczami pod **bardzo szerokim ozdobnym srebrno-granatowym kapturem**, na czole duży niebieski romb, po bokach **dwa długie srebrne wiszące ornamenty zakończone niebieskimi kryształami**. Wokół gęste błękitne duchowe wstęgi. Nie odsłaniać całej głowy.
+
+## ID 093 — Kosiarz
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **pomarańczowo-białymi oczami** i złotymi płytami na hełmie. Po obu bokach **dwa duże srebrno-złote zakrzywione sierpy/kosy**, ustawione symetrycznie, ich końce skierowane ku górze. Wokół **pomarańczowa widmowa aura** i złote iskry. Nie dodawać ludzkiego szkieletu.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z pomarańczowymi oczami, ale **większe srebrne sierpy** i **bardziej rozbudowane złote mechaniczne uchwyty** po bokach. Gęstsza pomarańczowa aura, drobne złote łańcuszki przy górnych mocowaniach. Zachować dwa główne łuki.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z pomarańczowymi oczami, nad nią **duży czarno-złoty kaptur/hełm z centralnym pomarańczowym kryształem**, po bokach **dwa wielkie srebrno-złote sierpy** na ozdobnych łańcuchach. Bardzo jasna pomarańczowa aura i drobne iskry. Nie zamieniać kos w proste miecze.
+
+## ID 094 — Zagłada
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarno-fioletowa kula** z dwoma **jasnofioletowymi oczami**, segmentowanym hełmem i **dużym purpurowym pierścieniem** biegnącym ukośnie wokół rdzenia. W pierścieniu **małe świecące runiczne znaki**, dookoła **ciemne lewitujące odłamki skał** i fioletowa mgła. Nie zamieniać w czarną dziurę bez twarzy.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z liliowymi oczami, ale **szerszy fioletowy pierścień z większą liczbą run** i **więcej czarnych skalnych odłamków** wokół. Purpurowe błyskawice i małe czerwone akcenty w tle. Zachować centralne oczy.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna metaliczna kula z fioletowymi oczami, otoczona **gęstą purpurową orbitą runiczną** i licznymi ciemnymi odłamkami. Nad czołem **wysoki złoto-fioletowy szpic z małą czarną kulą/otworem** u góry, po bokach ostre metaliczne płyty. Wokół silne fioletowe światło. Nie zastępować runicznych pierścieni płomieniami.
+
+## ID 095 — Chaos
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z **dwoma różnokolorowymi oczami**: jedno **jasnocyjanowe**, drugie **różowo-fioletowe**, złote kanciaste płyty na hełmie. Wokół **lewituje kilka kolorowych rombowych kryształów** w cyjanie, różu, pomarańczy i złocie, za nimi wielobarwna neonowa mgła. Nie ujednolicać koloru oczu.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama ciemna kula z jednym niebieskim i jednym różowym okiem, ale **więcej dużych wielobarwnych kryształów** po bokach, w tle **gęstsze różowo-cyjanowe smugi**. Złote segmenty na hełmie bardziej rozbudowane. Zachować asymetrię oczu.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z cyjanowym i różowym okiem, otoczona **bardzo gęstym wieńcem tęczowych rombowych kryształów** i **złotymi ostrymi płytami** po obu stronach. Na czole **duży różowy klejnot**, nad nim złote wysokie ornamenty. Bardzo silne różowe, błękitne i pomarańczowe rozbłyski. Nie zastępować tęczowych kryształów jednokolorowymi.
+
+## ID 096 — Porządek
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **czerwono-białymi oczami** i **dużym czerwonym rombowym klejnotem** na czole. Wokół **symetryczne srebrno-czerwone geometryczne ramiona** i małe czerwone romby na końcach, w tle czerwona aura. Wygląd uporządkowany, symetryczny. Nie mylić z wielokolorowym Chaosem.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z czerwonymi oczami i rombem na czole, lecz **większe, bardziej symetryczne srebrne łuki** po bokach, **kilka czerwonych rombów** ułożonych w regularny wzór oraz cienkie czerwone linie. Na górze jeden mały czerwony symbol. Zachować lustrzaną symetrię.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z czerwonymi oczami i dużym czerwonym kryształem, otoczona **bardzo regularną geometryczną konstrukcją** z **czerwonych rombów i srebrnych symetrycznych łuków**. Nad i pod kulą **poziome czerwone pierścienie**, u góry i na dole duże czerwone znaki, w tle czerwone światło. Nie dodawać losowych różnokolorowych elementów.
+
+## ID 097 — Feniks
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kulka** z dwoma **pomarańczowo-białymi oczami**, złotymi płytami na czole i **dwoma dużymi ognistymi skrzydłami** z piór rozłożonymi po lewej i prawej. Pióra złoto-pomarańczowe, wokół czerwony ogień. Nie rysować całego ptaka z nogami.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama czarna kula z pomarańczowymi oczami, lecz **większe, wyżej uniesione wielowarstwowe złote skrzydła**, gęstszy pomarańczowy ogień i więcej ostrych piór. Korpus nadal centralny. Zachować pióra, nie zamieniać ich w metalowe płetwy.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z bardzo jasnymi pomarańczowymi oczami, otoczona **ogromnymi symetrycznymi złoto-pomarańczowymi skrzydłami** o licznych warstwach ostrych piór. Na czole **wysoki złoty trójkątny grzebień**, za kulą intensywny pomarańczowy ogień. Nie usuwać centralnej kulistej twarzy.
+
+
+<!-- END part-91-97.md -->
+
+<!-- START part-98-103.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 98–103 (V1/V2/V3)
+
+**Źródło:** `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`; `PARTY87_ART`, klucze `"<id>_V<tier>"`, PNG w `rework/game-21.txt`–`game-24.txt`. **18/18 obrazów rzeczywiście otwarto i obejrzano.** Uwaga: oryginalny obraz **ID 102 V2 ma znacznie większy rozmiar/kadr** niż większość pozostałych; jest to cecha źródła, nie powód do wymyślania innego wyglądu. Postacie są fantastycznymi kulami 3D, nie ludźmi.
+
+## ID 098 — Kraken
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarno-złota metaliczna kula** z dwoma **jasnocyjanowymi oczami**, wokół niej **cztery duże niebiesko-złote macki** z wyraźnymi okrągłymi przyssawkami i spiralnie zawiniętymi końcówkami. Tło wypełnia **błękitna woda i bąbelki**. Macki są grube, segmentowane i częściowo metaliczne. Nie rysować pełnego ośmiorniczego tułowia.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z niebieskimi oczami, ale **większe, wyżej uniesione i liczniejsze macki** po bokach, więcej jasnoniebieskich przyssawek i bąbelków. Złote kanciaste płyty na hełmie wyraźniejsze. Zachować centralną kulę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna metaliczna kula z dużymi cyjanowymi oczami, otoczona **bardzo gęstym wieńcem wielkich złoto-niebieskich macek** z okrągłymi przyssawkami. Na czole **wysoki złoty trójkątny grzebień z niebieskim klejnotem**, w tle silna błękitna wodna aura i bąbelki. Nie zamieniać macek w skrzydła.
+
+## ID 099 — Król Dyń
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula-dynia** z dwoma **jaskrawopomarańczowymi oczami** i **dużymi zygzakowatymi pomarańczowymi ustami** jak w halloweenowej latarni. Na szczycie **złoty wygięty ogonek dyni** i mała złota korona/ornament, po bokach kilka złotych rombów. Wokół pomarańczowe płomienie. Nie usuwać charakterystycznego zygzakowatego uśmiechu.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama czarna dyniowa kula z pomarańczowymi oczami i zygzakowatymi ustami, lecz **większa złota korona z rogami** wokół ogonka, więcej złotych ozdób i **szersza pomarańczowa aura**. Po bokach złote romby, na dole płomieniste smugi. Zachować czarny metaliczny rdzeń.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna dynia z jasnymi pomarańczowymi oczami i zygzakowatymi ustami, nad nią **wielka złota królewska korona z czerwonym klejnotem**, po bokach **dwa szerokie nietoperze skrzydła** z czarno-pomarańczowymi błonami. Wokół intensywny pomarańczowy ogień i złote ornamenty. Nie zamieniać w zwykłą dynię bez korony.
+
+## ID 100 — 🎃 Wiedźma
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jaskrawozielonymi oczami**, na głowie **duży ciemnofioletowy spiczasty kapelusz wiedźmy** z szerokim rondem, **złotą wstążką** i dużym **okrągłym fioletowym klejnotem** na przedzie. Wokół **fioletowe widmowe wstęgi** i drobne purpurowe iskry. Nie dodawać ludzkiej twarzy.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama czarna kula z zielonymi oczami i fioletowym kapeluszem, lecz **bogatsza złota opaska i duży rombowy fioletowy klejnot**. Po bokach **małe wiszące szklane fiolki z zielonym i fioletowym płynem**, złote łańcuszki i gęstsza zielono-fioletowa aura. Zachować kapelusz jako dominujący element.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kulka z jasnymi zielonymi oczami, pod **bardzo szerokim ozdobnym fioletowym kapeluszem** z **dużym złotym półksiężycem i fioletowym klejnotem**. Wokół **liczne wiszące fiolki** z zielonymi i fioletowymi cieczami, złote łańcuchy, purpurowe wstęgi i zielone smugi. Nie zastępować kapelusza koroną.
+
+## ID 101 — 🎃 Kocioł
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna metaliczna kula w kształcie kociołka**, z dwoma **jasnozielonymi skośnymi oczami** i szerokim **mosiężnym otwartym brzegiem** na górze. Z wnętrza wydobywa się **jasnozielony bulgoczący płyn** z licznymi bąbelkami, wokół zielona mgła. Po bokach małe złote uchwyty. Nie rysować zwykłej miski bez oczu.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny kocioł z zielonymi oczami, ale **większe złote okrągłe uchwyty** po obu stronach, gęstsze zielone bąbelki i **zielony płyn spływający po przednim brzegu**. Na dole złote kanciaste ozdoby i niebieski mały klejnot. Zachować szeroki otwarty wierzch.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemny kociołek-kula z dużymi zielonymi oczami, **bardzo bogata złota obręcz** z centralnym zielonym rombowym klejnotem i złotymi runami, po bokach **dwa masywne złote uchwyty** z wiszącymi ozdobami. Na górze **duża ilość zielonego bulgoczącego płynu**, bąble i zielona mgła. Nie usuwać kociołkowego otworu.
+
+## ID 102 — 🎃 Czarny Kot
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kulka-kot** z **dwoma dużymi jasnofioletowymi skośnymi oczami**, **dwoma wysokimi trójkątnymi uszami** z fioletowym wnętrzem, **długimi srebrnymi wąsami** po bokach i **grubym czarnym zakręconym ogonem** po lewej. Na czole srebrny mały emblemat, wokół purpurowe smugi. Nie robić pełnego czworonożnego kota.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny metaliczny koci rdzeń, ale **większy i znacznie bliższy kadr** w oryginalnym obrazie. **Bardzo duże trójkątne uszy**, jasne fioletowobiałe oczy, **duży fioletowy rombowy klejnot na czole**, długie srebrne wąsy i **gruby zakręcony ogon** po lewej. Wokół gęste purpurowe wstęgi. **Nie zmniejszać do kadru V1 bez odniesienia do oryginalnego PNG.**
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula-kot z dwojgiem jasnych fioletowych oczu, wysokimi czarnymi uszami z purpurowymi wnętrzami, **dużym fioletowym kryształem na czole** i długimi srebrnymi wąsami. Po lewej **duży zawinięty ogon**, wokół **gęsta fioletowa widmowa aura** i kilka małych fioletowych wiszących klejnotów. Zachować metaliczną fakturę.
+
+## ID 103 — 🎃 Nietoperz
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z **dwoma jaskrawoczerwonymi oczami**, **dwoma krótkimi ostrymi uszami/rogami** na szczycie i **dwoma dużymi czarno-czerwonymi nietoperzymi skrzydłami** po bokach. Skrzydła mają srebrne ostre krawędzie i czerwone błony; wokół czerwona aura. Nie robić ptasich piór.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z czerwonymi oczami, ale **większe i bardziej rozłożone skrzydła**, na czole **mały czerwony rombowy klejnot**, więcej srebrnych ostrych płyt i czerwonych świetlistych smug. Zachować dwa główne skrzydła.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna metaliczna kula z jasnymi czerwonymi oczami, **dużym czerwonym kryształem na czole** i **ogromnymi symetrycznymi nietoperzymi skrzydłami** z czarno-czerwonymi błonami i srebrnymi ostrymi krawędziami. Na górze kilka wysokich czerwonych kolców, wokół bardzo intensywna czerwona aura. Nie zamieniać w wampira z kłami.
+
+
+<!-- END part-98-103.md -->
+
+<!-- START part-104-110.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 104–110 (V1/V2/V3)
+
+**Źródło:** oryginalny `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`. ID 104–108: `PARTY87_ART`, klucze `"<id>_V<tier>"` w `rework/game-23.txt`–`game-25.txt`; ID 109–110: osadzone PNG z kluczami `"<id>:<tier>"` w `rework/game-25.txt`–`game-26.txt`. **21/21 obrazów rzeczywiście otwartych i obejrzanych**. Halloweenowe kule fantasy 3D, bez realistycznej przemocy. Zachować ciemny kulisty rdzeń, oczy, materiały i ozdoby; nie tworzyć ludzkich ciał.
+
+## ID 104 — 🎃 Zombie
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnobrązowo-czarna metaliczna kula** z dwoma **jasnozielonymi skośnymi oczami**, popękanymi segmentami i złoto-brązowymi nitami. Wokół **zielona widmowa mgła** i **kilka małych beżowych kości** unoszących się po bokach. Brak realistycznych obrażeń i krwi; motyw kreskówkowo-fantastyczny.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z zielonymi oczami, ale **więcej jasnych kościanych fragmentów** na pancerzu i wokół, na górze mała **biała czaszka**. Gęstsza jasnozielona mgła i małe bąbelki. Zachować kulistą twarz.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna metaliczna kula z zielonymi oczami, otoczona **wieloma dużymi kościanymi łukami i ozdobami**, na czole **duża biała czaszka**, po bokach duże zakrzywione beżowe kościane elementy. Wokół intensywna zielona aura. Nie zamieniać w realistyczny szkielet człowieka.
+
+## ID 105 — 🎃 Voodoo
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna metaliczna kula** z dwoma **jasnocyjanowymi oczami**, częściowo okryta **brązowym zszywanym materiałem** jak lalka. Wokół **kilka dekoracyjnych złotych szpilek z kulistymi końcówkami** i cienkie złote łańcuszki, po bokach **błękitne widmowe wstęgi**. Nie tworzyć realistycznej postaci człowieka.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z niebieskimi oczami, ale **więcej złotych dekoracyjnych szpilek** na górze i bokach, na czole **okrągła beżowa plakietka z czarnymi oczami X i zygzakowatymi ustami**, po bokach **wiszące beżowe paski z ciemnymi runami**. Gęstsza niebieska aura. Zachować wygląd fantastycznej lalki.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z cyjanowymi oczami, **bardzo gęsta korona dekoracyjnych złotych szpilek z niebieskimi i złotymi końcówkami**, duża beżowa plakietka z oczami X na czole, po bokach **liczne wiszące paski z runami** i złote łańcuszki. Silne niebieskie widmowe smugi. Nie dodawać realistycznych ludzkich elementów.
+
+## ID 106 — 🎃 Strach na Wróble
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnobrązowa kulista postać** z dwoma **złotopomarańczowymi oczami**, w **dużym brązowym połatanym kapeluszu** z szerokim rondem, sznurkiem i małym okrągłym **halloweenowym guzikiem** z uśmiechem na froncie. Z obu boków wystają **duże pęki złotej słomy**, na korpusie widoczne zszycia. Nie zamieniać w ludzkiego stracha z rękami.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam brązowy rdzeń z pomarańczowymi oczami i połatanym kapeluszem, lecz **większe i gęstsze pęki słomy** po obu bokach i pod kulą. Więcej zszyć, złotych nici i małych dekoracyjnych drewnianych fragmentów. Guzik z uśmiechem nadal na kapeluszu.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnymi pomarańczowymi oczami, **bardzo duży poszarpany brązowy kapelusz** z okrągłym halloweenowym guzikiem, wokół **ogromne gęste pęki złotej słomy** i liczne zszycia. Na górze dodatkowe słomiane elementy i ciemne paski materiału. Nie zastępować słomy płomieniami.
+
+## ID 107 — 🎃 Ognik
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarnostalowa kula** z dwoma **jasnocyjanowymi oczami** i ostrymi srebrnymi płytami, otoczona **dużymi półprzezroczystymi niebieskimi duchowymi płomieniami**. Najwyższy płomień nad kulą, po bokach falujące błękitne języki. Nie zmieniać płomieni na czerwone.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z cyjanowymi oczami, ale **większe błękitne płomienie** i **srebrny diadem z jasnoniebieskim rombowym klejnotem** na czole. Po bokach ozdobne srebrne zakrzywione elementy. Zachować widmową niebieską paletę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnoniebieskimi oczami, **wysoki srebrny diadem z dużym niebieskim kryształem**, po bokach **dwa duże srebrne zakrzywione ornamenty** i **bardzo gęste wysokie błękitne płomienie** wokół całego obwodu. Nie robić z ognika zwykłego pożaru.
+
+## ID 108 — 🎃 Wilkołak
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnosrebrna kulista głowa wilka** z **dwoma jasnofioletowymi oczami**, **dużymi spiczastymi uszami**, krótkim czarnym nosem i **srebrnymi metaliczno-futrzanymi pasmami** po bokach. Wokół **purpurowa widmowa aura**. To nadal kula, nie pełny czworonożny wilk.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam wilczy rdzeń z fioletowymi oczami i srebrnymi pasmami, ale **większe uszy**, **gęstsze srebrne futrzane ostrza** po bokach i **mały srebrny półksiężyc na czole**. Wokół silniejsze purpurowe smugi. Zachować wilczy nos.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kulista wilcza głowa z dużymi fioletowymi oczami, **bardzo gęstym srebrnym futrzano-metalicznym kołnierzem**, dużymi uszami, na czole **jasny fioletowy półksiężyc i niebieski rombowy klejnot**. Wokół szeroka fioletowa aura. Nie zamieniać w ludzkiego wilkołaka.
+
+## ID 109 — 🎃 Banshee
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna metaliczna kula** z **jasnofioletowymi oczami** i **dużą białosrebrną maską z owalnym otworem ust** na przedzie, jak fantastyczna maska krzyku. Wokół **purpurowe widmowe wstęgi**, na górze srebrne ostre pasma przypominające włosy. Nie tworzyć realistycznej ludzkiej twarzy.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z fioletowymi oczami i białosrebrną maską, ale **większe srebrne ostre pasma/rogi** na górze, po bokach **wiszące fioletowe rombowe kryształy** i gęstsza purpurowa aura. Owalny otwór ust nadal centralny. Zachować maskę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnymi fioletowymi oczami, **bardzo rozbudowana srebrna maska** z dużym owalnym otworem, na czole **duży fioletowy kryształ**, wokół **wysokie srebrne ostre pasma** i **liczne wiszące purpurowe kryształy** po bokach. Silna fioletowa widmowa aura. Nie zmieniać w zwykłą dynię.
+
+## ID 110 — 🎃 Golem Cmentarny
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna kamienno-metaliczna kula** z dwoma **jaskrawozielonymi oczami**, popękanymi szarymi płytami i **kilkoma dużymi lewitującymi szarymi kamieniami** po bokach. Na czole **mały zielony rombowy znak**, wokół zielona aura. Nie dodawać ludzkich kończyn.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam kamienny rdzeń z zielonymi oczami, ale na górze **duży szary nagrobek z małą czaszką**, po bokach **kilka wąskich nagrobków** i lewitujących kamieni. Wokół gęsta zielona mgła. Zachować centralną kulistą twarz.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kamienna kula z jasnymi zielonymi oczami, na szczycie **duży gotycki nagrobek z czaszką**, po bokach **dwa wysokie kamienne filary/nagrobki** z zielonymi runami i małymi czaszkami, otoczone **zielonymi widmowymi płomieniami**. Dużo szarych odłamków. Nie zamieniać w humanoidalnego golema.
+
+
+<!-- END part-104-110.md -->
+
+<!-- START part-111-116.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 111–116 (V1/V2/V3)
+
+**Źródło:** `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`; osadzone oryginalne PNG z kluczami `"<id>:<tier>"` w `rework/game-25.txt`–`game-27.txt`. **18/18 obrazów faktycznie otwarto i obejrzano**. Halloweenowe kule fantasy 3D, bez realistycznych obrażeń; proporcje, kolory i liczba ozdób muszą pozostać zgodne z konkretną ewolucją.
+
+## ID 111 — 🎃 Krwawy Księżyc
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kula** z dwoma **jaskrawoczerwonymi oczami**, na hełmie **srebrne ostre płyty i małe ciemne kratery**, po lewej **duży srebrno-czerwony sierp księżyca**. Wokół **czerwona widmowa aura** i drobne czerwone rozbłyski. Nie rysować realistycznej krwi.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z czerwonymi oczami, ale nad głową **duży czerwony księżyc w pełni**, przed nim **duży czerwony sierp**, po bokach **srebrne ostre kolce** i **wiszące czerwone rombowe kryształy**. Gęstsza czerwona aura. Zachować dwa osobne motywy księżyca.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna metaliczna kula z jasnymi czerwonymi oczami, za nią **bardzo duży czerwony księżyc**, nad czołem **wielki czerwony sierp** i **gęsta korona srebrnych ostrych szpiców**. Po obu stronach **liczne wiszące czerwone kryształy na łańcuszkach**. Intensywna czerwona poświata. Nie usuwać księżyca w tle.
+
+## ID 112 — 🎃 Duch Latarni
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarnostalowa kula** z dwoma **jasnocyjanowymi oczami**, opasana **złotymi metalowymi prętami i łańcuchami**, na górze **złoty pierścień/uchwyt latarni**. Po lewej i prawej **dwie małe wiszące złote latarnie** z intensywnie niebieskim światłem. Wokół **błękitne widmowe płomienie**. Nie zamieniać w zwykłą latarnię bez twarzy.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z niebieskimi oczami i złotymi prętami, ale **większe dwie wiszące latarnie** na łańcuszkach, na czole **niebieski rombowy klejnot** w złotej oprawie. Gęstsze niebieskie widmowe płomienie i złote ornamenty. Zachować symetryczny układ.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z cyjanowymi oczami, **bardzo bogata złota klatka/latarnia** wokół głowy, na czole duży niebieski klejnot, na górze złoty uchwyt. Po bokach **cztery wiszące złote latarnie z błękitnym światłem**, po dwie na każdej stronie. Wokół gęste błękitne duchowe płomienie. Nie zmniejszać liczby latarni do dwóch.
+
+## ID 113 — 🎃 Mumia
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarnostalowa kula** z dwoma **złotopomarańczowymi oczami**, owinięta **szerokimi beżowymi bandażami** w ukośnych pasach. Na czole **złoty egipski emblemat z niebieskim klejnotem**, po bokach luźne fragmenty bandaży z małymi hieroglifami. Ciepły złoty blask. Nie rysować ludzkiego ciała.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z pomarańczowymi oczami i beżowymi bandażami, ale **większy złoty egipski ornament na czole** przypominający skarabeusza, z **niebieskim klejnotem** i rozłożonymi złotymi skrzydłami. Po bokach więcej luźnych bandaży z hieroglifami. Zachować ukośne pasy na twarzy.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnymi złotymi oczami, owinięta szerokimi beżowymi bandażami, na czole **bardzo duży złoty skrzydlaty skarabeusz** z **niebieskim owalnym klejnotem** i dodatkowymi złotymi segmentami. Po obu stronach **liczne długie paski bandaży z hieroglifami**, niebiesko-złote ornamenty. Nie zamieniać w faraona z ludzką twarzą.
+
+## ID 114 — 🎃 Gargulec
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnoszara kamienno-metaliczna kula** z dwoma **jasnofioletowymi oczami**, ostro zakończonymi segmentami i **dwoma dużymi szarymi nietoperzymi skrzydłami** po bokach, z fioletowymi błonami. Na górze małe szare rogi, wokół purpurowa aura. Nie dodawać ludzkich nóg.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam szary kamienny rdzeń z fioletowymi oczami, ale **większe, bardziej rozłożone skrzydła**, **dwa duże zakrzywione rogi** na górze i **mały fioletowy rombowy klejnot** na czole. Gęstsze fioletowe widmowe smugi. Zachować kamienną fakturę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kamienna kula z jasnymi fioletowymi oczami, **wielkie szare skrzydła** z purpurowymi błonami, **wysokie zakrzywione rogi** i **duży fioletowy kryształ** na czole. Po obu stronach **dwa długie wiszące fioletowe kryształy na złotych łańcuszkach**. Bardzo intensywna fioletowa aura. Nie zastępować skrzydeł ptasimi piórami.
+
+## ID 115 — 🎃 Nekromanta
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jasnozielonymi oczami**, okryta **poszarpanym ciemnofioletowym kapturem** z metalowymi złotymi łańcuchami. Na czole **mała biała czaszka z zielonym klejnotem**, po bokach **zielone widmowe płomienie z małymi czaszkami**. Nie tworzyć ludzkiego maga.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z zielonymi oczami i fioletowym kapturem, ale **więcej małych białych czaszek** na górze i po bokach, gęstsze złote łańcuchy, **większe zielone widmowe płomienie**. Na czole czaszka z zielonym kryształem. Zachować poszarpaną tkaninę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z zielonymi oczami, otoczona **wielką koroną z białych czaszek i srebrnych ostrych płyt**, centralna duża czaszka na czole z zielonym klejnotem. Po bokach **gęste zielone widmowe płomienie z małymi czaszkami**, długie złote łańcuchy i poszarpany fioletowy kaptur. Nie zamieniać w realistyczny szkielet.
+
+## ID 116 — 🎃 Przeklęte Lustro
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jasnofioletowymi oczami**, powierzchnia pokryta **srebrnymi pękniętymi płytami** jak rozbite lustro. Wokół **kilka lewitujących fioletowych rombowych luster** w złotych ramkach, po lewej złote łańcuchy. W centrum czoła mały fioletowy klejnot. Nie rysować jednego prostokątnego lustra zamiast kuli.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z fioletowymi oczami i pękniętym srebrnym pancerzem, ale **więcej dużych pionowych luster w złotych ramkach** po bokach, **większy fioletowy kryształ** na czole i gęstsze złote łańcuchy. Lustra mają błękitno-fioletowe refleksy. Zachować symetrię.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z dużymi fioletowymi oczami, **bardzo bogaty złoty ornament na czole** z fioletowym klejnotem, po bokach **dwa wielkie pionowe srebrno-błękitne lustra w złotych ramach** oraz liczne mniejsze fioletowe romby. Wokół złote łańcuchy i fioletowa aura. Nie usuwać pęknięć na powierzchni rdzenia.
+
+
+<!-- END part-111-116.md -->
+
+<!-- START part-117-122.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 117–122 (V1/V2/V3)
+
+**Źródło:** `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`; oryginalne PNG z kluczami `"<id>:<tier>"` w `rework/game-27.txt`–`game-29.txt`. **18/18 obrazów naprawdę otwarto i obejrzano**. Halloweenowe kuliste postacie fantasy 3D; zachować wyraziste oczy, metaliczny rdzeń i elementy towarzyszące. Opis nie zastępuje oryginalnego obrazu przy wymaganiu zgodności 1:1.
+
+## ID 117 — 🎃 Pająk Wdowa
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jaskrawoczerwonymi oczami** i **czerwoną pajęczyną na czole**, po bokach **kilka długich czarno-srebrnych pajęczych nóg** z czerwonymi błyszczącymi punktami i ostrymi końcówkami. Wokół cienka czerwona aura. Nie mylić z fioletowym Pająkiem ID 6.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z czerwonymi oczami i pajęczyną na czole, ale **więcej grubych segmentowanych pajęczych nóg** po bokach i **większa czerwona pajęczyna**. Czerwone kryształowe punkty na odnóżach, mocniejsza czerwona poświata. Zachować centralną kulę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z bardzo jasnymi czerwonymi oczami, na czole **duża czerwona pajęczyna z centralnym czerwonym klejnotem**, wokół **gęsty wieniec dużych czarno-srebrnych pajęczych nóg** z czerwonymi ostrymi detalami. Intensywna czerwona aura i drobne iskry. Nie zamieniać nóg w ptasie skrzydła.
+
+## ID 118 — 🎃 Jeździec Bez Głowy
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna dyniowa kula** z **dwoma pomarańczowymi oczami** i **dużym zygzakowatym pomarańczowym uśmiechem**. Za nią po prawej **ciemna głowa konia z zielonym świecącym okiem**, po lewej **czarna poszarpana peleryna** na złotych łańcuchach. Wokół intensywna zielona widmowa aura. Nie tworzyć ludzkiego jeźdźca.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny dyniowy rdzeń z pomarańczowymi oczami i uśmiechem, ale **większa głowa widmowego konia** po prawej, **bogatsza srebrna zbroja** na czole i **więcej złotych łańcuchów** przy pelerynie. Gęstsza zielona aura. Zachować konia w tle.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna dyniowa kula z pomarańczowymi oczami i zygzakowatymi ustami, na czole **duży złoto-srebrny hełm/korona z ostrymi płytami**, po prawej **wielka czarna głowa konia z zielonym okiem**, po lewej **poszarpana ciemna peleryna** i liczne złote łańcuchy. Wokół bardzo gęste zielone widmowe płomienie. Nie usuwać dyniowej twarzy.
+
+## ID 119 — 🎃 Żniwiarz Dusz
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jasnocyjanowymi oczami**, na czole **duży niebieski rombowy kryształ** w srebrnym hełmie. Po obu stronach **dwa wielkie srebrne sierpowate łuki**, połączone **ciemnymi łańcuchami**, na dole **małe błękitne duchowe płomienie**. Nie rysować ludzkiej postaci.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z niebieskimi oczami i kryształem, ale **większe srebrne sierpy**, **dodatkowe małe niebieskie duchowe płomienie** na górze i po bokach, **wiszące małe dzwoneczki** na łańcuchach przy dolnych końcach. Ciemne srebrne kolce na hełmie. Zachować symetrię.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnymi niebieskimi oczami, **wysoki srebrny hełm z małą białą czaszką na czole**, po obu stronach **olbrzymie srebrne sierpowate łuki** na łańcuchach, **liczne małe niebieskie duchowe płomienie** i wiszące dzwoneczki. Bardzo gęsta błękitna aura. Nie usuwać centralnej twarzy.
+
+## ID 120 — 🎃 Dzwon Północy
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna metaliczna kula** z dwoma **jasnofioletowymi oczami**, przykryta **dużym czarno-złotym dzwonowatym hełmem** z **fioletowym półksiężycem na górze**. Po bokach **dwa złote wiszące dzwonki** na łańcuchach, na hełmie fioletowe runy i złote obręcze. Wokół purpurowa widmowa aura.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z fioletowymi oczami i hełmem z półksiężycem, ale **trzy złote wiszące dzwonki** rozmieszczone po bokach i z przodu, więcej złotych łańcuchów i fioletowych run. Gęstsza purpurowa aura. Nie zamieniać dzwonków w kryształy.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnymi fioletowymi oczami, **bardzo bogaty złoty hełm** z dużym **fioletowym półksiężycem i małymi złotymi gwiazdkami**, po bokach **cztery duże złote dzwonki** na grubych łańcuchach. Na hełmie liczne fioletowe runy i złote ostre ornamenty. Silna purpurowa aura. Zachować dzwonowaty kształt.
+
+## ID 121 — 🎃 Lodowy Upiór
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarnostalowa kula** z dwoma **jasnobłękitnymi oczami**, na czole **duża srebrna maska czaszki** z ostrymi zębopodobnymi płytami, wokół **wysokie błękitne lodowe kryształy** i zimna aura. Nie robić realistycznej ludzkiej czaszki zamiast kulki.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z niebieskimi oczami, ale **większa srebrna czaszka na czole** i **więcej wysokich lodowych kryształów** po obu bokach. Na łańcuchach wiszą małe niebieskie kryształy, wokół silniejsza błękitna poświata. Zachować ciemną metaliczną twarz.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnymi niebieskimi oczami, **duża srebrna czaszka na czole** oraz **dwie mniejsze białe czaszki** po bokach. Wokół **bardzo gęsta korona wysokich niebieskich kryształów**, liczne łańcuchy i wiszące lodowe odłamki. Silna białoniebieska aura. Nie usuwać czaszek.
+
+## ID 122 — 🎃 Królowa Kruków
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jasnofioletowymi oczami**, **ostrym złoto-czarnym dziobopodobnym przodem** i **wieloma czarnymi kruczymi piórami** po bokach. Na czole **mała złota korona z fioletowym klejnotem**, wokół lewitujące ciemnofioletowe pióra i purpurowa aura. Nie zamieniać piór w nietoperze skrzydła.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z fioletowymi oczami i dziobopodobnym przodem, ale **większa złota korona z dużym fioletowym kryształem**, **gęstsze czarne pióra** rozłożone po bokach, na dole **dwa wiszące fioletowe kryształy**. Wokół silniejsza purpurowa aura. Zachować kruczy charakter.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z jasnymi fioletowymi oczami, **bardzo duża złota korona z fioletowym klejnotem i półksiężycem na szczycie**, po obu stronach **ogromne czarne krucze skrzydła z licznymi warstwami piór**. Wokół **kilka wiszących fioletowych kryształów** i silna purpurowa aura. Nie zamieniać w białego anioła.
+
+
+<!-- END part-117-122.md -->
+
+<!-- START part-123-129.md -->
+
+# Ball VS Ball 2.0 — oryginalne portrety ID 123–129 (V1/V2/V3)
+
+**Źródło:** oryginalny `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`; osadzone oryginalne PNG z kluczami `"<id>:<tier>"` w `rework/game-28.txt`–`game-31.txt`. **21/21 obrazów rzeczywiście otwarto i obejrzano**. To fantastyczne halloweenowe kulki 3D z wyrazistymi oczami, metalicznymi i organicznymi detalami. Nie dopowiadać elementów niewidocznych na konkretnym PNG; opis nie zastępuje referencji graficznej przy wymaganiu 1:1.
+
+## ID 123 — 🎃 Zgniła Dynia
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnopomarańczowa metaliczna dyniowa kula** z **dwoma jasnozielonymi oczami** i **dużym zygzakowatym zielonym uśmiechem**, powierzchnia popękana i miejscami czarna. Na szczycie **duży zakręcony brązowo-zielony ogonek**, po bokach **zielone wijące się pnącza**, wokół jasnozielona widmowa mgła. Nie robić świeżej, gładkiej dyni.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam pomarańczowo-czarny rdzeń z zielonymi oczami i zygzakowatymi ustami, ale **gęstsze zielone pnącza** i **więcej ciemnych pęknięć** na skórze, po lewej **mała biała czaszka** i **metalowe łańcuchy** wokół ogonka. Wokół intensywnie zielona aura. Zachować zgniłą fakturę.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemnopomarańczowa popękana dynia z jasnymi zielonymi oczami i zygzakowatymi ustami, na górze **duży skręcony ogonek**, po obu bokach **dwa wielkie zakrzywione srebrne ostrza/kolce**, **kilka białych czaszek** i złote łańcuchy. Wokół bardzo gęste zielone widmowe płomienie i pnącza. Nie usuwać dyniowego uśmiechu.
+
+## ID 124 — 🎃 Widmowy Rycerz
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnosrebrna metaliczna kula** z dwoma **jasnobłękitnymi oczami**, na twarzy **duży srebrny rycerski hełm z pionowym ostrym szpicem na czole** i kanciastymi płytami na policzkach. Wokół **błękitne widmowe płomienie**, po bokach małe metalowe łańcuchy. Nie tworzyć ludzkiego rycerza z nogami.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarnostalowy rdzeń z cyjanowymi oczami, ale **większy srebrny hełm z kratowanym dolnym wizjerem** i **dwie duże srebrne tarcze po bokach**, każda z ciemnym emblematem czaszki. Wokół gęstsze błękitne płomienie i łańcuchy. Zachować symetryczny układ tarcz.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna metaliczna kula z jasnymi niebieskimi oczami, **bardzo bogaty srebrny rycerski hełm z wysokim szpicem i niebieskim rombowym klejnotem** na czole. Po obu stronach **dwie wielkie srebrne tarcze z błękitnymi czaszkami**, na górze dodatkowe srebrne ostre elementy i łańcuchy. Wokół intensywne błękitne widmowe płomienie. Nie zastępować tarcz skrzydłami.
+
+## ID 125 — 🎃 Cukierkowy Koszmar
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jasnoróżowymi skośnymi oczami**, na górze **dwa duże różowo-białe zakrzywione cukrowe laski** jak rogi. Na pancerzu **różowy ociekający lukier**, małe kolorowe cukierki i okrągłe lizaki po bokach. Wokół różowa aura. Nie zamieniać cukierków w kryształy.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z różowymi oczami, ale **większe różowo-białe cukrowe laski**, na czole **duży różowy okrągły lizak ze spiralą**, wokół **więcej małych cukierków** i gęstszy różowy lukier spływający po pancerzu. Zachować wyraźne pasy na laskach.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna metaliczna kula z bardzo jasnymi różowymi oczami, na górze **dwie ogromne różowo-białe cukrowe laski**, centralny **duży spiralny lizak**, liczne **różowe gwiazdki, okrągłe cukierki i kolorowe kulki** wokół. Po czole i policzkach **gęste smugi ociekającego różowego lukru**, bardzo intensywna różowa aura. Nie robić zwykłego pudełka cukierków.
+
+## ID 126 — 🎃 Księżycowy Nietoperz
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarnofioletowa metaliczna kula** z dwoma **jasnofioletowymi oczami**, na czole **duży srebrny półksiężyc**, po bokach **dwa duże fioletowe nietoperze skrzydła** z czarnymi żyłkami i srebrnymi krawędziami. Wokół purpurowa aura. Nie zamieniać w ptasie pióra.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z fioletowymi oczami i półksiężycem, ale **większe rozłożone fioletowe skrzydła**, na górze **dwa wysokie srebrne ostre rogi**, po bokach **wiszące srebrne półksiężyce** na łańcuszkach. Gęstsza purpurowa aura. Zachować półksiężyc na czole.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z dużymi fioletowymi oczami, na czole **srebrny półksiężyc**, nad głową **duży świetlisty fioletowy księżyc w srebrnej oprawie**, po bokach **ogromne fioletowe nietoperze skrzydła** i **liczne wiszące fioletowe rombowe kryształy** na łańcuszkach. Silna purpurowa aura. Nie usuwać górnego księżyca.
+
+## ID 127 — 🎃 Grobowy Alchemik
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemnobrązowo-czarna metaliczna kula** z dwoma **jasnozielonymi oczami**, opasana **złoto-miedzianymi rurkami i łańcuchami**. Na czole **mała beżowa tabliczka z czarną czaszką i krótkim napisem**, po lewej **jedna duża szklana fiolka z zielonym płynem** na mosiężnym uchwycie, po prawej mały pergamin z runami. Wokół zielona widmowa mgła. Nie zmieniać fiolki w klejnot.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z zielonymi oczami, ale **więcej złoto-miedzianych rurek i okrągłych złączy**, na czole **większa beżowa tabliczka z czaszką**, po bokach **kilka szklanych fiolek** z zielonym i niebieskim płynem, wiszące pergaminy z runami. Gęstsza zielona aura. Zachować metaliczną konstrukcję.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna kula z dużymi zielonymi oczami, **bardzo gęsta złoto-miedziana aparatura dekoracyjna** na górze i bokach, na czole **duża beżowa tabliczka z czarną czaszką**, dookoła **liczne szklane fiolki z zielonym płynem**, rurki, złote zawiasy i **długie wiszące pergaminy z runami**. Wokół intensywna zielona widmowa aura. Nie dodawać ludzkich rąk.
+
+## ID 128 — 🎃 Płacząca Marionetka
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna kulista marionetka** z **dużą popękaną białą porcelanową maską** na przedzie, **dwoma jasnofioletowymi oczami** i **dwiema długimi fioletowymi smugami łez** pod oczami. Po bokach **cienkie fioletowe sznurki z małymi złotymi kulistymi ciężarkami**, na górze poszarpany fioletowy materiał. Nie robić ludzkiej lalki z nogami.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam czarny rdzeń z popękaną białą maską i fioletowymi oczami, ale **więcej sznurków i złotych ciężarków** po bokach, na czole **złoty rombowy ornament z fioletowym klejnotem**, większe poszarpane fioletowe płaty materiału. Fioletowe smugi łez nadal wyraźne. Zachować pęknięcia maski.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Czarna kula z dużą popękaną białą maską, fioletowymi oczami i długimi fioletowymi łzami, na górze **duża złota królewska korona z fioletowym klejnotem**, po bokach **gęsta sieć fioletowych sznurków z licznymi złotymi kulistymi ciężarkami** oraz poszarpane fioletowe płaty. Nie usuwać porcelanowej maski.
+
+## ID 129 — 🎃 Kryształ Zaświatów
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Czarna metaliczna kula** z dwoma **jasnocyjanowymi oczami**, na czole **srebrny diadem z dużym niebieskim rombowym kryształem**, po bokach **kilka lewitujących błękitno-fioletowych wielokątnych kryształów**. Wokół jasnobłękitna widmowa aura. Nie zastępować kryształów śnieżynkami.
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ten sam ciemny rdzeń z cyjanowymi oczami, ale **wyższy srebrny diadem z większym niebieskim kryształem** i **więcej dużych błękitno-fioletowych kryształów** po bokach. Drobne srebrne łańcuchy i silniejsza niebieska aura. Zachować ostre wielokątne fasety.
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+Ciemna metaliczna kula z bardzo jasnymi niebieskimi oczami, **wielki srebrny hełm/diadem z dużym pionowym niebieskim kryształem** na czole i dodatkowym wysokim kryształem nad nim. Wokół **bardzo gęsty wieniec wielkich niebiesko-fioletowych kryształów** po bokach i na górze, cienkie srebrne łańcuchy, intensywna błękitna aura. Nie zmieniać w przezroczystą lodową kulę.
+
+
+<!-- END part-123-129.md -->
+
+<!-- START part-130-trebusz.md -->
+
+# Ball VS Ball 2.0 — oryginalny Trebusz (ID 130), trzy ewolucje
+
+**POTWIERDZENIE:** w pełnej oryginalnej grze na gałęzi `main` (commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`) istnieje **Trebusz jako ID 130** w `RAW_BALLS`, a w `rework/game-31.txt` są **trzy rzeczywiste obrazy PNG** pod kluczami `"130:1"`, `"130:2"`, `"130:3"`. **Każdy z trzech obrazów został otwarty i obejrzany**, nie tylko wykryty w kodzie. Poniższy opis dotyczy wyłącznie fantastycznej grafiki postaci z gry, a nie konstrukcji prawdziwego urządzenia.
+
+## ID 130 — Trebusz
+
+### V1 — WERYFIKACJA WIZUALNA: TAK
+**Ciemna czarno-brązowa metaliczna kula** o groźnych, **jaskrawopomarańczowych skośnych oczach**, segmentowana licznymi ciemnymi żelaznymi płytami, miedziano-złotymi nitami i drewnianymi belkami. Po lewej nad kulą **długi drewniany element dekoracyjny**, a na jego lewym końcu zwisa **mały brązowy kosz z jednym dużym szarym kamiennym kulistym elementem**. Kosz zawieszony na czterech brązowych linach, drewno ma widoczne słoje i metalowe obręcze. Po prawej za kulą fragment **brązowego płata/tarczy z czarnym znakiem**; drobna czerwona poświata. Całość realistycznie cieniowana 3D, z ciemnym tłem i wolnym obszarem na górze. **Nie dodawać drugiego kamienia w V1.**
+
+### V2 — WERYFIKACJA WIZUALNA: TAK
+Ta sama ciemna kulka z dużymi pomarańczowymi oczami, jeszcze gęstszą zbroją z czarnych stalowych płyt, brązowych drewnianych listew i metalowych nitów. Nad głową **szersza drewniana belka z ciemnymi stalowymi opaskami**. Po lewej **wiszący brązowy kosz z dokładnie dwoma szarymi kulistymi kamieniami**, ułożonymi obok siebie; liny i złoto-brązowe uchwyty widoczne. Po prawej częściowo widoczna dodatkowa drewniana konstrukcja. Czerwono-pomarańczowy blask za obudową. **Nie zastępować dwóch kamieni pięcioma.**
+
+### V3 — WERYFIKACJA WIZUALNA: TAK
+**Najbardziej opancerzona czarna kula** z ostrymi pomarańczowymi oczami, mnóstwem miedzianych nitów, czarnych stalowych płyt i grubo okuwanego drewna. Na górze **masywna drewniana belka** z metalowymi złączami, po lewej **duży wiszący kosz zawierający dokładnie pięć szarych kulistych kamieni** (dwa na dole, trzy powyżej, część zachodzi na siebie). Po prawej **duży czerwony, poszarpany pionowy sztandar z białym runicznym znakiem**, przytwierdzony do drewnianego stelaża. Obudowa jest szersza i gęściej opancerzona niż V2, pod spodem ciemne segmenty, na oczach silny pomarańczowy blask. **Nie pomijać czerwonego sztandaru ani pięciu kamieni.**
+
+**Zakazy dla generatora:** nie zmieniać postaci w realistyczną machinę bez oczu; nie dodawać nóg ani ludzkiej załogi; nie zmieniać liczby kamieni; nie usuwać ciemnej kulistej twarzy; nie stosować kreskówkowej płaskiej stylistyki zamiast metalicznego fantasy 3D. Dla maksymalnej wierności dołączyć konkretne PNG jako referencję — tekst nie gwarantuje 1:1.
+
+
+<!-- END part-130-trebusz.md -->
+
