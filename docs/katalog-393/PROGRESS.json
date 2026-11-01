@@ -23,18 +23,37 @@
     15
   ],
   "verifiedVariants": 48,
-  "describedVariants": 48,
-  "remainingVariants": 345,
+  "describedVariants": 78,
+  "remainingVariants": 315,
   "completedDescriptionFiles": [
     "opisy/000-006.md",
     "opisy/007-012.md",
-    "opisy/013-015.md"
+    "opisy/013-015.md",
+    "opisy/016-025.md"
   ],
   "evidenceFiles": [
     "evidence/000-012.json",
-    "evidence/013-015.json"
+    "evidence/013-015.json",
+    "evidence/016-025-atlas.json"
   ],
   "nextIds": [
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38
+  ],
+  "status": "IN_PROGRESS",
+  "noUserNotificationBeforeComplete": true,
+  "atlasVisualIds": [
     16,
     17,
     18,
@@ -46,6 +65,6 @@
     24,
     25
   ],
-  "status": "IN_PROGRESS",
-  "noUserNotificationBeforeComplete": true
+  "atlasInspectedVariants": 30,
+  "individualCropUnverifiedVariants": 30
 }
