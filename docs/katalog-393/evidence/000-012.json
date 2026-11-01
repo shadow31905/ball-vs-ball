@@ -1,0 +1,675 @@
+{
+  "sourceBranch": "main",
+  "sourceCommit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
+  "sourceFiles": [
+    "rework/game-0.txt",
+    "rework/game-1.txt"
+  ],
+  "embeddedCollection": "window.BVBBatch01Frames",
+  "verification": "Wszystkie 39 obrazów WebP 384×384 z ID 0–12 V1–V3 zostały wyświetlone i indywidualnie obejrzane podczas tej sesji; sourceHash pochodzi z metadanych gry, nie z niezależnego ponownego hashowania.",
+  "records": [
+    {
+      "id": 0,
+      "wersja": "V1",
+      "sourceHash": "abe6941613fa95b45d15306a0dfdd07549dfd4d661357de89d96f6d1bcf8aefd",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5989583333333334,
+        "cy": 0.5546875,
+        "r": 0.3043043216069539
+      },
+      "sourceTransparentFraction": 0.5526487488839541,
+      "base64Length": 73152,
+      "sourcePart": 0,
+      "sourceOffset": 354869,
+      "visualVerified": true
+    },
+    {
+      "id": 0,
+      "wersja": "V2",
+      "sourceHash": "7f83ecbb11497cf13ede22d1066f271328d93629c789e58a84b61a8b168a6814",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5807291666666666,
+        "cy": 0.5260416666666666,
+        "r": 0.3515625
+      },
+      "sourceTransparentFraction": 0.48793970935748826,
+      "base64Length": 81860,
+      "sourcePart": 0,
+      "sourceOffset": 428274,
+      "visualVerified": true
+    },
+    {
+      "id": 0,
+      "wersja": "V3",
+      "sourceHash": "daaec6f1f32bd179bd89ea3fa458624300e5d9da6c946d8a81e81f96119a9e58",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5885416666666666,
+        "cy": 0.5390625,
+        "r": 0.3463541666666667
+      },
+      "sourceTransparentFraction": 0.44134558885251407,
+      "base64Length": 97812,
+      "sourcePart": 0,
+      "sourceOffset": 510388,
+      "visualVerified": true
+    },
+    {
+      "id": 1,
+      "wersja": "V1",
+      "sourceHash": "bb7b62564441213e64ed13749128aa855b181c8fa47b1d4841a7943ef7d23af8",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4270833333333333,
+        "cy": 0.6197916666666666,
+        "r": 0.2922855615615845
+      },
+      "sourceTransparentFraction": 0.5308658226688949,
+      "base64Length": 68712,
+      "sourcePart": 0,
+      "sourceOffset": 608454,
+      "visualVerified": true
+    },
+    {
+      "id": 1,
+      "wersja": "V2",
+      "sourceHash": "7e461e1c51aafaa25b1acd171dbb6fad70b13ef5900b8e0b8b00259b280c420f",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4973958333333333,
+        "cy": 0.5755208333333334,
+        "r": 0.2730543216069539
+      },
+      "sourceTransparentFraction": 0.5215870617532667,
+      "base64Length": 81172,
+      "sourcePart": 0,
+      "sourceOffset": 677428,
+      "visualVerified": true
+    },
+    {
+      "id": 1,
+      "wersja": "V3",
+      "sourceHash": "2c99285b5bc79d83799c54d4f28e552ed458c583d6891cf79cef98ef6695ad99",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5442708333333334,
+        "cy": 0.6223958333333334,
+        "r": 0.2647631565729777
+      },
+      "sourceTransparentFraction": 0.4854157286793902,
+      "base64Length": 87796,
+      "sourcePart": 0,
+      "sourceOffset": 758862,
+      "visualVerified": true
+    },
+    {
+      "id": 2,
+      "wersja": "V1",
+      "sourceHash": "cf060bfb17e65c498bd04be7a6fdd07626ca1d800542c4d8c9306802e975eb08",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.515625,
+        "cy": 0.5703125,
+        "r": 0.33216504255930585
+      },
+      "sourceTransparentFraction": 0.5451607487618568,
+      "base64Length": 73724,
+      "sourcePart": 0,
+      "sourceOffset": 846920,
+      "visualVerified": true
+    },
+    {
+      "id": 2,
+      "wersja": "V2",
+      "sourceHash": "50ed0e4c46d4cc85d0f481bce6f6de4ab4aed4a6481b124d1e52050d7f8fe2f9",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.53125,
+        "cy": 0.5520833333333334,
+        "r": 0.3503175973892212
+      },
+      "sourceTransparentFraction": 0.4993678919642153,
+      "base64Length": 96960,
+      "sourcePart": 0,
+      "sourceOffset": 920888,
+      "visualVerified": true
+    },
+    {
+      "id": 2,
+      "wersja": "V3",
+      "sourceHash": "df41856a0ac184723b5bae8140f09500b8fe7c91441779769a684828b2caaa9d",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5260416666666666,
+        "cy": 0.5651041666666666,
+        "r": 0.351485808690389
+      },
+      "sourceTransparentFraction": 0.4848364023005171,
+      "base64Length": 92084,
+      "sourcePart": 0,
+      "sourceOffset": 1018099,
+      "visualVerified": true
+    },
+    {
+      "id": 3,
+      "wersja": "V1",
+      "sourceHash": "5caa94e8f8293b2c99dd58a2c4a1b0087ebe04e17c8a2da5fc1d5e04c2b64130",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5052083333333334,
+        "cy": 0.5234375,
+        "r": 0.3050576448440552
+      },
+      "sourceTransparentFraction": 0.5613386445670505,
+      "base64Length": 63304,
+      "sourcePart": 0,
+      "sourceOffset": 1110444,
+      "visualVerified": true
+    },
+    {
+      "id": 3,
+      "wersja": "V2",
+      "sourceHash": "bbbaed14a09f1923b85b841e898f8ffaab15de341126898cb433207eff5dc0cc",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5729166666666666,
+        "cy": 0.4947916666666667,
+        "r": 0.3038575251897176
+      },
+      "sourceTransparentFraction": 0.5356746767600457,
+      "base64Length": 75000,
+      "sourcePart": 0,
+      "sourceOffset": 1174001,
+      "visualVerified": true
+    },
+    {
+      "id": 3,
+      "wersja": "V3",
+      "sourceHash": "b7c8b2a567d45695566fb8b56a5fa56e8fdf2e1a8928843519f44d2eb6855c03",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.546875,
+        "cy": 0.515625,
+        "r": 0.27621376514434814
+      },
+      "sourceTransparentFraction": 0.48044662184677295,
+      "base64Length": 94052,
+      "sourcePart": 0,
+      "sourceOffset": 1249263,
+      "visualVerified": true
+    },
+    {
+      "id": 4,
+      "wersja": "V1",
+      "sourceHash": "7f4a93f5d67a1ea4580c713012c631ce64298f021b03d0a680ba238e743f0fb4",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5130208333333334,
+        "cy": 0.6328125,
+        "r": 0.26516520977020264
+      },
+      "sourceTransparentFraction": 0.5746911319185306,
+      "base64Length": 78216,
+      "sourcePart": 0,
+      "sourceOffset": 1343559,
+      "visualVerified": true
+    },
+    {
+      "id": 4,
+      "wersja": "V2",
+      "sourceHash": "80cbb30203e25a58c1ade581acd5a3ce99328a42d744c8b9fbf1f3e8c35aabb5",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5208333333333334,
+        "cy": 0.5833333333333334,
+        "r": 0.23177083333333334
+      },
+      "sourceTransparentFraction": 0.5564846399019151,
+      "base64Length": 100476,
+      "sourcePart": 0,
+      "sourceOffset": 1422029,
+      "visualVerified": true
+    },
+    {
+      "id": 4,
+      "wersja": "V3",
+      "sourceHash": "c50e406ef6401f70702acddbcaeb20a826314eb653e3ca8176dc704632537f6e",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.484375,
+        "cy": 0.59375,
+        "r": 0.24567226568857828
+      },
+      "sourceTransparentFraction": 0.5394609657389814,
+      "base64Length": 91452,
+      "sourcePart": 0,
+      "sourceOffset": 1522768,
+      "visualVerified": true
+    },
+    {
+      "id": 5,
+      "wersja": "V1",
+      "sourceHash": "f62d1da2da64f7ad8269d35d5ea31f77aed41e3dd0e71097e627416f24c740ac",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.484375,
+        "cy": 0.6276041666666666,
+        "r": 0.2909451723098755
+      },
+      "sourceTransparentFraction": 0.6204083138104796,
+      "base64Length": 59484,
+      "sourcePart": 0,
+      "sourceOffset": 1614462,
+      "visualVerified": true
+    },
+    {
+      "id": 5,
+      "wersja": "V2",
+      "sourceHash": "56529df06acd916b8e2b0e161d2a6d435f2292ebab1cae455c9dbbf1a610dd8f",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4817708333333333,
+        "cy": 0.6354166666666666,
+        "r": 0.28125
+      },
+      "sourceTransparentFraction": 0.5665837422321935,
+      "base64Length": 63780,
+      "sourcePart": 0,
+      "sourceOffset": 1674198,
+      "visualVerified": true
+    },
+    {
+      "id": 5,
+      "wersja": "V3",
+      "sourceHash": "41c11f81a2fca58ccc47e0bc5c91db5747ea6e618fa11a5415fccf7480b33472",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4609375,
+        "cy": 0.6171875,
+        "r": 0.293824036916097
+      },
+      "sourceTransparentFraction": 0.5206401715467442,
+      "base64Length": 75220,
+      "sourcePart": 0,
+      "sourceOffset": 1738229,
+      "visualVerified": true
+    },
+    {
+      "id": 6,
+      "wersja": "V1",
+      "sourceHash": "f37c6ea95c136add9968b844e1af476db948fa3d3ba9bc4a0bf300d6fd07102b",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5260416666666666,
+        "cy": 0.4973958333333333,
+        "r": 0.25393156210581463
+      },
+      "sourceTransparentFraction": 0.606603684795576,
+      "base64Length": 75592,
+      "sourcePart": 0,
+      "sourceOffset": 1813692,
+      "visualVerified": true
+    },
+    {
+      "id": 6,
+      "wersja": "V2",
+      "sourceHash": "46ed014fc2983890f55434c36546b2cde61750ad12e68adc40aa55b29ac9202d",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5130208333333334,
+        "cy": 0.5130208333333334,
+        "r": 0.23024535179138184
+      },
+      "sourceTransparentFraction": 0.5939131938880113,
+      "base64Length": 90708,
+      "sourcePart": 0,
+      "sourceOffset": 1889546,
+      "visualVerified": true
+    },
+    {
+      "id": 6,
+      "wersja": "V3",
+      "sourceHash": "bbb00581e488556ce13858319fa93a6ead3b3a790d671c3aac0f6b96810eab43",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5390625,
+        "cy": 0.5234375,
+        "r": 0.26758428414662677
+      },
+      "sourceTransparentFraction": 0.5480637398919948,
+      "base64Length": 89656,
+      "sourcePart": 0,
+      "sourceOffset": 1980517,
+      "visualVerified": true
+    },
+    {
+      "id": 7,
+      "wersja": "V1",
+      "sourceHash": "f7244400c38f40e4632f0f80228d35ae3bac5bdd890a6d9aff9a27c07b838b08",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5026041666666666,
+        "cy": 0.5104166666666666,
+        "r": 0.3723958333333333
+      },
+      "sourceTransparentFraction": 0.5557469685523072,
+      "base64Length": 44184,
+      "sourcePart": 1,
+      "sourceOffset": 70391,
+      "visualVerified": true
+    },
+    {
+      "id": 7,
+      "wersja": "V2",
+      "sourceHash": "446df97468557fdeef9356bbaa33411cd1437d96123b3909bdb1a2d466f4e9cf",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5494791666666666,
+        "cy": 0.5677083333333334,
+        "r": 0.29679832855860394
+      },
+      "sourceTransparentFraction": 0.570948721666425,
+      "base64Length": 66736,
+      "sourcePart": 1,
+      "sourceOffset": 114837,
+      "visualVerified": true
+    },
+    {
+      "id": 7,
+      "wersja": "V3",
+      "sourceHash": "74f7ea70986707508f7fd0f65ac886082fec4e7024de6de7f3d98c26c5428ead",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5625,
+        "cy": 0.5651041666666666,
+        "r": 0.27539678414662677
+      },
+      "sourceTransparentFraction": 0.5844455636699404,
+      "base64Length": 66068,
+      "sourcePart": 1,
+      "sourceOffset": 181835,
+      "visualVerified": true
+    },
+    {
+      "id": 8,
+      "wersja": "V1",
+      "sourceHash": "9492e8983978dbfddc4d92ed0dc716131117364ed7d67abb2dc582e797938d94",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.515625,
+        "cy": 0.6875,
+        "r": 0.2614823579788208
+      },
+      "sourceTransparentFraction": 0.6932018497745015,
+      "base64Length": 51172,
+      "sourcePart": 1,
+      "sourceOffset": 248154,
+      "visualVerified": true
+    },
+    {
+      "id": 8,
+      "wersja": "V2",
+      "sourceHash": "91197142325ec23b2369ad4a5d7e42f3f653d8afe549e412d98257120c7cdd46",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5182291666666666,
+        "cy": 0.6432291666666666,
+        "r": 0.25716761747996014
+      },
+      "sourceTransparentFraction": 0.6157985037990075,
+      "base64Length": 70584,
+      "sourcePart": 1,
+      "sourceOffset": 299566,
+      "visualVerified": true
+    },
+    {
+      "id": 8,
+      "wersja": "V3",
+      "sourceHash": "3a1e82bc3439d343cc6706d9355f227acbc5f51d4898a594972b369a4aa66213",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5494791666666666,
+        "cy": 0.6458333333333334,
+        "r": 0.2504338026046753
+      },
+      "sourceTransparentFraction": 0.5672711756191988,
+      "base64Length": 85116,
+      "sourcePart": 1,
+      "sourceOffset": 370413,
+      "visualVerified": true
+    },
+    {
+      "id": 9,
+      "wersja": "V1",
+      "sourceHash": "77c52a7fa6e5f4b2011ea3d71a78ce389b8d38a55bc69c9b63d5b7fda3dbbec2",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5208333333333334,
+        "cy": 0.5,
+        "r": 0.372580885887146
+      },
+      "sourceTransparentFraction": 0.3919540405312251,
+      "base64Length": 100592,
+      "sourcePart": 1,
+      "sourceOffset": 455791,
+      "visualVerified": true
+    },
+    {
+      "id": 9,
+      "wersja": "V2",
+      "sourceHash": "2a752a85178cb4d429d1717583f9bd518e848aa2373f3fdb60fc9bca6e8d2732",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4322916666666667,
+        "cy": 0.53125,
+        "r": 0.3323631286621094
+      },
+      "sourceTransparentFraction": 0.380031109381399,
+      "base64Length": 103108,
+      "sourcePart": 1,
+      "sourceOffset": 556629,
+      "visualVerified": true
+    },
+    {
+      "id": 9,
+      "wersja": "V3",
+      "sourceHash": "e6431867b5733335b75073b63979ea433533cfb7cfccabcb0d177119bd5f214c",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5078125,
+        "cy": 0.5182291666666666,
+        "r": 0.2864453395207723
+      },
+      "sourceTransparentFraction": 0.39032035286127453,
+      "base64Length": 111344,
+      "sourcePart": 1,
+      "sourceOffset": 659987,
+      "visualVerified": true
+    },
+    {
+      "id": 10,
+      "wersja": "V1",
+      "sourceHash": "f1ba76d4f19c22e6c9f21fe5c075b07647b7c92766e9c32586714f8c918fa8e9",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5026041666666666,
+        "cy": 0.6041666666666666,
+        "r": 0.31672513484954834
+      },
+      "sourceTransparentFraction": 0.5658454349590084,
+      "base64Length": 59508,
+      "sourcePart": 1,
+      "sourceOffset": 771585,
+      "visualVerified": true
+    },
+    {
+      "id": 10,
+      "wersja": "V2",
+      "sourceHash": "fe7d5341de4f43b33c72a173c7a143458f52dec6fa3c824cd4b6913e7bd0336c",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5078125,
+        "cy": 0.5833333333333334,
+        "r": 0.34142641226450604
+      },
+      "sourceTransparentFraction": 0.5573901950759166,
+      "base64Length": 60512,
+      "sourcePart": 1,
+      "sourceOffset": 831357,
+      "visualVerified": true
+    },
+    {
+      "id": 10,
+      "wersja": "V3",
+      "sourceHash": "3e5dac1deb4d8fab249f3c3887f9a270e593f24ae92d99bd32f8933d3fe2f5ff",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.515625,
+        "cy": 0.6328125,
+        "r": 0.324090838432312
+      },
+      "sourceTransparentFraction": 0.4883581470713176,
+      "base64Length": 77368,
+      "sourcePart": 1,
+      "sourceOffset": 892124,
+      "visualVerified": true
+    },
+    {
+      "id": 11,
+      "wersja": "V1",
+      "sourceHash": "bcb6b14d2ec747e176f6f199efb3940fed0e247f86f52ad85ae008f73fea1f96",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4947916666666667,
+        "cy": 0.4921875,
+        "r": 0.3646022081375122
+      },
+      "sourceTransparentFraction": 0.5704596964355212,
+      "base64Length": 45760,
+      "sourcePart": 1,
+      "sourceOffset": 969735,
+      "visualVerified": true
+    },
+    {
+      "id": 11,
+      "wersja": "V2",
+      "sourceHash": "64c238c0e0c2c7c4cb87391103cb7c1e67fec20c33a5d796b685e3fa1a9a2bf0",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5,
+        "cy": 0.5572916666666666,
+        "r": 0.33406070868174237
+      },
+      "sourceTransparentFraction": 0.49703723205360073,
+      "base64Length": 69576,
+      "sourcePart": 1,
+      "sourceOffset": 1015749,
+      "visualVerified": true
+    },
+    {
+      "id": 11,
+      "wersja": "V3",
+      "sourceHash": "fc1fb78bc3e38b76c0301d5c2190f6aeb263f27a7ad174b651ae7e58d7565cb6",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4921875,
+        "cy": 0.5208333333333334,
+        "r": 0.3430285056432088
+      },
+      "sourceTransparentFraction": 0.3942611712694815,
+      "base64Length": 90276,
+      "sourcePart": 1,
+      "sourceOffset": 1085575,
+      "visualVerified": true
+    },
+    {
+      "id": 12,
+      "wersja": "V1",
+      "sourceHash": "e0e6743704c5a01b680ca2f359d65b090d05a089a41ddfbc36e9e7744e13c6f0",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.53125,
+        "cy": 0.6171875,
+        "r": 0.3438454866409302
+      },
+      "sourceTransparentFraction": 0.5427493265569316,
+      "base64Length": 76308,
+      "sourcePart": 1,
+      "sourceOffset": 1176105,
+      "visualVerified": true
+    },
+    {
+      "id": 12,
+      "wersja": "V2",
+      "sourceHash": "d3aa1bc01008d531f3dceef617acb329ec1b76f05a9f5864e626e9d083fe70ea",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.4973958333333333,
+        "cy": 0.6145833333333334,
+        "r": 0.3307291666666667
+      },
+      "sourceTransparentFraction": 0.4907263264729898,
+      "base64Length": 89796,
+      "sourcePart": 1,
+      "sourceOffset": 1252656,
+      "visualVerified": true
+    },
+    {
+      "id": 12,
+      "wersja": "V3",
+      "sourceHash": "7748888969cf11724e705d65bb72d1b8cdf72dc925553b638f625d255be5148a",
+      "width": 384,
+      "height": 384,
+      "anchor": {
+        "cx": 0.5104166666666666,
+        "cy": 0.5885416666666666,
+        "r": 0.364493727684021
+      },
+      "sourceTransparentFraction": 0.460224888013858,
+      "base64Length": 95912,
+      "sourcePart": 1,
+      "sourceOffset": 1342715,
+      "visualVerified": true
+    }
+  ]
+}
