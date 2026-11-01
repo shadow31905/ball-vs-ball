@@ -1,0 +1,437 @@
+{
+  "sourceBranch": "main",
+  "sourceCommit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
+  "sourceFile": "rework/game-10.txt to rework/game-12.txt",
+  "atlasVariable": "BVB_APPEARANCE_ATLASES[0]",
+  "atlasMime": "image/png",
+  "atlasDimensions": [
+    941,
+    1704
+  ],
+  "atlasBase64Length": 4085056,
+  "atlasFnv1aBase64": "b043d95d",
+  "runtimeSource": "Appearance-only atlas renderer in rework/game-14.txt",
+  "verification": "Plansza zawierająca wszystkie 30 sylwetek V1–V3 ID 16–25 została wyświetlona i obejrzana; osobne końcowe przycięcia i kluczowanie tła przez Canvas nie zostały jeszcze wyświetlone.",
+  "records": [
+    {
+      "id": 16,
+      "tier": 1,
+      "sourceRect": [
+        35,
+        182,
+        137,
+        116
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 16,
+      "tier": 2,
+      "sourceRect": [
+        178,
+        182,
+        133,
+        116
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 16,
+      "tier": 3,
+      "sourceRect": [
+        316,
+        182,
+        140,
+        116
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 17,
+      "tier": 1,
+      "sourceRect": [
+        493,
+        182,
+        135,
+        116
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 17,
+      "tier": 2,
+      "sourceRect": [
+        634,
+        182,
+        140,
+        116
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 17,
+      "tier": 3,
+      "sourceRect": [
+        778,
+        182,
+        136,
+        116
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 18,
+      "tier": 1,
+      "sourceRect": [
+        35,
+        495,
+        137,
+        120
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 18,
+      "tier": 2,
+      "sourceRect": [
+        178,
+        495,
+        133,
+        120
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 18,
+      "tier": 3,
+      "sourceRect": [
+        316,
+        495,
+        140,
+        120
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 19,
+      "tier": 1,
+      "sourceRect": [
+        493,
+        495,
+        135,
+        120
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 19,
+      "tier": 2,
+      "sourceRect": [
+        634,
+        495,
+        140,
+        120
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 19,
+      "tier": 3,
+      "sourceRect": [
+        778,
+        495,
+        136,
+        120
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 20,
+      "tier": 1,
+      "sourceRect": [
+        35,
+        822,
+        137,
+        124
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 20,
+      "tier": 2,
+      "sourceRect": [
+        178,
+        822,
+        133,
+        124
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 20,
+      "tier": 3,
+      "sourceRect": [
+        316,
+        822,
+        140,
+        124
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 21,
+      "tier": 1,
+      "sourceRect": [
+        493,
+        822,
+        135,
+        124
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 21,
+      "tier": 2,
+      "sourceRect": [
+        634,
+        822,
+        140,
+        124
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 21,
+      "tier": 3,
+      "sourceRect": [
+        778,
+        822,
+        136,
+        124
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 22,
+      "tier": 1,
+      "sourceRect": [
+        35,
+        1150,
+        137,
+        114
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 22,
+      "tier": 2,
+      "sourceRect": [
+        178,
+        1150,
+        133,
+        114
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 22,
+      "tier": 3,
+      "sourceRect": [
+        316,
+        1150,
+        140,
+        114
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 23,
+      "tier": 1,
+      "sourceRect": [
+        493,
+        1150,
+        135,
+        114
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 23,
+      "tier": 2,
+      "sourceRect": [
+        634,
+        1150,
+        140,
+        114
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 23,
+      "tier": 3,
+      "sourceRect": [
+        778,
+        1150,
+        136,
+        114
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 24,
+      "tier": 1,
+      "sourceRect": [
+        35,
+        1448,
+        137,
+        97
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 24,
+      "tier": 2,
+      "sourceRect": [
+        178,
+        1448,
+        133,
+        97
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 24,
+      "tier": 3,
+      "sourceRect": [
+        316,
+        1448,
+        140,
+        97
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    },
+    {
+      "id": 25,
+      "tier": 1,
+      "sourceRect": [
+        493,
+        1448,
+        135,
+        97
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V1 Z GRY"
+    },
+    {
+      "id": 25,
+      "tier": 2,
+      "sourceRect": [
+        634,
+        1448,
+        140,
+        97
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V2 PROPOZYCJA"
+    },
+    {
+      "id": 25,
+      "tier": 3,
+      "sourceRect": [
+        778,
+        1448,
+        136,
+        97
+      ],
+      "atlasVisualInspected": true,
+      "individualRuntimeCropVerified": false,
+      "renderedAs": "PNG crop with background keyed to transparency, scaled to 256x256",
+      "labelOnAtlas": "V3 PROPOZYCJA"
+    }
+  ]
+}
