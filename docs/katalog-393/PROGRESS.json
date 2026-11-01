@@ -17,22 +17,34 @@
     9,
     10,
     11,
-    12
-  ],
-  "verifiedVariants": 39,
-  "describedVariants": 39,
-  "remainingVariants": 354,
-  "completedDescriptionFiles": [
-    "opisy/000-006.md",
-    "opisy/007-012.md"
-  ],
-  "evidenceFiles": [
-    "evidence/000-012.json"
-  ],
-  "nextIds": [
+    12,
     13,
     14,
     15
+  ],
+  "verifiedVariants": 48,
+  "describedVariants": 48,
+  "remainingVariants": 345,
+  "completedDescriptionFiles": [
+    "opisy/000-006.md",
+    "opisy/007-012.md",
+    "opisy/013-015.md"
+  ],
+  "evidenceFiles": [
+    "evidence/000-012.json",
+    "evidence/013-015.json"
+  ],
+  "nextIds": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
   ],
   "status": "IN_PROGRESS",
   "noUserNotificationBeforeComplete": true
