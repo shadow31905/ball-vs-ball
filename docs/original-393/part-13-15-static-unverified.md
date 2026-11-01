@@ -1,3 +1,7 @@
+# HISTORYCZNA IKONA ZASTĘPCZA — NIE UŻYWAĆ DO ODTWARZANIA PEŁNYCH WYGLĄDÓW
+
+**SPROSTOWANIE:** odnaleziono i wizualnie zweryfikowano prawdziwe obrazy WebP ID 13–15 V1/V2/V3 w `rework/game-14.txt`–`game-15.txt`. **Aktualny właściwy opis znajduje się w `part-13-15.md`.** Poniższy tekst zachowano jedynie jako dokumentację starej funkcji `art(id)` i NIE jest źródłem oryginalnych pełnych portretów.
+
 # ID 13–15 — oryginalne statyczne ikony SVG, NIE zweryfikowane trzy warianty walki
 
 **Źródło:** `main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`, `rework/game-0.txt`, funkcja `art(id)`. **Trzy ikony zostały rzeczywiście wyrenderowane z oryginalnego kodu SVG i obejrzane**, ale **NIE potwierdzono pełnych wyglądów w walce dla V1/V2/V3**. Funkcja `art(id)` nie przyjmuje poziomu ewolucji; zwraca ten sam statyczny SVG dla każdego z tych ID. Osobny silnik animacji `BVBFirstSixteen` może rysować dodatkowe elementy zależne od poziomu — dopóki nie zostaną obejrzane wszystkie trzy stany w prawdziwym rendererze, **nie wolno oznaczać tych 9 wariantów jako w pełni wizualnie zweryfikowanych**.
