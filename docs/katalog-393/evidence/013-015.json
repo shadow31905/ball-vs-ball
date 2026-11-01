@@ -1,0 +1,103 @@
+{
+  "sourceBranch": "main",
+  "sourceCommit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
+  "sourceFiles": [
+    "rework/game-14.txt",
+    "rework/game-15.txt"
+  ],
+  "embeddedCollection": "const BVB_PAINTED1315",
+  "renderer": "window.BVBPainted1315",
+  "verification": "Każdy z 9 obrazów WebP dla ID 13–15 V1–V3 został rzeczywiście wyświetlony i obejrzany; fingerprintFnv1aBase64 jest kontrolną sumą ciągu base64, nie SHA obrazu.",
+  "records": [
+    {
+      "id": 13,
+      "tier": 1,
+      "format": "image/webp",
+      "base64Length": 124600,
+      "fingerprintFnv1aBase64": "2812bc18",
+      "sourcePart": 14,
+      "sourceOffset": 869799,
+      "visualVerified": true
+    },
+    {
+      "id": 13,
+      "tier": 2,
+      "format": "image/webp",
+      "base64Length": 155932,
+      "fingerprintFnv1aBase64": "e8b90a21",
+      "sourcePart": 14,
+      "sourceOffset": 994432,
+      "visualVerified": true
+    },
+    {
+      "id": 13,
+      "tier": 3,
+      "format": "image/webp",
+      "base64Length": 176112,
+      "fingerprintFnv1aBase64": "4cff916d",
+      "sourcePart": 14,
+      "sourceOffset": 1150397,
+      "visualVerified": true
+    },
+    {
+      "id": 14,
+      "tier": 1,
+      "format": "image/webp",
+      "base64Length": 126632,
+      "fingerprintFnv1aBase64": "34f3c88c",
+      "sourcePart": 14,
+      "sourceOffset": 1326542,
+      "visualVerified": true
+    },
+    {
+      "id": 14,
+      "tier": 2,
+      "format": "image/webp",
+      "base64Length": 181652,
+      "fingerprintFnv1aBase64": "f3310ce6",
+      "sourcePart": 14,
+      "sourceOffset": 1453207,
+      "visualVerified": true
+    },
+    {
+      "id": 14,
+      "tier": 3,
+      "format": "image/webp",
+      "base64Length": 198792,
+      "fingerprintFnv1aBase64": "d1595feb",
+      "sourcePart": 14,
+      "sourceOffset": 1634892,
+      "visualVerified": true
+    },
+    {
+      "id": 15,
+      "tier": 1,
+      "format": "image/webp",
+      "base64Length": 132952,
+      "fingerprintFnv1aBase64": "e079955b",
+      "sourcePart": 14,
+      "sourceOffset": 1833717,
+      "visualVerified": true
+    },
+    {
+      "id": 15,
+      "tier": 2,
+      "format": "image/webp",
+      "base64Length": 190128,
+      "fingerprintFnv1aBase64": "5633c501",
+      "sourcePart": 14,
+      "sourceOffset": 1966702,
+      "visualVerified": true
+    },
+    {
+      "id": 15,
+      "tier": 3,
+      "format": "image/webp",
+      "base64Length": 180536,
+      "fingerprintFnv1aBase64": "7c83b36b",
+      "sourcePart": 15,
+      "sourceOffset": 156863,
+      "visualVerified": true
+    }
+  ]
+}
