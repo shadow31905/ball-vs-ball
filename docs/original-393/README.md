@@ -1,12 +1,12 @@
 # Oryginalna gra Ball VS Ball 2.0 — katalog 393 wyglądów
 
-**Status: W TRAKCIE.** Zweryfikowano wizualnie **186 z 393 portretów** (ID 0–12 oraz ID 16–64, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 207 wariantów.
+**Status: W TRAKCIE.** Zweryfikowano wizualnie **189 z 393 portretów** (ID 0–12, ID 16–64 oraz Trebusz ID 130, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 204 wariantów.
 
 ## Ustalenie autentycznego źródła
 
 Repozytorium: `shadow31905/ball-vs-ball`. Punkt odniesienia: **`main`, commit `1de7d74870192bb45896cb5b1e0ecd891aafd5dd`** (1 listopada 2026). Publiczny `index.html` na komputerze lub przy `?full=1` uruchamia `bvb-loader.js`, który składa oryginalną pełną grę z **32 fragmentów** `rework/game-0.txt` … `rework/game-31.txt`. Dla telefonów bez `?full=1` `index.html` przekierowuje do lekkiej wersji `index-safe.html`; jej ikony nie są źródłem pełnych portretów. Nie używać obrazów z gałęzi `beta` zamiast portretów z `main`.
 
-W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpisów, ID 0–130**, w tym `Trebusz` jako ID 130. Oczekiwany komplet to **393 ewolucje**, nie 390. To **potwierdza obecność nazwy i indeksu Trebusza w pełnej wersji**, ale jego trzy obrazy muszą jeszcze zostać oddzielnie zweryfikowane wizualnie.
+W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpisów, ID 0–130**, w tym `Trebusz` jako ID 130. Oczekiwany komplet to **393 ewolucje**, nie 390. **Potwierdzono obecność i rzeczywiście obejrzano wszystkie trzy obrazy Trebusza (ID 130) z `rework/game-31.txt`**; opis w `part-130-trebusz.md`.
 
 ## Pochodzenie obrazów
 
@@ -29,6 +29,7 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 - `part-45-51.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-52-57.md`: **18** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-58-64.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
+- `part-130-trebusz.md`: **3** opisy V1/V2/V3, wszystkie obejrzane.
 
 ## Metoda tworzenia opisów
 
