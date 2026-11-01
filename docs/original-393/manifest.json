@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 237,
+  "verified_variants": 276,
   "expected_variants": 393,
   "records": [
     {
@@ -2126,352 +2126,352 @@
       "id": 78,
       "name": "Kwant",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"78:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 78,
       "name": "Kwant",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"78:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 78,
       "name": "Kwant",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"78:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 79,
       "name": "Atom",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"79:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 79,
       "name": "Atom",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"79:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 79,
       "name": "Atom",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"79:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 80,
       "name": "Proton",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"80:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 80,
       "name": "Proton",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"80:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 80,
       "name": "Proton",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"80:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 81,
       "name": "Neutron",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"81:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 81,
       "name": "Neutron",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"81:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 81,
       "name": "Neutron",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"81:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 82,
       "name": "Elektron",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"82:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 82,
       "name": "Elektron",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"82:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 82,
       "name": "Elektron",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"82:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 83,
       "name": "Iskra",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"83:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 83,
       "name": "Iskra",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"83:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 83,
       "name": "Iskra",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"83:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 84,
       "name": "Piekło",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"84:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 84,
       "name": "Piekło",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"84:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 84,
       "name": "Piekło",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"84:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-78-84.md"
     },
     {
       "id": 85,
       "name": "Tsunami",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"85:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 85,
       "name": "Tsunami",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"85:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 85,
       "name": "Tsunami",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"85:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 86,
       "name": "Wstrząs",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"86:1\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 86,
       "name": "Wstrząs",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"86:2\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 86,
       "name": "Wstrząs",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"86:3\" in rework/game-17.txt..game-19.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 87,
       "name": "Nawałnica",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"87_V1\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 87,
       "name": "Nawałnica",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"87_V2\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 87,
       "name": "Nawałnica",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"87_V3\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 88,
       "name": "Zamieć",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"88_V1\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 88,
       "name": "Zamieć",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"88_V2\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 88,
       "name": "Zamieć",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"88_V3\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 89,
       "name": "Miraż",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"89_V1\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 89,
       "name": "Miraż",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"89_V2\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 89,
       "name": "Miraż",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"89_V3\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 90,
       "name": "Widmo",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"90_V1\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 90,
       "name": "Widmo",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"90_V2\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 90,
       "name": "Widmo",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"90_V3\" in rework/game-19.txt..game-21.txt",
+      "description_file": "part-85-90.md"
     },
     {
       "id": 91,
