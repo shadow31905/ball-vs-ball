@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 198,
+  "verified_variants": 237,
   "expected_variants": 393,
   "records": [
     {
@@ -1775,352 +1775,352 @@
       "id": 65,
       "name": "Grawitacja",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"65:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 65,
       "name": "Grawitacja",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"65:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 65,
       "name": "Grawitacja",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"65:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 66,
       "name": "Kotwica",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"66:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 66,
       "name": "Kotwica",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"66:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 66,
       "name": "Kotwica",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"66:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 67,
       "name": "Lustro",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"67:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 67,
       "name": "Lustro",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"67:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 67,
       "name": "Lustro",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"67:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 68,
       "name": "Pustka",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"68:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 68,
       "name": "Pustka",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"68:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 68,
       "name": "Pustka",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"68:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 69,
       "name": "Słońce",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"69:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 69,
       "name": "Słońce",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"69:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 69,
       "name": "Słońce",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"69:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 70,
       "name": "Księżyc",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"70:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 70,
       "name": "Księżyc",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"70:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 70,
       "name": "Księżyc",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"70:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-65-70.md"
     },
     {
       "id": 71,
       "name": "Zaćmienie",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"71:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 71,
       "name": "Zaćmienie",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"71:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 71,
       "name": "Zaćmienie",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"71:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 72,
       "name": "Supernowa",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"72:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 72,
       "name": "Supernowa",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"72:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 72,
       "name": "Supernowa",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"72:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 73,
       "name": "Mgławica",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"73:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 73,
       "name": "Mgławica",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"73:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 73,
       "name": "Mgławica",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"73:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 74,
       "name": "Pulsar",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"74:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 74,
       "name": "Pulsar",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"74:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 74,
       "name": "Pulsar",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"74:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 75,
       "name": "Kwazar",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"75:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 75,
       "name": "Kwazar",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"75:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 75,
       "name": "Kwazar",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"75:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 76,
       "name": "Kometa",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"76:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 76,
       "name": "Kometa",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"76:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 76,
       "name": "Kometa",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"76:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 77,
       "name": "Asteroida",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"77:1\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 77,
       "name": "Asteroida",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"77:2\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 77,
       "name": "Asteroida",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"77:3\" in rework/game-15.txt..game-17.txt",
+      "description_file": "part-71-77.md"
     },
     {
       "id": 78,
