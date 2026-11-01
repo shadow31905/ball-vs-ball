@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 78,
+  "verified_variants": 117,
   "expected_variants": 393,
   "records": [
     {
@@ -1064,352 +1064,352 @@
       "id": 39,
       "name": "Kajdany",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"39:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 39,
       "name": "Kajdany",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"39:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 39,
       "name": "Kajdany",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"39:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 40,
       "name": "Kwas",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"40:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 40,
       "name": "Kwas",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"40:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 40,
       "name": "Kwas",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"40:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 41,
       "name": "Promień Świetlny",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"41:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 41,
       "name": "Promień Świetlny",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"41:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 41,
       "name": "Promień Świetlny",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"41:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 42,
       "name": "Trujący Gaz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"42:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 42,
       "name": "Trujący Gaz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"42:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 42,
       "name": "Trujący Gaz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"42:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 43,
       "name": "Shuriken",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"43:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 43,
       "name": "Shuriken",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"43:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 43,
       "name": "Shuriken",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"43:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 44,
       "name": "Fibonacci",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"44:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 44,
       "name": "Fibonacci",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"44:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 44,
       "name": "Fibonacci",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"44:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-39-44.md"
     },
     {
       "id": 45,
       "name": "Kaktus",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"45:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 45,
       "name": "Kaktus",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"45:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 45,
       "name": "Kaktus",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"45:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 46,
       "name": "Bomba",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"46:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 46,
       "name": "Bomba",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"46:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 46,
       "name": "Bomba",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"46:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 47,
       "name": "Orbita",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"47:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 47,
       "name": "Orbita",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"47:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 47,
       "name": "Orbita",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"47:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 48,
       "name": "Medyk",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"48:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 48,
       "name": "Medyk",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"48:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 48,
       "name": "Medyk",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"48:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 49,
       "name": "Prawda",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"49:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 49,
       "name": "Prawda",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"49:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 49,
       "name": "Prawda",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"49:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 50,
       "name": "Szkło",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"50:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 50,
       "name": "Szkło",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"50:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 50,
       "name": "Szkło",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"50:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 51,
       "name": "Portal",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"51:1\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 51,
       "name": "Portal",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"51:2\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 51,
       "name": "Portal",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"51:3\" in rework/game-2.txt..game-5.txt",
+      "description_file": "part-45-51.md"
     },
     {
       "id": 52,
