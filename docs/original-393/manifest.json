@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 276,
+  "verified_variants": 315,
   "expected_variants": 393,
   "records": [
     {
@@ -2477,352 +2477,352 @@
       "id": 91,
       "name": "Upiór",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"91_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 91,
       "name": "Upiór",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"91_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 91,
       "name": "Upiór",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"91_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 92,
       "name": "Zjawa",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"92_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 92,
       "name": "Zjawa",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"92_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 92,
       "name": "Zjawa",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"92_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 93,
       "name": "Kosiarz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"93_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 93,
       "name": "Kosiarz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"93_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 93,
       "name": "Kosiarz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"93_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 94,
       "name": "Zagłada",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"94_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 94,
       "name": "Zagłada",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"94_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 94,
       "name": "Zagłada",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"94_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 95,
       "name": "Chaos",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"95_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 95,
       "name": "Chaos",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"95_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 95,
       "name": "Chaos",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"95_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 96,
       "name": "Porządek",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"96_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 96,
       "name": "Porządek",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"96_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 96,
       "name": "Porządek",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"96_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 97,
       "name": "Feniks",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"97_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 97,
       "name": "Feniks",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"97_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 97,
       "name": "Feniks",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"97_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-91-97.md"
     },
     {
       "id": 98,
       "name": "Kraken",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"98_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 98,
       "name": "Kraken",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"98_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 98,
       "name": "Kraken",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"98_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 99,
       "name": "Król Dyń",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"99_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 99,
       "name": "Król Dyń",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"99_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 99,
       "name": "Król Dyń",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"99_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 100,
       "name": "🎃 Wiedźma",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"100_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 100,
       "name": "🎃 Wiedźma",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"100_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 100,
       "name": "🎃 Wiedźma",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"100_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 101,
       "name": "🎃 Kocioł",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"101_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 101,
       "name": "🎃 Kocioł",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"101_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 101,
       "name": "🎃 Kocioł",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"101_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 102,
       "name": "🎃 Czarny Kot",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"102_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 102,
       "name": "🎃 Czarny Kot",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"102_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 102,
       "name": "🎃 Czarny Kot",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"102_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 103,
       "name": "🎃 Nietoperz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"103_V1\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 103,
       "name": "🎃 Nietoperz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"103_V2\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 103,
       "name": "🎃 Nietoperz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"103_V3\" in rework/game-20.txt..game-24.txt",
+      "description_file": "part-98-103.md"
     },
     {
       "id": 104,
