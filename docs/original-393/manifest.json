@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 354,
+  "verified_variants": 393,
   "expected_variants": 393,
   "records": [
     {
@@ -3179,352 +3179,352 @@
       "id": 117,
       "name": "🎃 Pająk Wdowa",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"117:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 117,
       "name": "🎃 Pająk Wdowa",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"117:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 117,
       "name": "🎃 Pająk Wdowa",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"117:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 118,
       "name": "🎃 Jeździec Bez Głowy",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"118:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 118,
       "name": "🎃 Jeździec Bez Głowy",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"118:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 118,
       "name": "🎃 Jeździec Bez Głowy",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"118:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 119,
       "name": "🎃 Żniwiarz Dusz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"119:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 119,
       "name": "🎃 Żniwiarz Dusz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"119:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 119,
       "name": "🎃 Żniwiarz Dusz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"119:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 120,
       "name": "🎃 Dzwon Północy",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"120:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 120,
       "name": "🎃 Dzwon Północy",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"120:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 120,
       "name": "🎃 Dzwon Północy",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"120:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 121,
       "name": "🎃 Lodowy Upiór",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"121:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 121,
       "name": "🎃 Lodowy Upiór",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"121:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 121,
       "name": "🎃 Lodowy Upiór",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"121:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 122,
       "name": "🎃 Królowa Kruków",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"122:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 122,
       "name": "🎃 Królowa Kruków",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"122:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 122,
       "name": "🎃 Królowa Kruków",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"122:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-117-122.md"
     },
     {
       "id": 123,
       "name": "🎃 Zgniła Dynia",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"123:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 123,
       "name": "🎃 Zgniła Dynia",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"123:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 123,
       "name": "🎃 Zgniła Dynia",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"123:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 124,
       "name": "🎃 Widmowy Rycerz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"124:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 124,
       "name": "🎃 Widmowy Rycerz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"124:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 124,
       "name": "🎃 Widmowy Rycerz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"124:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 125,
       "name": "🎃 Cukierkowy Koszmar",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"125:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 125,
       "name": "🎃 Cukierkowy Koszmar",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"125:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 125,
       "name": "🎃 Cukierkowy Koszmar",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"125:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 126,
       "name": "🎃 Księżycowy Nietoperz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"126:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 126,
       "name": "🎃 Księżycowy Nietoperz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"126:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 126,
       "name": "🎃 Księżycowy Nietoperz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"126:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 127,
       "name": "🎃 Grobowy Alchemik",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"127:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 127,
       "name": "🎃 Grobowy Alchemik",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"127:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 127,
       "name": "🎃 Grobowy Alchemik",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"127:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 128,
       "name": "🎃 Płacząca Marionetka",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"128:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 128,
       "name": "🎃 Płacząca Marionetka",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"128:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 128,
       "name": "🎃 Płacząca Marionetka",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"128:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 129,
       "name": "🎃 Kryształ Zaświatów",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"129:1\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 129,
       "name": "🎃 Kryształ Zaświatów",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"129:2\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 129,
       "name": "🎃 Kryształ Zaświatów",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"129:3\" in rework/game-27.txt..game-31.txt",
+      "description_file": "part-123-129.md"
     },
     {
       "id": 130,
