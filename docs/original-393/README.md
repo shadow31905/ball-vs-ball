@@ -1,6 +1,6 @@
 # Oryginalna gra Ball VS Ball 2.0 — katalog 393 wyglądów
 
-**Status: W TRAKCIE.** Zweryfikowano wizualnie **276 z 393 portretów** (ID 0–90 oraz Trebusz ID 130, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 117 wariantów.
+**Status: W TRAKCIE.** Zweryfikowano wizualnie **315 z 393 portretów** (ID 0–103 oraz Trebusz ID 130, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 78 wariantów.
 
 ## Ustalenie autentycznego źródła
 
@@ -14,7 +14,7 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 - **ID 13–15:** pełne, rzeczywiste obrazy WebP V1/V2/V3 znalezione w `game-14.txt`–`game-15.txt` i wszystkie **9 obejrzane**. Stara funkcja `art(id)` zawiera jedynie uproszczone ikony zastępcze, których **nie używać** jako referencji pełnych portretów; `part-13-15.md`.
 - **ID 16–25:** osadzone oryginalne PNG z kluczami `"<id>:<tier>"` w `game-7.txt`–`game-10.txt`; wszystkie 30 obejrzane.
 - **ID 26–38:** osadzona tablica 39 obrazów WebP `frameData` w `game-1.txt` i `game-2.txt`, indeks `(id-26)*3+(tier-1)`. Wszystkie 39 obrazów obejrzane.
-- **ID 39–86:** oryginalne obrazy PNG z kluczami `"<id>:<tier>"`; wszystkie 144 obejrzane. **ID 87–90:** oryginalne PNG z kluczami `"<id>_V<tier>"` w `PARTY87_ART`; wszystkie 12 obejrzane. **ID 91–129:** obrazy jeszcze do sprawdzenia. ID 130 (Trebusz) zweryfikowany osobno.
+- **ID 39–86:** oryginalne obrazy PNG z kluczami `"<id>:<tier>"`; wszystkie 144 obejrzane. **ID 87–103:** oryginalne PNG z kluczami `"<id>_V<tier>"` w `PARTY87_ART`; wszystkie 51 obejrzane. **ID 104–129:** obrazy jeszcze do sprawdzenia. ID 130 (Trebusz) zweryfikowany osobno.
 - Wszystkie portrety **muszą być faktycznie wyświetlone i obejrzane** przed nadaniem statusu `verified_visually: true`. Samo istnienie base64 lub kodu to za mało.
 
 ## Dokumenty
@@ -36,6 +36,8 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 - `part-71-77.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-78-84.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-85-90.md`: **18** opisów V1/V2/V3, wszystkie obejrzane.
+- `part-91-97.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
+- `part-98-103.md`: **18** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-130-trebusz.md`: **3** opisy V1/V2/V3, wszystkie obejrzane.
 
 ## Metoda tworzenia opisów
