@@ -364,8 +364,9 @@
       "tier": 1,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(13) in rework/game-0.txt; V1 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 13,
@@ -373,8 +374,9 @@
       "tier": 2,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(13) in rework/game-0.txt; V2 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 13,
@@ -382,8 +384,9 @@
       "tier": 3,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(13) in rework/game-0.txt; V3 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 14,
@@ -391,8 +394,9 @@
       "tier": 1,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(14) in rework/game-0.txt; V1 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 14,
@@ -400,8 +404,9 @@
       "tier": 2,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(14) in rework/game-0.txt; V2 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 14,
@@ -409,8 +414,9 @@
       "tier": 3,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(14) in rework/game-0.txt; V3 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 15,
@@ -418,8 +424,9 @@
       "tier": 1,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(15) in rework/game-0.txt; V1 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 15,
@@ -427,8 +434,9 @@
       "tier": 2,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(15) in rework/game-0.txt; V2 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 15,
@@ -436,8 +444,9 @@
       "tier": 3,
       "verified_visually": false,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Static fallback SVG art(15) in rework/game-0.txt; V3 combat portrait not independently visually verified",
+      "description_file": "part-13-15-static-unverified.md",
+      "static_icon_visual_verified": true
     },
     {
       "id": 16,
