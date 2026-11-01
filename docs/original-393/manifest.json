@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 315,
+  "verified_variants": 354,
   "expected_variants": 393,
   "records": [
     {
@@ -2828,352 +2828,352 @@
       "id": 104,
       "name": "🎃 Zombie",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"104_V1\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 104,
       "name": "🎃 Zombie",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"104_V2\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 104,
       "name": "🎃 Zombie",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"104_V3\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 105,
       "name": "🎃 Voodoo",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"105_V1\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 105,
       "name": "🎃 Voodoo",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"105_V2\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 105,
       "name": "🎃 Voodoo",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"105_V3\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 106,
       "name": "🎃 Strach na Wróble",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"106_V1\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 106,
       "name": "🎃 Strach na Wróble",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"106_V2\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 106,
       "name": "🎃 Strach na Wróble",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"106_V3\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 107,
       "name": "🎃 Ognik",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"107_V1\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 107,
       "name": "🎃 Ognik",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"107_V2\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 107,
       "name": "🎃 Ognik",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"107_V3\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 108,
       "name": "🎃 Wilkołak",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"108_V1\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 108,
       "name": "🎃 Wilkołak",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"108_V2\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 108,
       "name": "🎃 Wilkołak",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG PARTY87_ART key \"108_V3\" in rework/game-23.txt..game-25.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 109,
       "name": "🎃 Banshee",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"109:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 109,
       "name": "🎃 Banshee",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"109:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 109,
       "name": "🎃 Banshee",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"109:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 110,
       "name": "🎃 Golem Cmentarny",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"110:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 110,
       "name": "🎃 Golem Cmentarny",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"110:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 110,
       "name": "🎃 Golem Cmentarny",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"110:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-104-110.md"
     },
     {
       "id": 111,
       "name": "🎃 Krwawy Księżyc",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"111:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 111,
       "name": "🎃 Krwawy Księżyc",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"111:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 111,
       "name": "🎃 Krwawy Księżyc",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"111:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 112,
       "name": "🎃 Duch Latarni",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"112:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 112,
       "name": "🎃 Duch Latarni",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"112:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 112,
       "name": "🎃 Duch Latarni",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"112:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 113,
       "name": "🎃 Mumia",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"113:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 113,
       "name": "🎃 Mumia",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"113:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 113,
       "name": "🎃 Mumia",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"113:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 114,
       "name": "🎃 Gargulec",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"114:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 114,
       "name": "🎃 Gargulec",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"114:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 114,
       "name": "🎃 Gargulec",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"114:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 115,
       "name": "🎃 Nekromanta",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"115:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 115,
       "name": "🎃 Nekromanta",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"115:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 115,
       "name": "🎃 Nekromanta",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"115:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 116,
       "name": "🎃 Przeklęte Lustro",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"116:1\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 116,
       "name": "🎃 Przeklęte Lustro",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"116:2\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 116,
       "name": "🎃 Przeklęte Lustro",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"116:3\" in rework/game-25.txt..game-27.txt",
+      "description_file": "part-111-116.md"
     },
     {
       "id": 117,
