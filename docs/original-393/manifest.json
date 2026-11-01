@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 147,
+  "verified_variants": 186,
   "expected_variants": 393,
   "records": [
     {
@@ -1415,352 +1415,352 @@
       "id": 52,
       "name": "Tarcza",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"52:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 52,
       "name": "Tarcza",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"52:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 52,
       "name": "Tarcza",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"52:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 53,
       "name": "Magik",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"53:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 53,
       "name": "Magik",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"53:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 53,
       "name": "Magik",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"53:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 54,
       "name": "Chronos",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"54:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 54,
       "name": "Chronos",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"54:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 54,
       "name": "Chronos",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"54:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 55,
       "name": "Ninja",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"55:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 55,
       "name": "Ninja",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"55:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 55,
       "name": "Ninja",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"55:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 56,
       "name": "Pirat",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"56:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 56,
       "name": "Pirat",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"56:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 56,
       "name": "Pirat",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"56:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 57,
       "name": "Górnik",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"57:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 57,
       "name": "Górnik",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"57:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 57,
       "name": "Górnik",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"57:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-52-57.md"
     },
     {
       "id": 58,
       "name": "Szeryf",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"58:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 58,
       "name": "Szeryf",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"58:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 58,
       "name": "Szeryf",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"58:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 59,
       "name": "Magma",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"59:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 59,
       "name": "Magma",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"59:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 59,
       "name": "Magma",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"59:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 60,
       "name": "Plazma",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"60:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 60,
       "name": "Plazma",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"60:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 60,
       "name": "Plazma",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"60:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 61,
       "name": "Meteor",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"61:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 61,
       "name": "Meteor",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"61:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 61,
       "name": "Meteor",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"61:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 62,
       "name": "Cyklon",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"62:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 62,
       "name": "Cyklon",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"62:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 62,
       "name": "Cyklon",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"62:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 63,
       "name": "Pryzmat",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"63:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 63,
       "name": "Pryzmat",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"63:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 63,
       "name": "Pryzmat",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"63:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 64,
       "name": "Echo",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"64:1\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 64,
       "name": "Echo",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"64:2\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 64,
       "name": "Echo",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"64:3\" in rework/game-5.txt..game-7.txt",
+      "description_file": "part-58-64.md"
     },
     {
       "id": 65,
