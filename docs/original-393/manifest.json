@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 117,
+  "verified_variants": 147,
   "expected_variants": 393,
   "records": [
     {
@@ -443,271 +443,271 @@
       "id": 16,
       "name": "Przekuwacz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"16:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 16,
       "name": "Przekuwacz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"16:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 16,
       "name": "Przekuwacz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"16:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 17,
       "name": "Komórka",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"17:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 17,
       "name": "Komórka",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"17:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 17,
       "name": "Komórka",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"17:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 18,
       "name": "Elektryk",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"18:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 18,
       "name": "Elektryk",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"18:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 18,
       "name": "Elektryk",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"18:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 19,
       "name": "Strefa",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"19:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 19,
       "name": "Strefa",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"19:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 19,
       "name": "Strefa",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"19:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 20,
       "name": "Promień",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"20:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 20,
       "name": "Promień",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"20:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 20,
       "name": "Promień",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"20:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-16-20.md"
     },
     {
       "id": 21,
       "name": "WDC",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"21:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 21,
       "name": "WDC",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"21:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 21,
       "name": "WDC",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"21:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 22,
       "name": "Jabłko",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"22:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 22,
       "name": "Jabłko",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"22:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 22,
       "name": "Jabłko",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"22:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 23,
       "name": "Armata",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"23:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 23,
       "name": "Armata",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"23:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 23,
       "name": "Armata",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"23:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 24,
       "name": "Wirus",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"24:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 24,
       "name": "Wirus",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"24:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 24,
       "name": "Wirus",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"24:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 25,
       "name": "Wielki Kolec",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"25:1\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 25,
       "name": "Wielki Kolec",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"25:2\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 25,
       "name": "Wielki Kolec",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "Original embedded PNG key \"25:3\" in rework/game-7.txt..game-10.txt",
+      "description_file": "part-21-25.md"
     },
     {
       "id": 26,
