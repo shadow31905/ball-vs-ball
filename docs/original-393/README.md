@@ -1,6 +1,6 @@
 # Oryginalna gra Ball VS Ball 2.0 — katalog 393 wyglądów
 
-**Status: W TRAKCIE.** Zweryfikowano wizualnie **189 z 393 portretów** (ID 0–12, ID 16–64 oraz Trebusz ID 130, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 204 wariantów.
+**Status: W TRAKCIE.** Zweryfikowano wizualnie **198 z 393 portretów** (ID 0–64 oraz Trebusz ID 130, V1/V2/V3). **Nie publikować jako katalog kompletny** do czasu ukończenia pozostałych 195 wariantów.
 
 ## Ustalenie autentycznego źródła
 
@@ -11,7 +11,7 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 ## Pochodzenie obrazów
 
 - **ID 0–15:** osadzona w HTML tablica `window.BVBBatch01Frames` — oryginalne portrety WebP, każdy opisany `id`, `tier`, `sourceHash`, `width`, `height`, `anchor`, `data`. Fragmenty zaczynają się w `game-0.txt` i przechodzą przez `game-1.txt`.
-- **ID 13–15:** oryginalna funkcja `art(id)` generuje te same statyczne SVG niezależnie od poziomu. Trzy ikony wyrenderowano i obejrzano, ale **dziewięć wariantów walki V1/V2/V3 pozostaje niezweryfikowanych**; `part-13-15-static-unverified.md`.
+- **ID 13–15:** pełne, rzeczywiste obrazy WebP V1/V2/V3 znalezione w `game-14.txt`–`game-15.txt` i wszystkie **9 obejrzane**. Stara funkcja `art(id)` zawiera jedynie uproszczone ikony zastępcze, których **nie używać** jako referencji pełnych portretów; `part-13-15.md`.
 - **ID 16–25:** osadzone oryginalne PNG z kluczami `"<id>:<tier>"` w `game-7.txt`–`game-10.txt`; wszystkie 30 obejrzane.
 - **ID 26–38:** osadzona tablica 39 obrazów WebP `frameData` w `game-1.txt` i `game-2.txt`, indeks `(id-26)*3+(tier-1)`. Wszystkie 39 obrazów obejrzane.
 - **ID 39–64:** osadzone oryginalne obrazy PNG z kluczami `"<id>:<tier>"`; wszystkie 78 obejrzane. **ID 65–130:** kolejne obrazy PNG, ich wyglądy i priorytety ostatnich nadpisań wymagają dalszej weryfikacji.
@@ -22,7 +22,8 @@ W `rework/game-0.txt` jest oryginalna lista `RAW_BALLS` zawierająca **131 wpis�
 - `manifest.json`: pełne 393 pozycje, nazwy, ewolucje, flagi weryfikacji, hash źródła dla zweryfikowanych.
 - `part-00-06.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-07-12.md`: **18** opisów V1/V2/V3, wszystkie obejrzane.
-- `part-13-15-static-unverified.md`: **3** oryginalne ikony SVG wyrenderowane, **9** wyglądów ewolucji walki nadal niezweryfikowanych.
+- `part-13-15.md`: **9** właściwych portretów WebP V1/V2/V3, wszystkie obejrzane.
+- `part-13-15-static-unverified.md`: historyczna dokumentacja uproszczonych ikon SVG, **nie używać do odtwarzania pełnych wyglądów**.
 - `part-16-20.md`: **15** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-21-25.md`: **15** opisów V1/V2/V3, wszystkie obejrzane.
 - `part-26-32.md`: **21** opisów V1/V2/V3, wszystkie obejrzane.
