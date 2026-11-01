@@ -30,7 +30,10 @@ Opis ma być użyteczny dla Claude/Gemini, ale nawet bardzo dokładny tekst nie 
 - **ID 026–032**: [opisy 21 indywidualnie obejrzanych WebP](opisy/026-032.md).
 - **ID 033–038**: [opisy 18 indywidualnie obejrzanych WebP](opisy/033-038.md) oraz [dowody ID 026–038](evidence/026-038.json).
 
-**Postęp:** 117/393 opisanych; 87/393 obejrzanych jako osobne grafiki; 30/393 obejrzanych na oryginalnym atlasie (końcowy crop wymaga weryfikacji). Pozostałe **ID 039–130** nie są jeszcze opisane. Pracę kontynuować w osobnych plikach i uzupełniać `PROGRESS.json`.
+- **ID 039–045**: [opisy 21 indywidualnie obejrzanych PNG](opisy/039-045.md).
+- **ID 046–051**: [opisy 18 indywidualnie obejrzanych PNG](opisy/046-051.md) oraz [dowody ID 039–051](evidence/039-051.json).
+
+**Postęp:** 156/393 opisanych; 126/393 obejrzanych jako osobne grafiki; 30/393 obejrzanych na oryginalnym atlasie (końcowy crop wymaga weryfikacji). Pozostałe **ID 052–130** nie są jeszcze opisane. Pracę kontynuować w osobnych plikach i uzupełniać `PROGRESS.json`.
 
 ## Zakaz zmian gry
 
