@@ -4,7 +4,7 @@
   "commit": "1de7d74870192bb45896cb5b1e0ecd891aafd5dd",
   "entrypoint": "index.html (desktop full=1) -> bvb-loader.js -> rework/game-0..31.txt",
   "warning": "Mobile default index-safe.html is deliberately lightweight and DOES NOT render these 393 portraits. This catalog documents full original desktop mode.",
-  "verified_variants": 39,
+  "verified_variants": 78,
   "expected_variants": 393,
   "records": [
     {
@@ -713,352 +713,352 @@
       "id": 26,
       "name": "Łuk",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(26-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 26,
       "name": "Łuk",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(26-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 26,
       "name": "Łuk",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(26-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 27,
       "name": "Król Elektryków",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(27-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 27,
       "name": "Król Elektryków",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(27-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 27,
       "name": "Król Elektryków",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(27-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 28,
       "name": "Zasięg",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(28-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 28,
       "name": "Zasięg",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(28-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 28,
       "name": "Zasięg",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(28-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 29,
       "name": "Mróz",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(29-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 29,
       "name": "Mróz",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(29-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 29,
       "name": "Mróz",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(29-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 30,
       "name": "Harpun",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(30-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 30,
       "name": "Harpun",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(30-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 30,
       "name": "Harpun",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(30-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 31,
       "name": "Rój",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(31-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 31,
       "name": "Rój",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(31-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 31,
       "name": "Rój",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(31-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 32,
       "name": "Eliksir",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(32-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 32,
       "name": "Eliksir",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(32-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 32,
       "name": "Eliksir",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(32-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-26-32.md"
     },
     {
       "id": 33,
       "name": "Konduktor",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(33-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 33,
       "name": "Konduktor",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(33-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 33,
       "name": "Konduktor",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(33-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 34,
       "name": "Czarny Pająk",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(34-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 34,
       "name": "Czarny Pająk",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(34-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 34,
       "name": "Czarny Pająk",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(34-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 35,
       "name": "Grób",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(35-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 35,
       "name": "Grób",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(35-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 35,
       "name": "Grób",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(35-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 36,
       "name": "Skrzydło Światła",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(36-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 36,
       "name": "Skrzydło Światła",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(36-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 36,
       "name": "Skrzydło Światła",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(36-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 37,
       "name": "Pudełko Cukierków",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(37-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 37,
       "name": "Pudełko Cukierków",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(37-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 37,
       "name": "Pudełko Cukierków",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(37-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 38,
       "name": "Szlam",
       "tier": 1,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(38-26)*3+(1-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 38,
       "name": "Szlam",
       "tier": 2,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(38-26)*3+(2-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 38,
       "name": "Szlam",
       "tier": 3,
-      "verified_visually": false,
+      "verified_visually": true,
       "sourceHash": null,
-      "source": null,
-      "description_file": null
+      "source": "WebP frameData[(38-26)*3+(3-1)] in rework/game-1.txt and game-2.txt",
+      "description_file": "part-33-38.md"
     },
     {
       "id": 39,
