@@ -20,23 +20,7 @@
     12,
     13,
     14,
-    15
-  ],
-  "verifiedVariants": 48,
-  "describedVariants": 78,
-  "remainingVariants": 315,
-  "completedDescriptionFiles": [
-    "opisy/000-006.md",
-    "opisy/007-012.md",
-    "opisy/013-015.md",
-    "opisy/016-025.md"
-  ],
-  "evidenceFiles": [
-    "evidence/000-012.json",
-    "evidence/013-015.json",
-    "evidence/016-025-atlas.json"
-  ],
-  "nextIds": [
+    15,
     26,
     27,
     28,
@@ -50,6 +34,38 @@
     36,
     37,
     38
+  ],
+  "verifiedVariants": 87,
+  "describedVariants": 117,
+  "remainingVariants": 276,
+  "completedDescriptionFiles": [
+    "opisy/000-006.md",
+    "opisy/007-012.md",
+    "opisy/013-015.md",
+    "opisy/016-025.md",
+    "opisy/026-032.md",
+    "opisy/033-038.md"
+  ],
+  "evidenceFiles": [
+    "evidence/000-012.json",
+    "evidence/013-015.json",
+    "evidence/016-025-atlas.json",
+    "evidence/026-038.json"
+  ],
+  "nextIds": [
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
   ],
   "status": "IN_PROGRESS",
   "noUserNotificationBeforeComplete": true,
