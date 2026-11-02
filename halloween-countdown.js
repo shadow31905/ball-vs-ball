@@ -1,8 +1,8 @@
-/* Odliczanie do odejścia halloween, 7.11.2026, 00:00 (Polska). */
+/* Odliczanie do odejścia halloween, 7.11.2026, 16:00 (Polska). */
 (function () {
   'use strict';
   const ID = 'bvb-halloween-countdown';
-  const DEADLINE = Date.parse('2026-11-07T00:00:00+01:00');
+  const DEADLINE = Date.parse('2026-11-07T16:00:00+01:00');
 
   function mount() {
     const menu = document.getElementById('menu');
@@ -34,7 +34,7 @@
     banner.setAttribute('aria-label', 'Odliczanie do odejścia Halloween Eventu');
     banner.innerHTML = [
       '<h2 class="bvb-hw-title">🎃 odejście halloween</h2>',
-      '<p class="bvb-hw-desc">Sobota, 7 listopada 2026 · 00:00</p>',
+      '<p class="bvb-hw-desc">Sobota, 7 listopada 2026 · 16:00</p>',
       '<div class="bvb-hw-units" role="timer" aria-live="off">',
       '<div class="bvb-hw-unit"><span class="bvb-hw-value" data-unit="d">00</span><span class="bvb-hw-label">DNI</span></div>',
       '<div class="bvb-hw-unit"><span class="bvb-hw-value" data-unit="h">00</span><span class="bvb-hw-label">GODZ.</span></div>',
