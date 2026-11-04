@@ -5,11 +5,12 @@ const DEADLINE=Date.parse('2026-11-07T16:00:00+01:00');
 function init(){
  const root=document.getElementById('menu');
  const native=document.getElementById('bvb3Home');
- if(!root||!native){setTimeout(init,350);return;}
+ if(!root){setTimeout(init,350);return;} if(!native&&!root.querySelector('#bvb-safe-note')){setTimeout(init,350);return;}
  if(document.getElementById('bvb-beta-home'))return;
  const css=document.createElement('style');
  css.id='bvb-beta-menu-style';
  css.textContent=`
+#menu:not(:has(#bvb3Home)):has(#bvb-beta-home:not([hidden])) > :not(#bvb-beta-home){display:none!important}
 #menu:has(#bvb-beta-home:not([hidden])) > #bvb3Home,
 #menu:has(#bvb-beta-home:not([hidden])) > #bvb-halloween-countdown{display:none!important}
 #app:has(#bvb-beta-home:not([hidden])){max-width:1500px!important;width:min(100%,1530px);box-sizing:border-box;padding:10px!important}
@@ -82,24 +83,24 @@ function init(){
   +'<div class="smallnav"><button data-action="training">Trening</button><button data-action="campaign">Kampania</button><button data-action="bosses">Bossowie</button><button data-action="multiplayer">Multiplayer</button><button data-action="quests">Zadania</button><button data-action="rewards">Nagrody</button><button data-action="settings">Ustawienia</button><button data-action="collection">Ekwipunek</button></div>'
   +'<div class="bottom">WERSJA BETA · ZMIENIONO WYŁĄCZNIE MENU · GRY NIE OPUBLIKOWANO W ORYGINALE</div>';
  root.prepend(page);
- const sync=()=>{page.hidden=native.hidden;};
- new MutationObserver(sync).observe(native,{attributes:true,attributeFilter:['hidden']});
+ const sync=()=>{page.hidden=native?native.hidden:false;};
+ if(native)new MutationObserver(sync).observe(native,{attributes:true,attributeFilter:['hidden']});
  sync();
  const actions={
   home:()=>window.BVBMenu?.open('home'),
-  modes:()=>window.BVBMenu?.open('modes'),
-  play:()=>window.BVBMenu?.open('modes'),
-  bosses:()=>window.BVBMenu?.open('bosses'),
-  rewards:()=>window.BVBMenu?.open('rewards'),
-  settings:()=>window.BVBMenu?.open('settings'),
+  modes:()=>window.BVBMenu?.open('modes')||(!window.BVBMenu&&window.startMatch?.()),
+  play:()=>window.BVBMenu?.open('modes')||(!window.BVBMenu&&window.startMatch?.()),
+  bosses:()=>window.BVBMenu?.open('bosses')||(!window.BVBMenu&&window.startMatch?.(0)), 
+  rewards:()=>window.BVBMenu?.open('rewards')||(!window.BVBMenu&&window.panel?.('q')),
+  settings:()=>window.BVBMenu?.open('settings')||(!window.BVBMenu&&window.panel?.('set')),
   collection:()=>window.panel?.('col'),
   crates:()=>window.panel?.('shop'),
   shop:()=>window.panel?.('st'),
-  ranking:()=>{window.panel?.('account');window.BVBCloud?.ranking?.();},
+  ranking:()=>{window.panel?.(window.BVBMenu?'account':'pr');window.BVBCloud?.ranking?.();},
   profile:()=>window.panel?.('pr'),
   multiplayer:()=>window.mpMenu?.(),
   training:()=>window.startMatch?.(4),
-  campaign:()=>window.BVBCampaign?.open?.(),
+  campaign:()=>window.BVBCampaign?.open?.()||(!window.BVBCampaign&&window.startMatch?.(0)),
   quests:()=>window.panel?.('q')
  };
  page.addEventListener('click',event=>{const b=event.target.closest('button[data-action]');if(!b)return;const f=actions[b.dataset.action];if(f)f();});
