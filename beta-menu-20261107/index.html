@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ball VS Ball — Halloween Menu Beta</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0d0724}
+#game-frame{width:100%;height:100%;border:0;display:block}
+#loading{position:fixed;inset:0;display:grid;place-items:center;color:#ffd18b;font:bold 19px system-ui;pointer-events:none;background:#10091d;z-index:2;transition:opacity .35s}
+#loading[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div id="loading" role="status">🎃 Ładowanie wersji beta...</div>
+<iframe id="game-frame" title="Ball VS Ball — beta menu Halloween" allow="fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+<script>
+(function(){
+  'use strict';
+  // Ta nakładka działa tylko na adresie beta. Oryginalne pliki gry pozostają bez zmian.
+  const frame=document.getElementById('game-frame');
+  const loading=document.getElementById('loading');
+  const skinUrl=new URL('./skin.js?v=20261104-2',location.href).href;
+  const q=new URLSearchParams(location.search);
+  const mobile=/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  const safe=q.get('lite')==='1'||(mobile&&q.get('full')!=='1');
+  const base=new URL('../',location.href);
+  frame.src=new URL(safe?'index-safe.html?v=20261104-2':'?full=1',base).href;
+  let workingDocument=null;
+  function attach(){
+    try{
+      const doc=frame.contentDocument;
+      if(!doc||!doc.body)return;
+      if(!doc.getElementById('menu'))return;
+      if(!doc.getElementById('bvb3Home')&&!doc.getElementById('bvb-safe-note'))return;
+      if(doc===workingDocument&&doc.getElementById('bvb-beta-home'))return;
+      if(doc.querySelector('script[data-bvb-beta-skin]'))return;
+      const s=doc.createElement('script');
+      s.src=skinUrl;
+      s.setAttribute('data-bvb-beta-skin','');
+      s.onload=()=>{workingDocument=doc;loading.hidden=true;};
+      s.onerror=()=>{loading.textContent='Nie udało się załadować menu beta. Odśwież stronę.';};
+      doc.body.appendChild(s);
+    }catch(e){
+      loading.textContent='Nie można wyświetlić wersji beta w tej przeglądarce.';
+    }
+  }
+  frame.addEventListener('load',attach);
+  setInterval(attach,650);
+  // Nie nakładamy żadnych zmian na źródłową grę.
+})();
+</script>
+</body>
+</html>
