@@ -54,7 +54,8 @@
     const layerHTML = (css ? css.outerHTML : '') + (splash ? splash.outerHTML : '');
     parts[0] = head.replace(/<body([^>]*)>/i, m => m + layerHTML);
     const scripts = '<script src="./halloween-countdown.js?v=20261101-3"></script>' +
-                    '<script src="./bvb-ready.js?v=20261101-1"></script>';
+                    '<script src="./bvb-ready.js?v=20261101-1"></script>' +
+                    '<script src="./bvb-halloween-menu-beta.js?v=20261104-1"></script>';
     parts[last] = foot.slice(0, closeIndex) + scripts + foot.slice(closeIndex);
     // HTML jest dzielony na fragmenty; zapisuj po kolei bez parts.join('').
     document.open();
