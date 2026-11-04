@@ -65,7 +65,7 @@ function init(){
 @media(max-width:880px){#bvb-beta-home .layout{grid-template-columns:1fr 1fr;gap:10px;padding:10px}#bvb-beta-home .center{grid-column:1/-1;grid-row:1}#bvb-beta-home .nav{display:grid;grid-template-columns:1fr 1fr}#bvb-beta-home .orbs{min-height:175px}#bvb-beta-home .smallnav{grid-template-columns:repeat(3,1fr);padding:10px}#bvb-beta-home .top{flex-wrap:wrap;padding:10px}}
 @media(max-width:480px){#bvb-beta-home .layout{grid-template-columns:1fr}#bvb-beta-home .sidecol{grid-row:3}#bvb-beta-home .orbs{min-height:135px}#bvb-beta-home .smallnav{grid-template-columns:repeat(2,1fr)}#bvb-beta-home .box{padding:12px}}
 @media(prefers-reduced-motion:reduce){#bvb-beta-home .hero-orb{animation:none}}
-\`;
+`;
  document.head.appendChild(css);
  const page=document.createElement('section');
  page.id='bvb-beta-home';
