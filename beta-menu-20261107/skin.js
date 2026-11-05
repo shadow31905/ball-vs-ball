@@ -124,7 +124,7 @@
     info('Tryby gry','Wybierz tryb, aby rozpocząć walkę.',`${mkBtn('fight','⚔ Walka z botem')}${mkBtn('training','🎯 Trening')}${mkBtn('campaign','📖 Kampania')}`);return
    }
    if(type==='fight'){window.startMatch?.(0);return}
-   if(type==='training'){window.startMatch?.(4);return}
+   if(type==='training'){window.startMatch?.(4);if(!document.getElementById('menu')?.hidden)info('Trening','Trening nie jest aktywny w tej wersji silnika. Nie wyświetlam nieistniejącej rundy.',mkBtn('close','Wróć'));return}
    if(type==='campaign'){if(typeof window.BVBCampaign?.open==='function')window.BVBCampaign.open();else info('Kampania','Kampania nie jest dostępna w tej wersji silnika.',mkBtn('close','Wróć'));return}
    if(type==='bosses'){if(!openNative('bosses'))info('Bossowie','Tryb bossów nie jest jeszcze podłączony do tej wersji silnika.',mkBtn('close','Wróć'));return}
    if(type==='collection'){viewCollection();return}
