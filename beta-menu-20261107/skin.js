@@ -93,7 +93,7 @@ function init(){
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Menu z filmu Ball VS Ball 2.5 — beta');
  const fightImg=(src,alt)=>`<img class="fighter" src="${src}" alt="${alt}" draggable="false">`;
  page.innerHTML=`<header class="head"><div class="identity"><span id="bvb-fm-user" class="username">Gracz · PODGLĄD</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div><div class="topright"><span class="money"><span class="coin">B</span><span id="bvb-fm-coins">0</span></span>${btn('settings','USTAWIENIA','plain')}</div></header>
- <div class="title"><h1>BALL VS BALL</h1><p id="bvb-fm-subtitle">OSTATNIE CHWILE HALLOWEEN</p></div>
+ <div class="title"><h1>BALL VS BALL</h1><p id="bvb-fm-subtitle">NOWE MENU 2.5</p></div>
  <div class="columns"><aside class="box"><h2>NAWIGACJA</h2><nav class="leftnav">${btn('home','Menu główne')}${btn('modes','Tryby gry')}${btn('collection','Kolekcja kulek')}${btn('crates','Skrzynie')}${btn('shop','Sklep')}${btn('ranking','Ranking')}${btn('profile','Profil')}</nav></aside>
  <main class="center"><div class="fighters">${fightImg(art.chess,'Szachy V3')}${fightImg(art.vamp,'Wampir V3')}${fightImg(art.phoenix,'Feniks V3')}</div>${btn('play','GRAJ','play')}</main>
  <aside class="right"><section class="box"><h2>AKTUALNOŚCI</h2><div class="news-name" id="bvb-fm-news">Odejście Halloween</div><div class="news-date">07.11.2026 · 16:00</div><div class="endline" id="bvb-fm-endline">KONIEC ZA</div><div class="count" role="timer" aria-label="Odliczanie do soboty 16:00" id="bvb-fm-timer">--:--</div></section>
@@ -117,7 +117,7 @@ function init(){
   $('#bvb-fm-timer').textContent=after?'00:00':(d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
   $('#bvb-fm-endline').textContent=after?'ODLICZANIE ZAKOŃCZONE':'KONIEC ZA';
   $('#bvb-fm-news').textContent=after?'Halloween zakończone':'Odejście Halloween';
-  $('#bvb-fm-subtitle').textContent=after?'POCZĄTEK NOWEJ ERY':'OSTATNIE CHWILE HALLOWEEN';
+  $('#bvb-fm-subtitle').textContent='NOWE MENU 2.5';
   const bar=$('#bvb-fm-chestbar');const should=bar.dataset.unlocked==='yes';
   if(should!==open||!bar.children.length){bar.innerHTML=chestList(t);bar.dataset.unlocked=open?'yes':'no'}
   $('#bvb-fm-chestnote').textContent=open?'3 rodzaje skrzyń dostępne':`Epicka i legendarna: od 07.11 · 16:02`;
