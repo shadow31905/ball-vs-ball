@@ -74,7 +74,7 @@
  function refresh(){
   if(!ctx||!volume)return;
   const shouldPlay=unlocked&&!isMuted()&&!document.hidden;
-  const v=shouldPlay?settingVolume()*.67:0;
+  const v=shouldPlay?settingVolume()*1.4:0;
   volume.gain.setTargetAtTime(v,ctx.currentTime,.045);
   if(!shouldPlay)return;
   if(ctx.state==='suspended')ctx.resume().catch(()=>{});
