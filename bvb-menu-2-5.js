@@ -294,6 +294,22 @@ function init(){
  #${pageId} .title h1:after{right:calc(50% - 198px);clip-path:polygon(100% 12%,0 0,20% 35%,0 45%,40% 70%,25% 88%,100% 55%)}
  @media(max-width:650px){#${pageId} .title h1:before,#${pageId} .title h1:after{width:40px;height:9px;top:88%}#${pageId} .title h1:before{left:calc(50% - 78px)}#${pageId} .title h1:after{right:calc(50% - 78px)}}
 `;
+ style.textContent += `
+ /* Match the approved 960×540 film framing without clipping phone layouts. */
+ #${pageId}{height:100dvh;min-height:0!important;overflow:hidden}
+ #${pageId} .cinematic-shell{height:100dvh;min-height:0!important;overflow:hidden}
+ #${pageId} .screen{height:100%;min-height:0;overflow:auto}
+ @media(min-width:651px) and (max-width:1050px){
+  #${pageId} .cinematic-shell{padding-left:0!important;padding-right:0!important}
+  #${pageId} .film-layout{padding-left:11px!important;padding-right:11px!important}
+  #${pageId} .film-nav{transform:translateY(-95px)!important}
+  #${pageId} .cinematic-shell:before{bottom:12px;height:160px}
+ }
+ @media(max-height:490px) and (min-width:651px){
+  #${pageId}{overflow:auto}
+  #${pageId} .cinematic-shell{height:auto;min-height:520px!important}
+ }
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
