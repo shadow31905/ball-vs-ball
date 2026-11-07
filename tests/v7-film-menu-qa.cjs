@@ -30,6 +30,17 @@ const server=http.createServer((req,res)=>{
    await page.locator('#bvb-film-menu').waitFor({state:'visible',timeout:30000});
    const rootMenu=page.locator('#bvb-film-menu');
    if(await rootMenu.isVisible()===false)throw Error('Film menu must be visible');
+   await page.screenshot({path:'tests/v7-menu-home-'+viewport.width+'.png',fullPage:true});
+   const artState=await page.evaluate(()=>{
+    try{
+     const balls=typeof B!=='undefined'&&Array.isArray(B)?B:[];
+     const images=typeof ART_IMAGES!=='undefined'?ART_IMAGES:null;
+     return {balls:balls.length,images:images?.size||0,first:images?.get?.(0)?.src?.slice(0,32)||''};
+    }catch(e){return {error:String(e)}}
+   });
+   console.log('ART '+viewport.width+' '+JSON.stringify(artState));
+   if(artState.balls!==130)throw Error('Expected 130 real balls, got '+artState.balls);
+
    for(const key of ['play','campaign','training','crates','collection','shop']){
     if(!await rootMenu.locator('[data-act="'+key+'"]').count())throw Error('Missing menu control '+key);
    }
@@ -38,9 +49,14 @@ const server=http.createServer((req,res)=>{
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="crates"]').first().click();
    if(!await rootMenu.locator('.cinema-shopcard').count())throw Error('Missing film shop cards');
+   await page.screenshot({path:'tests/v7-menu-shop-'+viewport.width+'.png',fullPage:true});
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="collection"]').first().click();
    if(!await rootMenu.locator('.cinema-collection-layout').count())throw Error('Missing film collection');
+   await page.screenshot({path:'tests/v7-menu-collection-'+viewport.width+'.png',fullPage:true});
+   const actualPortraits=await rootMenu.locator('.cinema-ball-tile img.cinema-portrait').count();
+   if(actualPortraits<2)throw Error('Collection uses no original ball artwork: '+actualPortraits);
+
    if(!await rootMenu.locator('[data-evolution="1"]').count())throw Error('Missing evolution controls');
    await rootMenu.locator('[data-evolution="3"]').click();
    if(!await rootMenu.locator('[data-evolution="3"].selected').count())throw Error('Evolution control failed');
