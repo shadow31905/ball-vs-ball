@@ -15,7 +15,7 @@ const server=http.createServer((req,res)=>{
  const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
  let failed=false;
  try{
-  for(const viewport of [{width:1280,height:720},{width:390,height:844}]){
+  for(const viewport of [{width:1280,height:720},{width:960,height:540},{width:390,height:844}]){
    const page=await browser.newPage({viewport});
    const errors=[];page.on('pageerror',err=>errors.push(err.message));
    await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'domcontentloaded',timeout:180000});
