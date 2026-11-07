@@ -7,6 +7,7 @@ from io import BytesIO
 from pathlib import Path
 import subprocess
 from PIL import Image, ImageDraw, ImageFilter
+import imageio_ffmpeg
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "rework/v7-scenes-01-12-hq-60fps.mp4"
@@ -21,7 +22,7 @@ def main():
     if not SOURCE.is_file():
         raise SystemExit(f"Film źródłowy nie istnieje: {SOURCE}")
     frame = subprocess.run(
-        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-ss", "302",
+        [imageio_ffmpeg.get_ffmpeg_exe(), "-hide_banner", "-loglevel", "error", "-ss", "302",
          "-i", str(SOURCE), "-frames:v", "1", "-f", "image2pipe",
          "-vcodec", "png", "-"],
         capture_output=True, check=True,
