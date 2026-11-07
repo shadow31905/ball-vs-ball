@@ -3,7 +3,7 @@
 const TARGET='2026-11-07T16:00:00+01:00';
 const CHESTS_AT='2026-11-07T16:02:00+01:00';
 const END=Date.parse(TARGET),UNLOCK=Date.parse(CHESTS_AT);
-const art={normal:'./assets/v7-chest-normal.webp',epic:'./assets/v7-chest-epic.webp',legend:'./assets/v7-chest-legend.webp'};
+const chestArt={normal:'./assets/v7-chest-normal.webp',epic:'./assets/v7-chest-epic.webp',legend:'./assets/v7-chest-legend.webp'};
 const pageId='bvb-film-menu';
 const $=s=>document.querySelector(s);
 const safe=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
@@ -397,7 +397,7 @@ function init(){
  const openNative=name=>{if(!can(name))return false;window.BVBMenu.open(name);return true};
  function showView(title,content){view.hidden=false;view.innerHTML=`${btn('home','← Wróć','back')}<h2>${safe(title)}</h2>${content}`;view.scrollTop=0;}
  function info(title,desc,links=''){showView(title,`<div class="pane">${desc}</div><div class="tilegrid">${links}</div>`)}
- const chestData=[['normal','Zwykła',100,art.normal],['epic','Epicka',300,art.epic],['legend','Legendarna',750,art.legend]];
+ const chestData=[['normal','Zwykła',100,chestArt.normal],['epic','Epicka',300,chestArt.epic],['legend','Legendarna',750,chestArt.legend]];
  function buttonsAt(t){return chestData.filter(([k])=>k==='normal'||availableAt(t))}
  function chestList(t){return buttonsAt(t).map(([k,n,cost,img])=>`<button type="button" data-act="chest-${k}" class="chest"><img src="${img}" alt="Skrzynia ${n}"><span>${n}</span></button>`).join('')}
  function renderClock(){
