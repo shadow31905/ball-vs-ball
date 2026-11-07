@@ -1,0 +1,29 @@
+name: Diagnose V7 film menu
+on:
+  push:
+    branches: [fix/menu-po-filmie-2026-11-07]
+    paths:
+      - tests/diagnose-menu.cjs
+      - .github/workflows/diagnose-menu.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - run: node tests/diagnose-menu.cjs
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: film-menu-diagnostics
+          path: tests/menu-after-film-*.png
+          if-no-files-found: ignore
