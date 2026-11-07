@@ -413,6 +413,11 @@ function init(){
  #${pageId} .cinema-collection-preview .cinema-portrait{filter:drop-shadow(0 0 8px #3588d04b)}
  #${pageId} .cinema-ball-tile:focus-visible,#${pageId} .cinema-evolutions button:focus-visible{outline:2px solid #f5d476;outline-offset:2px}
  `;
+ style.textContent += `
+ #${pageId} .cinema-ball-tile small .film-vector{width:13px;height:13px;stroke:#f7c85d}
+ #${pageId} .cinema-wallet .coin{display:inline-flex;vertical-align:middle;margin-right:4px}
+ #${pageId} .cinema-wallet .coin .film-vector{width:16px;height:16px}
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -428,6 +433,7 @@ function init(){
  shop:'<path d="M4 9V21h16V9M2 9l2-6h16l2 6-3 2-3-2-4 2-4-2-3 2zM9 21v-8h6v8"/>',
  trophy:'<path d="M7 3h10v7a5 5 0 0 1-10 0zM7 5H3v4a4 4 0 0 0 4 4M17 5h4v4a4 4 0 0 1-4 4M12 15v5M8 20h8"/>',
  progress:'<path d="M3 21V15h4v6M10 21V10h4v11M17 21V4h4v17"/>',
+ lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
  settings:'<circle cx="12" cy="12" r="3"/><path d="M10 2h4l.5 3 2.2 1 2.5-1.5 2.3 3.5-2.3 2v3l2.3 2-2.3 3.5-2.5-1.5-2.2 1-.5 3h-4l-.5-3-2.2-1-2.5 1.5L2.5 15l2.3-2v-3L2.5 8l2.3-3.5L7.3 6l2.2-1z"/>'
  };return '<svg class="film-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'+(shapes[kind]||'')+'</svg>'};
  page.innerHTML=`<div class="cinematic-shell"><header class="head"><div class="identity"><span class="avatar">${filmIcon("crown")}</span><div><span id="bvb-fm-user" class="username">Gracz</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div></div><div class="topright"><span class="money"><span class="coin">${filmIcon("coin")}</span><span id="bvb-fm-coins">0</span></span>${btn('settings',filmIcon('settings'),'plain')}</div></header>
@@ -456,7 +462,7 @@ function init(){
  function renderCrates(){
   const t=now(),opened=availableAt(t),s=getSave();
   const cards=buttonsAt(t).map(([k,n,cost,img])=>`<article class="cinema-shopcard"><img src="${img}" alt="Skrzynia ${n}"><strong>${n}</strong><button type="button" data-act="purchase-${k}">ZA ${cost} MONET</button></article>`).join('');
-  showView('NOWY SKLEP',`<div class="cinema-kicker">BALL VS BALL 2.5 / NOWA ERA</div><p class="cinema-lead">Kulki zdobywasz wyłącznie ze skrzyń</p><div class="cinema-wallet">🪙 <span id="bvb-fm-wallet">${Number(s?.coins||0).toLocaleString('pl-PL')}</span> MONET</div><div class="cinema-shopgrid">${cards}</div><div class="cinema-shopfooter">WYBIERZ SKRZYNIĘ</div>`);
+  showView('NOWY SKLEP',`<div class="cinema-kicker">BALL VS BALL 2.5 / NOWA ERA</div><p class="cinema-lead">Kulki zdobywasz wyłącznie ze skrzyń</p><div class="cinema-wallet"><span class="coin">${filmIcon("coin")}</span> <span id="bvb-fm-wallet">${Number(s?.coins||0).toLocaleString('pl-PL')}</span> MONET</div><div class="cinema-shopgrid">${cards}</div><div class="cinema-shopfooter">WYBIERZ SKRZYNIĘ</div>`);
   // In the approved V7 shot the small era label precedes the shop title.
   const kicker=view.querySelector('.cinema-kicker'),heading=view.querySelector('h2');
   if(kicker&&heading)view.insertBefore(kicker,heading);
@@ -521,7 +527,7 @@ function init(){
    ...Array.from({length:8},()=>balls[Math.floor(chooseCrypto()*balls.length)]||winner)
   ];
   const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===16?' winner':''}">${portrait(b)}<small>${safe(b.n)}</small></div>`).join('');
-  showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><p class="cinema-lead">Prawdziwa nagroda została zapisana • trwa losowanie</p><div class="cinema-wallet"><span class="coin">◉</span> ${Number(s.coins).toLocaleString('pl-PL')} MONET</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwierana skrzynia ${name}"></div><div class="cinema-reel-window" hidden><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><div class="cinema-outcome" hidden><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div></div>`);
+  showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><p class="cinema-lead">Prawdziwa nagroda została zapisana • trwa losowanie</p><div class="cinema-wallet"><span class="coin">${filmIcon("coin")}</span> ${Number(s.coins).toLocaleString('pl-PL')} MONET</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwierana skrzynia ${name}"></div><div class="cinema-reel-window" hidden><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><div class="cinema-outcome" hidden><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div></div>`);
   const kicker=view.querySelector('.cinema-kicker'),heading=view.querySelector('h2');
   if(kicker&&heading)view.insertBefore(kicker,heading);
   const chest=view.querySelector('.cinema-chest');
@@ -598,7 +604,7 @@ function init(){
   const locked=matches.filter(b=>!owned.has(b.id)).sort(byRarity);
   const select=list.find(b=>b.id===selectedBallId)||unlocked[0]||locked[0];
   if(select)selectedBallId=select.id;
-  const tiles=(items)=>items.slice(0,130).map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}" data-rarity="${Number(b.r)||0}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':'🔒'}</small></button>`).join('');
+  const tiles=(items)=>items.slice(0,130).map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}" data-rarity="${Number(b.r)||0}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':filmIcon('lock')}</small></button>`).join('');
   const pane=select?`<div class="cinema-collection-preview"><h3>PODGLĄD KULKI</h3>${portrait(select,selectedEvolution)}<b>${safe(select.n)}</b><small>${owned.has(select.id)?'ODBLOKOWANA':'ZABLOKOWANA'}</small><div class="cinema-evolutions">${[1,2,3].map(n=>`<button data-evolution="${n}" class="${selectedEvolution===n?'selected':''}" type="button">V${n}</button>`).join('')}</div><p>Umiejętność podstawowa: ${safe(select.d||'Opis w grze')}</p><button type="button" data-act="native-col">OTWÓRZ KOLEKCJĘ GRY</button></div>`:'';
   showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,owned.size/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${owned.size} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>Wszystkie kulki odblokowane</p>'}</div></section></div>${pane}</div>`);
   view.dataset.mode='collection';
