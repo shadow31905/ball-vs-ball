@@ -539,8 +539,11 @@ function init(){
    reelWindow.hidden=false;
    const resultLine=view.querySelector('.cinema-outcome');
    const prizeTile=strip.querySelector('.cinema-reel-ball.winner');
-   const prizeRect=prizeTile.getBoundingClientRect(),stripRect=strip.getBoundingClientRect();
-   const finalOffset=reelWindow.clientWidth/2-(prizeRect.left-stripRect.left+prizeRect.width/2);
+   // Align the winning card with the actual marker in viewport coordinates.
+   // Responsive padding previously shifted the prize by 10px on desktop.
+   const marker=reelWindow.querySelector('.cinema-marker');
+   const prizeRect=prizeTile.getBoundingClientRect(),markerRect=marker.getBoundingClientRect();
+   const finalOffset=(markerRect.left+markerRect.width/2)-(prizeRect.left+prizeRect.width/2);
    const finish=()=>{if(view.contains(strip)&&resultLine)resultLine.hidden=false;};
    if(typeof strip.animate==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
     strip.animate([{transform:'translateX(0)'},{transform:'translateX('+finalOffset+'px)'}],{duration:4900,easing:'cubic-bezier(.1,.7,.16,1)',fill:'forwards'}).finished.then(finish,finish);
