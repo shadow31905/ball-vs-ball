@@ -109,7 +109,17 @@ function play(id){
   ctx.globalAlpha=.42+.48*t;
   // The signature evolutions get distinctive diagrams rather than the shared
   // default ring: V2 and V3 depict different pieces of the actual mechanic.
-  if(action==='forgeDrone'||action==='forgeAnvil'){
+  if(action==='triageStation'||action==='emergencyProtocol'){
+   const x=ox+41,y=oy+12,r=action==='emergencyProtocol'?39:30;
+   ctx.strokeStyle=accent;ctx.lineWidth=action==='emergencyProtocol'?4:2.5;
+   ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke();
+   ctx.fillStyle='#f8fafc';ctx.fillRect(x-3,y-12,6,24);
+   ctx.fillRect(x-12,y-3,24,6);
+   if(action==='emergencyProtocol'){
+    glowingLine(x+28,y-10,x+45,y-24,3,'#fef08a',.85);
+    circle(x+45,y-24,5,'#fef08a');
+   }
+  }else if(action==='forgeDrone'||action==='forgeAnvil'){
    const cx=action==='forgeDrone'?ox+35:ex-20,cy=oy-27;
    const count=action==='forgeDrone'?6:8,r=action==='forgeDrone'?11:20;
    ctx.strokeStyle=accent;ctx.lineWidth=3;
@@ -443,6 +453,10 @@ function play(id){
     }
   }
   if(id>=32&&id<=47&&phase>.35)drawV1Signature32(id,t,ox,oy,ex,ey,color);
+  if(id===48&&phase>.35){
+   ctx.fillStyle='#f8fafc';
+   ctx.fillRect(ox+22,oy-12,6,24);ctx.fillRect(ox+13,oy-3,24,6);
+  }
   if(authored&&evolution>=2&&phase>.48){
    drawEvolvedEffect(authored[0],1,t,ox,oy,ex,ey);
    if(evolution>=3)drawEvolvedEffect(authored[1],2,t,ox,oy,ex,ey);

@@ -28,12 +28,13 @@ test('all sixteen balls 32-47 have original, recognizable signature artwork',()=
  }
  assert.equal(glyphs.size,16,'each ball should have a different SVG motif, not just an ID');
 });
-test('signature emblems are scoped to IDs 32–47, preserving earlier ball designs',()=>{
+test('signature emblems extend to Medyk ID48 while preserving earlier ball designs',()=>{
  const g=createGame();
- const value=g.run(`({prior:art(31),first:art(32),last:art(47),after:art(48),
+ const value=g.run(`({prior:art(31),first:art(32),last:art(47),after:art(48),next:art(49),
   data:Array.from({length:16},(_,i)=>BVB2.authoredUpgrades[i+32])})`);
  assert.equal(value.prior.includes('data-signature-id='),false);
- assert.equal(value.after.includes('data-signature-id='),false);
+ assert.ok(value.after.includes('data-signature-id="48"'));
+ assert.equal(value.next.includes('data-signature-id='),false);
  assert.ok(value.first.includes('data-signature-id="32"'));
  assert.ok(value.last.includes('data-signature-id="47"'));
  assert.ok(value.data.every(actions=>actions.length===2&&

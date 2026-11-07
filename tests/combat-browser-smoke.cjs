@@ -111,7 +111,7 @@ const base=process.env.BVB_TEST_URL||'http://127.0.0.1:8765/';
        'V2 collection panel must describe the actual V3 ability upgrade');
      // Twenty-four identity-specific upgrades (24–47) must also be
      // visually distinct in V1, V2 and V3 with reduced motion enabled.
-     for(let id=24;id<=47;id++){
+     for(let id=24;id<=48;id++){
        const variants=[];
        for(const tier of [1,2,3]){
          await page.evaluate(([ball,t])=>{S.tr[ball]=t;openBallDetail(ball);},[id,tier]);
