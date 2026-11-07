@@ -29,14 +29,16 @@ const server=http.createServer((req,res)=>{
    if(await guest.count()&&await guest.isVisible())await guest.click();
    await page.locator('#bvb-film-menu').waitFor({state:'visible',timeout:30000});
    const rootMenu=page.locator('#bvb-film-menu');
+   if(await rootMenu.isVisible()===false)throw Error('Film menu must be visible');
    for(const key of ['play','campaign','training','crates','collection','shop']){
     if(!await rootMenu.locator('[data-act="'+key+'"]').count())throw Error('Missing menu control '+key);
    }
    await rootMenu.locator('[data-act="campaign"]').first().click();
    if(!await rootMenu.getByText('WKRÓTCE').count())throw Error('Campaign should say WKRÓTCE');
-   await rootMenu.locator('[data-act="home"]').first().click();
+   await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="crates"]').first().click();
    if(!await rootMenu.locator('.cinema-shopcard').count())throw Error('Missing film shop cards');
+   await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="collection"]').first().click();
    if(!await rootMenu.locator('.cinema-collection-layout').count())throw Error('Missing film collection');
    if(!await rootMenu.locator('[data-evolution="1"]').count())throw Error('Missing evolution controls');
