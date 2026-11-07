@@ -92,13 +92,13 @@ function init(){
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const fightImg=(src,alt)=>`<img class="fighter" src="${src}" alt="${alt}" draggable="false">`;
- page.innerHTML=`<header class="head"><div class="identity"><span id="bvb-fm-user" class="username">Gracz · PODGLĄD</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div><div class="topright"><span class="money"><span class="coin">B</span><span id="bvb-fm-coins">0</span></span>${btn('settings','USTAWIENIA','plain')}</div></header>
+ page.innerHTML=`<header class="head"><div class="identity"><span id="bvb-fm-user" class="username">Gracz</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div><div class="topright"><span class="money"><span class="coin">B</span><span id="bvb-fm-coins">0</span></span>${btn('settings','USTAWIENIA','plain')}</div></header>
  <div class="title"><h1>BALL VS BALL</h1><p id="bvb-fm-subtitle">NOWE MENU 2.5</p></div>
  <div class="columns"><aside class="box"><h2>NAWIGACJA</h2><nav class="leftnav">${btn('home','Menu główne')}${btn('modes','Tryby gry')}${btn('collection','Kolekcja kulek')}${btn('crates','Skrzynie')}${btn('shop','Sklep')}${btn('ranking','Ranking')}${btn('profile','Profil')}</nav></aside>
  <main class="center"><div class="fighters">${fightImg(art.chess,'Szachy V3')}${fightImg(art.vamp,'Wampir V3')}${fightImg(art.phoenix,'Feniks V3')}</div>${btn('play','GRAJ','play')}</main>
  <aside class="right"><section class="box"><h2>AKTUALNOŚCI</h2><div class="news-name" id="bvb-fm-news">Odejście Halloween</div><div class="news-date">07.11.2026 · 16:00</div><div class="endline" id="bvb-fm-endline">KONIEC ZA</div><div class="count" role="timer" aria-label="Odliczanie do soboty 16:00" id="bvb-fm-timer">--:--</div></section>
  <section class="box"><h2>SKRZYNIE</h2><div class="chests" id="bvb-fm-chestbar"></div><p class="unlocks" id="bvb-fm-chestnote"></p></section></aside></div>
- <div class="bottom">${btn('training','Trening')}${btn('campaign','Kampania')}${btn('bosses','Bossowie')}${btn('multiplayer','Multiplayer')}${btn('quests','Zadania')}${btn('rewards','Nagrody')}${btn('replays','Powtórki')}</div>
+ <div class="bottom">${btn('training','Trening')}${btn('campaign','Tryb fabularny · WKRÓTCE')}${btn('bosses','Bossowie')}${btn('multiplayer','Multiplayer')}${btn('quests','Zadania')}${btn('rewards','Nagrody')}</div>
  <div class="foot">BALL VS BALL 2.5 · NOWE MENU · AKTUALNA GRA</div><section id="bvb-fm-screen" class="screen" hidden aria-live="polite"></section>`;
  root.prepend(page);
  const view=page.querySelector('#bvb-fm-screen');
@@ -174,14 +174,14 @@ function init(){
   if(key==='home'){view.hidden=true;view.dataset.mode='';if(can('home'))openNative('home');return}
   if(key==='play'||key==='modes'){
    if(openNative('modes'))return;
-   info('Tryby gry','Wybierz tryb do rozegrania rundy.',btn('bot','Walka z botem','tile')+btn('training','Trening','tile')+btn('bosses','Bossowie','tile')+btn('campaign','Kampania','tile'));return
+   info('Tryby gry','Wybierz tryb do rozegrania rundy.',btn('bot','Walka z botem','tile')+btn('training','Trening','tile')+btn('bosses','Bossowie','tile')+btn('campaign','Tryb fabularny · WKRÓTCE','tile'));return
   }
   if(key==='bot'){if(typeof window.startMatch==='function')window.startMatch(0);else info('Błąd','Silnik nie obsługuje rozpoczęcia walki.');return}
   if(key==='training'){if(typeof window.startMatch==='function'){window.startMatch(4);return}info('Trening','Ta wersja gry nie obsługuje treningu.',btn('home','← Wróć','tile'));return}
-  if(key==='campaign'){if(typeof window.BVBCampaign?.open==='function')window.BVBCampaign.open();else info('Kampania','Kampania fabularna nie jest jeszcze podłączona do tej wersji gry.',btn('home','← Wróć','tile'));return}
+  if(key==='campaign'){info('TRYB FABULARNY — WKRÓTCE','8 rozdziałów, 8 bossów i nowe mapy. Tryb jest w przygotowaniu; postępy i waluty pozostają bez zmian.',btn('home','← Wróć','tile'));return}
   if(key==='bosses'){if(openNative('bosses'))return;info('Bossowie','Tryb bossów nie jest jeszcze udostępniony w tej wersji gry.',btn('home','← Wróć','tile'));return}
   if(key==='multiplayer'){if(typeof window.mpMenu==='function')window.mpMenu();else info('Multiplayer','Nie jest dostępny w tej wersji gry.',btn('home','← Wróć','tile'));return}
-  if(key==='collection'){renderCollection();return}
+  if(key==='collection'){if(typeof window.panel==='function'){window.panel('col');return}renderCollection();return}
   if(key==='native-col'){if(typeof window.panel==='function')window.panel('col');return}
   if(key==='crates'||key==='shop'||key.startsWith('chest-')){renderCrates();return}
   if(key.startsWith('purchase-')){purchase(key.substring(9));return}
@@ -205,7 +205,7 @@ function init(){
  page.addEventListener('input',e=>{if(e.target.id==='bvb-fm-search'){
   const q=e.target.value,p=e.target.selectionStart;renderCollection(q);const el=$('#bvb-fm-search');el.focus();el.setSelectionRange(p,p)
  }});
- function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz')+' · PODGLĄD';$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';$('#bvb-fm-coins').textContent=Number(s.coins||0).toLocaleString('pl-PL')}
+ function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz')'';$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';$('#bvb-fm-coins').textContent=Number(s.coins||0).toLocaleString('pl-PL')}
  const sync=()=>{page.hidden=Boolean(native?.hidden)};
  if(native)new MutationObserver(sync).observe(native,{attributes:true,attributeFilter:['hidden']});sync();
  function tick(){if(!page.isConnected)return;renderClock();status()}
