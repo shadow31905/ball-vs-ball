@@ -263,6 +263,11 @@ function init(){
   #${pageId} .cinema-shopcard{padding-bottom:7px}
  }
 `;
+ style.textContent += `
+ #${pageId} .cinema-outcome .tilegrid{max-width:460px;margin:12px auto;grid-template-columns:repeat(2,minmax(0,1fr))}
+ #${pageId} .cinema-outcome .tile{min-height:44px;padding:8px 12px}
+ #${pageId} .cinema-reel-ball small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -338,14 +343,22 @@ function init(){
    return;
   }
   try{if(typeof SFX!=='undefined'&&typeof SFX.rare==='function')SFX.rare()}catch(_){};
-  const candidates=Array.from({length:16},(_,i)=>balls[Math.floor(chooseCrypto()*balls.length)]||winner);candidates.push(winner);
-  const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===candidates.length-1?' winner':''}">${portrait(b)}<small>${safe(b.n)}</small></div>`).join('');
+  // Keep decorative cards after the predetermined prize so the roulette never
+  // ends in an empty right half. The actual saved winner remains card #17.
+  const candidates=[
+   ...Array.from({length:16},()=>balls[Math.floor(chooseCrypto()*balls.length)]||winner),
+   winner,
+   ...Array.from({length:8},()=>balls[Math.floor(chooseCrypto()*balls.length)]||winner)
+  ];
+  const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===16?' winner':''}">${portrait(b)}<small>${safe(b.n)}</small></div>`).join('');
   showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwarta skrzynia ${name}"></div><div class="cinema-reel-window"><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><div class="cinema-outcome" hidden><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div></div>`);
 
   const strip=view.querySelector('.cinema-reel'),reelWindow=view.querySelector('.cinema-reel-window');
   if(strip&&reelWindow){
    const resultLine=view.querySelector('.cinema-outcome');
-   const finalOffset=reelWindow.clientWidth/2-strip.scrollWidth+47;
+   const prizeTile=strip.querySelector('.cinema-reel-ball.winner');
+   const prizeRect=prizeTile.getBoundingClientRect(),stripRect=strip.getBoundingClientRect();
+   const finalOffset=reelWindow.clientWidth/2-(prizeRect.left-stripRect.left+prizeRect.width/2);
    const finish=()=>{if(view.contains(strip)&&resultLine)resultLine.hidden=false;};
    if(typeof strip.animate==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
     strip.animate([{transform:'translateX(0)'},{transform:'translateX('+finalOffset+'px)'}],{duration:4900,easing:'cubic-bezier(.1,.7,.16,1)',fill:'forwards'}).finished.then(finish,finish);
