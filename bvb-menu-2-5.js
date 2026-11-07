@@ -418,6 +418,19 @@ function init(){
  #${pageId} .cinema-wallet .coin{display:inline-flex;vertical-align:middle;margin-right:4px}
  #${pageId} .cinema-wallet .coin .film-vector{width:16px;height:16px}
  `;
+ // At 960x540 the film's card row begins around x=178/y=196 and the
+ // banner ends above the luminous stage. Keep every layer interactive.
+ style.textContent += `
+ #${pageId} .cinematic-shell{background:radial-gradient(ellipse 55% 24% at 49% 97%,#ffab2233,transparent 76%),radial-gradient(ellipse 80% 35% at 48% 96%,#0758b36e,transparent 82%),linear-gradient(0deg,#02050f88,transparent 36%)}
+ #${pageId} .cinematic-shell:before{border-color:#ffc257;box-shadow:0 0 7px 3px #ffc14e,0 0 28px 12px #d8892a8c,inset 0 0 24px 8px #ffa928;opacity:.92}
+ @media(min-width:651px) and (max-width:1050px){
+  #${pageId} .title{height:108px}
+  #${pageId} .title .film-logo-heading{top:-65px}
+  #${pageId} .film-layout{grid-template-columns:clamp(105px,15.42vw,148px) minmax(0,746px);gap:clamp(10px,3.1vw,30px);padding-left:0!important;padding-right:0!important}
+  #${pageId} .film-banner-inner{min-height:92px!important;padding:6px 12px!important}
+  #${pageId} .cinematic-shell:before{bottom:-25px;height:160px}
+ }
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
