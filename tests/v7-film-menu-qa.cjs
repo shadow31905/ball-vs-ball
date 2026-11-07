@@ -75,6 +75,23 @@ const server=http.createServer((req,res)=>{
    if(!await rootMenu.locator('.cinema-collection-layout').count())throw Error('Missing film collection');
    const shownBalls=await rootMenu.locator('.cinema-ball-tile').count();
    if(shownBalls!==artState.balls)throw Error('Collection hides native balls: '+shownBalls+'/'+artState.balls);
+   // Search must not keep showing an unrelated, previously selected ball.
+   await rootMenu.locator('[data-ball="1"]').first().click();
+   const firstName=await page.evaluate(()=>B[0].n);
+   await rootMenu.locator('#bvb-fm-search').fill(firstName);
+   const filtered=await page.evaluate(()=>({
+    tiles:[...document.querySelectorAll('#bvb-film-menu .cinema-ball-tile')].map(e=>Number(e.dataset.ball)),
+    chosen:document.querySelector('#bvb-film-menu .cinema-ball-tile.chosen')?.dataset.ball,
+    preview:document.querySelector('#bvb-film-menu .cinema-collection-preview')?.textContent||''
+   }));
+   if(!filtered.tiles.includes(0)||filtered.chosen!=='0'||!filtered.preview.includes(firstName))
+    throw Error('Collection search retained stale preview: '+JSON.stringify(filtered));
+   await rootMenu.locator('#bvb-fm-search').fill('___NO_SUCH_BALL___');
+   if(await rootMenu.locator('.cinema-ball-tile').count()!==0||await rootMenu.locator('.cinema-collection-preview').count()!==0)
+    throw Error('Empty collection search must not display unrelated ball');
+   await rootMenu.locator('#bvb-fm-search').fill('');
+   if(await rootMenu.locator('.cinema-ball-tile').count()!==artState.balls)
+    throw Error('Clearing search did not restore all balls');
    await page.waitForTimeout(300);
    await page.screenshot({path:'tests/v7-menu-collection-'+viewport.width+'.png',fullPage:true});
    const actualPortraits=await rootMenu.locator('.cinema-ball-tile img.cinema-portrait').count();
@@ -108,6 +125,19 @@ const server=http.createServer((req,res)=>{
 
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await page.evaluate(()=>{if(typeof S==='undefined'||typeof save!=='function')throw Error('Native save unavailable');S.coins=5000;save();});
+   await rootMenu.locator('[data-act="crates"]').first().click();
+   // Wallet inside the shop must track external native rewards without reopening it.
+   await page.evaluate(()=>{S.coins=5010;save()});
+   await page.waitForFunction(()=>Number((document.querySelector('#bvb-fm-wallet')?.textContent||'').replace(/\\s/g,''))===5010,{timeout:5000});
+   await page.evaluate(()=>{S.coins=0;save()});
+   const beforeInsufficient=await page.evaluate(()=>({coins:S.coins,owned:[...S.own]}));
+   await rootMenu.locator('[data-act="purchase-normal"]').click();
+   if(!await rootMenu.getByText('Za mało monet').count())throw Error('Missing insufficient-funds response');
+   const afterInsufficient=await page.evaluate(()=>({coins:S.coins,owned:[...S.own]}));
+   if(JSON.stringify(beforeInsufficient)!==JSON.stringify(afterInsufficient))
+    throw Error('Insufficient funds mutated native save');
+   await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
+   await page.evaluate(()=>{S.coins=5000;save()});
    await rootMenu.locator('[data-act="crates"]').first().click();
    const before=await page.evaluate(()=>({coins:S.coins,owned:S.own.length}));
    await rootMenu.locator('[data-act="purchase-normal"]').click();
