@@ -158,8 +158,22 @@ function init(){
   if(s.q)s.q.gacha=(Number(s.q.gacha)||0)+1;
   try{if(typeof save==='function')save()}catch(_){}
   if(typeof window.SFX?.rare==='function')window.SFX.rare();
-  info('Wynik losowania — '+name,`<div class="gift"><div style="font-size:3rem">${safe(winner.e||'◉')}</div><b>${safe(winner.n)}</b><div>${had?'Duplikat · zwrot 40 🪙':'Nowa kulka w kolekcji!'}</div><div>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} 🪙</div></div>`,btn('crates','Otwórz kolejną','tile')+btn('collection','Kolekcja','tile'));
-  view.dataset.mode='result';
+  // Animation stops at the exact ball which was already saved; no second draw.
+  const pool=balls.filter(b=>b&&Number.isInteger(b.id));
+  const seq=Array.from({length:27},(_,i)=>i===23?winner:(pool[Math.floor(chooseCrypto()*pool.length)]||winner));
+  const artBall=b=>{try{if(typeof orb==='function')return orb(b)}catch(_){}return '<span style="font-size:2rem">'+safe(b.e||'◉')+'</span>'};
+  const tiles=seq.map((b,i)=>'<div class="bvb-roll-item" data-n="'+i+'"><div class="bvb-roll-art">'+artBall(b)+'</div><small>'+safe(b.n)+'</small></div>').join('');
+  const css='<style>.bvb-roll-window{position:relative;max-width:660px;width:100%;overflow:hidden;border:2px solid #d8ae64;background:#10172c;border-radius:12px;margin:12px auto}.bvb-roll-window:after{content:"";position:absolute;inset:0 auto 0 50%;width:3px;background:#ffce62;box-shadow:0 0 10px #ffbb33;pointer-events:none}.bvb-roll-track{display:flex;gap:7px;width:max-content;padding:12px 0}.bvb-roll-item{flex:0 0 101px;width:101px;border-radius:8px;background:#253957;text-align:center;padding:6px;color:#fff}.bvb-roll-art{display:grid;place-items:center;height:70px}.bvb-roll-art .orb{--s:58px}.bvb-roll-item small{display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}</style>';
+  info('Otwieranie skrzyni — '+name,css+'<div class="pane">Losowanie trwa. Nagroda została zapisana.</div><div class="bvb-roll-window"><div class="bvb-roll-track">'+tiles+'</div></div>');
+  view.dataset.mode='rolling';
+  const track=view.querySelector('.bvb-roll-track'),viewport=view.querySelector('.bvb-roll-window'),target=track?.querySelector('[data-n="23"]');
+  const finish=()=>{if(view.dataset.mode!=='rolling')return;info('Wynik losowania — '+name,'<div class="gift"><div>'+artBall(winner)+'</div><b>'+safe(winner.n)+'</b><div>'+(had?'Duplikat · zwrot 40 🪙':'Nowa kulka w kolekcji!')+'</div><div>Pozostało '+Number(s.coins).toLocaleString('pl-PL')+' 🪙</div></div>',btn('crates','Otwórz kolejną','tile')+btn('collection','Kolekcja','tile'));view.dataset.mode='result'};
+  if(track&&viewport&&target){
+   const x=-(target.offsetLeft+target.offsetWidth/2-viewport.clientWidth/2);
+   const animate=()=>{track.style.transition='transform 1800ms cubic-bezier(.1,.78,.12,1)';track.style.transform='translateX('+x+'px)'};
+   if(typeof requestAnimationFrame==='function')requestAnimationFrame(()=>requestAnimationFrame(animate));else animate();
+   window.setTimeout(finish,1950);
+  }else finish();
  }
  function renderCollection(q=''){
   const list=getBalls(),owned=new Set(getSave()?.own||[]);
