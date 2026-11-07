@@ -50,6 +50,11 @@ const server=http.createServer((req,res)=>{
    console.log('ART '+viewport.width+' '+JSON.stringify(artState));
    if(artState.balls<130)throw Error('Expected at least 130 original balls, got '+artState.balls);
    if(artState.images<130)throw Error('Original artwork map missing balls: '+artState.images);
+   await page.waitForFunction(()=>{
+    if(typeof ART_IMAGES==='undefined')return false;
+    return Array.from({length:130},(_,id)=>ART_IMAGES.get(id)).every(img=>img?.complete&&img.naturalWidth>0);
+   },{timeout:20000});
+   console.log('PASS 130 original V1 portraits loaded '+viewport.width);
 
    for(const key of ['play','campaign','training','crates','collection','shop']){
     if(!await rootMenu.locator('[data-act="'+key+'"]').count())throw Error('Missing menu control '+key);
