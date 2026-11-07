@@ -623,11 +623,11 @@ function init(){
   const byRarity=(a,b)=>(Number(b.r)||0)-(Number(a.r)||0)||a.id-b.id;
   const unlocked=matches.filter(b=>owned.has(b.id)).sort(byRarity);
   const locked=matches.filter(b=>!owned.has(b.id)).sort(byRarity);
-  const select=list.find(b=>b.id===selectedBallId)||unlocked[0]||locked[0];
-  if(select)selectedBallId=select.id;
+  const select=matches.find(b=>b.id===selectedBallId)||unlocked[0]||locked[0];
+  selectedBallId=select?.id??null;
   const tiles=(items)=>items.map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}" data-rarity="${Number(b.r)||0}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':filmIcon('lock')}</small></button>`).join('');
   const pane=select?`<div class="cinema-collection-preview"><h3>PODGLĄD KULKI</h3>${portrait(select,selectedEvolution)}<b>${safe(select.n)}</b><small>${owned.has(select.id)?'ODBLOKOWANA':'ZABLOKOWANA'}</small><div class="cinema-evolutions">${[1,2,3].map(n=>`<button data-evolution="${n}" class="${selectedEvolution===n?'selected':''}" type="button">V${n}</button>`).join('')}</div><p>Umiejętność podstawowa: ${safe(select.d||'Opis w grze')}</p><button type="button" data-act="native-col">OTWÓRZ KOLEKCJĘ GRY</button></div>`:'';
-  showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,unlocked.length/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${unlocked.length} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>Wszystkie kulki odblokowane</p>'}</div></section></div>${pane}</div>`);
+  showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,unlocked.length/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${unlocked.length} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>'+(matches.length?'Wszystkie kulki odblokowane':'Brak kulek pasujących do wyszukiwania')+'</p>'}</div></section></div>${pane}</div>`);
   view.dataset.mode='collection';
  }
  function renderBall(id){selectedBallId=id;renderCollection($('#bvb-fm-search')?.value||'')}
@@ -669,7 +669,7 @@ function init(){
  page.addEventListener('input',e=>{if(e.target.id==='bvb-fm-search'){
   const q=e.target.value,p=e.target.selectionStart;renderCollection(q);const el=$('#bvb-fm-search');el.focus();el.setSelectionRange(p,p)
  }});
- function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz');$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';$('#bvb-fm-coins').textContent=Number(s.coins||0).toLocaleString('pl-PL')}
+ function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz');$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';const balance=Number(s.coins||0).toLocaleString('pl-PL');$('#bvb-fm-coins').textContent=balance;const wallet=$('#bvb-fm-wallet');if(wallet)wallet.textContent=balance}
  const dismissLegacyNotes=()=>{try{if(!page.hidden&&window.BVB2ReleaseNotes?.hide&&document.getElementById('bvb2ReleaseModal')?.hidden===false)window.BVB2ReleaseNotes.hide()}catch(_){}};
  const sync=()=>{page.hidden=Boolean(native?.hidden);dismissLegacyNotes()};
  if(native)new MutationObserver(sync).observe(native,{attributes:true,attributeFilter:['hidden']});sync();
