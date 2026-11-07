@@ -68,8 +68,13 @@ const server=http.createServer((req,res)=>{
    if(actualPortraits<2)throw Error('Collection uses no original ball artwork: '+actualPortraits);
 
    if(!await rootMenu.locator('[data-evolution="1"]').count())throw Error('Missing evolution controls');
+   await rootMenu.locator('[data-evolution="2"]').click();
+   await page.waitForFunction(()=>{const img=document.querySelector('#bvb-film-menu .cinema-collection-preview img.cinema-portrait');return img?.complete&&img.naturalWidth>0&&img.src.includes('/assets/approved-first16/ball-00-v2.webp')},{timeout:10000});
    await rootMenu.locator('[data-evolution="3"]').click();
    if(!await rootMenu.locator('[data-evolution="3"].selected').count())throw Error('Evolution control failed');
+   await page.waitForFunction(()=>{const img=document.querySelector('#bvb-film-menu .cinema-collection-preview img.cinema-portrait');return img?.complete&&img.naturalWidth>0&&img.src.includes('/assets/approved-first16/ball-00-v3.webp')},{timeout:10000});
+   console.log('PASS approved V2/V3 portraits '+viewport.width);
+
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await page.evaluate(()=>{if(typeof S==='undefined'||typeof save!=='function')throw Error('Native save unavailable');S.coins=5000;save();});
    await rootMenu.locator('[data-act="crates"]').first().click();
