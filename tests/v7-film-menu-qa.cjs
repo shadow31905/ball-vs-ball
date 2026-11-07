@@ -165,7 +165,8 @@ const server=http.createServer((req,res)=>{
     if(JSON.stringify(saved)!==JSON.stringify(restored))throw Error('Native chest save lost after reload: '+JSON.stringify({saved,restored}));
     console.log('PASS chest rewards persist after full browser reload '+viewport.width);
    }
-   await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
+   const backToHome=rootMenu.locator('#bvb-fm-screen [data-act="home"]').first();
+   if(await backToHome.count()&&await backToHome.isVisible())await backToHome.click();
    await rootMenu.locator('[data-act="training"]').first().click();
    try{await page.locator('#game').waitFor({state:'visible',timeout:5000});}
    catch(_){
