@@ -58,7 +58,7 @@
     const scripts = '<style id="bvb-original-menu-2-5-css">#bvb-halloween-countdown{display:none!important}</style>' +
                     '<script src="./halloween-countdown.js?v=20261101-3"></script>' +
                     '<script src="./bvb-menu-2-5.js?v=20261105-prod-v1"></script>' +
-                    '<script src="./bvb-v7-premiere.js?v=20261107-hq-60fps-1"></script>' +
+                    '<script src="./bvb-v7-premiere.js?v=20261107-postfilm-menu-1"></script>' +
                     '<script src="./bvb-ready.js?v=20261101-1"></script>';
     parts[last] = foot.slice(0, closeIndex) + scripts + foot.slice(closeIndex);
     // HTML jest dzielony na fragmenty; zapisuj po kolei bez parts.join('').
