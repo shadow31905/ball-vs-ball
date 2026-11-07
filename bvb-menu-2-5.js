@@ -219,7 +219,7 @@ function init(){
  page.addEventListener('input',e=>{if(e.target.id==='bvb-fm-search'){
   const q=e.target.value,p=e.target.selectionStart;renderCollection(q);const el=$('#bvb-fm-search');el.focus();el.setSelectionRange(p,p)
  }});
- function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz')'';$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';$('#bvb-fm-coins').textContent=Number(s.coins||0).toLocaleString('pl-PL')}
+ function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz');$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';$('#bvb-fm-coins').textContent=Number(s.coins||0).toLocaleString('pl-PL')}
  const sync=()=>{page.hidden=Boolean(native?.hidden)};
  if(native)new MutationObserver(sync).observe(native,{attributes:true,attributeFilter:['hidden']});sync();
  function tick(){if(!page.isConnected)return;renderClock();status()}
