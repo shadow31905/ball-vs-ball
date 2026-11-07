@@ -286,6 +286,14 @@ function init(){
  #${pageId} .topright .plain .film-vector{width:22px;height:22px;color:#c9e5ff}
  @media(max-width:650px){#${pageId} .film-nav .film-vector{width:13px;height:13px;margin-right:3px}}
 `;
+ style.textContent += `
+ #${pageId} .foot{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+ #${pageId} .title h1{position:relative}
+ #${pageId} .title h1:before,#${pageId} .title h1:after{content:'';position:absolute;top:83%;height:22px;width:clamp(55px,10vw,135px);background:linear-gradient(180deg,#ffe6a1,#e3a634 50%,#8b4c12 75%,#3b240b);filter:drop-shadow(0 2px 3px #d79a2c);opacity:.95;pointer-events:none}
+ #${pageId} .title h1:before{left:calc(50% - 198px);clip-path:polygon(0 12%,100% 0,80% 35%,100% 45%,60% 70%,75% 88%,0 55%)}
+ #${pageId} .title h1:after{right:calc(50% - 198px);clip-path:polygon(100% 12%,0 0,20% 35%,0 45%,40% 70%,25% 88%,100% 55%)}
+ @media(max-width:650px){#${pageId} .title h1:before,#${pageId} .title h1:after{width:40px;height:9px;top:88%}#${pageId} .title h1:before{left:calc(50% - 78px)}#${pageId} .title h1:after{right:calc(50% - 78px)}}
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
