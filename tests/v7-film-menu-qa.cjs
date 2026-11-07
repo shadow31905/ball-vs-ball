@@ -60,6 +60,22 @@ const server=http.createServer((req,res)=>{
    if(!await rootMenu.locator('[data-evolution="1"]').count())throw Error('Missing evolution controls');
    await rootMenu.locator('[data-evolution="3"]').click();
    if(!await rootMenu.locator('[data-evolution="3"].selected').count())throw Error('Evolution control failed');
+   await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
+   await page.evaluate(()=>{if(typeof S==='undefined'||typeof save!=='function')throw Error('Native save unavailable');S.coins=5000;save();});
+   await rootMenu.locator('[data-act="crates"]').first().click();
+   const before=await page.evaluate(()=>({coins:S.coins,owned:S.own.length}));
+   await rootMenu.locator('[data-act="purchase-normal"]').click();
+   await rootMenu.locator('.cinema-reel-ball.winner').waitFor({state:'attached',timeout:10000});
+   const winnerName=await rootMenu.locator('.cinema-reel-ball.winner small').textContent();
+   if(await rootMenu.locator('.cinema-reel-ball img.cinema-portrait').count()<10)throw Error('Roulette missing real game artwork');
+   await rootMenu.locator('.cinema-outcome').waitFor({state:'visible',timeout:15000});
+   const result=await rootMenu.locator('.cinema-outcome').textContent();
+   if(!result.includes(winnerName))throw Error('Visual winner and awarded result disagree');
+   const after=await page.evaluate(()=>({coins:S.coins,owned:S.own.length,persisted:JSON.parse(localStorage.getItem(K)||'null')?.coins}));
+   if(after.coins!==after.persisted||after.coins>before.coins-60||after.owned<before.owned)throw Error('Chest transaction did not persist: '+JSON.stringify({before,after}));
+   await page.screenshot({path:'tests/v7-menu-reel-'+viewport.width+'.png',fullPage:true});
+   console.log('PASS native chest transaction '+viewport.width+' '+winnerName+' '+JSON.stringify({before,after}));
+
    await page.screenshot({path:'tests/v7-menu-'+viewport.width+'.png',fullPage:true});
    if(errors.length)throw Error('Browser JS errors: '+errors.slice(0,3).join('; '));
    console.log('PASS menu navigation '+viewport.width);
