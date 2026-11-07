@@ -214,7 +214,7 @@ function init(){
  style.textContent += `
  /* The rework engine has its own legacy top bar; hide it only while
     the V7 film menu is active. It remains available in gameplay. */
- #app:has(#${pageId}:not([hidden])) > :not(#menu){display:none!important}
+ #app:has(> #menu:not([hidden]) > #${pageId}:not([hidden])) > :not(#menu){display:none!important}
  #${pageId}{min-height:100dvh!important}
  #${pageId} .cinematic-shell{min-height:100dvh}
  #${pageId} .screen{inset:0;min-height:100%;background:#030b19!important;z-index:10;box-shadow:none}
