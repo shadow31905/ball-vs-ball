@@ -37,12 +37,19 @@ const server=http.createServer((req,res)=>{
     return g?{outer:g.outerHTML.slice(0,5000),z:getComputedStyle(g).zIndex,buttons:[...g.querySelectorAll('button')].map(b=>({txt:b.textContent,onclick:b.getAttribute('onclick')}))}:null;
    })));
 
+   if(await page.locator('#accountGate').isVisible()){
+    const note=page.locator('#bvb-v7-postfilm-note');
+    if(!(await note.isVisible()))throw Error('Missing post-film explanation');
+    console.log('PASS '+viewport.width+' post-film guidance');
+   }
    console.log('AFTER '+viewport.width+' '+JSON.stringify(await state()));
    const guest=page.locator('#accountGate button').filter({hasText:'Graj bez konta'});
    if(await guest.count() && await guest.isVisible()){
     await guest.click({timeout:12000});
     await page.waitForTimeout(650);
     console.log('AFTER_GUEST '+viewport.width+' '+JSON.stringify(await state()));
+    if(!(await page.locator('#bvb-film-menu').isVisible()))throw Error('New menu invisible after guest login');
+    console.log('PASS '+viewport.width+' new menu visible after guest');
    }
    console.log('JSERRORS '+viewport.width+' '+JSON.stringify(errors.slice(0,10)));
    await page.screenshot({path:'tests/menu-after-film-'+viewport.width+'.png',fullPage:true,timeout:20000}).catch(()=>{});
