@@ -232,6 +232,37 @@ function init(){
   #${pageId} .cinema-collection-preview{min-height:260px}
  }
 `;
+ style.textContent += `
+ #${pageId} .identity>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+ #${pageId} .identity .username{display:block;font-size:12px;line-height:1.15;max-width:180px}
+ #${pageId} .identity #bvb-fm-level{display:block;font-size:10px;color:#cbd8ee;line-height:1.2}
+ #${pageId} .film-nav{transform:translateY(clamp(-95px,-7.5vw,-65px));align-self:start}
+ #${pageId} .film-nav .leftnav{gap:clamp(5px,.7vw,10px)}
+ #${pageId} .film-nav button{min-height:clamp(39px,4.6vw,58px);font-size:clamp(11px,1.1vw,15px)}
+ #${pageId} .film-card{min-height:clamp(145px,14.8vw,190px);max-height:none}
+ #${pageId} .film-banner-inner{min-height:clamp(90px,9.3vw,125px)}
+ #${pageId} .film-banner{position:relative}
+ #${pageId} .film-banner-copy{padding-left:14px}
+ #${pageId} .film-chests img{mask-image:radial-gradient(ellipse at center,#000 63%,transparent 99%);-webkit-mask-image:radial-gradient(ellipse at center,#000 63%,transparent 99%)}
+ #${pageId} .film-chests img:nth-child(2){transform:scale(1.18)}
+ #${pageId} .film-banner:before{content:'❮';display:grid;place-items:center;position:absolute;left:9px;top:50%;transform:translateY(-50%);height:40px;width:30px;border:1px solid #5387c1;border-radius:7px;color:#e5f3ff;background:#091f3f;pointer-events:none;z-index:1}
+ #${pageId} .film-banner-inner{padding-left:42px}
+ #${pageId} .film-banner .new-tag{position:absolute;top:8px;left:clamp(44px,5vw,70px);z-index:1}
+ #${pageId} .film-banner-copy{padding-top:21px}
+ #${pageId} .cinema-shopcard img{height:clamp(155px,19vw,255px)}
+ #${pageId} .cinema-shopcard{padding-bottom:22px}
+ @media(max-width:650px){
+  #${pageId} .film-nav{transform:none}
+  #${pageId} .film-nav button{min-height:35px;font-size:10px}
+  #${pageId} .film-card{min-height:120px}
+  #${pageId} .film-banner-inner{min-height:82px;padding-left:17px}
+  #${pageId} .film-banner:before{display:none}
+  #${pageId} .film-banner .new-tag{left:6px;top:4px}
+  #${pageId} .film-banner-copy{padding-left:0;padding-top:15px}
+  #${pageId} .cinema-shopcard img{height:83px}
+  #${pageId} .cinema-shopcard{padding-bottom:7px}
+ }
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -245,7 +276,7 @@ function init(){
  page.innerHTML=`<div class="cinematic-shell"><header class="head"><div class="identity"><span class="avatar">${filmIcon("crown")}</span><div><span id="bvb-fm-user" class="username">Gracz</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div></div><div class="topright"><span class="money"><span class="coin">${filmIcon("coin")}</span><span id="bvb-fm-coins">0</span></span>${btn('settings','⚙','plain')}</div></header>
  <div class="title"><h1>BALL <em>VS</em> BALL</h1><p id="bvb-fm-subtitle">2.5</p></div>
  <div class="film-layout"><aside class="film-nav"><nav class="leftnav">${btn('home','⌂　 Menu')}${btn('collection','▣　 Ekwipunek')}${btn('crates','▤　 Skrzynie')}${btn('shop','▥　 Sklep')}${btn('ranking','🏆　 Osiągnięcia')}${btn('profile','▥　 Postęp')}</nav></aside>
- <main class="film-main"><div class="film-cards"><button type="button" class="film-card blue" data-act="play"><span class="film-symbol">${filmIcon("sword")}</span><strong>GRAJ</strong><small>Szybka rozgrywka</small></button><button type="button" class="film-card violet" data-act="campaign"><span class="film-symbol">${filmIcon("flag")}</span><strong>KAMPANIA</strong><small>Walka z bossami · WKRÓTCE</small></button><button type="button" class="film-card orange" data-act="training"><span class="film-symbol">${filmIcon("target")}</span><strong>TRENING</strong><small>Testuj kulki i umiejętności</small></button></div><section class="film-banner"><button type="button" data-act="crates" class="film-banner-inner"><span class="new-tag">NOWOŚĆ!</span><span class="film-banner-copy"><strong>NOWE SKRZYNIE</strong><small>Zdobywaj unikalne kulki!</small></span><span class="film-chests"><img src="${art.normal}" alt="Zwykła skrzynia"><img src="${art.epic}" alt="Epicka skrzynia"><img src="${art.legend}" alt="Legendarna skrzynia"></span><span class="film-next">❯</span></button></section></main></div>
+ <main class="film-main"><div class="film-cards"><button type="button" class="film-card blue" data-act="play"><span class="film-symbol">${filmIcon("sword")}</span><strong>GRAJ</strong><small>Szybka rozgrywka</small></button><button type="button" class="film-card violet" data-act="campaign"><span class="film-symbol">${filmIcon("flag")}</span><strong>KAMPANIA</strong><small>Walka z bossami · WKRÓTCE</small></button><button type="button" class="film-card orange" data-act="training"><span class="film-symbol">${filmIcon("target")}</span><strong>TRENING</strong><small>Testuj kulki i umiejętności</small></button></div><section class="film-banner"><button type="button" data-act="crates" class="film-banner-inner"><span class="new-tag">NOWOŚĆ!</span><span class="film-banner-copy"><strong>NOWE SKRZYNIE</strong><small>Zdobywaj unikalne kulki!</small></span><span class="film-chests"><img src="${art.normal}" alt="Zwykła skrzynia"><img src="${art.legend}" alt="Legendarna skrzynia"><img src="${art.epic}" alt="Epicka skrzynia"></span><span class="film-next">❯</span></button></section></main></div>
  <div class="foot">BALL VS BALL 2.5 · WERSJA TESTOWA · NIE WSZYSTKIE FUNKCJE SĄ GOTOWE</div></div><section id="bvb-fm-screen" class="screen" hidden aria-live="polite"></section>`;
  root.prepend(page);
  const view=page.querySelector('#bvb-fm-screen');
