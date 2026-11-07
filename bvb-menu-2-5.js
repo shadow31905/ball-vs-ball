@@ -367,6 +367,46 @@ function init(){
   #${pageId} .screen[data-mode="crates"] .cinema-shopfooter{font-size:12px}
  }
  `;
+ style.textContent += `
+ /* Scene 11, 05:10: the chest opens, then the reel fills the center stage. */
+ #${pageId} .screen[data-mode="result"]{padding:25px 39px 18px;background:radial-gradient(circle at 50% 50%,#081b3c55,transparent 75%),#030b19!important}
+ #${pageId} .screen[data-mode="result"]>.back{position:absolute;top:20px;right:205px;margin:0;padding:7px 9px;font-size:11px;z-index:2}
+ #${pageId} .screen[data-mode="result"]>.cinema-kicker{font-size:14px;letter-spacing:0;color:#dcc7e2;margin:3px 0 7px}
+ #${pageId} .screen[data-mode="result"]>h2{font-size:36px;line-height:1.1;color:#f1f4ff;margin:0 0 9px}
+ #${pageId} .screen[data-mode="result"]>.cinema-lead{font-size:14px;margin:0;color:#aab9d0}
+ #${pageId} .screen[data-mode="result"] .cinema-wallet{top:24px;right:33px}
+ #${pageId} .screen[data-mode="result"] .cinema-chest,
+ #${pageId} .screen[data-mode="result"] .cinema-reel-window{width:100%;max-width:850px;height:230px;min-height:230px;margin:50px auto 25px}
+ #${pageId} .screen[data-mode="result"] .cinema-chest{display:grid;place-items:center}
+ #${pageId} .screen[data-mode="result"] .cinema-chest img{height:200px;max-width:90%;object-fit:contain;animation:bvbChestOpen 1.1s ease-in-out both}
+ #${pageId} .screen[data-mode="result"] .cinema-reel-window{display:flex;align-items:center;padding:16px 12px;border:2px solid #7d66db;border-radius:23px;box-shadow:0 0 18px #5742b83b,inset 0 0 28px #261b663b}
+ #${pageId} .screen[data-mode="result"] .cinema-reel-ball{width:115px;height:150px;border-radius:11px;gap:4px}
+ #${pageId} .screen[data-mode="result"] .cinema-reel-ball .cinema-portrait{width:107px;height:116px}
+ #${pageId} .screen[data-mode="result"] .cinema-reel-ball .cinema-art-unavailable{font-size:9px}
+ #${pageId} .screen[data-mode="result"] .cinema-marker{width:4px;background:#ffca5a;box-shadow:0 0 16px #ffc64c}
+ #${pageId} .screen[data-mode="result"]>h3{text-align:center;color:#f3f3ff;font-size:26px;margin:25px 0 6px}
+ #${pageId} .screen[data-mode="result"] .cinema-outcome{text-align:center}
+ #${pageId} .screen[data-mode="result"] .cinema-outcome p{margin:3px auto;color:#bfcde1}
+ #${pageId} .screen[data-mode="result"] .cinema-outcome .tilegrid{max-width:430px;margin:8px auto}
+ #${pageId} .screen[data-mode="result"] .cinema-outcome .tile{min-height:45px;padding:8px}
+ @keyframes bvbChestOpen{0%{transform:scale(.8) translateY(10px);filter:brightness(.8) drop-shadow(0 0 6px #3d3dbd)}60%{transform:scale(1.08);filter:brightness(1.8) drop-shadow(0 0 35px #cf8dff)}100%{transform:scale(1);filter:brightness(2.2) drop-shadow(0 0 46px #fff4a5)}}
+ @media(max-width:700px){
+  #${pageId} .screen[data-mode="result"]{padding:12px 10px 16px}
+  #${pageId} .screen[data-mode="result"]>.back{top:6px;right:8px;padding:5px 7px}
+  #${pageId} .screen[data-mode="result"]>.cinema-kicker{font-size:10px;max-width:calc(100% - 85px)}
+  #${pageId} .screen[data-mode="result"]>h2{font-size:24px;margin-bottom:5px}
+  #${pageId} .screen[data-mode="result"]>.cinema-lead{font-size:11px}
+  #${pageId} .screen[data-mode="result"] .cinema-wallet{position:static;display:inline-block;margin:6px 0 0;padding:5px 9px;font-size:11px}
+  #${pageId} .screen[data-mode="result"] .cinema-chest,
+  #${pageId} .screen[data-mode="result"] .cinema-reel-window{height:178px;min-height:178px;margin:14px auto 10px}
+  #${pageId} .screen[data-mode="result"] .cinema-chest img{height:155px}
+  #${pageId} .screen[data-mode="result"] .cinema-reel-window{padding:10px 5px;border-radius:12px}
+  #${pageId} .screen[data-mode="result"] .cinema-reel-ball{width:82px;height:135px}
+  #${pageId} .screen[data-mode="result"] .cinema-reel-ball .cinema-portrait{width:78px;height:100px}
+  #${pageId} .screen[data-mode="result"]>h3{font-size:19px;margin:13px 0 4px}
+  #${pageId} .screen[data-mode="result"] .cinema-outcome p{font-size:11px}
+ }
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -475,10 +515,16 @@ function init(){
    ...Array.from({length:8},()=>balls[Math.floor(chooseCrypto()*balls.length)]||winner)
   ];
   const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===16?' winner':''}">${portrait(b)}<small>${safe(b.n)}</small></div>`).join('');
-  showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwarta skrzynia ${name}"></div><div class="cinema-reel-window"><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><div class="cinema-outcome" hidden><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div></div>`);
-
+  showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><p class="cinema-lead">Prawdziwa nagroda została zapisana • trwa losowanie</p><div class="cinema-wallet"><span class="coin">◉</span> ${Number(s.coins).toLocaleString('pl-PL')} MONET</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwierana skrzynia ${name}"></div><div class="cinema-reel-window" hidden><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><div class="cinema-outcome" hidden><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div></div>`);
+  const kicker=view.querySelector('.cinema-kicker'),heading=view.querySelector('h2');
+  if(kicker&&heading)view.insertBefore(kicker,heading);
+  const chest=view.querySelector('.cinema-chest');
   const strip=view.querySelector('.cinema-reel'),reelWindow=view.querySelector('.cinema-reel-window');
-  if(strip&&reelWindow){
+  view.dataset.mode='result';
+  const startRoll=()=>{
+   if(!strip||!reelWindow||!view.contains(strip))return;
+   if(chest)chest.hidden=true;
+   reelWindow.hidden=false;
    const resultLine=view.querySelector('.cinema-outcome');
    const prizeTile=strip.querySelector('.cinema-reel-ball.winner');
    const prizeRect=prizeTile.getBoundingClientRect(),stripRect=strip.getBoundingClientRect();
@@ -487,8 +533,12 @@ function init(){
    if(typeof strip.animate==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
     strip.animate([{transform:'translateX(0)'},{transform:'translateX('+finalOffset+'px)'}],{duration:4900,easing:'cubic-bezier(.1,.7,.16,1)',fill:'forwards'}).finished.then(finish,finish);
    }else{strip.style.transform='translateX('+finalOffset+'px)';finish();}
-  }
-  view.dataset.mode='result';
+  };
+  // First show the chest opening, then transition into the film's roulette.
+  // Reduced-motion users receive the result without waiting for animation.
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)startRoll();
+  else setTimeout(startRoll,1150);
+
  }
  const nativeArtwork=(id,evolution=1)=>{
   // ART_IMAGES is the real rework's preloaded SVG artwork map, used by the
