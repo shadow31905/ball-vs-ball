@@ -329,6 +329,15 @@ function init(){
  #${pageId} .film-chests img.film-mystery-banner{width:100%;height:clamp(66px,10vw,122px);object-fit:contain;mask-image:none;-webkit-mask-image:none;filter:drop-shadow(0 0 9px #d39f4a);transform:none}
  @media(max-width:650px){#${pageId} .film-chests{flex-basis:40%}#${pageId} .film-chests img.film-mystery-banner{height:53px}}
 `;
+ style.textContent += `
+ #${pageId} .title{height:125px;padding:0!important;position:relative}
+ #${pageId} .title:before,#${pageId} .title h1:before,#${pageId} .title h1:after{display:none!important}
+ #${pageId} .title .film-logo-heading{position:absolute;left:50%;top:-55px;transform:translateX(-50%);width:clamp(320px,45vw,500px);height:190px;margin:0;line-height:1;max-width:none}
+ #${pageId} .film-logo-image{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 10px #efab3450);animation:bvbLogoGlow 5s ease-in-out infinite}
+ @keyframes bvbLogoGlow{0%,100%{filter:drop-shadow(0 0 8px #efab3440)}50%{filter:drop-shadow(0 0 16px #42baff70)}}
+ @media(max-width:650px){#${pageId} .title{height:82px}#${pageId} .title .film-logo-heading{top:-16px;width:245px;height:115px}}
+ @media(prefers-reduced-motion:reduce){#${pageId} .film-logo-image{animation:none}}
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -347,7 +356,7 @@ function init(){
  settings:'<circle cx="12" cy="12" r="3"/><path d="M10 2h4l.5 3 2.2 1 2.5-1.5 2.3 3.5-2.3 2v3l2.3 2-2.3 3.5-2.5-1.5-2.2 1-.5 3h-4l-.5-3-2.2-1-2.5 1.5L2.5 15l2.3-2v-3L2.5 8l2.3-3.5L7.3 6l2.2-1z"/>'
  };return '<svg class="film-vector" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'+(shapes[kind]||'')+'</svg>'};
  page.innerHTML=`<div class="cinematic-shell"><header class="head"><div class="identity"><span class="avatar">${filmIcon("crown")}</span><div><span id="bvb-fm-user" class="username">Gracz</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div></div><div class="topright"><span class="money"><span class="coin">${filmIcon("coin")}</span><span id="bvb-fm-coins">0</span></span>${btn('settings',filmIcon('settings'),'plain')}</div></header>
- <div class="title"><h1>BALL <em>VS</em> BALL</h1><p id="bvb-fm-subtitle">2.5</p></div>
+ <div class="title"><h1 class="film-logo-heading"><img class="film-logo-image" src="./assets/v7-menu-logo.webp" alt="BALL VS BALL 2.5"></h1><p id="bvb-fm-subtitle" hidden>2.5</p></div>
  <div class="film-layout"><aside class="film-nav"><nav class="leftnav">${btn('home',filmIcon('home')+' Menu')}${btn('collection',filmIcon('bag')+' Ekwipunek')}${btn('crates',filmIcon('chest')+' Skrzynie')}${btn('shop',filmIcon('shop')+' Sklep')}${btn('ranking',filmIcon('trophy')+' Osiągnięcia')}${btn('profile',filmIcon('progress')+' Postęp')}</nav></aside>
  <main class="film-main"><div class="film-cards"><button type="button" class="film-card blue" data-act="play"><span class="film-symbol"><img class="film-art-icon" src="./assets/v7-menu-swords.webp" alt=""></span><strong>GRAJ</strong><small>Szybka rozgrywka</small></button><button type="button" class="film-card violet" data-act="campaign"><span class="film-symbol"><img class="film-art-icon" src="./assets/v7-menu-flag.webp" alt=""></span><strong>KAMPANIA</strong><small>Walka z bossami · WKRÓTCE</small></button><button type="button" class="film-card orange" data-act="training"><span class="film-symbol"><img class="film-art-icon" src="./assets/v7-menu-target.webp" alt=""></span><strong>TRENING</strong><small>Testuj kulki i umiejętności</small></button></div><section class="film-banner"><button type="button" data-act="crates" class="film-banner-inner"><span class="new-tag">NOWOŚĆ!</span><span class="film-banner-copy"><strong>NOWE SKRZYNIE</strong><small>Zdobywaj unikalne kulki!</small></span><span class="film-chests"><img class="film-mystery-banner" src="./assets/v7-menu-banner.webp" alt="Trzy tajemnicze skrzynie"></span><span class="film-next">❯</span></button></section></main></div>
  <div class="foot">BALL VS BALL 2.5 · WERSJA TESTOWA · NIE WSZYSTKIE FUNKCJE SĄ GOTOWE</div></div><section id="bvb-fm-screen" class="screen" hidden aria-live="polite"></section>`;
