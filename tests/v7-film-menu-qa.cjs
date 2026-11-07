@@ -49,6 +49,7 @@ const server=http.createServer((req,res)=>{
    });
    console.log('ART '+viewport.width+' '+JSON.stringify(artState));
    if(artState.balls<130)throw Error('Expected at least 130 original balls, got '+artState.balls);
+   if(artState.images<130)throw Error('Original artwork map missing balls: '+artState.images);
 
    for(const key of ['play','campaign','training','crates','collection','shop']){
     if(!await rootMenu.locator('[data-act="'+key+'"]').count())throw Error('Missing menu control '+key);
@@ -79,6 +80,23 @@ const server=http.createServer((req,res)=>{
    await rootMenu.locator('[data-evolution="3"]').click();
    if(!await rootMenu.locator('[data-evolution="3"].selected').count())throw Error('Evolution control failed');
    await page.waitForFunction(()=>{const img=document.querySelector('#bvb-film-menu .cinema-collection-preview img.cinema-portrait');return img?.complete&&img.naturalWidth>0&&img.src.includes('/assets/approved-first16/ball-00-v3.webp')},{timeout:10000});
+   // Verify all 32 approved evolution portraits (16 balls x V2/V3),
+   // not just the first ball. The other variants must not be fabricated.
+   const missingApproved=await page.evaluate(async()=>{
+    const missing=[];
+    const menu=document.querySelector('#bvb-film-menu');
+    for(let id=0;id<16;id++){
+     menu.querySelector('[data-ball="'+id+'"]')?.click();
+     for(const evolution of [2,3]){
+      menu.querySelector('[data-evolution="'+evolution+'"]')?.click();
+      const img=menu.querySelector('.cinema-collection-preview img.cinema-portrait');
+      if(!img){missing.push(id+':V'+evolution+':no-img');continue}
+      try{await img.decode()}catch(_){missing.push(id+':V'+evolution+':broken')}
+     }
+    }
+    return missing;
+   });
+   if(missingApproved.length)throw Error('Missing approved evolution portraits: '+missingApproved.join(', '));
    console.log('PASS approved V2/V3 portraits '+viewport.width);
 
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
@@ -91,11 +109,34 @@ const server=http.createServer((req,res)=>{
    if(await rootMenu.locator('.cinema-reel-ball img.cinema-portrait').count()<10)throw Error('Roulette missing real game artwork');
    await rootMenu.locator('.cinema-outcome').waitFor({state:'visible',timeout:15000});
    const result=await rootMenu.locator('.cinema-outcome').textContent();
+   const reelOffset=await page.evaluate(()=>{
+    const marker=document.querySelector('#bvb-film-menu .cinema-marker').getBoundingClientRect();
+    const winner=document.querySelector('#bvb-film-menu .cinema-reel-ball.winner').getBoundingClientRect();
+    return Math.abs(marker.left+marker.width/2-winner.left-winner.width/2);
+   });
+   if(reelOffset>3)throw Error('Roulette marker misses saved winner by '+reelOffset.toFixed(2)+'px');
    if(!result.includes(winnerName))throw Error('Visual winner and awarded result disagree');
    const after=await page.evaluate(()=>({coins:S.coins,owned:S.own.length,persisted:JSON.parse(localStorage.getItem(K)||'null')?.coins}));
    if(after.coins!==after.persisted||after.coins>before.coins-60||after.owned<before.owned)throw Error('Chest transaction did not persist: '+JSON.stringify({before,after}));
    await page.screenshot({path:'tests/v7-menu-reel-'+viewport.width+'.png',fullPage:true});
    console.log('PASS native chest transaction '+viewport.width+' '+winnerName+' '+JSON.stringify({before,after}));
+   for(const chest of ['epic','legend']){
+    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
+    await rootMenu.locator('[data-act="crates"]').first().click();
+    const previous=await page.evaluate(()=>({coins:S.coins,owned:S.own.length}));
+    await rootMenu.locator('[data-act="purchase-'+chest+'"]').click();
+    await rootMenu.locator('.cinema-reel-ball.winner').waitFor({state:'attached',timeout:10000});
+    const prize=await rootMenu.locator('.cinema-reel-ball.winner small').textContent();
+    await rootMenu.locator('.cinema-outcome').waitFor({state:'visible',timeout:15000});
+    const outcome=await rootMenu.locator('.cinema-outcome').textContent();
+    if(!outcome.includes(prize))throw Error(chest+' prize and reel mismatch');
+    const persisted=await page.evaluate(()=>({coins:S.coins,owned:S.own.length,stored:JSON.parse(localStorage.getItem(K)||'null')?.coins}));
+    const cost=chest==='epic'?300:750;
+    if(persisted.coins!==persisted.stored||persisted.coins>previous.coins-cost+40||persisted.owned<previous.owned)
+     throw Error(chest+' transaction not persisted: '+JSON.stringify({previous,persisted}));
+    console.log('PASS '+chest+' chest '+viewport.width+' '+prize);
+   }
+
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="training"]').first().click();
    try{await page.locator('#game').waitFor({state:'visible',timeout:5000});}
