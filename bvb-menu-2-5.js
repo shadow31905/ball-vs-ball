@@ -108,6 +108,7 @@ function init(){
  const openNative=name=>{if(!can(name))return false;window.BVBMenu.open(name);return true};
  function showView(title,content){view.hidden=false;view.innerHTML=`${btn('home','← Wróć','back')}<h2>${safe(title)}</h2>${content}`;view.scrollTop=0;}
  function info(title,desc,links=''){showView(title,`<div class="pane">${desc}</div><div class="tilegrid">${links}</div>`)}
+ let activeRoll=0;
  const chestData=[['normal','Zwykła',100,art.normal],['epic','Epicka',300,art.epic],['legend','Legendarna',750,art.legend]];
  function buttonsAt(t){return chestData.filter(([k])=>k==='normal'||availableAt(t))}
  function chestList(t){return buttonsAt(t).map(([k,n,cost,img])=>`<button type="button" data-act="chest-${k}" class="chest"><img src="${img}" alt="Skrzynia ${n}"><span>${n}</span></button>`).join('')}
@@ -160,6 +161,7 @@ function init(){
   if(typeof window.SFX?.rare==='function')window.SFX.rare();
   // Animation stops at the exact ball which was already saved; no second draw.
   const pool=balls.filter(b=>b&&Number.isInteger(b.id));
+  const rollId=++activeRoll;
   const seq=Array.from({length:27},(_,i)=>i===23?winner:(pool[Math.floor(chooseCrypto()*pool.length)]||winner));
   const artBall=b=>{try{if(typeof orb==='function')return orb(b)}catch(_){}return '<span style="font-size:2rem">'+safe(b.e||'◉')+'</span>'};
   const tiles=seq.map((b,i)=>'<div class="bvb-roll-item" data-n="'+i+'"><div class="bvb-roll-art">'+artBall(b)+'</div><small>'+safe(b.n)+'</small></div>').join('');
@@ -167,7 +169,7 @@ function init(){
   info('Otwieranie skrzyni — '+name,css+'<div class="pane">Losowanie trwa. Nagroda została zapisana.</div><div class="bvb-roll-window"><div class="bvb-roll-track">'+tiles+'</div></div>');
   view.dataset.mode='rolling';
   const track=view.querySelector('.bvb-roll-track'),viewport=view.querySelector('.bvb-roll-window'),target=track?.querySelector('[data-n="23"]');
-  const finish=()=>{if(view.dataset.mode!=='rolling')return;info('Wynik losowania — '+name,'<div class="gift"><div>'+artBall(winner)+'</div><b>'+safe(winner.n)+'</b><div>'+(had?'Duplikat · zwrot 40 🪙':'Nowa kulka w kolekcji!')+'</div><div>Pozostało '+Number(s.coins).toLocaleString('pl-PL')+' 🪙</div></div>',btn('crates','Otwórz kolejną','tile')+btn('collection','Kolekcja','tile'));view.dataset.mode='result'};
+  const finish=()=>{if(view.dataset.mode!=='rolling'||rollId!==activeRoll)return;info('Wynik losowania — '+name,'<div class="gift"><div>'+artBall(winner)+'</div><b>'+safe(winner.n)+'</b><div>'+(had?'Duplikat · zwrot 40 🪙':'Nowa kulka w kolekcji!')+'</div><div>Pozostało '+Number(s.coins).toLocaleString('pl-PL')+' 🪙</div></div>',btn('crates','Otwórz kolejną','tile')+btn('collection','Kolekcja','tile'));view.dataset.mode='result'};
   if(track&&viewport&&target){
    const x=-(target.offsetLeft+target.offsetWidth/2-viewport.clientWidth/2);
    const animate=()=>{track.style.transition='transform 1800ms cubic-bezier(.1,.78,.12,1)';track.style.transform='translateX('+x+'px)'};
