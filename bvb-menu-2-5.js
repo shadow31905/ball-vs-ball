@@ -89,17 +89,44 @@ function init(){
  @media(max-width:405px){#${pageId} .columns{grid-template-columns:98px 1fr;min-height:unset}#${pageId} .leftnav button{font-size:.73rem;padding:9px 2px}#${pageId} .right{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}#${pageId} .center{min-height:270px}#${pageId} .fighters{min-height:152px}#${pageId} .fighter{height:125px}#${pageId} .bottom{grid-template-columns:repeat(3,minmax(0,1fr))}}
  @media(prefers-reduced-motion:reduce){#${pageId} *,#${pageId}:before{animation:none!important;transition:none!important}}
  `;
+ style.textContent += `
+/* Cinematic menu prototype — isolated to film menu, no game logic changes. */
+#${pageId}{min-height:640px!important;background:radial-gradient(ellipse at 50% 0%,#0054a9 0%,transparent 48%),radial-gradient(ellipse at 75% 70%,#9b4309 0%,transparent 46%),linear-gradient(120deg,#020a1b,#081b40 50%,#190c15)!important}
+#${pageId} .cinematic-shell{position:relative;min-height:610px;padding:12px 14px 35px;background:linear-gradient(90deg,#00132c55,#0000 40%,#27100444)}
+#${pageId} .head{display:flex;justify-content:space-between;align-items:center;margin:0 0 4px!important;padding:0!important;background:transparent!important;border:0!important}
+#${pageId} .identity{display:flex;align-items:center;gap:9px}
+#${pageId} .avatar{display:grid;place-items:center;border:2px solid #e6a931;border-radius:50%;width:47px;height:47px;background:#171421;font-size:24px;box-shadow:0 0 14px #e8a32b}
+#${pageId} .title{text-align:center;margin:-8px auto 22px!important;pointer-events:none}
+#${pageId} .title h1{font-size:clamp(2rem,5.4vw,4.3rem)!important;font-weight:1000;font-style:italic;letter-spacing:-.04em;color:#f2f7ff;text-shadow:2px 4px 0 #0a2448,0 0 24px #248fff}
+#${pageId} .title h1 em{color:#ffc443;text-shadow:0 0 16px #ec8d16}
+#${pageId} .title p{font-size:clamp(1.6rem,4vw,3.2rem)!important;font-weight:1000;font-style:italic;color:#ffbf30;text-shadow:0 4px 0 #6a3104;margin:-12px 0 0}
+#${pageId} .film-layout{display:grid;grid-template-columns:clamp(105px,17%,175px) minmax(0,1fr);gap:18px}
+#${pageId} .film-nav .leftnav{display:flex;flex-direction:column;gap:8px}
+#${pageId} .film-nav button{min-height:43px;text-align:left;border:1px solid #3684be;background:linear-gradient(130deg,#102b53,#030e24);box-shadow:inset 0 0 12px #1379b533;border-radius:9px;color:#edf7ff;font-weight:850;padding:8px!important}
+#${pageId} .film-nav button:first-child{background:linear-gradient(#ad7723,#613700);border-color:#f6c65c}
+#${pageId} .film-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#${pageId} .film-card{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;min-height:205px;border:2px solid var(--c);border-radius:17px;color:white;cursor:pointer;background:radial-gradient(ellipse at 50% 30%,var(--glow),transparent 65%),linear-gradient(160deg,#08162e,#020a19);box-shadow:inset 0 0 22px var(--glow),0 0 14px var(--glow);transform:skew(-3deg);transition:transform .2s,filter .2s}
+#${pageId} .film-card:hover{transform:skew(-3deg) translateY(-5px);filter:brightness(1.2)}
+#${pageId} .film-card.blue{--c:#09baff;--glow:#0877d9a0}#${pageId} .film-card.violet{--c:#a970ff;--glow:#7139c5a0}#${pageId} .film-card.orange{--c:#ff8b28;--glow:#c94c0aa0}
+#${pageId} .film-symbol{font-size:clamp(2.5rem,7vw,5.2rem);line-height:1.1;text-shadow:0 0 18px var(--c)}
+#${pageId} .film-card strong{font-size:clamp(1.1rem,2.8vw,2.2rem);font-weight:1000;font-style:italic;text-shadow:0 3px 3px #000}
+#${pageId} .film-card small{font-size:clamp(.62rem,1.2vw,.86rem);text-align:center;color:#e4edff}
+#${pageId} .film-banner{margin-top:15px;border:2px solid #4b83bf;border-radius:13px;overflow:hidden;background:linear-gradient(100deg,#031329,#0c2457,#170b31)}
+#${pageId} .film-banner-inner{width:100%;min-height:105px;border:0;background:transparent;color:white;display:flex;align-items:center;gap:12px;padding:12px 17px;text-align:left;cursor:pointer}
+#${pageId} .film-banner-copy{display:flex;flex-direction:column;flex:1}#${pageId} .film-banner-copy strong{font-size:clamp(1rem,2.6vw,1.9rem);font-style:italic;font-weight:1000}#${pageId} .film-banner-copy small{color:#cbd8ee}
+#${pageId} .new-tag{background:#9c6615;color:#ffe6a2;border:1px solid #ffce67;border-radius:6px;font-weight:900;padding:4px 7px;font-size:.7rem}
+#${pageId} .film-chests{font-size:clamp(1.2rem,3.5vw,3rem)}#${pageId} .film-next{font-size:1.5rem}
+#${pageId} .foot{text-align:center;margin-top:18px;font-size:.65rem;color:#adbed5}
+@media(max-width:650px){#${pageId} .cinematic-shell{padding:8px 5px 18px}#${pageId} .film-layout{grid-template-columns:85px minmax(0,1fr);gap:6px}#${pageId} .film-nav button{font-size:.64rem;min-height:38px;padding:5px!important}#${pageId} .film-cards{gap:4px}#${pageId} .film-card{min-height:155px;border-radius:9px;padding:4px}#${pageId} .film-symbol{font-size:2rem}#${pageId} .film-card strong{font-size:.85rem}#${pageId} .film-card small{font-size:.56rem}#${pageId} .film-banner-inner{padding:6px;gap:4px}#${pageId} .film-chests{font-size:1rem}#${pageId} .new-tag{font-size:.52rem;padding:3px}}
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const fightImg=(src,alt)=>`<img class="fighter" src="${src}" alt="${alt}" draggable="false">`;
- page.innerHTML=`<header class="head"><div class="identity"><span id="bvb-fm-user" class="username">Gracz · PODGLĄD</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div><div class="topright"><span class="money"><span class="coin">B</span><span id="bvb-fm-coins">0</span></span>${btn('settings','USTAWIENIA','plain')}</div></header>
- <div class="title"><h1>BALL VS BALL</h1><p id="bvb-fm-subtitle">NOWE MENU 2.5</p></div>
- <div class="columns"><aside class="box"><h2>NAWIGACJA</h2><nav class="leftnav">${btn('home','Menu główne')}${btn('modes','Tryby gry')}${btn('collection','Kolekcja kulek')}${btn('crates','Skrzynie')}${btn('shop','Sklep')}${btn('ranking','Ranking')}${btn('profile','Profil')}</nav></aside>
- <main class="center"><div class="fighters">${fightImg(art.chess,'Szachy V3')}${fightImg(art.vamp,'Wampir V3')}${fightImg(art.phoenix,'Feniks V3')}</div>${btn('play','GRAJ','play')}</main>
- <aside class="right"><section class="box"><h2>AKTUALNOŚCI</h2><div class="news-name" id="bvb-fm-news">Odejście Halloween</div><div class="news-date">07.11.2026 · 16:00</div><div class="endline" id="bvb-fm-endline">KONIEC ZA</div><div class="count" role="timer" aria-label="Odliczanie do soboty 16:00" id="bvb-fm-timer">--:--</div></section>
- <section class="box"><h2>SKRZYNIE</h2><div class="chests" id="bvb-fm-chestbar"></div><p class="unlocks" id="bvb-fm-chestnote"></p></section></aside></div>
- <div class="bottom">${btn('training','Trening')}${btn('campaign','Kampania')}${btn('bosses','Bossowie')}${btn('multiplayer','Multiplayer')}${btn('quests','Zadania')}${btn('rewards','Nagrody')}${btn('replays','Powtórki')}</div>
- <div class="foot">BALL VS BALL 2.5 · NOWE MENU · AKTUALNA GRA</div><section id="bvb-fm-screen" class="screen" hidden aria-live="polite"></section>`;
+ page.innerHTML=`<div class="cinematic-shell"><header class="head"><div class="identity"><span class="avatar">👑</span><div><span id="bvb-fm-user" class="username">Gracz</span><span id="bvb-fm-level">Poziom 1</span><div class="xpbar"><i id="bvb-fm-xp"></i></div></div></div><div class="topright"><span class="money"><span class="coin">★</span><span id="bvb-fm-coins">0</span></span>${btn('settings','⚙','plain')}</div></header>
+ <div class="title"><h1>BALL <em>VS</em> BALL</h1><p id="bvb-fm-subtitle">2.5</p></div>
+ <div class="film-layout"><aside class="film-nav"><nav class="leftnav">${btn('home','⌂　 Menu')}${btn('collection','▣　 Ekwipunek')}${btn('crates','▤　 Skrzynie')}${btn('shop','▥　 Sklep')}${btn('ranking','🏆　 Osiągnięcia')}${btn('profile','▥　 Postęp')}</nav></aside>
+ <main class="film-main"><div class="film-cards"><button type="button" class="film-card blue" data-act="play"><span class="film-symbol">⚔</span><strong>GRAJ</strong><small>Szybka rozgrywka</small></button><button type="button" class="film-card violet" data-act="campaign"><span class="film-symbol">⚑</span><strong>KAMPANIA</strong><small>Walka z bossami · WKRÓTCE</small></button><button type="button" class="film-card orange" data-act="training"><span class="film-symbol">◎</span><strong>TRENING</strong><small>Testuj kulki i umiejętności</small></button></div><section class="film-banner"><button type="button" data-act="crates" class="film-banner-inner"><span class="new-tag">NOWOŚĆ!</span><span class="film-banner-copy"><strong>NOWE SKRZYNIE</strong><small>Zdobywaj unikalne kulki!</small></span><span class="film-chests">🎁　🎁　🎁</span><span class="film-next">❯</span></button></section></main></div>
+ <div class="foot">BALL VS BALL 2.5 · WERSJA TESTOWA MENU · FUNKCJE PODŁĄCZONE DO GRY</div></div><section id="bvb-fm-screen" class="screen" hidden aria-live="polite"></section>`;
  root.prepend(page);
  const view=page.querySelector('#bvb-fm-screen');
  const getSave=()=>{try{return typeof S!=='undefined'&&S?S:null}catch(_){return null}};
