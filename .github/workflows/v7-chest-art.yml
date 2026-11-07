@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - run: python -m pip install --disable-pip-version-check Pillow==11.3.0 imageio-ffmpeg==0.6.0
       - run: python scripts/extract_chest_art.py
       - name: Commit full chest assets to beta branch only
         run: |
