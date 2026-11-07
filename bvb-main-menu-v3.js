@@ -53,7 +53,8 @@ const boss=move(screens.modes.list,'bossMenu()','👹 Walka z bossem','Wybierz b
 if(bot)bot.setAttribute('onclick',"window.BVBMenu.prepare('bot')");
 if(boss)boss.setAttribute('onclick',"window.BVBMenu.prepare('boss')");
 move(screens.modes.list,'startMatch(4)','🎯 Trening','Ćwicz umiejętności swoich kulek.');
-move(screens.modes.list,'window.BVBCampaign?.open?.()','🗺️ Kampania','50 poziomów i bossowie.');
+const story=move(screens.modes.list,'window.BVBCampaign?.open?.()','🗺️ Tryb fabularny · WKRÓTCE','8 rozdziałów i 8 bossów w przygotowaniu.');
+if(story)story.setAttribute('onclick',"window.BVBFilmMenuBeta?.openCampaignSoon?.()");
 screens.modes.list.append(custom('••• Więcej trybów','Survival, Boss Rush, Chaos, Turniej i PvP.',()=>open('extra'),'bvb3-wide'));
 for(const action of ['startMatch(1)','startMatch(7)','startMatch(3)','startMatch(5)','startMatch(6)'])move(screens.extra.list,action);
 move(screens.extra.list,'mpMenu()','🌐 Multiplayer','Zaproś znajomego do walki online.');
