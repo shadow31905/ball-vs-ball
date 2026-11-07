@@ -211,6 +211,27 @@ function init(){
  #${pageId} .cinema-collection-preview>.cinema-art-unavailable{height:180px}
  #${pageId} .cinema-reel-ball .cinema-art-unavailable{height:77px}
  `;
+ style.textContent += `
+ /* The rework engine has its own legacy top bar; hide it only while
+    the V7 film menu is active. It remains available in gameplay. */
+ #app:has(#${pageId}:not([hidden])) > :not(#menu){display:none!important}
+ #${pageId}{min-height:100dvh!important}
+ #${pageId} .cinematic-shell{min-height:100dvh}
+ #${pageId} .screen{inset:0;min-height:100%;background:#030b19!important;z-index:10;box-shadow:none}
+ #${pageId} .screen:has(.cinema-collection-layout){padding:10px 15px 18px}
+ #${pageId} .screen:has(.cinema-collection-layout)>.back{position:absolute;top:8px;right:15px;z-index:2;padding:6px 10px;font-size:12px;margin:0}
+ #${pageId} .screen:has(.cinema-collection-layout)>h2{font-size:20px;margin:0 0 4px;line-height:1.2}
+ #${pageId} .screen:has(.cinema-collection-layout) .cinema-collection-header{margin:0 0 8px;max-width:calc(100% - 78px)}
+ #${pageId} .screen:has(.cinema-collection-layout) #bvb-fm-search{padding:7px 10px;font-size:12px;width:260px}
+ @media(max-width:650px){
+  #${pageId} .screen{padding:13px 9px}
+  #${pageId} .screen:has(.cinema-collection-layout){padding:12px 8px}
+  #${pageId} .screen:has(.cinema-collection-layout)>.back{top:8px;right:8px}
+  #${pageId} .screen:has(.cinema-collection-layout)>h2{font-size:16px;margin:0 0 8px}
+  #${pageId} .screen:has(.cinema-collection-layout) .cinema-collection-header{max-width:100%;margin-top:20px}
+  #${pageId} .cinema-collection-preview{min-height:260px}
+ }
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
