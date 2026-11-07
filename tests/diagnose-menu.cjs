@@ -38,6 +38,12 @@ const server=http.createServer((req,res)=>{
    })));
 
    console.log('AFTER '+viewport.width+' '+JSON.stringify(await state()));
+   const guest=page.locator('#accountGate button').filter({hasText:'Graj bez konta'});
+   if(await guest.count() && await guest.isVisible()){
+    await guest.click({timeout:12000});
+    await page.waitForTimeout(650);
+    console.log('AFTER_GUEST '+viewport.width+' '+JSON.stringify(await state()));
+   }
    console.log('JSERRORS '+viewport.width+' '+JSON.stringify(errors.slice(0,10)));
    await page.screenshot({path:'tests/menu-after-film-'+viewport.width+'.png',fullPage:true,timeout:20000}).catch(()=>{});
    await page.close();
