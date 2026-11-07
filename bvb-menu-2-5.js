@@ -274,7 +274,7 @@ function init(){
  function chooseCrypto(){try{let v=new Uint32Array(1);crypto.getRandomValues(v);return v[0]/4294967296}catch(_){return Math.random()}}
  function selectBall(kind,balls){
   // No manufactured rarity: use b.r from the native game data.
-  const chances=kind==='epic'?[[2,0.70],[3,0.25],[4,0.05]]:[[3,0.80],[4,0.20]];
+  const chances=kind==='normal'?[[0,.50],[1,.30],[2,.15],[3,.04],[4,.01]]:kind==='epic'?[[2,.70],[3,.25],[4,.05]]:[[3,.80],[4,.20]];
   const usable=chances.filter(([rar])=>balls.some(b=>b?.r===rar));
   if(!usable.length)return null;
   const total=usable.reduce((sum,a)=>sum+a[1],0);let value=chooseCrypto()*total,chosen=usable[usable.length-1][0];
@@ -287,19 +287,26 @@ function init(){
   if(kind!=='normal'&&!availableAt(now())){renderCrates();return;}
   const [key,name,cost]=d,s=getSave();if(!s){info('Nie można otworzyć','Stan gry nie jest dostępny.',btn('crates','Skrzynie','tile'));return}
   if(s.coins<cost){info('Za mało monet','Potrzeba '+cost+' monet. Aktualnie masz '+s.coins+'.',btn('crates','← Skrzynie','tile'));return}
-  if(kind==='normal'){
-   // Use the original real gacha including its own loot odds, animation and save.
-   if(typeof window.pull==='function'){window.pull();return}
-   info('Skrzynia zwykła','Mechanika otwierania nie jest dostępna w tej wersji silnika.',btn('crates','← Skrzynie','tile'));return;
-  }
   const balls=getBalls(),winner=selectBall(kind,balls);
   if(!winner){info('Skrzynia niedostępna','W grze brakuje kulek tej rzadkości. Monety nie zostały pobrane.',btn('crates','← Skrzynie','tile'));return}
   const had=Array.isArray(s.own)&&s.own.includes(winner.id);
-  s.coins-=cost;
-  if(!had){s.own ||= [];s.own.push(winner.id)}else s.coins+=40;
+  const beforeCoins=s.coins,beforeOwn=Array.isArray(s.own)?s.own.slice():[],beforeGacha=s.q?.gacha;
+  s.coins=Number(s.coins)-cost+(had?40:0);
+  if(!had){s.own ||= [];s.own.push(winner.id)}
   if(s.q)s.q.gacha=(Number(s.q.gacha)||0)+1;
-  try{if(typeof save==='function')save()}catch(_){}
-  if(typeof window.SFX?.rare==='function')window.SFX.rare();
+  // The prize and the reel must agree, and a failed save must not spend coins.
+  try{
+   if(typeof save!=='function')throw Error('Native save unavailable');
+   save();
+   const key=typeof K!=='undefined'?K:'bvb2';
+   const persisted=JSON.parse(localStorage.getItem(key)||'null');
+   if(!persisted||Number(persisted.coins)!==Number(s.coins)||!persisted.own?.includes(winner.id))throw Error('Persistence verification failed');
+  }catch(err){
+   s.coins=beforeCoins;s.own=beforeOwn;if(s.q)s.q.gacha=beforeGacha;
+   info('BŁĄD ZAPISU','Nie udało się bezpiecznie zapisać losowania. Monety i kolekcja nie zostały zmienione.',btn('crates','← Skrzynie','tile'));
+   return;
+  }
+  try{if(typeof SFX!=='undefined'&&typeof SFX.rare==='function')SFX.rare()}catch(_){};
   const candidates=Array.from({length:16},(_,i)=>balls[Math.floor(chooseCrypto()*balls.length)]||winner);candidates.push(winner);
   const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===candidates.length-1?' winner':''}">${portrait(b)}<small>${safe(b.n)}</small></div>`).join('');
   showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwarta skrzynia ${name}"></div><div class="cinema-reel-window"><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><div class="cinema-outcome" hidden><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div></div>`);
