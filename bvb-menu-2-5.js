@@ -268,6 +268,18 @@ function init(){
  #${pageId} .cinema-outcome .tile{min-height:44px;padding:8px 12px}
  #${pageId} .cinema-reel-ball small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 `;
+ style.textContent += `
+ /* Procedural V7 arena scenery: separate live layers, never a pasted film frame. */
+ #${pageId} .cinematic-shell{isolation:isolate;overflow:hidden}
+ #${pageId} .cinematic-shell:before{content:'';position:absolute;left:50%;bottom:-18px;width:min(62vw,760px);height:180px;transform:translateX(-50%) perspective(500px) rotateX(66deg);border:8px solid #e9a737;border-radius:50%;background:radial-gradient(ellipse at center,#ffbc3020,transparent 68%);box-shadow:0 0 14px #f5a727,0 0 34px #e39b2b99,inset 0 0 28px #ffb334;opacity:.75;pointer-events:none;z-index:0}
+ #${pageId} .cinematic-shell:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;background:linear-gradient(132deg,transparent 15%,#0078ff44 16%,transparent 17% 36%,#3adfff20 37%,transparent 38%),linear-gradient(35deg,transparent 30%,#ffab2033 31%,transparent 32% 75%,#ffbb3333 76%,transparent 77%);mask-image:linear-gradient(#000 0%,transparent 62%);-webkit-mask-image:linear-gradient(#000 0%,transparent 62%);opacity:.8}
+ #${pageId} .cinematic-shell>*{position:relative;z-index:1}
+ #${pageId} .film-layout{position:relative}
+ #${pageId} .film-layout:before,#${pageId} .film-layout:after{content:'♛';position:absolute;top:-153px;width:48px;height:103px;display:block;text-align:center;padding-top:18px;font-size:27px;color:#ffe28d;text-shadow:0 0 12px #e4a736;background:linear-gradient(100deg,#291909,#77511d 45%,#2d1a0d);border:2px solid #a87932;clip-path:polygon(0 0,100% 0,100% 79%,50% 100%,0 79%);opacity:.74;pointer-events:none}
+ #${pageId} .film-layout:before{left:12%}
+ #${pageId} .film-layout:after{right:1%}
+ @media(max-width:650px){#${pageId} .film-layout:before,#${pageId} .film-layout:after{display:none}#${pageId} .cinematic-shell:before{height:80px;bottom:-8px;border-width:4px}}
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
