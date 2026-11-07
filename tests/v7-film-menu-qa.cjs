@@ -137,6 +137,12 @@ const server=http.createServer((req,res)=>{
     await rootMenu.locator('.cinema-outcome').waitFor({state:'visible',timeout:15000});
     const outcome=await rootMenu.locator('.cinema-outcome').textContent();
     if(!outcome.includes(prize))throw Error(chest+' prize and reel mismatch');
+    const chestOffset=await page.evaluate(()=>{
+     const marker=document.querySelector('#bvb-film-menu .cinema-marker').getBoundingClientRect();
+     const winner=document.querySelector('#bvb-film-menu .cinema-reel-ball.winner').getBoundingClientRect();
+     return Math.abs(marker.left+marker.width/2-winner.left-winner.width/2);
+    });
+    if(chestOffset>3)throw Error(chest+' roulette marker misses saved winner by '+chestOffset.toFixed(2)+'px');
     const persisted=await page.evaluate(()=>({coins:S.coins,owned:S.own.length,stored:JSON.parse(localStorage.getItem(K)||'null')?.coins}));
     const cost=chest==='epic'?300:750;
     if(persisted.coins!==persisted.stored||persisted.coins>previous.coins-cost+40||persisted.owned<previous.owned)
@@ -144,6 +150,21 @@ const server=http.createServer((req,res)=>{
     console.log('PASS '+chest+' chest '+viewport.width+' '+prize);
    }
 
+   // One real browser reload verifies that the native save survives a new page,
+   // rather than merely updating the in-memory S object or localStorage once.
+   if(viewport.width===1280){
+    const saved=await page.evaluate(()=>({coins:S.coins,owned:[...S.own].sort((a,b)=>a-b)}));
+    await page.reload({waitUntil:'domcontentloaded',timeout:180000});
+    await page.locator('#bvb-loading-screen').waitFor({state:'detached',timeout:150000});
+    const skipAgain=page.locator('#bvb-v7-skip');
+    if(await skipAgain.count()&&await skipAgain.isVisible())await skipAgain.click();
+    const guestAgain=page.locator('#accountGate button').filter({hasText:'Graj bez konta'});
+    if(await guestAgain.count()&&await guestAgain.isVisible())await guestAgain.click();
+    await rootMenu.waitFor({state:'visible',timeout:30000});
+    const restored=await page.evaluate(()=>({coins:S.coins,owned:[...S.own].sort((a,b)=>a-b)}));
+    if(JSON.stringify(saved)!==JSON.stringify(restored))throw Error('Native chest save lost after reload: '+JSON.stringify({saved,restored}));
+    console.log('PASS chest rewards persist after full browser reload '+viewport.width);
+   }
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="training"]').first().click();
    try{await page.locator('#game').waitFor({state:'visible',timeout:5000});}
