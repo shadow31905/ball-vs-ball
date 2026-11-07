@@ -338,6 +338,35 @@ function init(){
  @media(max-width:650px){#${pageId} .title{height:82px}#${pageId} .title .film-logo-heading{top:-16px;width:245px;height:115px}}
  @media(prefers-reduced-motion:reduce){#${pageId} .film-logo-image{animation:none}}
 `;
+ style.textContent += `
+ /* Scene 11, 04:58: label -> title -> subtitle -> three aligned chests. */
+ #${pageId} .screen[data-mode="crates"]{padding:25px 37px 12px;background:radial-gradient(circle at 50% 90%,#0a2d5260,transparent 50%),#030b19!important}
+ #${pageId} .screen[data-mode="crates"]>.back{position:absolute;top:20px;right:205px;margin:0;padding:7px 9px;font-size:11px;z-index:2}
+ #${pageId} .screen[data-mode="crates"]>.cinema-kicker{font-size:14px;letter-spacing:0;color:#e5c18b;line-height:18px;margin:3px 0 6px}
+ #${pageId} .screen[data-mode="crates"]>h2{font-size:36px;line-height:1.1;margin:0 0 9px;color:#eef5ff;letter-spacing:.01em}
+ #${pageId} .screen[data-mode="crates"]>.cinema-lead{font-size:15px;line-height:19px;margin:0 0 13px;color:#aebed2}
+ #${pageId} .screen[data-mode="crates"] .cinema-wallet{top:24px;right:33px}
+ #${pageId} .screen[data-mode="crates"] .cinema-shopgrid{gap:35px;margin:20px 0 28px}
+ #${pageId} .screen[data-mode="crates"] .cinema-shopcard{min-height:285px;justify-content:flex-end;gap:8px;padding:9px 9px 17px;background:linear-gradient(170deg,#071324,#061126);border-width:2px;border-radius:16px}
+ #${pageId} .screen[data-mode="crates"] .cinema-shopcard img{height:183px;object-fit:contain}
+ #${pageId} .screen[data-mode="crates"] .cinema-shopcard strong{font-size:20px;line-height:22px}
+ #${pageId} .screen[data-mode="crates"] .cinema-shopcard button{font-size:12px;line-height:18px;border-radius:10px;padding:6px 13px}
+ #${pageId} .screen[data-mode="crates"] .cinema-shopfooter{max-width:412px;font-size:16px;border-radius:18px}
+ @media(max-width:700px){
+  #${pageId} .screen[data-mode="crates"]{padding:12px 10px 15px}
+  #${pageId} .screen[data-mode="crates"]>.back{top:6px;right:8px;padding:5px 7px}
+  #${pageId} .screen[data-mode="crates"]>.cinema-kicker{font-size:10px;margin-top:0;max-width:calc(100% - 85px)}
+  #${pageId} .screen[data-mode="crates"]>h2{font-size:25px;margin-bottom:5px}
+  #${pageId} .screen[data-mode="crates"]>.cinema-lead{font-size:11px;margin:0 0 6px}
+  #${pageId} .screen[data-mode="crates"] .cinema-wallet{position:static;display:inline-block;margin:0 0 8px;padding:5px 8px;font-size:11px}
+  #${pageId} .screen[data-mode="crates"] .cinema-shopgrid{gap:6px;margin:8px 0 18px}
+  #${pageId} .screen[data-mode="crates"] .cinema-shopcard{min-height:180px;padding:6px 3px 9px;gap:5px;border-radius:8px}
+  #${pageId} .screen[data-mode="crates"] .cinema-shopcard img{height:95px}
+  #${pageId} .screen[data-mode="crates"] .cinema-shopcard strong{font-size:12px;line-height:14px}
+  #${pageId} .screen[data-mode="crates"] .cinema-shopcard button{font-size:9px;padding:5px 3px}
+  #${pageId} .screen[data-mode="crates"] .cinema-shopfooter{font-size:12px}
+ }
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -382,6 +411,9 @@ function init(){
   const t=now(),opened=availableAt(t),s=getSave();
   const cards=buttonsAt(t).map(([k,n,cost,img])=>`<article class="cinema-shopcard"><img src="${img}" alt="Skrzynia ${n}"><strong>${n}</strong><button type="button" data-act="purchase-${k}">ZA ${cost} MONET</button></article>`).join('');
   showView('NOWY SKLEP',`<div class="cinema-kicker">BALL VS BALL 2.5 / NOWA ERA</div><p class="cinema-lead">Kulki zdobywasz wyłącznie ze skrzyń</p><div class="cinema-wallet">🪙 <span id="bvb-fm-wallet">${Number(s?.coins||0).toLocaleString('pl-PL')}</span> MONET</div><div class="cinema-shopgrid">${cards}</div><div class="cinema-shopfooter">WYBIERZ SKRZYNIĘ</div>`);
+  // In the approved V7 shot the small era label precedes the shop title.
+  const kicker=view.querySelector('.cinema-kicker'),heading=view.querySelector('h2');
+  if(kicker&&heading)view.insertBefore(kicker,heading);
   view.dataset.mode='crates';view.dataset.unlocked=opened?'yes':'no';
  }
  function chooseCrypto(){try{let v=new Uint32Array(1);crypto.getRandomValues(v);return v[0]/4294967296}catch(_){return Math.random()}}
