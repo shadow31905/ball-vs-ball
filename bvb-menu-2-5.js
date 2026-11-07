@@ -454,7 +454,11 @@ function init(){
    chosen.image,chosen.img,chosen.portrait,chosen.sprite,chosen.imageUrl,
    b['v'+evolution],b['V'+evolution],b['artV'+evolution]
   ].find(v=>typeof v==='string'&&/^(data:image\/|https?:\/\/|blob:|\.{0,2}\/)/.test(v));
-  const src=explicit||nativeArtwork(b.id,evolution);
+  // First 16 evolution portraits are previously approved WebP, imported
+  // from art/accurate-game-sketch-00-48. Do not fabricate the remaining tiers.
+  const approved=evolution>1&&Number.isInteger(b.id)&&b.id>=0&&b.id<16?
+   './assets/approved-first16/ball-'+String(b.id).padStart(2,'0')+'-v'+evolution+'.webp':null;
+  const src=explicit||nativeArtwork(b.id,evolution)||approved;
   if(src)return '<img class="cinema-portrait" loading="lazy" src="'+safe(src)+'" alt="'+safe(b.n||'Kulka')+' V'+evolution+'">';
   return '<span class="cinema-art-unavailable" aria-label="Brak potwierdzonej grafiki V'+evolution+'">GRAFIKA V'+evolution+'<br>NIEDOSTĘPNA</span>';
  };
