@@ -92,6 +92,14 @@ const server=http.createServer((req,res)=>{
    const match=await page.evaluate(()=>({mode:typeof G!=='undefined'?G?.m:null,phase:typeof G!=='undefined'?G?.ph:null}));
    if(match.mode!==4)throw Error('Training did not start real native match: '+JSON.stringify(match));
    console.log('PASS real training match '+viewport.width+' '+JSON.stringify(match));
+   await page.evaluate(()=>{if(typeof menu==='function')menu();window.BVBMenu?.open?.('home')});
+   await rootMenu.waitFor({state:'visible',timeout:10000});
+   await rootMenu.locator('[data-act="ranking"]').first().click();
+   await page.locator('#pn').waitFor({state:'visible',timeout:10000});
+   const achievements=await page.locator('#pb').textContent();
+   if(!/osiągnię|achievement|wyzwan/i.test(achievements||''))throw Error('Achievements did not open native panel');
+   console.log('PASS real achievements panel '+viewport.width);
+
 
 
    await page.screenshot({path:'tests/v7-menu-'+viewport.width+'.png',fullPage:true});
