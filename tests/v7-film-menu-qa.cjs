@@ -73,6 +73,8 @@ const server=http.createServer((req,res)=>{
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="collection"]').first().click();
    if(!await rootMenu.locator('.cinema-collection-layout').count())throw Error('Missing film collection');
+   const shownBalls=await rootMenu.locator('.cinema-ball-tile').count();
+   if(shownBalls!==artState.balls)throw Error('Collection hides native balls: '+shownBalls+'/'+artState.balls);
    await page.waitForTimeout(300);
    await page.screenshot({path:'tests/v7-menu-collection-'+viewport.width+'.png',fullPage:true});
    const actualPortraits=await rootMenu.locator('.cinema-ball-tile img.cinema-portrait').count();
