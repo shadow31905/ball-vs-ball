@@ -230,16 +230,11 @@ function init(){
  function buttonsAt(t){return chestData.filter(([k])=>k==='normal'||availableAt(t))}
  function chestList(t){return buttonsAt(t).map(([k,n,cost,img])=>`<button type="button" data-act="chest-${k}" class="chest"><img src="${img}" alt="Skrzynia ${n}"><span>${n}</span></button>`).join('')}
  function renderClock(){
-  const t=now(),after=endingAt(t),open=availableAt(t);
-  const time=Math.max(0,Math.ceil((END-t)/1000));const d=Math.floor(time/86400),h=Math.floor(time%86400/3600),m=Math.floor(time%3600/60),s=time%60;
-  $('#bvb-fm-timer').textContent=after?'00:00':(d?d+'d ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-  $('#bvb-fm-endline').textContent=after?'ODLICZANIE ZAKOŃCZONE':'KONIEC ZA';
-  $('#bvb-fm-news').textContent=after?'Halloween zakończone':'Odejście Halloween';
-  $('#bvb-fm-subtitle').textContent='NOWE MENU 2.5';
-  const bar=$('#bvb-fm-chestbar');const should=bar.dataset.unlocked==='yes';
-  if(should!==open||!bar.children.length){bar.innerHTML=chestList(t);bar.dataset.unlocked=open?'yes':'no'}
-  $('#bvb-fm-chestnote').textContent=open?'3 rodzaje skrzyń dostępne':`Epicka i legendarna: od 07.11 · 16:02`;
-  if(view.dataset.mode==='crates'&&view.dataset.unlocked!==(open?'yes':'no'))renderCrates();
+  // The cinematic home screen no longer includes the legacy Halloween timer,
+  // chestbar or news nodes. Never dereference UI elements removed by the redesign.
+  const subtitle=page.querySelector('#bvb-fm-subtitle');
+  if(subtitle)subtitle.textContent='2.5';
+  if(view.dataset.mode==='crates'&&view.dataset.unlocked!==(availableAt(now())?'yes':'no'))renderCrates();
  }
  function renderCrates(){
   const t=now(),opened=availableAt(t),s=getSave();
