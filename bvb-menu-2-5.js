@@ -129,6 +129,28 @@ function init(){
  #${pageId} .film-chests img:nth-child(2){transform:scale(1.2);z-index:1}
  @media(max-width:650px){#${pageId} .film-symbol{width:33px;height:33px;margin-bottom:5px}#${pageId} .film-chests{flex-basis:36%}#${pageId} .film-chests img{height:36px}}
 `;
+ style.textContent += `
+ #${pageId} .cinema-kicker{font-size:11px;letter-spacing:2px;color:#bdad95;text-transform:uppercase}
+ #${pageId} .cinema-lead{font-size:14px;color:#a7b6d0;margin:5px 0 12px}
+ #${pageId} .cinema-wallet{position:absolute;top:30px;right:22px;border:1px solid #d4a858;border-radius:30px;padding:7px 14px;background:#071426;color:#fff}
+ #${pageId} .cinema-shopgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin:22px 0 16px}
+ #${pageId} .cinema-shopcard{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;border:1px solid #4079b7;border-radius:8px;background:linear-gradient(160deg,#0c1a36,#070d1e);padding:13px 10px 18px;box-shadow:inset 0 0 22px #1c54a127}
+ #${pageId} .cinema-shopcard:nth-child(2){border-color:#b262f0;box-shadow:inset 0 0 22px #7b36ad38}
+ #${pageId} .cinema-shopcard:nth-child(3){border-color:#d7aa45;box-shadow:inset 0 0 22px #a76e2638}
+ #${pageId} .cinema-shopcard img{width:100%;height:clamp(105px,17vw,225px);object-fit:contain;filter:drop-shadow(0 0 14px #568bc45c)}
+ #${pageId} .cinema-shopcard strong{font-size:18px;color:white}
+ #${pageId} .cinema-shopcard button{border:1px solid #5986c3;border-radius:8px;padding:8px 14px;background:#193454;color:#fff;font-weight:800;font-size:11px}
+ #${pageId} .cinema-shopfooter{max-width:350px;text-align:center;margin:auto;padding:9px;border:1px solid #5b7dba;border-radius:20px;font-weight:800}
+ #${pageId} .cinema-chest{text-align:center}
+ #${pageId} .cinema-chest img{height:150px;max-width:80%;object-fit:contain;filter:drop-shadow(0 0 18px #b266df)}
+ #${pageId} .cinema-reel-window{position:relative;overflow:hidden;border:2px solid #5767aa;border-radius:12px;background:#070d22;padding:10px 0;margin:15px auto;max-width:730px}
+ #${pageId} .cinema-reel{display:flex;width:max-content;gap:9px;animation:bvbFilmRoll 5.5s cubic-bezier(.08,.63,.12,1) both}
+ #${pageId} .cinema-reel-ball{width:94px;height:115px;flex-shrink:0;border:1px solid #6684b3;border-radius:8px;background:linear-gradient(#152a4b,#080d21);display:flex;align-items:center;justify-content:center;flex-direction:column}
+ #${pageId} .cinema-reel-ball span{font-size:45px}#${pageId} .cinema-reel-ball small{font-size:11px;text-align:center}#${pageId} .cinema-reel-ball.winner{border:2px solid #ffc956}
+ #${pageId} .cinema-marker{position:absolute;top:0;left:50%;height:100%;width:2px;background:#ffc64c;box-shadow:0 0 12px #ffc64c}
+ @keyframes bvbFilmRoll{from{transform:translateX(0)}to{transform:translateX(calc(-100% + 54%))}}
+ @media(max-width:650px){#${pageId} .cinema-shopgrid{gap:5px}#${pageId} .cinema-shopcard{padding:7px 3px}#${pageId} .cinema-shopcard img{height:83px}#${pageId} .cinema-shopcard strong{font-size:12px}#${pageId} .cinema-shopcard button{padding:6px 3px;font-size:9px}#${pageId} .cinema-wallet{position:static;display:inline-block}}
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -169,8 +191,8 @@ function init(){
  }
  function renderCrates(){
   const t=now(),opened=availableAt(t),s=getSave();
-  const cards=buttonsAt(t).map(([k,n,cost,img])=>`<div class="shopcard"><img src="${img}" alt="Skrzynia ${n}"><strong>${n}</strong><div>${cost} 🪙</div>${btn('purchase-'+k,'Otwórz za '+cost+' 🪙')}</div>`).join('');
-  showView('Skrzynie — Ball VS Ball 2.5',`<div class="pane">Masz <b id="bvb-fm-wallet">${Number(s?.coins||0).toLocaleString('pl-PL')} 🪙</b>. Kulki zdobywa się wyłącznie ze skrzyń. ${opened?'Epicka i legendarna odblokowane.':'Epicka i legendarna odblokują się w sobotę 07.11 o 16:02.'}<small style="display:block;margin-top:5px">Ceny i szanse nowych skrzyń to tymczasowy balans wyłącznie wersji beta.</small></div><div class="tilegrid">${cards}</div><div class="pane">Zwykła: losowanie z puli gry. Epicka: gwarantowana rzadkość epicka lub wyższa. Legendarna: legendarna lub mityczna. Duplikat: zwrot 40 monet.</div>`);
+  const cards=buttonsAt(t).map(([k,n,cost,img])=>`<article class="cinema-shopcard"><img src="${img}" alt="Skrzynia ${n}"><strong>${n}</strong><button type="button" data-act="purchase-${k}">ZA ${cost} MONET</button></article>`).join('');
+  showView('NOWY SKLEP',`<div class="cinema-kicker">BALL VS BALL 2.5 / NOWA ERA</div><p class="cinema-lead">Kulki zdobywasz wyłącznie ze skrzyń</p><div class="cinema-wallet">🪙 <span id="bvb-fm-wallet">${Number(s?.coins||0).toLocaleString('pl-PL')}</span> MONET</div><div class="cinema-shopgrid">${cards}</div><div class="cinema-shopfooter">WYBIERZ SKRZYNIĘ</div>`);
   view.dataset.mode='crates';view.dataset.unlocked=opened?'yes':'no';
  }
  function chooseCrypto(){try{let v=new Uint32Array(1);crypto.getRandomValues(v);return v[0]/4294967296}catch(_){return Math.random()}}
@@ -202,7 +224,10 @@ function init(){
   if(s.q)s.q.gacha=(Number(s.q.gacha)||0)+1;
   try{if(typeof save==='function')save()}catch(_){}
   if(typeof window.SFX?.rare==='function')window.SFX.rare();
-  info('Wynik losowania — '+name,`<div class="gift"><div style="font-size:3rem">${safe(winner.e||'◉')}</div><b>${safe(winner.n)}</b><div>${had?'Duplikat · zwrot 40 🪙':'Nowa kulka w kolekcji!'}</div><div>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} 🪙</div></div>`,btn('crates','Otwórz kolejną','tile')+btn('collection','Kolekcja','tile'));
+  const candidates=Array.from({length:16},(_,i)=>balls[Math.floor(chooseCrypto()*balls.length)]||winner);candidates.push(winner);
+  const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===candidates.length-1?' winner':''}"><span>${safe(b.e||'◉')}</span><small>${safe(b.n)}</small></div>`).join('');
+  showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwarta skrzynia ${name}"></div><div class="cinema-reel-window"><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div>`);
+
   view.dataset.mode='result';
  }
  function renderCollection(q=''){
