@@ -4,6 +4,9 @@ on:
     branches: [rework/menu-film-accurate-20261107]
     paths:
       - bvb-menu-2-5.js
+      - bvb-loader.js
+      - index.html
+      - 'assets/**'
       - tests/v7-film-menu-qa.cjs
       - .github/workflows/v7-film-menu-qa.yml
   workflow_dispatch:
