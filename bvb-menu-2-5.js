@@ -428,6 +428,11 @@ function init(){
   #${pageId} .title .film-logo-heading{top:-65px}
   #${pageId} .film-layout{grid-template-columns:clamp(105px,15.42vw,148px) minmax(0,746px);gap:clamp(10px,3.1vw,30px);padding-left:0!important;padding-right:0!important}
   #${pageId} .film-banner-inner{min-height:92px!important;padding:6px 12px!important}
+  #${pageId} .film-banner{max-width:715px}
+  #${pageId} .film-banner .new-tag{left:76px}
+  #${pageId} .film-banner-copy{padding-left:50px}
+  #${pageId} .film-chests{flex-basis:47%}
+  #${pageId} .film-chests img.film-mystery-banner{height:80px}
   #${pageId} .cinematic-shell:before{bottom:-25px;height:160px}
  }
  `;
