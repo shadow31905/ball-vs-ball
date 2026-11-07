@@ -445,7 +445,11 @@ function init(){
   const forms=b.evolutions||b.evo||b.variants||b.forms;
   const form=Array.isArray(forms)?forms[evolution-1]:(forms?.['V'+evolution]||forms?.['v'+evolution]||forms?.[evolution]);
   const chosen=form&&typeof form==='object'?form:b;
-  const explicit=[chosen.image,chosen.img,chosen.portrait,chosen.sprite,chosen.imageUrl].find(v=>typeof v==='string'&&/^(data:image\/|https?:\/\/|blob:|\.{0,2}\/)/.test(v));
+  const explicit=[
+   typeof form==='string'?form:null,
+   chosen.image,chosen.img,chosen.portrait,chosen.sprite,chosen.imageUrl,
+   b['v'+evolution],b['V'+evolution],b['artV'+evolution]
+  ].find(v=>typeof v==='string'&&/^(data:image\/|https?:\/\/|blob:|\.{0,2}\/)/.test(v));
   const src=explicit||nativeArtwork(b.id,evolution);
   if(src)return '<img class="cinema-portrait" loading="lazy" src="'+safe(src)+'" alt="'+safe(b.n||'Kulka')+' V'+evolution+'">';
   return '<span class="cinema-art-unavailable" aria-label="Brak potwierdzonej grafiki V'+evolution+'">GRAFIKA V'+evolution+'<br>NIEDOSTĘPNA</span>';
