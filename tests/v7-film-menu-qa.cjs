@@ -68,6 +68,7 @@ const server=http.createServer((req,res)=>{
    if(actualPortraits<2)throw Error('Collection uses no original ball artwork: '+actualPortraits);
 
    if(!await rootMenu.locator('[data-evolution="1"]').count())throw Error('Missing evolution controls');
+   await rootMenu.locator('[data-ball="0"]').first().click();
    await rootMenu.locator('[data-evolution="2"]').click();
    await page.waitForFunction(()=>{const img=document.querySelector('#bvb-film-menu .cinema-collection-preview img.cinema-portrait');return img?.complete&&img.naturalWidth>0&&img.src.includes('/assets/approved-first16/ball-00-v2.webp')},{timeout:10000});
    await rootMenu.locator('[data-evolution="3"]').click();
