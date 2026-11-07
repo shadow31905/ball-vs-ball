@@ -310,6 +310,10 @@ function init(){
   #${pageId} .cinematic-shell{height:auto;min-height:520px!important}
  }
 `;
+ style.textContent += `
+ #app:has(> #menu:not([hidden]) > #${pageId}:not([hidden])){padding:0!important;margin:0!important}
+ #menu:has(> #${pageId}:not([hidden])){margin:0!important;padding:0!important}
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
