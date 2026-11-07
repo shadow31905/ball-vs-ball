@@ -128,7 +128,7 @@ const server=http.createServer((req,res)=>{
    await rootMenu.locator('[data-act="crates"]').first().click();
    // Wallet inside the shop must track external native rewards without reopening it.
    await page.evaluate(()=>{S.coins=5010;save()});
-   await page.waitForFunction(()=>Number((document.querySelector('#bvb-fm-wallet')?.textContent||'').replace(/\\s/g,''))===5010,{timeout:5000});
+   await page.waitForFunction(()=>Number((document.querySelector('#bvb-fm-wallet')?.textContent||'').replace(/\s/g,''))===5010,{timeout:5000});
    await page.evaluate(()=>{S.coins=0;save()});
    const beforeInsufficient=await page.evaluate(()=>({coins:S.coins,owned:[...S.own]}));
    await rootMenu.locator('[data-act="purchase-normal"]').click();
