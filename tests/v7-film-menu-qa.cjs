@@ -108,6 +108,8 @@ const server=http.createServer((req,res)=>{
    const winnerName=await rootMenu.locator('.cinema-reel-ball.winner small').textContent();
    if(await rootMenu.locator('.cinema-reel-ball img.cinema-portrait').count()<10)throw Error('Roulette missing real game artwork');
    await rootMenu.locator('.cinema-outcome').waitFor({state:'visible',timeout:15000});
+   if(await rootMenu.locator('.cinema-chest').isVisible())throw Error('Opening chest should transition away before roulette result');
+   if(!await rootMenu.locator('.cinema-reel-window').isVisible())throw Error('Roulette reel hidden after chest opens');
    const result=await rootMenu.locator('.cinema-outcome').textContent();
    const reelOffset=await page.evaluate(()=>{
     const marker=document.querySelector('#bvb-film-menu .cinema-marker').getBoundingClientRect();
