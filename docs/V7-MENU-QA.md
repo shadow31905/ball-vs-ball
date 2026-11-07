@@ -8,7 +8,7 @@ Data audytu: 2026-11-07. **Wyłącznie gałąź testowa** `rework/menu-film-accu
 - Trzy kompletne grafiki skrzyń pochodzą z filmu V7 (kadr 302 s), wycięte skryptem `scripts/extract_chest_art.py` do `assets/v7-chest-{normal,epic,legend}.webp`. To grafiki pojedynczych przedmiotów, a nie statyczne zdjęcie całego menu.
 - Wszystkie trzy skrzynie korzystają z jednego losowania wizualnego; **wynik na taśmie jest tym samym obiektem, który zapisano do ekwipunku**. Normalna skrzynia używa oryginalnych szans 50/30/15/4/1, epicka i legendarna mają odrębne pule. Zapis monet i własności w `localStorage` jest weryfikowany; przy błędzie zapisu stan jest cofany.
 - Przycisk fabularny pokazuje `WKRÓTCE`. Stary modal changeloga nie blokuje menu ani rozgrywki.
-- Testy Playwright na 1280×720 i 390×844 wykonują nawigację, zrzuty ekranu, losowanie z zapisem i kontrolę zgodności wyniku. Udane przebiegi: GitHub Actions `42391803348` oraz wcześniejsze `42391429395` i `42391360089`. Test realnego wejścia do treningu dodano później; wymaga odrębnego PASS.
+- Testy Playwright na 1280×720 i 390×844 wykonują nawigację, zrzuty ekranu, losowanie z zapisem i kontrolę zgodności wyniku. Udane przebiegi: GitHub Actions `42391803348` oraz wcześniejsze `42391429395` i `42391360089`. Test realnego wejścia do treningu **PASS na desktopie i telefonie**: GitHub Actions `42392049241`, `G.m=4`, `G.ph=draft`. Wcześniejszy błąd blokujący widoczność `#game` naprawiono przez ograniczenie reguły ukrywającej stary interfejs do czasu, gdy `#menu` jest widoczne.
 - Żadna z powyższych zmian nie została opublikowana na `main`.
 
 ## Blokery ukończenia 1:1
