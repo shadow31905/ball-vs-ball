@@ -81,7 +81,14 @@ const server=http.createServer((req,res)=>{
    console.log('PASS native chest transaction '+viewport.width+' '+winnerName+' '+JSON.stringify({before,after}));
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="training"]').first().click();
-   await page.locator('#game').waitFor({state:'visible',timeout:20000});
+   try{await page.locator('#game').waitFor({state:'visible',timeout:5000});}
+   catch(_){
+    const diagnostic=await page.evaluate(()=>{
+     const el=id=>{const e=document.getElementById(id);return e?{hidden:e.hidden,display:getComputedStyle(e).display,parent:e.parentElement?.id}:null};
+     return {startMatch:typeof window.startMatch,game:el('game'),menu:el('menu'),film:el('bvb-film-menu'),native:el('bvb3Home'),G:typeof G!=='undefined'?{m:G?.m,ph:G?.ph}:null,screen:document.getElementById('bvb-fm-screen')?.textContent?.slice(0,160)};
+    });
+    throw Error('Training not visible: '+JSON.stringify(diagnostic));
+   }
    const match=await page.evaluate(()=>({mode:typeof G!=='undefined'?G?.m:null,phase:typeof G!=='undefined'?G?.ph:null}));
    if(match.mode!==4)throw Error('Training did not start real native match: '+JSON.stringify(match));
    console.log('PASS real training match '+viewport.width+' '+JSON.stringify(match));
