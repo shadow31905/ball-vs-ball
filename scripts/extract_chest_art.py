@@ -59,6 +59,7 @@ def main():
         "flag": (505, 197, 595, 273),
         "target": (747, 198, 836, 275),
         "banner": (506, 357, 806, 448),
+        "logo": (294, 0, 706, 187),
     }
     for kind, box in icons.items():
         portrait = icon_image.crop(box)
