@@ -11,7 +11,7 @@ function mount(){
  overlay.id='bvb-v7-premiere';
  overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');
  overlay.setAttribute('aria-label','Premiera Ball VS Ball 2.5');
- overlay.innerHTML='<div class="bvb-v7-wrap"><h1>BALL VS BALL 2.5</h1><p class="bvb-v7-heading">UPADEK STAREJ ERY · PREMIERA 12 SCEN</p><p id="bvb-v7-clock" style="font-weight:900;color:#ffdb9b;font-size:clamp(22px,4vw,34px);margin:7px">PREMIERA O 16:15</p><video id="bvb-v7-video" playsinline preload="metadata" controls disablepictureinpicture></video><p class="bvb-v7-status" role="status">Film jest przygotowany. Film rozpocznie się o 16:15. Wcześniej kliknij przygotowanie dźwięku.</p><div class="bvb-v7-buttons"><button id="bvb-v7-play" type="button">🔊 Przygotuj dźwięk</button><button id="bvb-v7-skip" type="button">Przejdź do gry</button></div></div>';
+ overlay.innerHTML='<div class="bvb-v7-wrap"><h1>BALL VS BALL 2.5</h1><p class="bvb-v7-heading">UPADEK STAREJ ERY · PREMIERA 12 SCEN</p><p id="bvb-v7-clock" style="font-weight:900;color:#ffdb9b;font-size:clamp(22px,4vw,34px);margin:7px">PREMIERA O 16:15</p><video id="bvb-v7-video" playsinline preload="metadata" controls disablepictureinpicture></video><p class="bvb-v7-status" role="status">Film jest przygotowany. Film rozpocznie się o 16:15. Wcześniej kliknij przygotowanie dźwięku.</p><div class="bvb-v7-buttons"><button id="bvb-v7-play" type="button">🔊 Przygotuj dźwięk</button><button id="bvb-v7-skip" type="button">Zakończ film · przejdź do menu</button></div></div>';
  const css=document.createElement('style');
  css.id='bvb-v7-premiere-css';
  css.textContent='#bvb-v7-premiere{position:fixed;inset:0;z-index:2147483646;background:radial-gradient(ellipse at center,#24234a 0%,#060810 70%);color:#fff;display:grid;place-items:center;padding:16px;box-sizing:border-box;font-family:system-ui,sans-serif;overflow:auto}#bvb-v7-premiere .bvb-v7-wrap{width:min(1100px,100%);text-align:center}#bvb-v7-premiere h1{margin:0;font-size:clamp(24px,5vw,46px);letter-spacing:.08em;color:#f8d48a}#bvb-v7-premiere .bvb-v7-heading{margin:7px 0 13px;font-weight:700}#bvb-v7-video{display:block;background:#000;width:100%;aspect-ratio:16/9;max-height:70vh;object-fit:contain;border:1px solid #896a4c;border-radius:8px}#bvb-v7-premiere .bvb-v7-status{min-height:24px;font-size:14px;color:#c6d5ef}#bvb-v7-premiere .bvb-v7-buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}#bvb-v7-premiere button{cursor:pointer;font-size:16px;font-weight:750;padding:12px 18px;border-radius:8px;color:#fff;background:#254e7c;border:1px solid #75c4fb}#bvb-v7-premiere #bvb-v7-play{background:#8d4b19;border-color:#ffce8a}';
@@ -22,7 +22,24 @@ function mount(){
  const skip=overlay.querySelector('#bvb-v7-skip');
  const status=overlay.querySelector('.bvb-v7-status');
  video.src=FILM;video.preload='auto';video.muted=false;video.volume=1;video.controls=false;video.load();
- function close(){if(timer)clearInterval(timer);video.pause();video.removeAttribute('src');video.load();sessionStorage.setItem(FLAG,'1');overlay.remove();css.remove()}
+ function close(){
+  if(timer)clearInterval(timer);
+  video.pause();video.removeAttribute('src');video.load();
+  sessionStorage.setItem(FLAG,'1');overlay.remove();css.remove();
+  // Login/guest choice is intentional. Explain that the new menu is directly behind it.
+  const gate=document.getElementById('accountGate');
+  if(gate&&!gate.hidden&&!document.getElementById('bvb-v7-postfilm-note')){
+    const body=gate.querySelector('#gateBody');
+    if(body){
+      const note=document.createElement('p');
+      note.id='bvb-v7-postfilm-note';
+      note.setAttribute('role','status');
+      note.style.cssText='padding:10px 12px;border:1px solid #83b8ee;border-radius:10px;background:#183052;color:#fff;font-weight:700;line-height:1.4';
+      note.textContent='Film zakończony! Aby zobaczyć NOWE MENU 2.5, wybierz „Graj bez konta” albo zaloguj się.';
+      body.prepend(note);
+    }
+  }
+ }
 
  const clock=overlay.querySelector('#bvb-v7-clock');
  let started=false,armed=false,timer=null;
