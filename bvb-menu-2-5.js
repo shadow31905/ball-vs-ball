@@ -314,6 +314,14 @@ function init(){
  #app:has(> #menu:not([hidden]) > #${pageId}:not([hidden])){padding:0!important;margin:0!important}
  #menu:has(> #${pageId}:not([hidden])){margin:0!important;padding:0!important}
 `;
+ style.textContent += `
+ #${pageId} .cinema-ball-tile[data-rarity="4"]{border-color:#ffcb52}
+ #${pageId} .cinema-ball-tile[data-rarity="3"]{border-color:#ae7eff}
+ #${pageId} .cinema-ball-tile[data-rarity="2"]{border-color:#cc6df3}
+ #${pageId} .cinema-ball-tile[data-rarity="1"]{border-color:#4b9be7}
+ #${pageId} .cinema-ball-tile[data-rarity="0"]{border-color:#506781}
+ #${pageId} .cinema-ball-tile.chosen{border:2px solid #ffcf62!important}
+`;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -466,10 +474,12 @@ function init(){
  function renderCollection(q=''){
   const list=getBalls(),owned=new Set(getSave()?.own||[]);
   const matches=list.filter(b=>b?.n?.toLowerCase().includes(q.toLowerCase()));
-  const unlocked=matches.filter(b=>owned.has(b.id)),locked=matches.filter(b=>!owned.has(b.id));
+  const byRarity=(a,b)=>(Number(b.r)||0)-(Number(a.r)||0)||a.id-b.id;
+  const unlocked=matches.filter(b=>owned.has(b.id)).sort(byRarity);
+  const locked=matches.filter(b=>!owned.has(b.id)).sort(byRarity);
   const select=list.find(b=>b.id===selectedBallId)||unlocked[0]||locked[0];
   if(select)selectedBallId=select.id;
-  const tiles=(items)=>items.slice(0,130).map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':'🔒'}</small></button>`).join('');
+  const tiles=(items)=>items.slice(0,130).map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}" data-rarity="${Number(b.r)||0}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':'🔒'}</small></button>`).join('');
   const pane=select?`<div class="cinema-collection-preview">${portrait(select,selectedEvolution)}<b>${safe(select.n)}</b><small>${owned.has(select.id)?'ODBLOKOWANA':'ZABLOKOWANA'}</small><div class="cinema-evolutions">${[1,2,3].map(n=>`<button data-evolution="${n}" class="${selectedEvolution===n?'selected':''}" type="button">V${n}</button>`).join('')}</div><p>Umiejętność podstawowa: ${safe(select.d||'Opis w grze')}</p><button type="button" data-act="native-col">OTWÓRZ KOLEKCJĘ GRY</button></div>`:'';
   showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,owned.size/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${owned.size} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>Wszystkie kulki odblokowane</p>'}</div></section></div>${pane}</div>`);
   view.dataset.mode='collection';
