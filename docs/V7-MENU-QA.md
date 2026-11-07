@@ -12,7 +12,7 @@ Data audytu: 2026-11-07. **Wyłącznie gałąź testowa** `rework/menu-film-accu
 - Żadna z powyższych zmian nie została opublikowana na `main`.
 
 ## Blokery ukończenia 1:1
-1. **V2/V3**: aktywny rework zawiera mapę `ART_IMAGES` tylko dla 131 bazowych grafik. Nie ma zweryfikowanego zestawu zatwierdzonych V2/V3 dla wszystkich kulek. Zamiast udawać zgodność, interfejs oznacza brak potwierdzonej grafiki. Starsza gałąź `beta/all-130-visuals-20261031` ma 48 WebP dla pierwszych 16 kulek oraz proceduralny generator 390 SVG, lecz jej dokumentacja ostrzega, że nie wszystkie wyglądy są zatwierdzone. **Nie przenosić ich bez weryfikacji z obowiązującymi szkicami.**
+1. **V2/V3**: aktywny rework zawiera mapę `ART_IMAGES` dla 131 bazowych grafik V1. Dodatkowo skopiowano **32 wcześniej zatwierdzone grafiki WebP V2/V3 dla ID 0–15** z gałęzi `art/accurate-game-sketch-00-48` do `assets/approved-first16/` (wyłącznie na gałąź testową). Pozostałe warianty **ID 16–130** nie mają zweryfikowanych zatwierdzonych obrazów; interfejs oznacza ich brak. Starsza gałąź `beta/all-130-visuals-20261031` ma generator 390 SVG, lecz jej dokumentacja ostrzega, że nie wszystkie wyglądy są zatwierdzone. **Nie przenosić ich bez weryfikacji z obowiązującymi szkicami.**
 2. **Zgodność wizualna**: wymagane dalsze porównania z filmem: logo 3D, profesjonalne ikony kafli, oświetlenie areny, płynność i skala na telefonach.
 3. **Regresja**: nadal potrzebne pełne testy profilu, ustawień, sklepu, multiplayer i rzeczywistego telefonu. PASS pojedynczego scenariusza nie oznacza ukończenia gry.
 4. **Zakres skrzyń**: film V7 przedstawia trzy (zwykłą, epicką, legendarną), wcześniejszy plan dwie (zwykłą i eventową). Na gałęzi filmowej odtworzono trzy z kadru; publikacja wymaga akceptacji zakresu.
