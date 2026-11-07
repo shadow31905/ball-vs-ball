@@ -227,7 +227,7 @@ function init(){
  function tick(){if(!page.isConnected)return;renderClock();status()}
  tick();const timer=setInterval(()=>{if(!page.isConnected)clearInterval(timer);else tick()},1000);
  syncTime().then(tick);
- window.BVBFilmMenuBeta={get countdownTime(){return END},get unlockTime(){return UNLOCK},get clockSource(){return serverEpoch==null?'local-fallback':'server-header'},isUnlockedAt:availableAt,isEndedAt:endingAt,openCrates:renderCrates,openHome:()=>action('home'),version:'production-menu-20261105-1'};
+ window.BVBFilmMenuBeta={get countdownTime(){return END},get unlockTime(){return UNLOCK},get clockSource(){return serverEpoch==null?'local-fallback':'server-header'},isUnlockedAt:availableAt,isEndedAt:endingAt,openCrates:renderCrates,openCampaignSoon:()=>action('campaign'),openHome:()=>action('home'),version:'production-menu-20261105-1'};
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
