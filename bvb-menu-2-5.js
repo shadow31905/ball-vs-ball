@@ -180,6 +180,29 @@ function init(){
  #${pageId} .cinema-ball-fallback{display:grid;place-items:center;width:100%;height:72px;font-size:29px}
  @media(max-width:650px){#${pageId} .cinema-collection-layout{grid-template-columns:minmax(0,1fr)}#${pageId} .cinema-collection-header{gap:5px;font-size:9px}#${pageId} .cinema-ball-grid{grid-template-columns:repeat(4,minmax(0,1fr))}#${pageId} .cinema-collection-preview>.cinema-portrait{height:115px}}
  `;
+ style.textContent += `
+ #${pageId}{min-height:540px;background:radial-gradient(ellipse 48% 64% at 50% 91%,#e6a12f30,transparent 66%),radial-gradient(ellipse 31% 34% at 47% 24%,#174b9c84,transparent 74%),linear-gradient(135deg,#030912,#081a3b 41%,#070f2a 77%,#040816)}
+ #${pageId}:after{content:'';z-index:-1;position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 54% 98%,#f3aa3572,transparent 17%),linear-gradient(168deg,transparent 50%,#007eff29 62%,transparent 68%),linear-gradient(18deg,transparent 50%,#ee961b22 63%,transparent 69%);background-repeat:no-repeat}
+ #${pageId} .title{padding:0 4px 8px;position:relative}
+ #${pageId} .title:before{content:'';position:absolute;left:50%;top:-4px;z-index:-1;width:240px;height:142px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,#ffbd273e 22%,#053371 48%,#e7aa2277 52%,#0a63e66e 55%,transparent 60%);filter:drop-shadow(0 0 19px #259bfa)}
+ #${pageId} .title h1{font-size:clamp(2.4rem,5vw,4.7rem);font-style:italic;letter-spacing:-.035em;color:#e2ebff;text-shadow:0 2px 0 #334b77,0 5px 0 #0a1d3c,0 9px 12px #000,-1px -1px #fff}
+ #${pageId} .title h1 em{color:#ffd56b;font-style:italic;text-shadow:0 3px 0 #965219,0 7px 10px #111}
+ #${pageId} .title p{font-size:clamp(1.3rem,3vw,2.4rem);font-weight:1000;font-style:italic;line-height:1;color:#ffc147;text-shadow:0 3px 0 #8a490d,0 7px 12px #000;margin:0}
+ #${pageId} .film-layout{padding:6px 22px 7px;grid-template-columns:clamp(110px,16%,158px) minmax(0,1fr);gap:24px}
+ #${pageId} .film-cards{gap:14px}
+ #${pageId} .film-card{min-height:144px;max-height:162px;border-radius:20px;transform:skew(-7deg);box-shadow:inset 0 0 20px var(--glow),0 0 14px var(--c),0 6px 8px #0009}
+ #${pageId} .film-card:hover{transform:skew(-7deg) translateY(-5px) scale(1.02)}
+ #${pageId} .film-banner-inner{min-height:90px}
+ #${pageId} .film-nav button{min-height:38px}
+ #${pageId} .foot{padding:3px 0 9px}
+ #${pageId} .cinema-reel{animation:none!important}
+ #${pageId} .cinema-reel-ball .cinema-portrait{width:80px;height:77px;object-fit:contain}
+ #${pageId} .cinema-reel-ball .cinema-ball-fallback{height:77px}
+ #${pageId} .cinema-reel-window .cinema-reel-ball.winner{box-shadow:0 0 15px #f5c755}
+ #${pageId} .cinema-outcome{animation:bvbResultIn .3s ease both}
+ @keyframes bvbResultIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+ @media(max-width:650px){#${pageId} .film-layout{padding:6px;gap:7px;grid-template-columns:minmax(82px,24%) minmax(0,1fr)}#${pageId} .film-cards{gap:5px}#${pageId} .film-card{min-height:120px}#${pageId} .film-card strong{font-size:12px}#${pageId} .film-card small{font-size:8px}#${pageId} .film-nav button{font-size:10px;min-height:35px}#${pageId} .title h1{font-size:2rem}#${pageId} .film-banner-inner{min-height:82px;padding:6px}}
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -254,16 +277,25 @@ function init(){
   try{if(typeof save==='function')save()}catch(_){}
   if(typeof window.SFX?.rare==='function')window.SFX.rare();
   const candidates=Array.from({length:16},(_,i)=>balls[Math.floor(chooseCrypto()*balls.length)]||winner);candidates.push(winner);
-  const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===candidates.length-1?' winner':''}"><span>${safe(b.e||'◉')}</span><small>${safe(b.n)}</small></div>`).join('');
-  showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwarta skrzynia ${name}"></div><div class="cinema-reel-window"><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div>`);
+  const reel=candidates.map((b,i)=>`<div class="cinema-reel-ball${i===candidates.length-1?' winner':''}">${portrait(b)}<small>${safe(b.n)}</small></div>`).join('');
+  showView('OTWIERANIE SKRZYNI',`<div class="cinema-kicker">SKRZYNIE / LOSOWANIE</div><div class="cinema-chest"><img src="${d[3]}" alt="Otwarta skrzynia ${name}"></div><div class="cinema-reel-window"><div class="cinema-reel">${reel}</div><i class="cinema-marker"></i></div><h3>LOSOWANIE KULKI</h3><div class="cinema-outcome" hidden><p>Wylosowano: <b>${safe(winner.n)}</b> · ${had?'Duplikat, zwrot 40 monet':'Nowa kulka w kolekcji!'}</p><p>Pozostało ${Number(s.coins).toLocaleString('pl-PL')} monet</p><div class="tilegrid">${btn('crates','Kolejna skrzynia','tile')}${btn('collection','Kolekcja','tile')}</div></div>`);
 
+  const strip=view.querySelector('.cinema-reel'),reelWindow=view.querySelector('.cinema-reel-window');
+  if(strip&&reelWindow){
+   const resultLine=view.querySelector('.cinema-outcome');
+   const finalOffset=reelWindow.clientWidth/2-strip.scrollWidth+47;
+   const finish=()=>{if(view.contains(strip)&&resultLine)resultLine.hidden=false;};
+   if(typeof strip.animate==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    strip.animate([{transform:'translateX(0)'},{transform:'translateX('+finalOffset+'px)'}],{duration:4900,easing:'cubic-bezier(.1,.7,.16,1)',fill:'forwards'}).finished.then(finish,finish);
+   }else{strip.style.transform='translateX('+finalOffset+'px)';finish();}
+  }
   view.dataset.mode='result';
  }
  const portrait=(b)=>{if(!b)return '<span class="cinema-ball-fallback">?</span>';
   const src=[b.image,b.img,b.portrait,b.icon,b.sprite,b.imageUrl].find(v=>typeof v==='string'&&(/^(data:image\/|https?:\/\/|\.{0,2}\/)/.test(v)));
   if(src)return '<img class="cinema-portrait" src="'+safe(src)+'" alt="'+safe(b.n||'Kulka')+'">';
   const name=String(b.n||'').toLowerCase();
-  const known=name.includes('szach')?art.chess:name.includes('wampir')?art.vampire:name.includes('feniks')?art.phoenix:null;
+  const known=name.includes('szach')?art.chess:name.includes('wampir')?art.vamp:name.includes('feniks')?art.phoenix:null;
   if(known)return '<img class="cinema-portrait" src="'+known+'" alt="'+safe(b.n)+'">';
   return '<span class="cinema-ball-fallback" aria-label="Brak grafiki">'+safe(b.e||'◉')+'</span>';
  };
@@ -316,7 +348,7 @@ function init(){
  page.addEventListener('input',e=>{if(e.target.id==='bvb-fm-search'){
   const q=e.target.value,p=e.target.selectionStart;renderCollection(q);const el=$('#bvb-fm-search');el.focus();el.setSelectionRange(p,p)
  }});
- function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz')+' · PODGLĄD';$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';$('#bvb-fm-coins').textContent=Number(s.coins||0).toLocaleString('pl-PL')}
+ function status(){const s=getSave();if(!s)return;$('#bvb-fm-user').textContent=(s.nm||s.nick||'Gracz');$('#bvb-fm-level').textContent='Poziom '+(s.lv||1);$('#bvb-fm-xp').style.width=Math.max(0,Math.min(100,((Number(s.xp)||0)/Math.max(1,(Number(s.lv)||1)*100)*100)))+'%';$('#bvb-fm-coins').textContent=Number(s.coins||0).toLocaleString('pl-PL')}
  const sync=()=>{page.hidden=Boolean(native?.hidden)};
  if(native)new MutationObserver(sync).observe(native,{attributes:true,attributeFilter:['hidden']});sync();
  function tick(){if(!page.isConnected)return;renderClock();status()}
