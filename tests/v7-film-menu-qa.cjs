@@ -31,9 +31,10 @@ const server=http.createServer((req,res)=>{
    const rootMenu=page.locator('#bvb-film-menu');
    if(await rootMenu.isVisible()===false)throw Error('Film menu must be visible');
    await page.waitForFunction(()=>{
+    const logo=document.querySelector('#bvb-film-menu .film-logo-image');
     const banner=document.querySelector('#bvb-film-menu .film-mystery-banner');
     const icons=[...document.querySelectorAll('#bvb-film-menu .film-art-icon')];
-    return banner?.complete&&banner.naturalWidth>0&&icons.length===3&&icons.every(i=>i.complete&&i.naturalWidth>0);
+    return logo?.complete&&logo.naturalWidth>0&&banner?.complete&&banner.naturalWidth>0&&icons.length===3&&icons.every(i=>i.complete&&i.naturalWidth>0);
    },{timeout:15000});
    const dimensions=await page.evaluate(()=>({height:document.documentElement.scrollHeight,width:document.documentElement.scrollWidth,viewportHeight:innerHeight,viewportWidth:innerWidth}));
    if(dimensions.width>dimensions.viewportWidth+6)throw Error('Horizontal overflow: '+JSON.stringify(dimensions));
