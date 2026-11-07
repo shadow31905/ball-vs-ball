@@ -1,0 +1,40 @@
+name: Import approved V2-V3 art for first 16 balls
+on:
+  push:
+    branches: [rework/menu-film-accurate-20261107]
+    paths:
+      - .github/workflows/v7-approved-evolutions.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Copy only previously approved first-16 evolution portraits
+        run: |
+          git fetch origin art/accurate-game-sketch-00-48
+          mkdir -p assets/approved-first16
+          for n in $(seq 0 15); do
+            i=$(printf '%02d' "$n")
+            for v in 2 3; do
+              git show "FETCH_HEAD:assets/approved-first16/ball-${i}-v${v}.webp" > "assets/approved-first16/ball-${i}-v${v}.webp"
+            done
+          done
+          test "$(find assets/approved-first16 -name '*.webp' | wc -l)" -eq 32
+      - name: Commit approved art to beta only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/approved-first16
+          if ! git diff --cached --quiet; then
+            git commit -m "Import approved V2 and V3 WebP for original balls 0-15"
+            git fetch origin rework/menu-film-accurate-20261107
+            git rebase origin/rework/menu-film-accurate-20261107
+            git push origin HEAD:rework/menu-film-accurate-20261107
+          fi
