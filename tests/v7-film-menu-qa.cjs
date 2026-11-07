@@ -30,7 +30,11 @@ const server=http.createServer((req,res)=>{
    await page.locator('#bvb-film-menu').waitFor({state:'visible',timeout:30000});
    const rootMenu=page.locator('#bvb-film-menu');
    if(await rootMenu.isVisible()===false)throw Error('Film menu must be visible');
-   await page.waitForFunction(()=>[...document.querySelectorAll('#bvb-film-menu .film-chests img')].length===3&&[...document.querySelectorAll('#bvb-film-menu .film-chests img')].every(i=>i.complete&&i.naturalWidth>0),{timeout:15000});
+   await page.waitForFunction(()=>{
+    const banner=document.querySelector('#bvb-film-menu .film-mystery-banner');
+    const icons=[...document.querySelectorAll('#bvb-film-menu .film-art-icon')];
+    return banner?.complete&&banner.naturalWidth>0&&icons.length===3&&icons.every(i=>i.complete&&i.naturalWidth>0);
+   },{timeout:15000});
    const dimensions=await page.evaluate(()=>({height:document.documentElement.scrollHeight,width:document.documentElement.scrollWidth,viewportHeight:innerHeight,viewportWidth:innerWidth}));
    if(dimensions.width>dimensions.viewportWidth+6)throw Error('Horizontal overflow: '+JSON.stringify(dimensions));
    if(viewport.width===960&&dimensions.height>dimensions.viewportHeight+6)throw Error('960x540 film menu overflows vertically: '+JSON.stringify(dimensions));
