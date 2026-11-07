@@ -3,7 +3,7 @@
 'use strict';
 const START=Date.parse('2026-11-07T15:59:30+01:00');
 const EXPIRY=Date.parse('2026-11-08T16:06:45+01:00');
-const FILM="https://d2jqrm6oza8nb6.cloudfront.net/datasets/c27085ad-bce8-409b-ab09-9df502898bb2.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiM2MxNjIxMDU0NWViNzUwNSIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NDE1MDQwNX0.4gnyFqc53wOWfv6p4SNHOWNK5Lkut-EcyPdiIkJNS2s";
+const FILM='./rework/v7-scenes-01-12.mp4';
 const FLAG='bvb-v7-premiere-played-20261107';
 function mount(){
  if(Date.now()<START||Date.now()>EXPIRY||sessionStorage.getItem(FLAG)||document.getElementById('bvb-v7-premiere'))return;
