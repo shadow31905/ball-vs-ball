@@ -203,6 +203,14 @@ function init(){
  @keyframes bvbResultIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
  @media(max-width:650px){#${pageId} .film-layout{padding:6px;gap:7px;grid-template-columns:minmax(82px,24%) minmax(0,1fr)}#${pageId} .film-cards{gap:5px}#${pageId} .film-card{min-height:120px}#${pageId} .film-card strong{font-size:12px}#${pageId} .film-card small{font-size:8px}#${pageId} .film-nav button{font-size:10px;min-height:35px}#${pageId} .title h1{font-size:2rem}#${pageId} .film-banner-inner{min-height:82px;padding:6px}}
  `;
+ style.textContent += `
+ /* The old 2.0.1 changelog is not part of the approved V7 menu and
+    must never cover or intercept clicks on the beta film interface. */
+ body:has(#${pageId}:not([hidden])) #bvb2ReleaseModal{display:none!important}
+ #${pageId} .cinema-art-unavailable{display:flex;align-items:center;justify-content:center;text-align:center;min-height:72px;width:100%;padding:7px;background:radial-gradient(circle,#172b4a,#060d1d);border:1px dashed #53698d;border-radius:7px;color:#92a7c6;font-size:10px;letter-spacing:.4px;line-height:1.5}
+ #${pageId} .cinema-collection-preview>.cinema-art-unavailable{height:180px}
+ #${pageId} .cinema-reel-ball .cinema-art-unavailable{height:77px}
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -286,16 +294,40 @@ function init(){
   }
   view.dataset.mode='result';
  }
- const portrait=(b,evolution=1)=>{if(!b)return '<span class="cinema-ball-fallback">?</span>';
+ const nativeArtwork=(id,evolution=1)=>{
+  // ART_IMAGES is the real rework's preloaded SVG artwork map, used by the
+  // in-game skill preview. Do not replace its graphics with emoji.
+  const keys=evolution===1?[id]:[
+   id+':v'+evolution,id+'-v'+evolution,id+'_v'+evolution,
+   'v'+evolution+':'+id,'v'+evolution+'-'+id
+  ];
+  try{
+   if(typeof ART_IMAGES!=='undefined'&&ART_IMAGES?.get){
+    for(const key of keys){
+     const img=ART_IMAGES.get(key);
+     if(img?.src&&/^(data:image\/|blob:|https?:\/\/)/.test(img.src))return img.src;
+    }
+   }
+  }catch(_){}
+  if(evolution!==1)return null;
+  try{
+   if(typeof art==='function'){
+    const svg=art(id);
+    if(typeof svg==='string'&&/^\s*<svg[\s>]/i.test(svg))return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+    if(typeof svg==='string'&&/^(data:image\/|blob:)/.test(svg))return svg;
+   }
+  }catch(_){}
+  return null;
+ };
+ const portrait=(b,evolution=1)=>{
+  if(!b)return '<span class="cinema-art-unavailable">Brak danych</span>';
   const forms=b.evolutions||b.evo||b.variants||b.forms;
   const form=Array.isArray(forms)?forms[evolution-1]:(forms?.['V'+evolution]||forms?.['v'+evolution]||forms?.[evolution]);
   const chosen=form&&typeof form==='object'?form:b;
-  const src=[chosen.image,chosen.img,chosen.portrait,chosen.icon,chosen.sprite,chosen.imageUrl].find(v=>typeof v==='string'&&(/^(data:image\/|https?:\/\/|\.{0,2}\/)/.test(v)));
-  if(src)return '<img class="cinema-portrait" src="'+safe(src)+'" alt="'+safe(b.n||'Kulka')+'">';
-  const name=String(b.n||'').toLowerCase();
-  const known=name.includes('szach')?art.chess:name.includes('wampir')?art.vamp:name.includes('feniks')?art.phoenix:null;
-  if(known)return '<img class="cinema-portrait" src="'+known+'" alt="'+safe(b.n)+'">';
-  return '<span class="cinema-ball-fallback" aria-label="Brak grafiki">'+safe(b.e||'◉')+'</span>';
+  const explicit=[chosen.image,chosen.img,chosen.portrait,chosen.sprite,chosen.imageUrl].find(v=>typeof v==='string'&&/^(data:image\/|https?:\/\/|blob:|\.{0,2}\/)/.test(v));
+  const src=explicit||nativeArtwork(b.id,evolution);
+  if(src)return '<img class="cinema-portrait" loading="lazy" src="'+safe(src)+'" alt="'+safe(b.n||'Kulka')+' V'+evolution+'">';
+  return '<span class="cinema-art-unavailable" aria-label="Brak potwierdzonej grafiki V'+evolution+'">GRAFIKA V'+evolution+'<br>NIEDOSTĘPNA</span>';
  };
  let selectedBallId=null,selectedEvolution=1;
  function renderCollection(q=''){
