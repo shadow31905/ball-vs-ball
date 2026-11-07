@@ -30,7 +30,13 @@ const server=http.createServer((req,res)=>{
     return {menu:info('menu'),newMenu:info('bvb-film-menu'),native:info('bvb3Home'),loading:info('bvb-loading-screen'),overlay:info('bvb-v7-premiere'),gate:info('accountGate'),app:info('app'),main:!!window.BVBFilmMenuBeta,ready:document.readyState}
    });
    console.log('BEFORE '+viewport.width+' '+JSON.stringify(await state()));
-   if(await page.locator('#bvb-v7-skip').count()){await page.locator('#bvb-v7-skip').click({timeout:12000,force:true});await page.waitForTimeout(500)}
+   await page.locator('#bvb-loading-screen').waitFor({state:'detached',timeout:120000});
+   if(await page.locator('#bvb-v7-skip').count()){await page.locator('#bvb-v7-skip').click({timeout:12000});await page.waitForTimeout(500)}
+   console.log('GATE '+viewport.width+' '+JSON.stringify(await page.evaluate(()=>{
+    const g=document.getElementById('accountGate');
+    return g?{outer:g.outerHTML.slice(0,5000),z:getComputedStyle(g).zIndex,buttons:[...g.querySelectorAll('button')].map(b=>({txt:b.textContent,onclick:b.getAttribute('onclick')}))}:null;
+   })));
+
    console.log('AFTER '+viewport.width+' '+JSON.stringify(await state()));
    console.log('JSERRORS '+viewport.width+' '+JSON.stringify(errors.slice(0,10)));
    await page.screenshot({path:'tests/menu-after-film-'+viewport.width+'.png',fullPage:true,timeout:20000}).catch(()=>{});
