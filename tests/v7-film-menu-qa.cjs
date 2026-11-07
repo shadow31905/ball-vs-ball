@@ -57,6 +57,9 @@ const server=http.createServer((req,res)=>{
    await page.waitForTimeout(300);
    await page.screenshot({path:'tests/v7-menu-shop-'+viewport.width+'.png',fullPage:true});
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
+   await rootMenu.locator('[data-act="shop"]').first().click();
+   if(await rootMenu.locator('.cinema-shopcard').count()!==3)throw Error('Shop must show three film chests');
+   await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="collection"]').first().click();
    if(!await rootMenu.locator('.cinema-collection-layout').count())throw Error('Missing film collection');
    await page.waitForTimeout(300);
