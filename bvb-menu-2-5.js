@@ -143,7 +143,7 @@ function init(){
  <div class="title"><h1>BALL <em>VS</em> BALL</h1><p id="bvb-fm-subtitle">2.5</p></div>
  <div class="film-layout"><aside class="film-nav"><nav class="leftnav">${btn('home','⌂　 Menu')}${btn('collection','▣　 Ekwipunek')}${btn('crates','▤　 Skrzynie')}${btn('shop','▥　 Sklep')}${btn('ranking','🏆　 Osiągnięcia')}${btn('profile','▥　 Postęp')}</nav></aside>
  <main class="film-main"><div class="film-cards"><button type="button" class="film-card blue" data-act="play"><span class="film-symbol">${filmIcon("sword")}</span><strong>GRAJ</strong><small>Szybka rozgrywka</small></button><button type="button" class="film-card violet" data-act="campaign"><span class="film-symbol">${filmIcon("flag")}</span><strong>KAMPANIA</strong><small>Walka z bossami · WKRÓTCE</small></button><button type="button" class="film-card orange" data-act="training"><span class="film-symbol">${filmIcon("target")}</span><strong>TRENING</strong><small>Testuj kulki i umiejętności</small></button></div><section class="film-banner"><button type="button" data-act="crates" class="film-banner-inner"><span class="new-tag">NOWOŚĆ!</span><span class="film-banner-copy"><strong>NOWE SKRZYNIE</strong><small>Zdobywaj unikalne kulki!</small></span><span class="film-chests"><img src="${art.normal}" alt="Zwykła skrzynia"><img src="${art.epic}" alt="Epicka skrzynia"><img src="${art.legend}" alt="Legendarna skrzynia"></span><span class="film-next">❯</span></button></section></main></div>
- <div class="foot">BALL VS BALL 2.5 · WERSJA TESTOWA MENU · FUNKCJE PODŁĄCZONE DO GRY</div></div><section id="bvb-fm-screen" class="screen" hidden aria-live="polite"></section>`;
+ <div class="foot">BALL VS BALL 2.5 · WERSJA TESTOWA · NIE WSZYSTKIE FUNKCJE SĄ GOTOWE</div></div><section id="bvb-fm-screen" class="screen" hidden aria-live="polite"></section>`;
  root.prepend(page);
  const view=page.querySelector('#bvb-fm-screen');
  const getSave=()=>{try{return typeof S!=='undefined'&&S?S:null}catch(_){return null}};
@@ -222,7 +222,7 @@ function init(){
   }
   if(key==='bot'){if(typeof window.startMatch==='function')window.startMatch(0);else info('Błąd','Silnik nie obsługuje rozpoczęcia walki.');return}
   if(key==='training'){if(typeof window.startMatch==='function'){window.startMatch(4);return}info('Trening','Ta wersja gry nie obsługuje treningu.',btn('home','← Wróć','tile'));return}
-  if(key==='campaign'){if(typeof window.BVBCampaign?.open==='function')window.BVBCampaign.open();else info('Kampania','Kampania fabularna nie jest jeszcze podłączona do tej wersji gry.',btn('home','← Wróć','tile'));return}
+  if(key==='campaign'){info('TRYB FABULARNY — WKRÓTCE','Nowy tryb fabularny z bossami jest w przygotowaniu. Nie uruchamiam niedokończonej kampanii.',btn('home','← Wróć','tile'));return}
   if(key==='bosses'){if(openNative('bosses'))return;info('Bossowie','Tryb bossów nie jest jeszcze udostępniony w tej wersji gry.',btn('home','← Wróć','tile'));return}
   if(key==='multiplayer'){if(typeof window.mpMenu==='function')window.mpMenu();else info('Multiplayer','Nie jest dostępny w tej wersji gry.',btn('home','← Wróć','tile'));return}
   if(key==='collection'){renderCollection();return}
