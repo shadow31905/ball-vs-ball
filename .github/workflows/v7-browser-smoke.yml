@@ -1,0 +1,38 @@
+name: V7 beta real browser E2E
+on:
+  push:
+    branches: [test/v7-film-porownanie-2026-11-07]
+    paths:
+      - tests/v7-browser-smoke.cjs
+      - .github/workflows/v7-browser-smoke.yml
+      - bvb-menu-2-5.js
+      - bvb-main-menu-v3.js
+      - bvb-loader.js
+      - rework/**
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium test runner
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Test full 32-part rework loader on desktop and mobile
+        run: node tests/v7-browser-smoke.cjs
+      - name: Preserve browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v7-beta-browser-screenshots
+          path: |
+            tests/v7-*-e2e.png
+            tests/v7-*-failure.png
+          if-no-files-found: ignore
