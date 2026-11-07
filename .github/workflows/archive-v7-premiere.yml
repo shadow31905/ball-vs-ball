@@ -32,12 +32,14 @@ jobs:
           size=target.stat().st_size
           if not 29000000<size<35000000:
               print("Unexpected video size",size);sys.exit(1)
-          check=subprocess.run(["ffprobe","-v","error","-show_entries","stream=codec_type","-of","csv=p=0",str(target)],capture_output=True,text=True)
-          if check.returncode!=0 or "video" not in check.stdout or "audio" not in check.stdout:
-              print("Video/audio verification failed",check.stdout,check.stderr);sys.exit(1)
+          import hashlib
+          actual=hashlib.sha256(target.read_bytes()).hexdigest()
+          expected="c8bef614886d4448b1cb6df570a2316d01d6a31f10d6fc9617328e4b56703de9"
+          if actual!=expected:
+              print("Video checksum mismatch",actual);sys.exit(1)
           script=script.replace(m.group(0),"const FILM='./rework/v7-scenes-01-12.mp4';")
           pathlib.Path("bvb-v7-premiere.js").write_text(script)
-          print("Video archived and validated:",size,check.stdout.strip())
+          print("Video archived and SHA256 validated:",size,actual)
           PY
       - name: Publish permanent film file without changing game logic
         run: |
