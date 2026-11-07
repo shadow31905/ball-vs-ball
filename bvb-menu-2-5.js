@@ -151,6 +151,35 @@ function init(){
  @keyframes bvbFilmRoll{from{transform:translateX(0)}to{transform:translateX(calc(-100% + 54%))}}
  @media(max-width:650px){#${pageId} .cinema-shopgrid{gap:5px}#${pageId} .cinema-shopcard{padding:7px 3px}#${pageId} .cinema-shopcard img{height:83px}#${pageId} .cinema-shopcard strong{font-size:12px}#${pageId} .cinema-shopcard button{padding:6px 3px;font-size:9px}#${pageId} .cinema-wallet{position:static;display:inline-block}}
  `;
+ style.textContent += `
+ #${pageId} .cinema-collection-header{display:flex;align-items:center;gap:20px;margin:0 0 8px;color:#d3e5fd;font-size:12px}
+ #${pageId} .cinema-collection-header>span{flex:0 0 auto}#${pageId} .cinema-collection-header>b{border:1px solid #b98b3a;border-radius:8px;padding:8px;color:#ffd484}
+ #${pageId} .cinema-collection-header>b span{display:block;text-align:center;font-size:17px;color:white}
+ #${pageId} .cinema-progress{flex:1;height:9px;border:1px solid #233f6b;background:#0d1b33;border-radius:9px;overflow:hidden}
+ #${pageId} .cinema-progress i{display:block;height:100%;background:linear-gradient(90deg,#11a887,#64debc)}
+ #${pageId} .cinema-collection-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(190px,1fr);gap:9px;margin-top:8px}
+ #${pageId} .cinema-collection-lists section{border:1px solid #27567b;border-radius:9px;background:#09172ce8;padding:9px;margin-bottom:8px}
+ #${pageId} .cinema-collection-lists section h3{font-size:12px;letter-spacing:.4px;color:#54d5a9;margin:0 0 10px}
+ #${pageId} .cinema-collection-lists section:nth-child(2) h3{color:#e5b454}
+ #${pageId} .cinema-collection-lists section h3 small{float:right}
+ #${pageId} .cinema-ball-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;max-height:260px;overflow:auto}
+ #${pageId} .cinema-ball-tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;padding:5px;background:linear-gradient(#17314c,#07152a);border:1px solid #3668a1;border-radius:5px;color:white}
+ #${pageId} .cinema-ball-tile.chosen{border-color:#e3b755;box-shadow:0 0 9px #e8ac3570}
+ #${pageId} .cinema-ball-tile .cinema-portrait{width:100%;height:72px;object-fit:contain}
+ #${pageId} .cinema-ball-tile b{font-size:10px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ #${pageId} .cinema-ball-tile small{position:absolute;top:3px;right:4px;color:#7de5ac}
+ #${pageId} .cinema-collection-preview{display:flex;flex-direction:column;align-items:center;gap:9px;border:1px solid #bb8c3d;border-radius:9px;background:linear-gradient(#0b1930,#070e20);padding:14px 8px;min-width:0}
+ #${pageId} .cinema-collection-preview>.cinema-portrait{width:85%;height:180px;object-fit:contain}
+ #${pageId} .cinema-collection-preview>b{font-size:18px;color:white}
+ #${pageId} .cinema-collection-preview>small{color:#e2b95f;font-weight:800}
+ #${pageId} .cinema-evolutions{display:flex;gap:6px;width:100%}
+ #${pageId} .cinema-evolutions button{flex:1;background:#0e2845;color:#d9e9ff;border:1px solid #4377ad;border-radius:5px;padding:8px}
+ #${pageId} .cinema-evolutions button.selected{background:linear-gradient(#ddad44,#8d5d20);color:#fff;border-color:#ffe19d}
+ #${pageId} .cinema-collection-preview p{text-align:center;font-size:11px;color:#9fafc7}
+ #${pageId} .cinema-collection-preview>[data-act]{font-size:10px;background:#184369;border:1px solid #398acc;border-radius:5px;color:white;padding:8px}
+ #${pageId} .cinema-ball-fallback{display:grid;place-items:center;width:100%;height:72px;font-size:29px}
+ @media(max-width:650px){#${pageId} .cinema-collection-layout{grid-template-columns:minmax(0,1fr)}#${pageId} .cinema-collection-header{gap:5px;font-size:9px}#${pageId} .cinema-ball-grid{grid-template-columns:repeat(4,minmax(0,1fr))}#${pageId} .cinema-collection-preview>.cinema-portrait{height:115px}}
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -230,15 +259,27 @@ function init(){
 
   view.dataset.mode='result';
  }
+ const portrait=(b)=>{if(!b)return '<span class="cinema-ball-fallback">?</span>';
+  const src=[b.image,b.img,b.portrait,b.icon,b.sprite,b.imageUrl].find(v=>typeof v==='string'&&(/^(data:image\/|https?:\/\/|\.{0,2}\/)/.test(v)));
+  if(src)return '<img class="cinema-portrait" src="'+safe(src)+'" alt="'+safe(b.n||'Kulka')+'">';
+  const name=String(b.n||'').toLowerCase();
+  const known=name.includes('szach')?art.chess:name.includes('wampir')?art.vampire:name.includes('feniks')?art.phoenix:null;
+  if(known)return '<img class="cinema-portrait" src="'+known+'" alt="'+safe(b.n)+'">';
+  return '<span class="cinema-ball-fallback" aria-label="Brak grafiki">'+safe(b.e||'◉')+'</span>';
+ };
+ let selectedBallId=null,selectedEvolution=1;
  function renderCollection(q=''){
   const list=getBalls(),owned=new Set(getSave()?.own||[]);
-  const matches=list.filter(b=>b?.n?.toLowerCase().includes(q.toLowerCase()));matches.sort((a,b)=>Number(owned.has(b.id))-Number(owned.has(a.id))||a.id-b.id);
-  showView('Kolekcja kulek',`<div class="pane">Wpisz nazwę kulki. Odblokowane są wyświetlane jako pierwsze. <b>${owned.size} posiadanych</b>.</div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki" aria-label="Szukaj kulki" value="${safe(q)}"><div class="balls">${matches.map(b=>`<button class="ball${owned.has(b.id)?'':' locked'}" type="button" data-ball="${b.id}"><div style="font-size:1.8rem">${safe(b.e||'◉')}</div><b>${safe(b.n)}</b><small>${owned.has(b.id)?'Odblokowana':'🔒 Zablokowana'}</small></button>`).join('')}</div>`);view.dataset.mode='collection';
+  const matches=list.filter(b=>b?.n?.toLowerCase().includes(q.toLowerCase()));
+  const unlocked=matches.filter(b=>owned.has(b.id)),locked=matches.filter(b=>!owned.has(b.id));
+  const select=list.find(b=>b.id===selectedBallId)||unlocked[0]||locked[0];
+  if(select)selectedBallId=select.id;
+  const tiles=(items)=>items.slice(0,130).map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':'🔒'}</small></button>`).join('');
+  const pane=select?`<div class="cinema-collection-preview">${portrait(select)}<b>${safe(select.n)}</b><small>${owned.has(select.id)?'ODBLOKOWANA':'ZABLOKOWANA'}</small><div class="cinema-evolutions">${[1,2,3].map(n=>`<button data-evolution="${n}" class="${selectedEvolution===n?'selected':''}" type="button">V${n}</button>`).join('')}</div><p>${safe(select.d||'Podgląd umiejętności w grze')}</p><button type="button" data-act="native-col">PEŁNY PODGLĄD W GRZE</button></div>`:'';
+  showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,owned.size/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${owned.size} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>Wszystkie kulki odblokowane</p>'}</div></section></div>${pane}</div>`);
+  view.dataset.mode='collection';
  }
- function renderBall(id){
-  const ball=getBalls().find(b=>b.id===id);if(!ball)return;
-  info(ball.n,`<b>Umiejętność:</b> ${safe(ball.d||'Opis w grze.')}. <p>Dokładny widok V1/V2/V3 wymaga pełnych grafik gry.</p>`,btn('collection','← Kolekcja','tile')+btn('native-col','Otwórz pełną kolekcję','tile'));
- }
+ function renderBall(id){selectedBallId=id;renderCollection($('#bvb-fm-search')?.value||'')}
  function action(key){
   if(key==='home'){view.hidden=true;view.dataset.mode='';if(can('home'))openNative('home');return}
   if(key==='play'||key==='modes'){
@@ -269,6 +310,7 @@ function init(){
  }
  page.addEventListener('click',ev=>{
   const ball=ev.target.closest('button[data-ball]');if(ball){renderBall(Number(ball.dataset.ball));return}
+  const evolution=ev.target.closest('button[data-evolution]');if(evolution){selectedEvolution=Number(evolution.dataset.evolution)||1;renderCollection($('#bvb-fm-search')?.value||'');return}
   const target=ev.target.closest('button[data-act]');if(target)action(target.dataset.act);
  });
  page.addEventListener('input',e=>{if(e.target.id==='bvb-fm-search'){
