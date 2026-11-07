@@ -78,7 +78,10 @@ const server=http.createServer((req,res)=>{
    // Search must not keep showing an unrelated, previously selected ball.
    await rootMenu.locator('[data-ball="1"]').first().click();
    const firstName=await page.evaluate(()=>B[0].n);
+   const fullOwnedCount=await rootMenu.locator('.cinema-collection-header b span').textContent();
    await rootMenu.locator('#bvb-fm-search').fill(firstName);
+   if(await rootMenu.locator('.cinema-collection-header b span').textContent()!==fullOwnedCount)
+    throw Error('Search changed total collection progress instead of filtering only visible tiles');
    const filtered=await page.evaluate(()=>({
     tiles:[...document.querySelectorAll('#bvb-film-menu .cinema-ball-tile')].map(e=>Number(e.dataset.ball)),
     chosen:document.querySelector('#bvb-film-menu .cinema-ball-tile.chosen')?.dataset.ball,
@@ -154,6 +157,20 @@ const server=http.createServer((req,res)=>{
     return Math.abs(marker.left+marker.width/2-winner.left-winner.width/2);
    });
    if(reelOffset>3)throw Error('Roulette marker misses saved winner by '+reelOffset.toFixed(2)+'px');
+   // Responsive orientation/reflow must never change the awarded ball under
+   // the fixed marker once the animation has finished.
+   if(viewport.width===1280){
+    for(const size of [{width:1000,height:650},viewport]){
+     await page.setViewportSize(size);
+     await page.waitForTimeout(180);
+     const drift=await page.evaluate(()=>{
+      const marker=document.querySelector('#bvb-film-menu .cinema-marker').getBoundingClientRect();
+      const winner=document.querySelector('#bvb-film-menu .cinema-reel-ball.winner').getBoundingClientRect();
+      return Math.abs(marker.left+marker.width/2-winner.left-winner.width/2);
+     });
+     if(drift>3)throw Error('Roulette marker drift after resize '+JSON.stringify(size)+': '+drift.toFixed(2)+'px');
+    }
+   }
    if(!result.includes(winnerName))throw Error('Visual winner and awarded result disagree');
    const after=await page.evaluate(()=>({coins:S.coins,owned:S.own.length,persisted:JSON.parse(localStorage.getItem(K)||'null')?.coins}));
    if(after.coins!==after.persisted||after.coins>before.coins-60||after.owned<before.owned)throw Error('Chest transaction did not persist: '+JSON.stringify({before,after}));

@@ -465,7 +465,8 @@ function init(){
  const getBalls=()=>{try{return typeof B!=='undefined'&&Array.isArray(B)?B:[]}catch(_){return []}};
  const can=name=>Boolean(window.BVBMenu&&typeof window.BVBMenu.open==='function'&&document.getElementById('bvb3_'+name));
  const openNative=name=>{if(!can(name))return false;window.BVBMenu.open(name);return true};
- function showView(title,content){view.hidden=false;view.innerHTML=`${btn('home','← Wróć','back')}<h2>${safe(title)}</h2>${content}`;view.scrollTop=0;}
+ let cleanupReel=()=>{};
+ function showView(title,content){cleanupReel();cleanupReel=()=>{};view.hidden=false;view.innerHTML=`${btn('home','← Wróć','back')}<h2>${safe(title)}</h2>${content}`;view.scrollTop=0;}
  function info(title,desc,links=''){showView(title,`<div class="pane">${desc}</div><div class="tilegrid">${links}</div>`)}
  const chestData=[['normal','Zwykła',100,chestArt.normal],['epic','Epicka',300,chestArt.epic],['legend','Legendarna',750,chestArt.legend]];
  function buttonsAt(t){return chestData.filter(([k])=>k==='normal'||availableAt(t))}
@@ -557,15 +558,39 @@ function init(){
    reelWindow.hidden=false;
    const resultLine=view.querySelector('.cinema-outcome');
    const prizeTile=strip.querySelector('.cinema-reel-ball.winner');
-   // Align the winning card with the actual marker in viewport coordinates.
-   // Responsive padding previously shifted the prize by 10px on desktop.
    const marker=reelWindow.querySelector('.cinema-marker');
-   const prizeRect=prizeTile.getBoundingClientRect(),markerRect=marker.getBoundingClientRect();
-   const finalOffset=(markerRect.left+markerRect.width/2)-(prizeRect.left+prizeRect.width/2);
-   const finish=()=>{if(view.contains(strip)&&resultLine)resultLine.hidden=false;};
+   if(!prizeTile||!marker)return;
+   const center=el=>{const r=el.getBoundingClientRect();return r.left+r.width/2};
+   // Record the offset before the animation. Recalculate after any viewport
+   // change, since the center marker moves on rotation and responsive reflow.
+   const finalOffset=center(marker)-center(prizeTile);
+   let applied=0,settled=false,animation=null;
+   const align=()=>{
+    if(!view.contains(strip)||reelWindow.hidden)return;
+    const correction=center(marker)-center(prizeTile);
+    if(Math.abs(correction)>.05){
+     applied+=correction;
+     strip.style.transform='translateX('+applied+'px)';
+    }
+   };
+   const onResize=()=>{if(settled)requestAnimationFrame(align)};
+   window.addEventListener('resize',onResize);
+   cleanupReel=()=>window.removeEventListener('resize',onResize);
+   const finish=()=>{
+    if(settled||!view.contains(strip))return;
+    settled=true;
+    if(animation)animation.cancel();
+    applied=finalOffset;
+    strip.style.transform='translateX('+applied+'px)';
+    align();
+    if(resultLine)resultLine.hidden=false;
+   };
    if(typeof strip.animate==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    strip.animate([{transform:'translateX(0)'},{transform:'translateX('+finalOffset+'px)'}],{duration:4900,easing:'cubic-bezier(.1,.7,.16,1)',fill:'forwards'}).finished.then(finish,finish);
-   }else{strip.style.transform='translateX('+finalOffset+'px)';finish();}
+    try{
+     animation=strip.animate([{transform:'translateX(0)'},{transform:'translateX('+finalOffset+'px)'}],{duration:4900,easing:'cubic-bezier(.1,.7,.16,1)',fill:'forwards'});
+     animation.finished.then(finish,finish);
+    }catch(_){finish();}
+   }else finish();
   };
   // First show the chest opening, then transition into the film's roulette.
   // Reduced-motion users receive the result without waiting for animation.
@@ -621,18 +646,19 @@ function init(){
   const list=getBalls(),owned=new Set(getSave()?.own||[]);
   const matches=list.filter(b=>b?.n?.toLowerCase().includes(q.toLowerCase()));
   const byRarity=(a,b)=>(Number(b.r)||0)-(Number(a.r)||0)||a.id-b.id;
+  const totalUnlocked=list.filter(b=>owned.has(b.id)).length;
   const unlocked=matches.filter(b=>owned.has(b.id)).sort(byRarity);
   const locked=matches.filter(b=>!owned.has(b.id)).sort(byRarity);
   const select=matches.find(b=>b.id===selectedBallId)||unlocked[0]||locked[0];
   selectedBallId=select?.id??null;
   const tiles=(items)=>items.map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}" data-rarity="${Number(b.r)||0}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':filmIcon('lock')}</small></button>`).join('');
   const pane=select?`<div class="cinema-collection-preview"><h3>PODGLĄD KULKI</h3>${portrait(select,selectedEvolution)}<b>${safe(select.n)}</b><small>${owned.has(select.id)?'ODBLOKOWANA':'ZABLOKOWANA'}</small><div class="cinema-evolutions">${[1,2,3].map(n=>`<button data-evolution="${n}" class="${selectedEvolution===n?'selected':''}" type="button">V${n}</button>`).join('')}</div><p>Umiejętność podstawowa: ${safe(select.d||'Opis w grze')}</p><button type="button" data-act="native-col">OTWÓRZ KOLEKCJĘ GRY</button></div>`:'';
-  showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,unlocked.length/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${unlocked.length} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>'+(matches.length?'Wszystkie kulki odblokowane':'Brak kulek pasujących do wyszukiwania')+'</p>'}</div></section></div>${pane}</div>`);
+  showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,totalUnlocked/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${totalUnlocked} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>'+(matches.length?'Wszystkie kulki odblokowane':'Brak kulek pasujących do wyszukiwania')+'</p>'}</div></section></div>${pane}</div>`);
   view.dataset.mode='collection';
  }
  function renderBall(id){selectedBallId=id;renderCollection($('#bvb-fm-search')?.value||'')}
  function action(key){
-  if(key==='home'){view.hidden=true;view.dataset.mode='';if(can('home'))openNative('home');return}
+  if(key==='home'){cleanupReel();cleanupReel=()=>{};view.hidden=true;view.dataset.mode='';if(can('home'))openNative('home');return}
   if(key==='play'||key==='modes'){
    if(openNative('modes'))return;
    info('Tryby gry','Wybierz tryb do rozegrania rundy.',btn('bot','Walka z botem','tile')+btn('training','Trening','tile')+btn('bosses','Bossowie','tile')+btn('campaign','Kampania','tile'));return
