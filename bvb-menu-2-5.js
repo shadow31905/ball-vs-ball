@@ -436,6 +436,11 @@ function init(){
   if(!winner){info('Skrzynia niedostępna','W grze brakuje kulek tej rzadkości. Monety nie zostały pobrane.',btn('crates','← Skrzynie','tile'));return}
   const had=Array.isArray(s.own)&&s.own.includes(winner.id);
   const beforeCoins=s.coins,beforeOwn=Array.isArray(s.own)?s.own.slice():[],beforeGacha=s.q?.gacha;
+  // Snapshot the persisted state as well as the live object. A partially
+  // successful native save must never leave a charged-but-unawarded chest.
+  const storageKey=typeof K!=='undefined'?K:'bvb2';
+  let storageBefore=null,storageReadable=false;
+  try{storageBefore=localStorage.getItem(storageKey);storageReadable=true}catch(_){}
   s.coins=Number(s.coins)-cost+(had?40:0);
   if(!had){s.own ||= [];s.own.push(winner.id)}
   if(s.q)s.q.gacha=(Number(s.q.gacha)||0)+1;
@@ -443,12 +448,22 @@ function init(){
   try{
    if(typeof save!=='function')throw Error('Native save unavailable');
    save();
-   const key=typeof K!=='undefined'?K:'bvb2';
-   const persisted=JSON.parse(localStorage.getItem(key)||'null');
+   const persisted=JSON.parse(localStorage.getItem(storageKey)||'null');
    if(!persisted||Number(persisted.coins)!==Number(s.coins)||!persisted.own?.includes(winner.id))throw Error('Persistence verification failed');
   }catch(err){
    s.coins=beforeCoins;s.own=beforeOwn;if(s.q)s.q.gacha=beforeGacha;
-   info('BŁĄD ZAPISU','Nie udało się bezpiecznie zapisać losowania. Monety i kolekcja nie zostały zmienione.',btn('crates','← Skrzynie','tile'));
+   let restored=false;
+   if(storageReadable){
+    try{
+     if(storageBefore===null)localStorage.removeItem(storageKey);
+     else localStorage.setItem(storageKey,storageBefore);
+     restored=localStorage.getItem(storageKey)===storageBefore;
+    }catch(_){}
+   }
+   info('BŁĄD ZAPISU',restored?
+    'Nie udało się zapisać losowania. Przywrócono poprzedni stan monet i kolekcji.':
+    'Nie udało się zweryfikować zapisu. Nie kontynuuj zakupów, dopóki zapis gry nie będzie działał.',
+    btn('crates','← Skrzynie','tile'));
    return;
   }
   try{if(typeof SFX!=='undefined'&&typeof SFX.rare==='function')SFX.rare()}catch(_){};
