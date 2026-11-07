@@ -464,9 +464,11 @@ function init(){
   if(key.startsWith('purchase-')){purchase(key.substring(9));return}
   if(key==='profile'){if(typeof window.panel==='function')window.panel('pr');else info('Profil','Profil nie jest dostępny.',btn('home','← Wróć','tile'));return}
   if(key==='ranking'){
-   // Show the real ranking only if an account/ranking connector is present.
-   if(typeof window.BVBCloud?.ranking==='function'&&typeof window.panel==='function'){window.panel('account');window.BVBCloud.ranking();return}
-   info('Ranking','Ranking online nie jest dostępny w stabilnej wersji silnika. Nie wyświetlam fikcyjnych wyników.',btn('home','← Wróć','tile'));return;
+   // Film label is "Osiągnięcia", not the unrelated online ranking.
+   if(typeof window.panel==='function'){window.panel('ach');return}
+   if(openNative('rewards'))return;
+   info('Osiągnięcia','Panel osiągnięć nie jest dostępny w tej wersji gry.',btn('home','← Wróć','tile'));
+   return;
   }
   if(key==='quests'){if(typeof window.panel==='function')window.panel('q');else info('Zadania','Funkcja niedostępna.',btn('home','← Wróć','tile'));return}
   if(key==='rewards'){if(openNative('rewards'))return;if(typeof window.panel==='function')window.panel('bp');else info('Nagrody','Funkcja niedostępna.',btn('home','← Wróć','tile'));return}
