@@ -3,7 +3,7 @@
 'use strict';
 const START=Date.parse('2026-11-07T16:15:00+01:00');
 const EXPIRY=Date.parse('2026-11-07T18:00:00+01:00');
-const FILM='./rework/v7-scenes-01-12.mp4';
+const FILM='./rework/v7-scenes-01-12-hq-60fps.mp4';
 const FLAG='bvb-v7-premiere-played-20261107-1615';
 function mount(){
  if(Date.now()>EXPIRY||sessionStorage.getItem(FLAG)||document.getElementById('bvb-v7-premiere'))return;
