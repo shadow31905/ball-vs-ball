@@ -407,6 +407,12 @@ function init(){
   #${pageId} .screen[data-mode="result"] .cinema-outcome p{font-size:11px}
  }
  `;
+ style.textContent += `
+ #${pageId} .cinema-collection-preview{position:relative}
+ #${pageId} .cinema-collection-preview>h3{position:absolute;top:10px;left:13px;margin:0;color:#d8e6f6;font-size:12px;font-weight:900;letter-spacing:.06em}
+ #${pageId} .cinema-collection-preview .cinema-portrait{filter:drop-shadow(0 0 8px #3588d04b)}
+ #${pageId} .cinema-ball-tile:focus-visible,#${pageId} .cinema-evolutions button:focus-visible{outline:2px solid #f5d476;outline-offset:2px}
+ `;
  document.head.append(style);
  const page=document.createElement('section');page.id=pageId;page.setAttribute('aria-label','Nowe Menu Ball VS Ball 2.5');
  const filmIcon=(kind)=>{const shapes={
@@ -593,7 +599,7 @@ function init(){
   const select=list.find(b=>b.id===selectedBallId)||unlocked[0]||locked[0];
   if(select)selectedBallId=select.id;
   const tiles=(items)=>items.slice(0,130).map(b=>`<button type="button" class="cinema-ball-tile${b.id===selectedBallId?' chosen':''}" data-ball="${b.id}" data-rarity="${Number(b.r)||0}">${portrait(b)}<b>${safe(b.n)}</b><small>${owned.has(b.id)?'✓':'🔒'}</small></button>`).join('');
-  const pane=select?`<div class="cinema-collection-preview">${portrait(select,selectedEvolution)}<b>${safe(select.n)}</b><small>${owned.has(select.id)?'ODBLOKOWANA':'ZABLOKOWANA'}</small><div class="cinema-evolutions">${[1,2,3].map(n=>`<button data-evolution="${n}" class="${selectedEvolution===n?'selected':''}" type="button">V${n}</button>`).join('')}</div><p>Umiejętność podstawowa: ${safe(select.d||'Opis w grze')}</p><button type="button" data-act="native-col">OTWÓRZ KOLEKCJĘ GRY</button></div>`:'';
+  const pane=select?`<div class="cinema-collection-preview"><h3>PODGLĄD KULKI</h3>${portrait(select,selectedEvolution)}<b>${safe(select.n)}</b><small>${owned.has(select.id)?'ODBLOKOWANA':'ZABLOKOWANA'}</small><div class="cinema-evolutions">${[1,2,3].map(n=>`<button data-evolution="${n}" class="${selectedEvolution===n?'selected':''}" type="button">V${n}</button>`).join('')}</div><p>Umiejętność podstawowa: ${safe(select.d||'Opis w grze')}</p><button type="button" data-act="native-col">OTWÓRZ KOLEKCJĘ GRY</button></div>`:'';
   showView('KOLEKCJA KULEK',`<div class="cinema-collection-header"><span>Wszystkie kulki: ${list.length}</span><div class="cinema-progress"><i style="width:${list.length?Math.min(100,owned.size/list.length*100):0}%"></i></div><b>ODBLOKOWANE <span>${owned.size} / ${list.length}</span></b></div><input id="bvb-fm-search" type="search" placeholder="Szukaj kulki…" aria-label="Szukaj kulki" value="${safe(q)}"><div class="cinema-collection-layout"><div class="cinema-collection-lists"><section><h3>● ODBLOKOWANE KULKI <small>${unlocked.length}</small></h3><div class="cinema-ball-grid">${tiles(unlocked)||'<p>Brak odblokowanych kulek</p>'}</div></section><section><h3>● ZABLOKOWANE KULKI <small>${locked.length}</small></h3><div class="cinema-ball-grid">${tiles(locked)||'<p>Wszystkie kulki odblokowane</p>'}</div></section></div>${pane}</div>`);
   view.dataset.mode='collection';
  }
