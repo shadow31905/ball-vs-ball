@@ -30,6 +30,7 @@ const server=http.createServer((req,res)=>{
    await page.locator('#bvb-film-menu').waitFor({state:'visible',timeout:30000});
    const rootMenu=page.locator('#bvb-film-menu');
    if(await rootMenu.isVisible()===false)throw Error('Film menu must be visible');
+   await page.waitForFunction(()=>[...document.querySelectorAll('#bvb-film-menu .film-chests img')].length===3&&[...document.querySelectorAll('#bvb-film-menu .film-chests img')].every(i=>i.complete&&i.naturalWidth>0),{timeout:15000});
    await page.screenshot({path:'tests/v7-menu-home-'+viewport.width+'.png',fullPage:true});
    const artState=await page.evaluate(()=>{
     try{
@@ -49,10 +50,13 @@ const server=http.createServer((req,res)=>{
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="crates"]').first().click();
    if(!await rootMenu.locator('.cinema-shopcard').count())throw Error('Missing film shop cards');
+   await page.waitForFunction(()=>[...document.querySelectorAll('#bvb-film-menu .cinema-shopcard img')].length===3&&[...document.querySelectorAll('#bvb-film-menu .cinema-shopcard img')].every(i=>i.complete&&i.naturalWidth>0),{timeout:15000});
+   await page.waitForTimeout(300);
    await page.screenshot({path:'tests/v7-menu-shop-'+viewport.width+'.png',fullPage:true});
    await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
    await rootMenu.locator('[data-act="collection"]').first().click();
    if(!await rootMenu.locator('.cinema-collection-layout').count())throw Error('Missing film collection');
+   await page.waitForTimeout(300);
    await page.screenshot({path:'tests/v7-menu-collection-'+viewport.width+'.png',fullPage:true});
    const actualPortraits=await rootMenu.locator('.cinema-ball-tile img.cinema-portrait').count();
    if(actualPortraits<2)throw Error('Collection uses no original ball artwork: '+actualPortraits);
