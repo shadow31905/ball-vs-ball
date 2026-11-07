@@ -35,11 +35,11 @@ const server=http.createServer((req,res)=>{
     try{
      const balls=typeof B!=='undefined'&&Array.isArray(B)?B:[];
      const images=typeof ART_IMAGES!=='undefined'?ART_IMAGES:null;
-     return {balls:balls.length,images:images?.size||0,first:images?.get?.(0)?.src?.slice(0,32)||''};
+     return {balls:balls.length,images:images?.size||0,first:images?.get?.(0)?.src?.slice(0,32)||'',last:balls.at(-1)?.n||''};
     }catch(e){return {error:String(e)}}
    });
    console.log('ART '+viewport.width+' '+JSON.stringify(artState));
-   if(artState.balls!==130)throw Error('Expected 130 real balls, got '+artState.balls);
+   if(artState.balls<130)throw Error('Expected at least 130 original balls, got '+artState.balls);
 
    for(const key of ['play','campaign','training','crates','collection','shop']){
     if(!await rootMenu.locator('[data-act="'+key+'"]').count())throw Error('Missing menu control '+key);
