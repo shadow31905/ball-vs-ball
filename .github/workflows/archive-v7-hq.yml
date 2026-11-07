@@ -1,0 +1,35 @@
+name: Archive V7 60 FPS Premiere
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/archive-v7-hq.yml
+permissions:
+  contents: write
+jobs:
+  archive-hq:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download 960x540 60fps master and verify exact SHA256
+        run: |
+          import pathlib,hashlib,urllib.request,shutil,sys,json
+          url="https://d2jqrm6oza8nb6.cloudfront.net/datasets/44e0fe49-c6e7-4277-8ff7-cda0a6967be2.mp4?_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlIYXNoIjoiYTRhNjQ2MmZmZWNmODJlYiIsImJ1Y2tldCI6InJ1bndheS1kYXRhc2V0cyIsInN0YWdlIjoicHJvZCIsImV4cCI6MTc5NDE2MTk2N30.xg5qHIARZrz3tKiDcb7yld8V0F-Pbg692mdfh9qIUL0"
+          target=pathlib.Path("rework/v7-scenes-01-12-hq-60fps.mp4")
+          req=urllib.request.Request(url,headers={"User-Agent":"BVB-Quality-Upgrade/1.0"})
+          with urllib.request.urlopen(req,timeout=180) as response, target.open("wb") as out:
+              shutil.copyfileobj(response,out,1024*1024)
+          size=target.stat().st_size
+          actual=hashlib.sha256(target.read_bytes()).hexdigest()
+          if size!=78231183 or actual!="c6d2f390e633645ca982d802f6f7ea64869effb6b8637052fe61e9d4714f4acc":
+              print("Source differs from verified master",size,actual);sys.exit(1)
+          print("HQ video verified",size,actual)
+          PY
+      - name: Commit HQ version without changing active video
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rework/v7-scenes-01-12-hq-60fps.mp4
+          git commit -m "Add V7 premiere master video 960x540 at 60 FPS"
+          git push origin HEAD:main
