@@ -1,4 +1,4 @@
-/* Ball VS Ball 2.5 — zaakceptowane menu z filmu; produkcja. */
+/* Ball VS Ball 2.5 — testowe odwzorowanie sceny 11 filmu V7; NIE jest to wydanie produkcyjne. */
 (()=>{'use strict';
 const TARGET='2026-11-07T16:00:00+01:00';
 const CHESTS_AT='2026-11-07T16:02:00+01:00';
@@ -490,7 +490,7 @@ function init(){
  function tick(){if(!page.isConnected)return;dismissLegacyNotes();renderClock();status()}
  tick();const timer=setInterval(()=>{if(!page.isConnected)clearInterval(timer);else tick()},1000);
  syncTime().then(tick);
- window.BVBFilmMenuBeta={get countdownTime(){return END},get unlockTime(){return UNLOCK},get clockSource(){return serverEpoch==null?'local-fallback':'server-header'},isUnlockedAt:availableAt,isEndedAt:endingAt,openCrates:renderCrates,openHome:()=>action('home'),version:'production-menu-20261105-1'};
+ window.BVBFilmMenuBeta={get countdownTime(){return END},get unlockTime(){return UNLOCK},get clockSource(){return serverEpoch==null?'local-fallback':'server-header'},isUnlockedAt:availableAt,isEndedAt:endingAt,openCrates:renderCrates,openHome:()=>action('home'),version:'v7-scene11-beta-20261107'};
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
