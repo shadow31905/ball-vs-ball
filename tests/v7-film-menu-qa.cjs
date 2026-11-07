@@ -79,6 +79,13 @@ const server=http.createServer((req,res)=>{
    if(after.coins!==after.persisted||after.coins>before.coins-60||after.owned<before.owned)throw Error('Chest transaction did not persist: '+JSON.stringify({before,after}));
    await page.screenshot({path:'tests/v7-menu-reel-'+viewport.width+'.png',fullPage:true});
    console.log('PASS native chest transaction '+viewport.width+' '+winnerName+' '+JSON.stringify({before,after}));
+   await rootMenu.locator('#bvb-fm-screen [data-act="home"]').first().click();
+   await rootMenu.locator('[data-act="training"]').first().click();
+   await page.locator('#game').waitFor({state:'visible',timeout:20000});
+   const match=await page.evaluate(()=>({mode:typeof G!=='undefined'?G?.m:null,phase:typeof G!=='undefined'?G?.ph:null}));
+   if(match.mode!==4)throw Error('Training did not start real native match: '+JSON.stringify(match));
+   console.log('PASS real training match '+viewport.width+' '+JSON.stringify(match));
+
 
    await page.screenshot({path:'tests/v7-menu-'+viewport.width+'.png',fullPage:true});
    if(errors.length)throw Error('Browser JS errors: '+errors.slice(0,3).join('; '));
